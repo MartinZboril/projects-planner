@@ -19,3 +19,7 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 
 // Users
 Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+Route::get('/users/create', [App\Http\Controllers\UserController::class, 'create'])->name('users.create');
+
+Route::post('/users/store', [App\Http\Controllers\UserController::class, 'store'])->name('users.store');
+

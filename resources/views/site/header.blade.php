@@ -34,7 +34,7 @@
         <!-- Dropdown -->
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                <img src="dist/img/user.png" class="img-circle mr-2" alt="User Image" style="width: 25px;height: 25px;">
+                <img src="../dist/img/user.png" class="img-circle mr-2" alt="User Image" style="width: 25px;height: 25px;">
                 {{ Auth::User()->name }}
             </a>
             <div class="dropdown-menu">
