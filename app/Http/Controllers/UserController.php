@@ -85,6 +85,22 @@ class UserController extends Controller
         Session::flash('message', 'User was created!');
         Session::flash('type', 'info');
 
-        return ($request->save_and_close) ? redirect()->route('users.index') : redirect()->route('users.index');
+        return ($request->save_and_close) ? redirect()->route('users.index') : redirect()->route('users.detail', ['user' => $user]);
+    }
+
+    /**
+     * Displays detail of user
+     */
+    public function detail(User $user)
+    {
+        return view('users.detail', ['user' => $user]);
+    }
+
+    /**
+     * Displays form for editing user
+     */
+    public function edit(User $user)
+    {
+        return view('users.edit', ['user' => $user]);
     }
 }
