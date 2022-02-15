@@ -10,7 +10,7 @@
     <!-- Content Header (Page header) -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('users.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
-        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-plus mr-1"></i>Edit</a>
+        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
     </div>
     <!-- /.content-header -->
 

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 
@@ -85,7 +86,7 @@ class UserController extends Controller
         Session::flash('message', 'User was created!');
         Session::flash('type', 'info');
 
-        return ($request->save_and_close) ? redirect()->route('users.index') : redirect()->route('users.detail', ['user' => $user]);
+        return ($request->create_and_close) ? redirect()->route('users.index') : redirect()->route('users.detail', ['user' => $user]);
     }
 
     /**
@@ -102,5 +103,64 @@ class UserController extends Controller
     public function edit(User $user)
     {
         return view('users.edit', ['user' => $user]);
+    }
+
+    /**
+     * Update edited user
+     */
+    public function update(User $user, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'surname' => ['required', 'string', 'max:255'],
+            'email' => [
+                'required', 'string', 'email', 'max:255',
+                Rule::unique('users')->ignore($user->id),
+            ],
+            'username' => [
+                'required', 'string', 'max:255',
+                Rule::unique('users')->ignore($user->id),
+            ],
+            'password' => ['string', 'nullable', 'min:8'],
+            'job_title' => ['string', 'nullable', 'max:255'],
+            'mobile' => ['string', 'nullable', 'max:255'],
+            'phone' => ['string', 'nullable', 'max:255'],
+            'street' => ['string', 'nullable', 'max:255'],
+            'house_number' => ['string', 'nullable', 'max:255'],
+            'city' => ['string', 'nullable', 'max:255'],
+            'country' => ['string', 'nullable', 'max:255'],
+            'zip_code' => ['string', 'nullable', 'max:255'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                    ->route('users.detail', ['user' => $user->id])
+                    ->withErrors($validator)
+                    ->withInput();
+        }
+
+        User::where('id', $user->id)
+                    ->update([
+                        'name' => $request->name,
+                        'surname' => $request->surname,
+                        'email' => $request->email,
+                        'username' => $request->username,
+                        'job_title' => $request->job_title,
+                        'password' => ($request->password) ? Hash::make($request->password) : $user->password,
+                        'mobile' => $request->mobile,
+                        'phone' => $request->phone,
+                        'street' => $request->street,
+                        'house_number' => $request->house_number,
+                        'city' => $request->city,
+                        'zip_code' => $request->zip_code,
+                        'country' => $request->country
+                    ]);
+
+        $user = User::find($user->id);
+
+        Session::flash('message', 'User was updated!');
+        Session::flash('type', 'info');
+
+        return ($request->save_and_close) ? redirect()->route('users.index') : redirect()->route('users.detail', ['user' => $user->id]);
     }
 }

@@ -24,4 +24,4 @@ Route::get('/users/{user}/detail', [App\Http\Controllers\UserController::class, 
 Route::get('/users/{user}/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('users.edit');
 
 Route::post('/users/store', [App\Http\Controllers\UserController::class, 'store'])->name('users.store');
-
+Route::patch('/users/{user}/update', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
