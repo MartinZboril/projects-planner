@@ -13,7 +13,7 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
-        <a href="{{ route('users.create') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-plus mr-1"></i>Create</a>
+        <a href="{{ route('clients.create') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-plus mr-1"></i>Create</a>
     </div>
     <!-- /.content-header -->
 
@@ -22,34 +22,30 @@
         <div class="container-fluid">
             <div class="card card-primary card-outline rounded-0">
                 <div class="card-body">
-                    <input type="hidden" id="userform-message" value="{{ Session::get('message') }}">
-                    <input type="hidden" id="userform-message-type" value="{{ Session::get('type') }}">
+                    <input type="hidden" id="clientform-message" value="{{ Session::get('message') }}">
+                    <input type="hidden" id="clientform-message-type" value="{{ Session::get('type') }}">
 
                     <div class="table-responsive">
-                        <table id="{{ count($users) > 0? 'users-table' : '' }}" class="table table-bordered table-striped">
+                        <table id="{{ count($clients) > 0 ? 'clients-table' : '' }}" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>Name</th>
+                                    <th>Contact Person</th>
                                     <th>Email</th>
-                                    <th>Job title</th>
-                                    <th>Mobile</th>
-                                    <th>City</th>
                                     <th>Date</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($users as $user)
+                                @forelse ($clients as $client)
                                     <tr>
-                                        <td><a href="{{ route('users.detail', $user->id) }}">{{ $user->name }} {{ $user->surname }}</a></td>
-                                        <td>{{ $user->email }}</td>
-                                        <td>{{ $user->job_title }}</td>
-                                        <td>{{ $user->mobile }}</td>
-                                        <td>{{ $user->city }}</td>
-                                        <td>{{ $user->created_at->format('d.m.Y') }}</td>
+                                        <td><a href="{!{ route('clients.detail', $client->id) }}">{{ $client->name }} {{ $client->surname }}</a></td>
+                                        <td>{{ $client->contact_person }}</td>
+                                        <td>{{ $client->email }}</td>
+                                        <td>{{ $client->created_at->format('d.m.Y') }}</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="text-center">No users were found!</td>
+                                        <td colspan="4" class="text-center">No clients were found!</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -81,15 +77,15 @@
 
     <script>
         $(function () {
-            $("#users-table").DataTable();
+            $("#clients-table").DataTable();
 
-            if($('#userform-message').val()) {
-                if($('#userform-message-type').val() == "success") {
-                    toastr.success($('#userform-message').val());
-                } else if($('#userform-message-type').val() == "info") {
-                    toastr.info($('#userform-message').val());
+            if($('#clientform-message').val()) {
+                if($('#clientform-message-type').val() == "success") {
+                    toastr.success($('#clientform-message').val());
+                } else if($('#clientform-message-type').val() == "info") {
+                    toastr.info($('#clientform-message').val());
                 } else {
-                    toastr.error($('#userform-message').val());            
+                    toastr.error($('#clientform-message').val());            
                 }
             }; 
         });

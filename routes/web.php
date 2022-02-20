@@ -25,3 +25,9 @@ Route::get('/users/{user}/edit', [App\Http\Controllers\UserController::class, 'e
 
 Route::post('/users/store', [App\Http\Controllers\UserController::class, 'store'])->name('users.store');
 Route::patch('/users/{user}/update', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
+
+// Clients
+Route::get('/clients', [App\Http\Controllers\ClientController::class, 'index'])->name('clients.index');
+Route::get('/clients/create', [App\Http\Controllers\ClientController::class, 'create'])->name('clients.create');
+
+Route::post('/clients/store', [App\Http\Controllers\ClientController::class, 'store'])->name('clients.store');

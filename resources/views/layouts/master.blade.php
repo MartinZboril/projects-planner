@@ -28,6 +28,13 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
 
     @yield('styles')
+
+    <style>
+      .form-group.required .control-label:after {
+          content:" *";
+          color:red;
+      }
+    </style>
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">

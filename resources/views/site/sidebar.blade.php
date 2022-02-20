@@ -20,7 +20,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('clients.index') }}" class="nav-link {{ (str_contains(url()->current(), 'clients')) ? 'active' : '' }}">
                         <i class="nav-icon fas fa-address-book"></i>
                         <p>
                             Clients
