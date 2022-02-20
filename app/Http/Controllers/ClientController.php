@@ -121,7 +121,7 @@ class ClientController extends Controller
      */
     public function edit(Client $client)
     {
-        //
+        return view('clients.edit', ['client' => $client]);
     }
 
     /**
@@ -133,7 +133,63 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255',
+                Rule::unique('clients')->ignore($client->id),
+            ],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'contact_person' => ['string', 'nullable', 'max:255'],
+            'contact_email' => ['string', 'nullable', 'max:255'],
+            'mobile' => ['string', 'nullable', 'max:255'],
+            'phone' => ['string', 'nullable', 'max:255'],
+            'street' => ['string', 'nullable', 'max:255'],
+            'house_number' => ['string', 'nullable', 'max:255'],
+            'city' => ['string', 'nullable', 'max:255'],
+            'country' => ['string', 'nullable', 'max:255'],
+            'zip_code' => ['string', 'nullable', 'max:255'],
+            'website' => ['string', 'nullable'],
+            'skype' => ['string', 'nullable'],
+            'linekedin' => ['string', 'nullable'],
+            'twitter' => ['string', 'nullable'],
+            'facebook' => ['string', 'nullable'],
+            'instagram' => ['string', 'nullable'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                    ->route('clients.detail', ['client' => $client->id])
+                    ->withErrors($validator)
+                    ->withInput();
+        }
+
+        Client::where('id', $client->id)
+                    ->update([
+                        'name' => $request->name,
+                        'email' => $request->email,
+                        'contact_person' => $request->contact_person,
+                        'contact_email' => $request->contact_email,
+                        'mobile' => $request->mobile,
+                        'phone' => $request->phone,
+                        'street' => $request->street,
+                        'house_number' => $request->house_number,
+                        'city' => $request->city,
+                        'country' => $request->country,
+                        'zip_code' => $request->zip_code,
+                        'website' => $request->website,
+                        'skype' => $request->skype,
+                        'linekedin' => $request->linekedin,
+                        'twitter' => $request->twitter,
+                        'facebook' => $request->facebook,
+                        'instagram' => $request->instagram,
+                        'note' => $request->note,
+                    ]);
+
+        $client = Client::find($client->id);
+
+        Session::flash('message', 'Client was updated!');
+        Session::flash('type', 'info');
+
+        return ($request->save_and_close) ? redirect()->route('clients.index') : redirect()->route('clients.detail', ['client' => $client->id]);
     }
 
     /**
