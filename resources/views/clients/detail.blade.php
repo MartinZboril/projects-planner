@@ -9,73 +9,66 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
-        <a href="{{ route('users.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
-        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
+        <a href="{{ route('clients.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
+        <a href="{!{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
     </div>
     <!-- /.content-header -->
 
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <input type="hidden" id="userform-message" value="{{ Session::get('message') }}">
-            <input type="hidden" id="userform-message-type" value="{{ Session::get('type') }}">
+            <input type="hidden" id="clientform-message" value="{{ Session::get('message') }}">
+            <input type="hidden" id="clientform-message-type" value="{{ Session::get('type') }}">
 
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <div class="card card-primary card-outline rounded-0">
                         <div class="card-header">Profile</div>
                         <div class="card-body">
-                            <div class="text-center">
-                                <h5>{{ $user->name }} {{ $user->surname }}</h5>
-                                <img src="{{ asset('dist/img/user.png') }}" class="img-circle mb-2" alt="User Image" style="width: 100px;height: 100px;">
+                            <div class="row mb-3">
+                                <img src="{{ asset('dist/img/user.png') }}" class="img-circle mr-3" alt="Client Image" style="width: 75px;height: 75px;">
+                                <div class="">
+                                    <h5>{{ $client->name }}</h5>
+                                    <i class="fas fa-envelope"></i> {{ $client->email ? $client->email : '-' }}<br>
+                                    <i class="fas fa-user-circle"></i> {{ $client->contact_person ? $client->contact_person : '-' }} ({{ $client->contact_email ? $client->contact_email : '-' }})<br>
+                                </div>                            
                             </div>
-                            <table class="table">
-                                <tbody>
-                                    <tr>
-                                        <td class="text-muted">Email</td><td class="text-right">{{ $user->email }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-muted">Username</td><td class="text-right">{{ $user->username }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-muted">Job title</td><td class="text-right">{{ $user->job_title ? $user->job_title : '-' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-muted">Mobile</td><td class="text-right">{{ $user->mobile ? $user->mobile : '-' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-muted">Phone</td><td class="text-right">{{ $user->phone ? $user->phone : '-' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-muted">Address</td><td class="text-right">{{ $user->street ? $user->street . ' ' . $user->house_number : '-' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-muted">City</td><td class="text-right">{{ $user->city ? $user->city : '-' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-muted">ZIP code</td><td class="text-right">{{ $user->zip_code ? $user->zip_code : '-' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-muted">Country</td><td class="text-right">{{ $user->country ? $user->country : '-' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-muted">Phone</td><td class="text-right">{{ $user->phone ? $user->phone : '-' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-muted">Verified At</td><td class="text-right">{{ $user->email_verified_at ? $user->email_verified_at->format('d.m.Y H:i') : 'Not verified' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-muted">Created At</td><td class="text-right">{{ $user->created_at->format('d.m.Y H:i') }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-muted">Updated</td><td class="text-right">{{ $user->updated_at->format('d.m.Y H:i') }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            @if ($client->note)
+                                <hr>
+                                {{ $client->note }}
+                                <hr>                                
+                            @endif
+                            <ul class="list-group">
+                                <li class="list-group-item active"><i class="fas fa-address-card mr-2"></i>Contacts</li>
+                                <li class="list-group-item"><i class="fas fa-phone mr-2"></i>Phone: {{ $client->phone ? $client->phone : '-' }}</li>
+                                <li class="list-group-item"><i class="fas fa-mobile-alt mr-2"></i>Mobile: {{ $client->mobile ? $client->mobile : '-' }}</li>
+                                <li class="list-group-item"><i class="fas fa-pager mr-2"></i></i>Website: @if ($client->website) <a href="{{ $client->website }}">{{ $client->website }}</a> @else - @endif</li>
+                                <li class="list-group-item"><i class="fas fa-envelope mr-2"></i>Email: {{ $client->email ? $client->email : '-' }}</li>
+                                <li class="list-group-item"><i class="fas fa-map mr-2"></i>Address: @if ($client->street || $client->house_number || $client->city || $client->country || $client->zip_code){{ $client->street ? $client->street . ' ' . $client->house_number : '-' }} ; {{ $client->city ? $client->city : '-' }} ; {{ $client->country ? $client->country : '-' }} ; {{ $client->zip_code ? $client->zip_code : '-' }}</li>@else-@endif
+                            </ul>
+                            @if ($client->facebook || $client->twitter || $client->instagram || $client->linekedin || $client->skype)
+                                <hr>
+                                @if ($client->facebook)
+                                    <a href="{{ $client->facebook }}" class="btn bg-primary mr-1" target="_BLANK"><i class="fab fa-facebook"></i></a>
+                                @endif
+                                @if ($client->instagram)
+                                    <a href="{{ $client->instagram }}" class="btn bg-fuchsia color-palette mr-1" target="_BLANK"><i class="fab fa-instagram"></i></a>
+                                @endif
+                                @if ($client->linekedin)
+                                    <a href="{{ $client->linekedin }}" class="btn bg-lightblue color-palette mr-1" target="_BLANK"><i class="fab fa-linkedin"></i></a>
+                                @endif
+                                @if ($client->skype)
+                                    <a href="{{ $client->skype }}" class="btn bg-cyan color-palette mr-1" target="_BLANK"><i class="fab fa-skype"></i></a>                                 
+                                @endif
+                                @if ($client->twitter)
+                                    <a href="{{ $client->twitter }}" class="btn bg-info color-palette mr-1" target="_BLANK"><i class="fab fa-twitter"></i></a>
+                                @endif
+                                <hr>                                
+                            @endif
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-7">
                     <div class="card card-primary card-outline rounded-0">
                         <div class="card-header">Activity Feed</div>
                         <div class="card-body">
@@ -94,13 +87,13 @@
 
     <script>
         $(function () {
-            if($('#userform-message').val()) {
-                if($('#userform-message-type').val() == "success") {
-                    toastr.success($('#userform-message').val());
-                } else if($('#userform-message-type').val() == "info") {
-                    toastr.info($('#userform-message').val());
+            if($('#clientform-message').val()) {
+                if($('#clientform-message-type').val() == "success") {
+                    toastr.success($('#clientform-message').val());
+                } else if($('#clientform-message-type').val() == "info") {
+                    toastr.info($('#clientform-message').val());
                 } else {
-                    toastr.error($('#userform-message').val());            
+                    toastr.error($('#clientform-message').val());            
                 }
             }; 
         });

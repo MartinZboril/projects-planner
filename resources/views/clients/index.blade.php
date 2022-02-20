@@ -38,7 +38,7 @@
                             <tbody>
                                 @forelse ($clients as $client)
                                     <tr>
-                                        <td><a href="{!{ route('clients.detail', $client->id) }}">{{ $client->name }} {{ $client->surname }}</a></td>
+                                        <td><a href="{{ route('clients.detail', $client->id) }}">{{ $client->name }} {{ $client->surname }}</a></td>
                                         <td>{{ $client->contact_person }}</td>
                                         <td>{{ $client->email }}</td>
                                         <td>{{ $client->created_at->format('d.m.Y') }}</td>

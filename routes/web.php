@@ -29,5 +29,6 @@ Route::patch('/users/{user}/update', [App\Http\Controllers\UserController::class
 // Clients
 Route::get('/clients', [App\Http\Controllers\ClientController::class, 'index'])->name('clients.index');
 Route::get('/clients/create', [App\Http\Controllers\ClientController::class, 'create'])->name('clients.create');
+Route::get('/clients/{client}/detail', [App\Http\Controllers\ClientController::class, 'detail'])->name('clients.detail');
 
 Route::post('/clients/store', [App\Http\Controllers\ClientController::class, 'store'])->name('clients.store');
