@@ -34,3 +34,12 @@ Route::get('/clients/{client}/edit', [App\Http\Controllers\ClientController::cla
 
 Route::post('/clients/store', [App\Http\Controllers\ClientController::class, 'store'])->name('clients.store');
 Route::patch('/clients/{client}/update', [App\Http\Controllers\ClientController::class, 'update'])->name('clients.update');
+
+// Projects
+Route::get('/projects', [App\Http\Controllers\ProjectController::class, 'index'])->name('projects.index');
+Route::get('/projects/create', [App\Http\Controllers\ProjectController::class, 'create'])->name('projects.create');
+Route::get('/projects/{project}/detail', [App\Http\Controllers\ProjectController::class, 'detail'])->name('projects.detail');
+Route::get('/projects/{project}/edit', [App\Http\Controllers\ProjectController::class, 'edit'])->name('projects.edit');
+
+Route::post('/projects/store', [App\Http\Controllers\ProjectController::class, 'store'])->name('projects.store');
+Route::patch('/projects/{project}/update', [App\Http\Controllers\ProjectController::class, 'update'])->name('projects.update');

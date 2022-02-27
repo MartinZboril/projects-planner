@@ -28,7 +28,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('projects.index') }}" class="nav-link {{ (str_contains(url()->current(), 'projects')) ? 'active' : '' }}">
                         <i class="nav-icon fas fa-clock"></i>
                         <p>
                             Projects
