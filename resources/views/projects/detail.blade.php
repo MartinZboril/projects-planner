@@ -46,6 +46,23 @@
                                     <span class="d-block ml-2">Used Budget: <b>{{ number_format($project->used_budget, 2) }}</b></span>
                                 </p>
                                 <hr>
+                                <p class="text-sm">Team
+                                    <ul class="list-group list-group-flush ml-1">
+                                        @foreach ($project->team as $user)
+                                            <li class="list-group-item">
+                                                <div class="user-block">
+                                                    <img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;">
+                                                    <span class="username">
+                                                    {{ $user->name }} {{ $user->surname }}
+                                                    </span>
+                                                    <span class="description">Member</span>
+                                                </div> 
+                                                <!-- <a class="float-right"><i class="fas fa-trash-alt"></i></a> -->
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </p>
+                                <hr>
                                 <p class="text-sm">Description
                                     <b class="d-block ml-2">{!! $project->description !!}</b>
                                 </p>

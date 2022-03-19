@@ -28,7 +28,7 @@
                                 </div>
                                 <div class="form-group required">
                                     <label for="client_id" class="control-label">Client</label>
-                                    <select class="form-control select2bs4 @error('client_id') is-invalid @enderror" name="client_id" id="client_id" style="width: 100%;">
+                                    <select class="form-control client-select @error('client_id') is-invalid @enderror" name="client_id" id="client_id" style="width: 100%;">
                                         <option disabled selected value>Choose client</option>
                                         @foreach($clients as $client)
                                             <option value="{{ $client->id }}" @if(old('client_id') == $client->id) selected @endif>{{ $client->name }}</option>
@@ -38,6 +38,17 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                <div class="form-group required">
+                                    <label for="team" class="control-label">Team</label>
+                                    <select class="form-control team-select @error('team') is-invalid @enderror" name="team[]" multiple="multiple" id="team" style="width: 100%;">
+                                        @foreach($users as $user)
+                                            <option value="{{ $user->id }}">{{ $user->name }} {{ $user->surname }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('team')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div> 
                                 <div class="form-group required">
                                     <label for="start_date" class="control-label">Start date</label>
                                     <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" placeholder="start date" value="{{ old('start_date', date('Y-m-d')) }}" autocomplete="off">
@@ -52,15 +63,15 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
-                                    <label for="estimated_hours">Estimated hours</label>
+                                <div class="form-group required">
+                                    <label for="estimated_hours" class="control-label">Estimated hours</label>
                                     <input type="number" name="estimated_hours" id="estimated_hours" class="form-control @error('estimated_hours') is-invalid @enderror" placeholder="estimated hours" value="{{ old('estimated_hours', 0) }}" autocomplete="off">
                                     @error('estimated_hours')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group">
-                                    <label for="budget">Budget</label>
+                                <div class="form-group required">
+                                    <label for="budget" class="control-label">Budget</label>
                                     <input type="number" name="budget" id="budget" class="form-control @error('budget') is-invalid @enderror" placeholder="budget" value="{{ old('budget', 0) }}" autocomplete="off">
                                     @error('budget')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -97,8 +108,14 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $('.select2bs4').select2({
-                theme: 'bootstrap4'
+            $('.client-select').select2({
+                theme: 'bootstrap4',
+                placeholder: 'select client'
+            });
+
+            $('.team-select').select2({
+                theme: 'bootstrap4',
+                placeholder: 'select member'
             });
 
             $('#description').summernote();

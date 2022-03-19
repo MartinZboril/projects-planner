@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\Client;
+use App\Models\User;
+use App\Models\ProjectUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -36,7 +38,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('projects.create', ['clients' => Client::all()]);
+        return view('projects.create', ['clients' => Client::all(), 'users' => User::all()]);
     }
 
     /**
@@ -49,7 +51,8 @@ class ProjectController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
-            'client_id' => ['required', 'integer', 'exists:clients,id',],
+            'client_id' => ['required', 'integer', 'exists:clients,id'],
+            'team' => ['required', 'array'],
             'due_date' => ['required', 'date'],
             'estimated_hours' => ['required', 'date'],
             'estimated_hours' => ['required', 'integer', 'min:0'],
@@ -76,6 +79,17 @@ class ProjectController extends Controller
 
         $project->save();
 
+        $team = $request->team;
+
+        foreach ($team as $user) {
+            $projectUser = new ProjectUser;
+
+            $projectUser->project_id = $project->id;
+            $projectUser->user_id = $user;
+
+            $projectUser->save();
+        }
+
         Session::flash('message', 'Project was created!');
         Session::flash('type', 'info');
 
@@ -101,7 +115,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        return view('projects.edit', ['project' => $project, 'clients' => Client::all()]);
+        return view('projects.edit', ['project' => $project, 'clients' => Client::all(), 'users' => User::all()]);
     }
 
     /**
@@ -115,7 +129,8 @@ class ProjectController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
-            'client_id' => ['required', 'integer', 'exists:clients,id',],
+            'client_id' => ['required', 'integer', 'exists:clients,id'],
+            'team' => ['required', 'array'],
             'due_date' => ['required', 'date'],
             'estimated_hours' => ['required', 'date'],
             'estimated_hours' => ['required', 'integer', 'min:0'],
@@ -125,7 +140,7 @@ class ProjectController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('projects.detail', ['project' => $project->id])
+                    ->route('projects.edit', ['project' => $project->id])
                     ->withErrors($validator)
                     ->withInput();
         }
@@ -142,6 +157,19 @@ class ProjectController extends Controller
                     ]);
 
         $project = Project::find($project->id);
+
+        ProjectUser::where('project_id', $project->id)->delete();
+
+        $team = $request->team;
+
+        foreach ($team as $user) {
+            $projectUser = new ProjectUser;
+
+            $projectUser->project_id = $project->id;
+            $projectUser->user_id = $user;
+
+            $projectUser->save();
+        }
 
         Session::flash('message', 'Project was updated!');
         Session::flash('type', 'info');

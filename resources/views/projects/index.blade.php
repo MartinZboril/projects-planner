@@ -43,7 +43,11 @@
                                     <tr>
                                         <td><a href="{{ route('projects.detail', $project->id) }}">{{ $project->name }}</a></td>
                                         <td>{{ $project->client->name }}</td>
-                                        <td>-</td>
+                                        <td>
+                                            @foreach ($project->team as $user)
+                                                <img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $user->name }} {{ $user->surname }}">
+                                            @endforeach
+                                        </td>
                                         <td>0 %</td>
                                         <td>0 Hours</td>
                                         <td>0 %</td>
@@ -94,6 +98,8 @@
                     toastr.error($('#projectform-message').val());            
                 }
             }; 
+
+            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
 @endsection
