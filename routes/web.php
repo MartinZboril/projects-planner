@@ -43,3 +43,12 @@ Route::get('/projects/{project}/edit', [App\Http\Controllers\ProjectController::
 
 Route::post('/projects/store', [App\Http\Controllers\ProjectController::class, 'store'])->name('projects.store');
 Route::patch('/projects/{project}/update', [App\Http\Controllers\ProjectController::class, 'update'])->name('projects.update');
+
+// Tasks
+Route::get('/tasks', [App\Http\Controllers\TaskController::class, 'index'])->name('tasks.index');
+Route::get('/tasks/create', [App\Http\Controllers\TaskController::class, 'create'])->name('tasks.create');
+Route::get('/tasks/{task}/detail', [App\Http\Controllers\TaskController::class, 'detail'])->name('tasks.detail');
+Route::get('/tasks/{task}/edit', [App\Http\Controllers\TaskController::class, 'edit'])->name('tasks.edit');
+
+Route::post('/tasks/store', [App\Http\Controllers\TaskController::class, 'store'])->name('tasks.store');
+Route::patch('/tasks/{task}/update', [App\Http\Controllers\TaskController::class, 'update'])->name('tasks.update');

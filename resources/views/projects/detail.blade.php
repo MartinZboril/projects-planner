@@ -20,6 +20,14 @@
             <input type="hidden" id="projectform-message" value="{{ Session::get('message') }}">
             <input type="hidden" id="projectform-message-type" value="{{ Session::get('type') }}">
 
+
+            <div class="card-header p-0 pb-2 mb-2">
+                <ul class="nav nav-pills">
+                    <li class="nav-item"><a class="nav-link active" href="{{ route('projects.detail', $project->id) }}">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#tasks">Tasks</a></li>
+                </ul>
+            </div>
+
             <div class="row">
                 <div class="col-md-5">
                     <div class="card card-primary card-outline rounded-0">
@@ -77,7 +85,7 @@
                         </div>
                     </div>
                 </div>
-            </div>         
+            </div>  
         </div>
     </section>
     <!-- /.content -->
