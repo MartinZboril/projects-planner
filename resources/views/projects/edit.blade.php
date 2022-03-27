@@ -18,7 +18,7 @@
                 <div class="row">
                     <div class="col-md-7">
                         <div class="card card-primary card-outline rounded-0">
-                            <div class="card-header">Create project</div>
+                            <div class="card-header">Edit project</div>
                             <div class="card-body">
                                 <div class="form-group required">
                                     <label for="name" class="control-label">Name</label>
@@ -98,7 +98,7 @@
                         </div>
                         <div class="card rounded-0">
                             <div class="card-body">
-                                <input type="submit" name="create" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="create_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ route('projects.index') }}" class="cancel-btn">Close</a></span>
+                                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ route('projects.index') }}" class="cancel-btn">Close</a></span>
                             </div>
                         </div>
                     </div>

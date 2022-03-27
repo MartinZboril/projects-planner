@@ -102,7 +102,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        //
+        return view('tasks.edit', ['task' => $task, 'projects' => Project::all(), 'users' => User::all()]);
     }
 
     /**
@@ -114,7 +114,36 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'project_id' => ['required', 'integer', 'exists:projects,id'],
+            'user_id' => ['required', 'integer', 'exists:users,id'],
+            'start_date' => ['required', 'date'],
+            'due_date' => ['required', 'date'],
+            'description' => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                    ->route('tasks.edit', ['task' => $task->id])
+                    ->withErrors($validator)
+                    ->withInput();
+        }
+
+        Task::where('id', $task->id)
+                    ->update([
+                        'name' => $request->name,
+                        'project_id' => $request->project_id,
+                        'user_id' => $request->user_id,
+                        'start_date' => $request->start_date,
+                        'due_date' => $request->due_date,
+                        'description' => $request->description,
+                    ]);
+
+        Session::flash('message', 'Task was updated!');
+        Session::flash('type', 'info');
+
+        return ($request->save_and_close) ? redirect()->route('tasks.index') : redirect()->route('tasks.detail', ['task' => $task->id]);
     }
 
     /**
