@@ -36,7 +36,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('tasks.index') }}" class="nav-link {{ (str_contains(url()->current(), 'tasks')) ? 'active' : '' }}">
+                    <a href="{{ route('tasks.index') }}" class="nav-link {{ (str_contains(url()->current(), 'tasks') && !str_contains(url()->current(), 'projects')) ? 'active' : '' }}">
                         <i class="nav-icon fas fa-tasks"></i>
                         <p>
                             Tasks

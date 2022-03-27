@@ -32,6 +32,17 @@ class ProjectController extends Controller
     }
 
     /**
+     * Display the specified resource of project tasks.
+     *
+     * @param  \App\Models\Project  $project
+     * @return \Illuminate\Http\Response
+     */
+    public function tasks(Project $project)
+    {
+        return view('projects.tasks', ['project' => $project]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

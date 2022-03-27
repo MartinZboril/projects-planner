@@ -24,7 +24,7 @@
             <div class="card-header p-0 pb-2 mb-2">
                 <ul class="nav nav-pills">
                     <li class="nav-item"><a class="nav-link active" href="{{ route('projects.detail', $project->id) }}">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#tasks">Tasks</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('projects.tasks', $project->id) }}">Tasks</a></li>
                 </ul>
             </div>
 
