@@ -36,7 +36,7 @@
                                 @forelse ($project->newTasks as $task)
                                     <div class="card card-info card-outline">
                                         <div class="card-header">
-                                            <div class="card-title"><a href="{{ route('tasks.detail', $task->id) }}">{{ $task->name }}</a> {!! $task->is_stopped ? "<span class='badge badge-danger' style='font-size:14px;'>Stopped</span>" : ($task->is_returned ? "<span class='badge badge-danger' style='font-size:14px;'>Returned</span>" : '') !!}</div>
+                                            <div class="card-title"><a href="{{ route('tasks.detail', $task->id) }}">{{ $task->name }}</a> {!! $task->is_stopped ? "<span class='badge badge-danger ml-2' style='font-size:14px;'>Stopped</span>" : ($task->is_returned ? "<span class='badge badge-danger ml-2' style='font-size:14px;'>Returned</span>" : '') !!}</div>
                                             <div class="card-tools">
                                                 @if ($task->status->id == 1)
                                                     <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('start-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-play" data-toggle="tooltip" data-placement="bottom" title="Start"></i></a>
@@ -100,7 +100,7 @@
                                 @forelse ($project->inProgressTasks as $task)
                                     <div class="card card-warning card-outline">
                                         <div class="card-header">
-                                            <div class="card-title"><a href="{{ route('tasks.detail', $task->id) }}">{{ $task->name }}</a> {!! $task->is_stopped ? "<span class='badge badge-danger' style='font-size:14px;'>Stopped</span>" : ($task->is_returned ? "<span class='badge badge-danger' style='font-size:14px;'>Returned</span>" : '') !!}</div>
+                                            <div class="card-title"><a href="{{ route('tasks.detail', $task->id) }}">{{ $task->name }}</a> {!! $task->is_stopped ? "<span class='badge badge-danger ml-2' style='font-size:14px;'>Stopped</span>" : ($task->is_returned ? "<span class='badge badge-danger ml-2' style='font-size:14px;'>Returned</span>" : '') !!}</div>
                                             <div class="card-tools">
                                                 @if ($task->status->id == 1)
                                                     <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('start-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-play" data-toggle="tooltip" data-placement="bottom" title="Start"></i></a>
@@ -164,7 +164,7 @@
                                 @forelse ($project->completedTasks as $task)
                                     <div class="card card-success card-outline">
                                         <div class="card-header">
-                                            <div class="card-title"><a href="{{ route('tasks.detail', $task->id) }}">{{ $task->name }}</a> {!! $task->is_stopped ? "<span class='badge badge-danger' style='font-size:14px;'>Stopped</span>" : ($task->is_returned ? "<span class='badge badge-danger' style='font-size:14px;'>Returned</span>" : '') !!}</div>
+                                            <div class="card-title"><a href="{{ route('tasks.detail', $task->id) }}">{{ $task->name }}</a> {!! $task->is_stopped ? "<span class='badge badge-danger ml-2' style='font-size:14px;'>Stopped</span>" : ($task->is_returned ? "<span class='badge badge-danger ml-2' style='font-size:14px;'>Returned</span>" : '') !!}</div>
                                             <div class="card-tools">
                                                 @if ($task->status->id == 1)
                                                     <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('start-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-play" data-toggle="tooltip" data-placement="bottom" title="Start"></i></a>
