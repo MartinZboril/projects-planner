@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             'created_at' => Carbon::now()->toDateTimeString(),
             'updated_at' => Carbon::now()->toDateTimeString(),
         ],[
-            'name' => 'Ongoing',
+            'name' => 'In Progress',
             'created_at' => Carbon::now()->toDateTimeString(),
             'updated_at' => Carbon::now()->toDateTimeString(),
         ],[

@@ -147,6 +147,46 @@ class TaskController extends Controller
     }
 
     /**
+     * Start working on the task.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
+    public function start(Request $request, Task $task)
+    {
+        Task::where('id', $task->id)
+                    ->update([
+                        'status_id' => 2,
+                    ]);
+
+        Session::flash('message', 'Start working on Task!');
+        Session::flash('type', 'info');
+
+        return redirect()->route('tasks.detail', ['task' => $task->id]);
+    }
+
+    /**
+     * Complete working on the task.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
+    public function complete(Request $request, Task $task)
+    {
+        Task::where('id', $task->id)
+                    ->update([
+                        'status_id' => 3,
+                    ]);
+
+        Session::flash('message', 'Task was completed!');
+        Session::flash('type', 'info');
+
+        return redirect()->route('tasks.detail', ['task' => $task->id]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Task  $task

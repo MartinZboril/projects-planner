@@ -6,11 +6,16 @@
 
 @section('content')
 <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+<div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('tasks.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
         <a href="{{ route('tasks.edit', $task->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
+        @if ($task->status->id == 1)
+            <a href="#" class="btn btn-sm btn-info" onclick="event.preventDefault(); document.getElementById('start-working-on-task-form').submit();"><i class="fas fa-play mr-1"></i> Start</a>
+        @elseif ($task->status->id == 2)
+            <a href="#" class="btn btn-sm btn-success" onclick="event.preventDefault(); document.getElementById('complete-working-on-task-form').submit();"><i class="fas fa-check mr-1"></i> Complete</a>
+        @endif
     </div>
     <!-- /.content-header -->
 
@@ -57,6 +62,7 @@
                             @if ($task->user->id != $task->author->id)
                                 <span class="d-block">Author: <b>{{ $task->author->name }} {{ $task->author->surname }}</b></span>
                             @endif
+                            <span class="d-block">Status: <b>{{ $task->status->name }}</b></span>
                             <hr>
                             {!! $task->description !!}
                         </div>
@@ -72,8 +78,18 @@
             </div>         
         </div>
     </section>
-    <!-- /.content -->
-  </div>
+<!-- /.content -->
+</div>
+
+<form id="start-working-on-task-form" action="{{ route('tasks.start', $task->id) }}" method="POST" class="hidden">
+    @csrf
+    @method('PATCH')
+</form>
+
+<form id="complete-working-on-task-form" action="{{ route('tasks.complete', $task->id) }}" method="POST" class="hidden">
+    @csrf
+    @method('PATCH')
+</form>
 @endsection
 
 @section('scripts')
