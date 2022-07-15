@@ -57,3 +57,4 @@ Route::patch('/tasks/{task}/start', [App\Http\Controllers\TaskController::class,
 Route::patch('/tasks/{task}/complete', [App\Http\Controllers\TaskController::class, 'complete'])->name('tasks.complete');
 Route::patch('/tasks/{task}/stop', [App\Http\Controllers\TaskController::class, 'stop'])->name('tasks.stop');
 Route::patch('/tasks/{task}/resume', [App\Http\Controllers\TaskController::class, 'resume'])->name('tasks.resume');
+Route::patch('/tasks/{task}/return', [App\Http\Controllers\TaskController::class, 'return'])->name('tasks.return');

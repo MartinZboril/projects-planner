@@ -158,6 +158,7 @@ class TaskController extends Controller
         Task::where('id', $task->id)
                     ->update([
                         'status_id' => 2,
+                        'is_returned' => false,
                     ]);
 
         Session::flash('message', 'Start working on Task!');
@@ -222,6 +223,27 @@ class TaskController extends Controller
 
         Session::flash('message', 'Task was resumed!');
         Session::flash('type', 'info');
+
+        return redirect()->route('tasks.detail', ['task' => $task->id]);
+    }
+
+    /**
+     * Return working on the task.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
+    public function return(Request $request, Task $task)
+    {
+        Task::where('id', $task->id)
+                    ->update([
+                        'is_returned' => true,
+                        'status_id' => 1,
+                    ]);
+
+        Session::flash('message', 'Task was returned!');
+        Session::flash('type', 'danger');
 
         return redirect()->route('tasks.detail', ['task' => $task->id]);
     }
