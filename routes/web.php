@@ -55,3 +55,5 @@ Route::post('/tasks/store', [App\Http\Controllers\TaskController::class, 'store'
 Route::patch('/tasks/{task}/update', [App\Http\Controllers\TaskController::class, 'update'])->name('tasks.update');
 Route::patch('/tasks/{task}/start', [App\Http\Controllers\TaskController::class, 'start'])->name('tasks.start');
 Route::patch('/tasks/{task}/complete', [App\Http\Controllers\TaskController::class, 'complete'])->name('tasks.complete');
+Route::patch('/tasks/{task}/stop', [App\Http\Controllers\TaskController::class, 'stop'])->name('tasks.stop');
+Route::patch('/tasks/{task}/resume', [App\Http\Controllers\TaskController::class, 'resume'])->name('tasks.resume');

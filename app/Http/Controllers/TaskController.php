@@ -181,6 +181,46 @@ class TaskController extends Controller
                     ]);
 
         Session::flash('message', 'Task was completed!');
+        Session::flash('type', 'success');
+
+        return redirect()->route('tasks.detail', ['task' => $task->id]);
+    }
+
+    /**
+     * Stop working on the task.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
+    public function stop(Request $request, Task $task)
+    {
+        Task::where('id', $task->id)
+                    ->update([
+                        'is_stopped' => true,
+                    ]);
+
+        Session::flash('message', 'Task was stopped!');
+        Session::flash('type', 'danger');
+
+        return redirect()->route('tasks.detail', ['task' => $task->id]);
+    }
+
+    /**
+     * Resume working on the task.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
+    public function resume(Request $request, Task $task)
+    {
+        Task::where('id', $task->id)
+                    ->update([
+                        'is_stopped' => false,
+                    ]);
+
+        Session::flash('message', 'Task was resumed!');
         Session::flash('type', 'info');
 
         return redirect()->route('tasks.detail', ['task' => $task->id]);

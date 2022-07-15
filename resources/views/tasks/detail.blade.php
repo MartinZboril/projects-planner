@@ -14,7 +14,12 @@
         @if ($task->status->id == 1)
             <a href="#" class="btn btn-sm btn-info" onclick="event.preventDefault(); document.getElementById('start-working-on-task-form').submit();"><i class="fas fa-play mr-1"></i> Start</a>
         @elseif ($task->status->id == 2)
-            <a href="#" class="btn btn-sm btn-success" onclick="event.preventDefault(); document.getElementById('complete-working-on-task-form').submit();"><i class="fas fa-check mr-1"></i> Complete</a>
+            <a href="#" class="btn btn-sm btn-success {{ ($task->is_stopped) ? 'disabled' : '' }}" onclick="event.preventDefault(); document.getElementById('complete-working-on-task-form').submit();"><i class="fas fa-check mr-1"></i> Complete</a>
+            @if ($task->is_stopped)
+                <a href="#" class="btn btn-sm btn-info" onclick="event.preventDefault(); document.getElementById('resume-working-on-task-form').submit();"><i class="fas fa-hourglass-start mr-1"></i> Resume</a>
+            @else
+                <a href="#" class="btn btn-sm btn-danger" onclick="event.preventDefault(); document.getElementById('stop-working-on-task-form').submit();"><i class="fas fa-stop mr-1"></i> Stop</a>
+            @endif
         @endif
     </div>
     <!-- /.content-header -->
@@ -28,7 +33,7 @@
             <div class="row">
                 <div class="col-md-5">
                     <div class="card card-primary card-outline rounded-0">
-                        <div class="card-header">{{ $task->name }}</div>
+                        <div class="card-header">{{ $task->name }} {!! ($task->is_stopped) ? "<span class='badge badge-danger ml-2' style='font-size:14px;'>Stopped</span>"  : '' !!}</div>
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12 col-sm-4">
@@ -87,6 +92,16 @@
 </form>
 
 <form id="complete-working-on-task-form" action="{{ route('tasks.complete', $task->id) }}" method="POST" class="hidden">
+    @csrf
+    @method('PATCH')
+</form>
+
+<form id="stop-working-on-task-form" action="{{ route('tasks.stop', $task->id) }}" method="POST" class="hidden">
+    @csrf
+    @method('PATCH')
+</form>
+
+<form id="resume-working-on-task-form" action="{{ route('tasks.resume', $task->id) }}" method="POST" class="hidden">
     @csrf
     @method('PATCH')
 </form>
