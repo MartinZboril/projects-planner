@@ -41,9 +41,15 @@ Route::get('/projects/create', [App\Http\Controllers\ProjectController::class, '
 Route::get('/projects/{project}/detail', [App\Http\Controllers\ProjectController::class, 'detail'])->name('projects.detail');
 Route::get('/projects/{project}/edit', [App\Http\Controllers\ProjectController::class, 'edit'])->name('projects.edit');
 Route::get('/projects/{project}/tasks', [App\Http\Controllers\ProjectController::class, 'tasks'])->name('projects.tasks');
+Route::get('/projects/{project}/kanban', [App\Http\Controllers\ProjectController::class, 'kanban'])->name('projects.kanban');
 
 Route::post('/projects/store', [App\Http\Controllers\ProjectController::class, 'store'])->name('projects.store');
 Route::patch('/projects/{project}/update', [App\Http\Controllers\ProjectController::class, 'update'])->name('projects.update');
+Route::patch('/projects/{project}/task/{task}/start', [App\Http\Controllers\ProjectController::class, 'start'])->name('projects.tasks.start');
+Route::patch('/projects/{project}/task/{task}/complete', [App\Http\Controllers\ProjectController::class, 'complete'])->name('projects.tasks.complete');
+Route::patch('/projects/{project}/task/{task}/stop', [App\Http\Controllers\ProjectController::class, 'stop'])->name('projects.tasks.stop');
+Route::patch('/projects/{project}/task/{task}/resume', [App\Http\Controllers\ProjectController::class, 'resume'])->name('projects.tasks.resume');
+Route::patch('/projects/{project}/task/{task}/return', [App\Http\Controllers\ProjectController::class, 'return'])->name('projects.tasks.return');
 
 // Tasks
 Route::get('/tasks', [App\Http\Controllers\TaskController::class, 'index'])->name('tasks.index');

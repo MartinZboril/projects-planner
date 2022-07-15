@@ -24,6 +24,7 @@
                 <ul class="nav nav-pills">
                     <li class="nav-item"><a class="nav-link" href="{{ route('projects.detail', $project->id) }}">Dashboard</a></li>
                     <li class="nav-item"><a class="nav-link active" href="{{ route('projects.tasks', $project->id) }}">Tasks</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('projects.kanban', $project->id) }}">Kanban</a></li>
                 </ul>
             </div>
 

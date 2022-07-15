@@ -26,6 +26,21 @@ class Project extends Model
         return $this->hasMany(Task::class, 'project_id');
     }
 
+    public function newTasks()
+    {
+        return $this->hasMany(Task::class, 'project_id')->new();
+    }
+
+    public function inProgressTasks()
+    {
+        return $this->hasMany(Task::class, 'project_id')->inProgress();
+    }
+
+    public function completedTasks()
+    {
+        return $this->hasMany(Task::class, 'project_id')->completed();
+    }
+
     public function getDeadlineAttribute()
     {
         return $this->due_date->diffInDays(\Carbon\Carbon::now()->format('Y-m-d'));

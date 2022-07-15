@@ -30,4 +30,19 @@ class Task extends Model
     {
         return $this->belongsTo(Status::class, 'status_id');
     }
+
+    public function scopeNew($query)
+    {
+        return $query->where('status_id', 1);
+    }
+
+    public function scopeInProgress($query)
+    {
+        return $query->where('status_id', 2);
+    }
+
+    public function scopeCompleted($query)
+    {
+        return $query->where('status_id', 3);
+    }
 }

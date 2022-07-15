@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\Client;
 use App\Models\User;
 use App\Models\ProjectUser;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -40,6 +41,17 @@ class ProjectController extends Controller
     public function tasks(Project $project)
     {
         return view('projects.tasks', ['project' => $project]);
+    }
+
+    /**
+     * Display the specified resource of project tasks with kanban board.
+     *
+     * @param  \App\Models\Project  $project
+     * @return \Illuminate\Http\Response
+     */
+    public function kanban(Project $project)
+    {
+        return view('projects.kanban', ['project' => $project]);
     }
 
     /**
@@ -186,6 +198,108 @@ class ProjectController extends Controller
         Session::flash('type', 'info');
 
         return ($request->save_and_close) ? redirect()->route('projects.index') : redirect()->route('projects.detail', ['project' => $project->id]);
+    }
+
+    /**
+     * Start working on the task.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
+    public function start(Request $request, Project $project, Task $task)
+    {
+        Task::where('id', $task->id)
+                    ->update([
+                        'status_id' => 2,
+                        'is_returned' => false,
+                    ]);
+
+        Session::flash('message', 'Start working on Task!');
+        Session::flash('type', 'info');
+
+        return redirect()->route('projects.kanban', ['project' => $task->project->id]);
+    }
+
+    /**
+     * Complete working on the task.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
+    public function complete(Request $request, Project $project, Task $task)
+    {
+        Task::where('id', $task->id)
+                    ->update([
+                        'status_id' => 3,
+                    ]);
+
+        Session::flash('message', 'Task was completed!');
+        Session::flash('type', 'success');
+
+        return redirect()->route('projects.kanban', ['project' => $task->project->id]);
+    }
+
+    /**
+     * Stop working on the task.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
+    public function stop(Request $request, Project $project, Task $task)
+    {
+        Task::where('id', $task->id)
+                    ->update([
+                        'is_stopped' => true,
+                    ]);
+
+        Session::flash('message', 'Task was stopped!');
+        Session::flash('type', 'danger');
+
+        return redirect()->route('projects.kanban', ['project' => $task->project->id]);
+    }
+
+    /**
+     * Resume working on the task.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
+    public function resume(Request $request, Project $project, Task $task)
+    {
+        Task::where('id', $task->id)
+                    ->update([
+                        'is_stopped' => false,
+                    ]);
+
+        Session::flash('message', 'Task was resumed!');
+        Session::flash('type', 'info');
+
+        return redirect()->route('projects.kanban', ['project' => $task->project->id]);
+    }
+
+    /**
+     * Return working on the task.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
+    public function return(Request $request, Project $project, Task $task)
+    {
+        Task::where('id', $task->id)
+                    ->update([
+                        'is_returned' => true,
+                        'status_id' => 1,
+                    ]);
+
+        Session::flash('message', 'Task was returned!');
+        Session::flash('type', 'danger');
+
+        return redirect()->route('projects.kanban', ['project' => $task->project->id]);
     }
 
     /**
