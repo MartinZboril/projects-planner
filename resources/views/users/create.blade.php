@@ -71,8 +71,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="password">Password</label>
+                                        <div class="form-group required">
+                                            <label for="password" class="control-label">Password</label>
                                             <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="password" value="{{ old('password') }}" autocomplete="off">
                                             @error('password')
                                                 <div class="invalid-feedback">{{ $message }}</div>
