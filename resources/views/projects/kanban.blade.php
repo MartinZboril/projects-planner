@@ -59,6 +59,9 @@
                                             @if ($task->user->id != $task->author->id)
                                                 <span class="d-block">Author: <b>{{ $task->author->name }} {{ $task->author->surname }}</b></span>
                                             @endif
+                                            @if ($task->milestone)
+                                                <span class="d-block">Milestone: <b>{{ $task->milestone->name }}</b></span>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -123,6 +126,9 @@
                                             @if ($task->user->id != $task->author->id)
                                                 <span class="d-block">Author: <b>{{ $task->author->name }} {{ $task->author->surname }}</b></span>
                                             @endif
+                                            @if ($task->milestone)
+                                                <span class="d-block">Milestone: <b>{{ $task->milestone->name }}</b></span>
+                                            @endif
                                         </div>
                                     </div>
 
@@ -186,6 +192,9 @@
                                             <span class="d-block">User: <b>{{ $task->user->name }} {{ $task->user->surname }}</b></span>
                                             @if ($task->user->id != $task->author->id)
                                                 <span class="d-block">Author: <b>{{ $task->author->name }} {{ $task->author->surname }}</b></span>
+                                            @endif
+                                            @if ($task->milestone)
+                                                <span class="d-block">Milestone: <b>{{ $task->milestone->name }}</b></span>
                                             @endif
                                         </div>
                                     </div>

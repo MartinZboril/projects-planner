@@ -68,6 +68,7 @@ class TaskController extends Controller
 
         $task->name = $request->name;
         $task->project_id = $request->project_id;
+        $task->milestone_id = $request->milestone_id ? $request->milestone_id : null;
         $task->status_id = 1;
         $task->author_id = Auth::id();
         $task->user_id = $request->user_id;
@@ -134,6 +135,7 @@ class TaskController extends Controller
                     ->update([
                         'name' => $request->name,
                         'project_id' => $request->project_id,
+                        'milestone_id' => $request->milestone_id ? $request->milestone_id : null,
                         'user_id' => $request->user_id,
                         'start_date' => $request->start_date,
                         'due_date' => $request->due_date,

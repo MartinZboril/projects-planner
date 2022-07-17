@@ -39,7 +39,7 @@
                             <tbody>
                                 @forelse ($tasks as $task)
                                     <tr>
-                                        <td><a href="{{ route('tasks.detail', $task->id) }}">{{ $task->name }} {{ $task->surname }}</a></td>
+                                        <td><a href="{{ route('tasks.detail', $task->id) }}">{{ $task->name }}</a></td>
                                         <td>{{ $task->project->name }}</td>
                                         <td><img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $task->user->name }} {{ $task->user->surname }}"></td>
                                         <td>{{ $task->due_date->format('d.m.Y') }}</td>

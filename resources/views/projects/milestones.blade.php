@@ -34,13 +34,13 @@
                 <div class="card-body">
                     <input type="hidden" id="milestoneform-message" value="{{ Session::get('message') }}">
                     <input type="hidden" id="milestoneform-message-type" value="{{ Session::get('type') }}">
-
                     <div class="table-responsive">
                         <table id="{{ count($project->milestones) > 0 ? 'milestones-table' : '' }}" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>Name</th>
                                     <th>Owner</th>
+                                    <th>Progress</th>
                                     <th>Start Date</th>
                                     <th>End Date</th>
                                     <th></th>
@@ -51,6 +51,12 @@
                                     <tr>
                                         <td><a href="{{ route('milestones.detail', ['project' => $project->id, 'milestone' => $milestone->id]) }}">{{ $milestone->name }}</a></td>
                                         <td>{{ $milestone->owner->name }} {{ $milestone->owner->surname }}</td>
+                                        <td>
+                                            <div class="progress progress-sm">
+                                                <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="{{ $milestone->progress * 100 }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $milestone->progress * 100 }}%"></div>
+                                            </div>
+                                            <small>{{ $milestone->progress * 100 }}% Complete ({{ $milestone->tasksCompleted->count() }}/{{ $milestone->tasks->count() }})</small>
+                                        </td>
                                         <td>{{ $milestone->start_date->format('d.m.Y') }}</td>
                                         <td>{{ $milestone->end_date->format('d.m.Y') }}</td>
                                         <td>

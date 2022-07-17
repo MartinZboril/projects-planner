@@ -43,6 +43,11 @@ class ProjectController extends Controller
         return view('projects.tasks', ['project' => $project]);
     }
 
+    public function getMilestones(Project $project)
+    {
+        return $project->milestones()->select('id', 'name')->get();
+    }
+
     /**
      * Display the specified resource of project tasks with kanban board.
      *

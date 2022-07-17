@@ -31,6 +31,11 @@ class Task extends Model
         return $this->belongsTo(Status::class, 'status_id');
     }
 
+    public function milestone()
+    {
+        return $this->belongsTo(Milestone::class, 'milestone_id');
+    }
+
     public function scopeNew($query)
     {
         return $query->where('status_id', 1);

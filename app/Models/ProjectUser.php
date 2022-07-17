@@ -9,7 +9,7 @@ class ProjectUser extends Model
 {
     use HasFactory;
 
-    protected $table = 'project_user';
+    protected $table = 'projects_users';
 
     public function project()
     {

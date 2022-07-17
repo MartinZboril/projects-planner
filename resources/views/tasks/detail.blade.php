@@ -65,6 +65,9 @@
                             </div>
                             <span class="d-block">Project: <b>{{ $task->project->name }}</b></span>
                             <span class="d-block">Client: <b>{{ $task->project->client->name }}</b></span>
+                            @if ($task->milestone)
+                                <span class="d-block">Milestone: <b>{{ $task->milestone->name }}</b></span>
+                            @endif
                             <span class="d-block">User: <b>{{ $task->user->name }} {{ $task->user->surname }}</b></span>
                             @if ($task->user->id != $task->author->id)
                                 <span class="d-block">Author: <b>{{ $task->author->name }} {{ $task->author->surname }}</b></span>

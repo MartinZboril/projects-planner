@@ -38,6 +38,15 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                <div class="form-group">
+                                    <label for="milestone_id">Milestone</label>
+                                    <select class="form-control milestone-select @error('milestone_id') is-invalid @enderror" name="milestone_id" id="milestone_id" style="width: 100%;">
+                                        <option disabled selected value>Choose project</option>
+                                    </select>
+                                    @error('milestone_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                                 <div class="form-group required">
                                     <label for="user_id" class="control-label">User</label>
                                     <select class="form-control user-select @error('user_id') is-invalid @enderror" name="user_id" id="user_id" style="width: 100%;">
@@ -95,9 +104,28 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
+            $('#project_id').change(function() {
+                var url = '{{ url('projects') }}/' + $(this).val() + '/milestones/get/';
+
+                $.get(url, function(data) {
+                    var milestoneSelect = $('#milestone_id');
+                    milestoneSelect.empty();
+
+                    $.each(data,function(key, value) {
+                        milestoneSelect.append('<option disabled selected value>Choose milestone</option>');
+                        milestoneSelect.append('<option value=' + value.id + '>' + value.name + '</option>');
+                    });
+                });
+            });
+
             $('.project-select').select2({
                 theme: 'bootstrap4',
                 placeholder: 'select project'
+            });
+
+            $('.milestone-select').select2({
+                theme: 'bootstrap4',
+                placeholder: 'select milestone'
             });
 
             $('.user-select').select2({

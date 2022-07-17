@@ -43,6 +43,7 @@ Route::get('/projects/{project}/edit', [App\Http\Controllers\ProjectController::
 Route::get('/projects/{project}/tasks', [App\Http\Controllers\ProjectController::class, 'tasks'])->name('projects.tasks');
 Route::get('/projects/{project}/kanban', [App\Http\Controllers\ProjectController::class, 'kanban'])->name('projects.kanban');
 Route::get('/projects/{project}/milestones', [App\Http\Controllers\ProjectController::class, 'milestones'])->name('projects.milestones');
+Route::get('/projects/{project}/milestones/get', [App\Http\Controllers\ProjectController::class, 'getMilestones']);
 
 Route::post('/projects/store', [App\Http\Controllers\ProjectController::class, 'store'])->name('projects.store');
 Route::patch('/projects/{project}/update', [App\Http\Controllers\ProjectController::class, 'update'])->name('projects.update');

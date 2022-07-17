@@ -18,7 +18,7 @@
                 <div class="row">
                     <div class="col-md-7">
                         <div class="card card-primary card-outline rounded-0">
-                            <div class="card-header">Create milestone</div>
+                            <div class="card-header">Edit milestone</div>
                             <div class="card-body">
                                 <div class="form-group required">
                                     <label for="name" class="control-label">Name</label>

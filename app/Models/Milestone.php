@@ -20,4 +20,19 @@ class Milestone extends Model
     {
         return $this->belongsTo(User::class, 'owner_id');
     }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class, 'milestone_id');
+    }
+
+    public function tasksCompleted()
+    {
+        return $this->hasMany(Task::class, 'milestone_id')->completed();
+    }
+
+    public function getProgressAttribute()
+    {
+        return count($this->tasksCompleted) / count($this->tasks);
+    }
 }
