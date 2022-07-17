@@ -74,3 +74,10 @@ Route::get('/projects/{project}/milestones/{milestone}/edit', [App\Http\Controll
 
 Route::post('/projects/{project}/milestones/store', [App\Http\Controllers\MilestoneController::class, 'store'])->name('milestones.store');
 Route::patch('/projects/{project}/milestones/{milestone}/update', [App\Http\Controllers\MilestoneController::class, 'update'])->name('milestones.update');
+
+// ToDos
+Route::get('/tasks/{task}/todos/create', [App\Http\Controllers\ToDoController::class, 'create'])->name('todos.create');
+Route::get('/tasks/{task}/todos/{todo}/edit', [App\Http\Controllers\ToDoController::class, 'edit'])->name('todos.edit');
+
+Route::post('/tasks/{task}/todos/store', [App\Http\Controllers\ToDoController::class, 'store'])->name('todos.store');
+Route::patch('/tasks/{task}/todos/{todo}/update', [App\Http\Controllers\ToDoController::class, 'update'])->name('todos.update');

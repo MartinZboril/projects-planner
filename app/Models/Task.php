@@ -36,6 +36,11 @@ class Task extends Model
         return $this->belongsTo(Milestone::class, 'milestone_id');
     }
 
+    public function todos()
+    {
+        return $this->hasMany(ToDo::class, 'task_id');
+    }
+
     public function scopeNew($query)
     {
         return $query->where('status_id', 1);

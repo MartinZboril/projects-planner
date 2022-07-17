@@ -79,6 +79,35 @@
                     </div>
                 </div>
                 <div class="col-md-7">
+                <div class="card card-primary card-outline rounded-0">
+                    <div class="card-header ui-sortable-handle" style="cursor: move;">
+                        <h3 class="card-title">
+                        <i class="ion ion-clipboard mr-1"></i>
+                        To Do List
+                        </h3>
+                        <div class="card-tools">
+                            <a href="{{ route('todos.create', $task->id) }}" class="btn btn-primary btn-sm float-right"><i class="fas fa-plus"></i> Add</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <ul class="todo-list ui-sortable" data-widget="todo-list">
+                            @foreach ($task->todos as $todo)
+                                <li>
+                                    <div class="icheck-primary d-inline ml-2">
+                                        <input type="checkbox" value="" name="todo-{{ $todo->id }}" id="todo-check-{{ $todo->id }}">
+                                        <label for="todo-check-{{ $todo->id }}"></label>
+                                    </div>
+                                    <span class="text">{{ $todo->name }}</span>
+                                    <small class="badge badge-danger"><i class="far fa-clock"></i> {{ $todo->deadline->format('d.m.Y') }}</small>
+                                    @if($todo->description)<small class="ml-1">{{ $todo->description }}</small>@endif
+                                    <div class="tools">
+                                        <a href="{{ route('todos.edit', ['task' => $task->id, 'todo' => $todo->id]) }}"><i class="fas fa-edit"></i></a>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
                     <div class="card card-primary card-outline rounded-0">
                         <div class="card-header">Activity Feed</div>
                         <div class="card-body">
