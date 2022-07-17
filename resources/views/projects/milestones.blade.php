@@ -9,7 +9,7 @@
 
 @section('content')
 <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+<div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('projects.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
@@ -23,43 +23,44 @@
             <div class="card-header p-0 pb-2 mb-2">
                 <ul class="nav nav-pills">
                     <li class="nav-item"><a class="nav-link" href="{{ route('projects.detail', $project->id) }}">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{{ route('projects.tasks', $project->id) }}">Tasks</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('projects.tasks', $project->id) }}">Tasks</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('projects.kanban', $project->id) }}">Kanban</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('projects.milestones', $project->id) }}">Milestones</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ route('projects.milestones', $project->id) }}">Milestones</a></li>
                 </ul>
             </div>
 
             <div class="card card-primary card-outline rounded-0">
+                <div class="card-header"><a href="{{ route('milestones.create', ['project' => $project->id]) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
                 <div class="card-body">
-                    <input type="hidden" id="taskform-message" value="{{ Session::get('message') }}">
-                    <input type="hidden" id="taskform-message-type" value="{{ Session::get('type') }}">
+                    <input type="hidden" id="milestoneform-message" value="{{ Session::get('message') }}">
+                    <input type="hidden" id="milestoneform-message-type" value="{{ Session::get('type') }}">
 
                     <div class="table-responsive">
-                        <table id="{{ count($project->tasks) > 0 ? 'tasks-table' : '' }}" class="table table-bordered table-striped">
+                        <table id="{{ count($project->milestones) > 0 ? 'milestones-table' : '' }}" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>User</th>
-                                    <th>Due Date</th>
-                                    <th>Status</th>
+                                    <th>Owner</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($project->tasks as $task)
+                                @forelse ($project->milestones as $milestone)
                                     <tr>
-                                        <td><a href="{{ route('tasks.detail', $task->id) }}">{{ $task->name }} {{ $task->surname }}</a></td>
-                                        <td><img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $task->user->name }} {{ $task->user->surname }}"></td>
-                                        <td>{{ $task->due_date->format('d.m.Y') }}</td>
-                                        <td>{{ $task->status->name }}</td>
+                                        <td><a href="{{ route('milestones.detail', ['project' => $project->id, 'milestone' => $milestone->id]) }}">{{ $milestone->name }}</a></td>
+                                        <td>{{ $milestone->owner->name }} {{ $milestone->owner->surname }}</td>
+                                        <td>{{ $milestone->start_date->format('d.m.Y') }}</td>
+                                        <td>{{ $milestone->end_date->format('d.m.Y') }}</td>
                                         <td>
-                                            <a class="btn btn-sm btn-dark" href="{{ route('tasks.edit', $task->id) }}"><i class="fas fa-pencil-alt"></i></a>
-                                            <a class="btn btn-sm btn-info" href="{{ route('tasks.detail', $task->id) }}"><i class="fas fa-eye"></i></a>
+                                            <a href="{{ route('milestones.edit', ['project' => $project->id, 'milestone' => $milestone->id]) }}" class="btn btn-sm btn-dark" href=""><i class="fas fa-pencil-alt"></i></a>
+                                            <a href="{{ route('milestones.detail', ['project' => $project->id, 'milestone' => $milestone->id]) }}" class="btn btn-sm btn-info" href=""><i class="fas fa-eye"></i></a>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center">No tasks were found!</td>
+                                        <td colspan="5" class="text-center">No milestones were found!</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -70,7 +71,7 @@
         </div>
     </section>
     <!-- /.content -->
-  </div>
+</div>
 @endsection
 
 @section('scripts')
@@ -91,15 +92,15 @@
 
     <script>
         $(function () {
-            $("#tasks-table").DataTable();
+            $("#milestones-table").DataTable();
 
-            if($('#taskform-message').val()) {
-                if($('#taskform-message-type').val() == "success") {
-                    toastr.success($('#taskform-message').val());
-                } else if($('#taskform-message-type').val() == "info") {
-                    toastr.info($('#taskform-message').val());
+            if($('#milestoneform-message').val()) {
+                if($('#milestoneform-message-type').val() == "success") {
+                    toastr.success($('#milestoneform-message').val());
+                } else if($('#milestoneform-message-type').val() == "info") {
+                    toastr.info($('#milestoneform-message').val());
                 } else {
-                    toastr.error($('#taskform-message').val());            
+                    toastr.error($('#milestoneform-message').val());            
                 }
             }; 
 

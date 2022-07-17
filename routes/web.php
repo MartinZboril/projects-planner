@@ -42,6 +42,7 @@ Route::get('/projects/{project}/detail', [App\Http\Controllers\ProjectController
 Route::get('/projects/{project}/edit', [App\Http\Controllers\ProjectController::class, 'edit'])->name('projects.edit');
 Route::get('/projects/{project}/tasks', [App\Http\Controllers\ProjectController::class, 'tasks'])->name('projects.tasks');
 Route::get('/projects/{project}/kanban', [App\Http\Controllers\ProjectController::class, 'kanban'])->name('projects.kanban');
+Route::get('/projects/{project}/milestones', [App\Http\Controllers\ProjectController::class, 'milestones'])->name('projects.milestones');
 
 Route::post('/projects/store', [App\Http\Controllers\ProjectController::class, 'store'])->name('projects.store');
 Route::patch('/projects/{project}/update', [App\Http\Controllers\ProjectController::class, 'update'])->name('projects.update');
@@ -64,3 +65,11 @@ Route::patch('/tasks/{task}/complete', [App\Http\Controllers\TaskController::cla
 Route::patch('/tasks/{task}/stop', [App\Http\Controllers\TaskController::class, 'stop'])->name('tasks.stop');
 Route::patch('/tasks/{task}/resume', [App\Http\Controllers\TaskController::class, 'resume'])->name('tasks.resume');
 Route::patch('/tasks/{task}/return', [App\Http\Controllers\TaskController::class, 'return'])->name('tasks.return');
+
+// Milestones
+Route::get('/projects/{project}/milestones/create', [App\Http\Controllers\MilestoneController::class, 'create'])->name('milestones.create');
+Route::get('/projects/{project}/milestones/{milestone}/detail', [App\Http\Controllers\MilestoneController::class, 'detail'])->name('milestones.detail');
+Route::get('/projects/{project}/milestones/{milestone}/edit', [App\Http\Controllers\MilestoneController::class, 'edit'])->name('milestones.edit');
+
+Route::post('/projects/{project}/milestones/store', [App\Http\Controllers\MilestoneController::class, 'store'])->name('milestones.store');
+Route::patch('/projects/{project}/milestones/{milestone}/update', [App\Http\Controllers\MilestoneController::class, 'update'])->name('milestones.update');

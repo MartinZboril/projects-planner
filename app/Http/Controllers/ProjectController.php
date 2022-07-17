@@ -54,6 +54,18 @@ class ProjectController extends Controller
         return view('projects.kanban', ['project' => $project]);
     }
 
+    
+    /**
+     * Display the specified resource of project milestones.
+     *
+     * @param  \App\Models\Project  $project
+     * @return \Illuminate\Http\Response
+     */
+    public function milestones(Project $project)
+    {
+        return view('projects.milestones', ['project' => $project]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
