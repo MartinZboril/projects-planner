@@ -81,3 +81,4 @@ Route::get('/tasks/{task}/todos/{todo}/edit', [App\Http\Controllers\ToDoControll
 
 Route::post('/tasks/{task}/todos/store', [App\Http\Controllers\ToDoController::class, 'store'])->name('todos.store');
 Route::patch('/tasks/{task}/todos/{todo}/update', [App\Http\Controllers\ToDoController::class, 'update'])->name('todos.update');
+Route::patch('/tasks/{task}/todos/{todo}/check', [App\Http\Controllers\ToDoController::class, 'check'])->name('todos.check');

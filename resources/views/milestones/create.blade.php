@@ -62,7 +62,9 @@
                                 <div class="form-group required">
                                     <label for="description" class="control-label">Description</label>
                                     <textarea name="description" class="form-control summernote" id="description" cols="30" rows="10" placeholder="description">{{ old('description') }}</textarea>
-                                    <span data-validate-for="description" class="text-danger binline modal-validate-for"></span>
+                                    @error('description')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>     
                             </div>
                         </div>

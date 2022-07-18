@@ -79,7 +79,8 @@ class ToDoController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'deadline' => ['required', 'date'],
-            'description' => ['required'],
+            'is_finished' => ['boolean'],
+            'description' => ['max:65553'],
         ]);
 
         if ($validator->fails()) {
@@ -93,10 +94,41 @@ class ToDoController extends Controller
                     ->update([
                         'name' => $request->name,
                         'deadline' => $request->deadline,
+                        'is_finished' => $request->is_finished,
                         'description' => $request->description,
                     ]);
 
         Session::flash('message', 'ToDo was updated!');
+        Session::flash('type', 'info');
+
+        return redirect()->route('tasks.detail', ['task' => $task]);
+    }
+
+    /**
+     * Check the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\ToDo  $todo
+     * @return \Illuminate\Http\Response
+     */
+    public function check(Request $request, Task $task, ToDo $todo)
+    {
+        if($todo->is_finished) {
+            ToDo::where('id', $todo->id)
+                ->update([
+                    'is_finished' => false,
+                ]);
+
+            Session::flash('message', 'ToDo was returned!');
+        } else {
+            ToDo::where('id', $todo->id)
+                ->update([
+                    'is_finished' => true,
+                ]);
+
+            Session::flash('message', 'ToDo was finished!');
+        }
+
         Session::flash('type', 'info');
 
         return redirect()->route('tasks.detail', ['task' => $task]);

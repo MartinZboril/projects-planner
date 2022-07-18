@@ -94,7 +94,8 @@
                             @foreach ($task->todos as $todo)
                                 <li>
                                     <div class="icheck-primary d-inline ml-2">
-                                        <input type="checkbox" value="" name="todo-{{ $todo->id }}" id="todo-check-{{ $todo->id }}">
+                                        <input type="checkbox" value="" name="todo-{{ $todo->id }}" id="todo-check-{{ $todo->id }}" onclick="event.preventDefault(); document.getElementById('check-todo-{{ $todo->id }}-form').submit();"
+                                            {{ $todo->is_finished ? 'checked' : '' }}>
                                         <label for="todo-check-{{ $todo->id }}"></label>
                                     </div>
                                     <span class="text">{{ $todo->name }}</span>
@@ -103,6 +104,10 @@
                                     <div class="tools">
                                         <a href="{{ route('todos.edit', ['task' => $task->id, 'todo' => $todo->id]) }}"><i class="fas fa-edit"></i></a>
                                     </div>
+                                    <form id="check-todo-{{ $todo->id }}-form" action="{{ route('todos.check', ['task' => $task->id, 'todo' => $todo->id]) }}" method="POST" class="hidden">
+                                        @csrf
+                                        @method('PATCH')
+                                    </form>
                                 </li>
                             @endforeach
                         </ul>

@@ -35,9 +35,20 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
+                                    <div class="custom-control custom-switch">
+                                        <input type="checkbox" name="is_finished" class="custom-control-input @error('is_finished') is-invalid @enderror" id="is-finished" value="1">
+                                        <label class="custom-control-label" for="is-finished">Finished</label>
+                                    </div>
+                                    @error('is_finished')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>                                   
+                                <div class="form-group">
                                     <label for="description">Description</label>
-                                    <textarea name="description" class="form-control summernote" id="description" cols="30" rows="10" placeholder="description">{{ old('description', $todo->description) }}</textarea>
-                                    <span data-validate-for="description" class="text-danger binline modal-validate-for"></span>
+                                    <textarea name="description" class="form-control summernote @error('description') is-invalid @enderror" id="description" cols="30" rows="10" placeholder="description">{{ old('description', $todo->description) }}</textarea>
+                                    @error('description')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>     
                             </div>
                         </div>
