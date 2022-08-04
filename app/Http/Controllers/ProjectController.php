@@ -7,7 +7,10 @@ use App\Models\Client;
 use App\Models\User;
 use App\Models\ProjectUser;
 use App\Models\Task;
+use App\Models\Milestone;
+use App\Models\ToDo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
@@ -218,6 +221,127 @@ class ProjectController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Project  $project
+     * @return \Illuminate\Http\Response
+     */
+    public function createTask(Project $project)
+    {
+        return view('projects.task.create', ['project' => $project, 'milestones' => Milestone::where('project_id', $project->id)->get(), 'users' => User::all()]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Project  $project
+     * @return \Illuminate\Http\Response
+     */
+    public function storeTask(Request $request, Project $project)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'user_id' => ['required', 'integer', 'exists:users,id'],
+            'start_date' => ['required', 'date'],
+            'due_date' => ['required', 'date'],
+            'description' => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                    ->route('projects.task.create', ['project' => $project])
+                    ->withErrors($validator)
+                    ->withInput();
+        }
+
+        $task = new Task();
+
+        $task->name = $request->name;
+        $task->project_id = $project->id;
+        $task->milestone_id = $request->milestone_id ? $request->milestone_id : null;
+        $task->status_id = 1;
+        $task->author_id = Auth::id();
+        $task->user_id = $request->user_id;
+        $task->start_date = $request->start_date;
+        $task->due_date = $request->due_date;
+        $task->description = $request->description;
+
+        $task->save();
+
+        Session::flash('message', 'Task was created!');
+        Session::flash('type', 'info');
+
+        return ($request->create_and_close) ? redirect()->route('projects.tasks', ['project' => $project]) : redirect()->route('projects.task.detail', ['project' => $project, 'task' => $task]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
+    public function detailTask(Project $project, Task $task)
+    {
+        return view('projects.task.detail', ['project' => $project, 'task' => $task, 'milestones' => Milestone::where('project_id', $project->id)->get(), 'users' => User::all()]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
+    public function editTask(Project $project, Task $task)
+    {
+        return view('projects.task.edit', ['project' => $project, 'task' => $task, 'milestones' => Milestone::where('project_id', $project->id)->get(), 'users' => User::all()]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
+    public function updateTask(Request $request, Project $project, Task $task)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'user_id' => ['required', 'integer', 'exists:users,id'],
+            'start_date' => ['required', 'date'],
+            'due_date' => ['required', 'date'],
+            'description' => ['required'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                    ->route('projects.task.edit', ['project' => $project, 'task' => $task])
+                    ->withErrors($validator)
+                    ->withInput();
+        }
+
+        Task::where('id', $task->id)
+                    ->update([
+                        'name' => $request->name,
+                        'project_id' => $project->id,
+                        'milestone_id' => $request->milestone_id ? $request->milestone_id : null,
+                        'user_id' => $request->user_id,
+                        'start_date' => $request->start_date,
+                        'due_date' => $request->due_date,
+                        'description' => $request->description,
+                    ]);
+
+        Session::flash('message', 'Task was updated!');
+        Session::flash('type', 'info');
+
+        return ($request->save_and_close) ? redirect()->route('projects.tasks', ['project' => $project]) : redirect()->route('projects.task.detail', ['project' => $project, 'task' => $task]);
+    }
+
+    /**
      * Start working on the task.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -235,7 +359,7 @@ class ProjectController extends Controller
         Session::flash('message', 'Start working on Task!');
         Session::flash('type', 'info');
 
-        return redirect()->route('projects.kanban', ['project' => $task->project->id]);
+        return ($request->type == 'kanban') ? redirect()->route('projects.kanban', ['project' => $task->project->id]) : redirect()->route('projects.task.detail', ['project' => $project, 'task' => $task]);
     }
 
     /**
@@ -255,7 +379,7 @@ class ProjectController extends Controller
         Session::flash('message', 'Task was completed!');
         Session::flash('type', 'success');
 
-        return redirect()->route('projects.kanban', ['project' => $task->project->id]);
+        return ($request->type == 'kanban') ? redirect()->route('projects.kanban', ['project' => $task->project->id]) : redirect()->route('projects.task.detail', ['project' => $project, 'task' => $task]);
     }
 
     /**
@@ -275,7 +399,7 @@ class ProjectController extends Controller
         Session::flash('message', 'Task was stopped!');
         Session::flash('type', 'danger');
 
-        return redirect()->route('projects.kanban', ['project' => $task->project->id]);
+        return ($request->type == 'kanban') ? redirect()->route('projects.kanban', ['project' => $task->project->id]) : redirect()->route('projects.task.detail', ['project' => $project, 'task' => $task]);
     }
 
     /**
@@ -295,7 +419,7 @@ class ProjectController extends Controller
         Session::flash('message', 'Task was resumed!');
         Session::flash('type', 'info');
 
-        return redirect()->route('projects.kanban', ['project' => $task->project->id]);
+        return ($request->type == 'kanban') ? redirect()->route('projects.kanban', ['project' => $task->project->id]) : redirect()->route('projects.task.detail', ['project' => $project, 'task' => $task]);
     }
 
     /**
@@ -316,7 +440,142 @@ class ProjectController extends Controller
         Session::flash('message', 'Task was returned!');
         Session::flash('type', 'danger');
 
-        return redirect()->route('projects.kanban', ['project' => $task->project->id]);
+        return ($request->type == 'kanban') ? redirect()->route('projects.kanban', ['project' => $task->project->id]) : redirect()->route('projects.task.detail', ['project' => $project, 'task' => $task]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
+    public function createToDo(Project $project, Task $task)
+    {
+        return view('projects.todo.create', ['project' => $project, 'task' => $task]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Task  $task
+     * @return \Illuminate\Http\Response
+     */
+    public function storeTodo(Request $request, Project $project, Task $task)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'deadline' => ['required', 'date'],
+            'description' => ['max:65553'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                    ->route('projects.todo.create', ['project' => $project, 'task' => $task])
+                    ->withErrors($validator)
+                    ->withInput();
+        }
+
+
+        $todo = new ToDo();
+
+        $todo->name = $request->name;
+        $todo->task_id = $task->id;
+        $todo->deadline = $request->deadline;
+        $todo->description = $request->description;
+
+        $todo->save();
+
+        Session::flash('message', 'ToDo was created!');
+        Session::flash('type', 'info');
+
+        return redirect()->route('projects.task.detail', ['project' => $project, 'task' => $task]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Task  $task
+     * @param  \App\Models\ToDo  $todo
+     * @return \Illuminate\Http\Response
+     */
+    public function editToDo(Project $project, Task $task, ToDo $todo)
+    {
+        return view('projects.todo.edit', ['project' => $project, 'task' => $task, 'todo' => $todo]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Task  $task
+     * @param  \App\Models\ToDo  $todo
+     * @return \Illuminate\Http\Response
+     */
+    public function updateToDo(Request $request, Project $project, Task $task, ToDo $todo)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'deadline' => ['required', 'date'],
+            'is_finished' => ['boolean'],
+            'description' => ['max:65553'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                    ->route('projects.todo.edit', ['project' => $project, 'task' => $task, 'todo' => $todo])
+                    ->withErrors($validator)
+                    ->withInput();
+        }
+
+        ToDo::where('id', $todo->id)
+                    ->update([
+                        'name' => $request->name,
+                        'deadline' => $request->deadline,
+                        'is_finished' => $request->is_finished,
+                        'description' => $request->description,
+                    ]);
+
+        Session::flash('message', 'ToDo was updated!');
+        Session::flash('type', 'info');
+
+        return redirect()->route('projects.task.detail', ['project' => $project, 'task' => $task]);
+    }
+
+    /**
+     * Check the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Task  $task
+     * @param  \App\Models\ToDo  $todo
+     * @return \Illuminate\Http\Response
+     */
+    public function checkToDo(Request $request, Project $project, Task $task, ToDo $todo)
+    {
+        if($todo->is_finished) {
+            ToDo::where('id', $todo->id)
+                ->update([
+                    'is_finished' => false,
+                ]);
+
+            Session::flash('message', 'ToDo was returned!');
+        } else {
+            ToDo::where('id', $todo->id)
+                ->update([
+                    'is_finished' => true,
+                ]);
+
+            Session::flash('message', 'ToDo was finished!');
+        }
+
+        Session::flash('type', 'info');
+
+        return redirect()->route('projects.task.detail', ['project' => $project, 'task' => $task]);
     }
 
     /**

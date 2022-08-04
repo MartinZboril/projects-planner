@@ -37,7 +37,7 @@
                                 @forelse ($project->newTasks as $task)
                                     <div class="card card-info card-outline">
                                         <div class="card-header">
-                                            <div class="card-title"><a href="{{ route('tasks.detail', $task->id) }}">{{ $task->name }}</a> {!! $task->is_stopped ? "<span class='badge badge-danger ml-2' style='font-size:14px;'>Stopped</span>" : ($task->is_returned ? "<span class='badge badge-danger ml-2' style='font-size:14px;'>Returned</span>" : '') !!}</div>
+                                            <div class="card-title"><a href="{{ route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) }}">{{ $task->name }}</a> {!! $task->is_stopped ? "<span class='badge badge-danger ml-2' style='font-size:14px;'>Stopped</span>" : ($task->is_returned ? "<span class='badge badge-danger ml-2' style='font-size:14px;'>Returned</span>" : '') !!}</div>
                                             <div class="card-tools">
                                                 @if ($task->status->id == 1)
                                                     <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('start-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-play" data-toggle="tooltip" data-placement="bottom" title="Start"></i></a>
@@ -65,29 +65,10 @@
                                         </div>
                                     </div>
 
-                                    <form id="start-working-on-task-{{ $task->id }}-form" action="{{ route('projects.tasks.start', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
+                                    <form id="start-working-on-task-{{ $task->id }}-form" action="{{ route('projects.task.start', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
                                         @csrf
                                         @method('PATCH')
-                                    </form>
-
-                                    <form id="complete-working-on-task-{{ $task->id }}-form" action="{{ route('projects.tasks.complete', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
-                                        @csrf
-                                        @method('PATCH')
-                                    </form>
-
-                                    <form id="stop-working-on-task-{{ $task->id }}-form" action="{{ route('projects.tasks.stop', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
-                                        @csrf
-                                        @method('PATCH')
-                                    </form>
-
-                                    <form id="resume-working-on-task-{{ $task->id }}-form" action="{{ route('projects.tasks.resume', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
-                                        @csrf
-                                        @method('PATCH')
-                                    </form>
-
-                                    <form id="return-working-on-task-{{ $task->id }}-form" action="{{ route('projects.tasks.return', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
-                                        @csrf
-                                        @method('PATCH')
+                                        <input type="hidden" name="type" value="kanban">
                                     </form>
                                 @empty
                                     <div class="card">
@@ -104,7 +85,7 @@
                                 @forelse ($project->inProgressTasks as $task)
                                     <div class="card card-warning card-outline">
                                         <div class="card-header">
-                                            <div class="card-title"><a href="{{ route('tasks.detail', $task->id) }}">{{ $task->name }}</a> {!! $task->is_stopped ? "<span class='badge badge-danger ml-2' style='font-size:14px;'>Stopped</span>" : ($task->is_returned ? "<span class='badge badge-danger ml-2' style='font-size:14px;'>Returned</span>" : '') !!}</div>
+                                            <div class="card-title"><a href="{{ route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) }}">{{ $task->name }}</a> {!! $task->is_stopped ? "<span class='badge badge-danger ml-2' style='font-size:14px;'>Stopped</span>" : ($task->is_returned ? "<span class='badge badge-danger ml-2' style='font-size:14px;'>Returned</span>" : '') !!}</div>
                                             <div class="card-tools">
                                                 @if ($task->status->id == 1)
                                                     <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('start-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-play" data-toggle="tooltip" data-placement="bottom" title="Start"></i></a>
@@ -132,29 +113,22 @@
                                         </div>
                                     </div>
 
-                                    <form id="start-working-on-task-{{ $task->id }}-form" action="{{ route('projects.tasks.start', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
+                                    <form id="complete-working-on-task-{{ $task->id }}-form" action="{{ route('projects.task.complete', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
                                         @csrf
                                         @method('PATCH')
+                                        <input type="hidden" name="type" value="kanban">
                                     </form>
 
-                                    <form id="complete-working-on-task-{{ $task->id }}-form" action="{{ route('projects.tasks.complete', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
+                                    <form id="stop-working-on-task-{{ $task->id }}-form" action="{{ route('projects.task.stop', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
                                         @csrf
                                         @method('PATCH')
+                                        <input type="hidden" name="type" value="kanban">
                                     </form>
 
-                                    <form id="stop-working-on-task-{{ $task->id }}-form" action="{{ route('projects.tasks.stop', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
+                                    <form id="resume-working-on-task-{{ $task->id }}-form" action="{{ route('projects.task.resume', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
                                         @csrf
                                         @method('PATCH')
-                                    </form>
-
-                                    <form id="resume-working-on-task-{{ $task->id }}-form" action="{{ route('projects.tasks.resume', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
-                                        @csrf
-                                        @method('PATCH')
-                                    </form>
-
-                                    <form id="return-working-on-task-{{ $task->id }}-form" action="{{ route('projects.tasks.return', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
-                                        @csrf
-                                        @method('PATCH')
+                                        <input type="hidden" name="type" value="kanban">
                                     </form>
                                 @empty
                                     <div class="card">
@@ -171,7 +145,7 @@
                                 @forelse ($project->completedTasks as $task)
                                     <div class="card card-success card-outline">
                                         <div class="card-header">
-                                            <div class="card-title"><a href="{{ route('tasks.detail', $task->id) }}">{{ $task->name }}</a> {!! $task->is_stopped ? "<span class='badge badge-danger ml-2' style='font-size:14px;'>Stopped</span>" : ($task->is_returned ? "<span class='badge badge-danger ml-2' style='font-size:14px;'>Returned</span>" : '') !!}</div>
+                                            <div class="card-title"><a href="{{ route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) }}">{{ $task->name }}</a> {!! $task->is_stopped ? "<span class='badge badge-danger ml-2' style='font-size:14px;'>Stopped</span>" : ($task->is_returned ? "<span class='badge badge-danger ml-2' style='font-size:14px;'>Returned</span>" : '') !!}</div>
                                             <div class="card-tools">
                                                 @if ($task->status->id == 1)
                                                     <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('start-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-play" data-toggle="tooltip" data-placement="bottom" title="Start"></i></a>
@@ -199,29 +173,10 @@
                                         </div>
                                     </div>
 
-                                    <form id="start-working-on-task-{{ $task->id }}-form" action="{{ route('projects.tasks.start', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
+                                    <form id="return-working-on-task-{{ $task->id }}-form" action="{{ route('projects.task.return', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
                                         @csrf
                                         @method('PATCH')
-                                    </form>
-
-                                    <form id="complete-working-on-task-{{ $task->id }}-form" action="{{ route('projects.tasks.complete', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
-                                        @csrf
-                                        @method('PATCH')
-                                    </form>
-
-                                    <form id="stop-working-on-task-{{ $task->id }}-form" action="{{ route('projects.tasks.stop', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
-                                        @csrf
-                                        @method('PATCH')
-                                    </form>
-
-                                    <form id="resume-working-on-task-{{ $task->id }}-form" action="{{ route('projects.tasks.resume', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
-                                        @csrf
-                                        @method('PATCH')
-                                    </form>
-
-                                    <form id="return-working-on-task-{{ $task->id }}-form" action="{{ route('projects.tasks.return', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
-                                        @csrf
-                                        @method('PATCH')
+                                        <input type="hidden" name="type" value="kanban">
                                     </form>
                                 @empty
                                     <div class="card">

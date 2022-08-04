@@ -41,17 +41,27 @@ Route::get('/projects/create', [App\Http\Controllers\ProjectController::class, '
 Route::get('/projects/{project}/detail', [App\Http\Controllers\ProjectController::class, 'detail'])->name('projects.detail');
 Route::get('/projects/{project}/edit', [App\Http\Controllers\ProjectController::class, 'edit'])->name('projects.edit');
 Route::get('/projects/{project}/tasks', [App\Http\Controllers\ProjectController::class, 'tasks'])->name('projects.tasks');
+Route::get('/projects/{project}/task/create', [App\Http\Controllers\ProjectController::class, 'createTask'])->name('projects.task.create');
+Route::get('/projects/{project}/task/{task}/detail', [App\Http\Controllers\ProjectController::class, 'detailTask'])->name('projects.task.detail');
+Route::get('/projects/{project}/task/{task}/edit', [App\Http\Controllers\ProjectController::class, 'editTask'])->name('projects.task.edit');
 Route::get('/projects/{project}/kanban', [App\Http\Controllers\ProjectController::class, 'kanban'])->name('projects.kanban');
 Route::get('/projects/{project}/milestones', [App\Http\Controllers\ProjectController::class, 'milestones'])->name('projects.milestones');
 Route::get('/projects/{project}/milestones/get', [App\Http\Controllers\ProjectController::class, 'getMilestones']);
+Route::get('/projects/{project}/task/{task}/todo/create', [App\Http\Controllers\ProjectController::class, 'createToDo'])->name('projects.todo.create');
+Route::get('/projects/{project}/task/{task}/todo/{todo}/edit', [App\Http\Controllers\ProjectController::class, 'editToDo'])->name('projects.todo.edit');
 
 Route::post('/projects/store', [App\Http\Controllers\ProjectController::class, 'store'])->name('projects.store');
+Route::post('/projects/{project}/task/store', [App\Http\Controllers\ProjectController::class, 'storeTask'])->name('projects.task.store');
+Route::post('/projects/{project}/tasks/{task}/todo/store', [App\Http\Controllers\ProjectController::class, 'storeToDo'])->name('projects.todo.store');
 Route::patch('/projects/{project}/update', [App\Http\Controllers\ProjectController::class, 'update'])->name('projects.update');
-Route::patch('/projects/{project}/task/{task}/start', [App\Http\Controllers\ProjectController::class, 'start'])->name('projects.tasks.start');
-Route::patch('/projects/{project}/task/{task}/complete', [App\Http\Controllers\ProjectController::class, 'complete'])->name('projects.tasks.complete');
-Route::patch('/projects/{project}/task/{task}/stop', [App\Http\Controllers\ProjectController::class, 'stop'])->name('projects.tasks.stop');
-Route::patch('/projects/{project}/task/{task}/resume', [App\Http\Controllers\ProjectController::class, 'resume'])->name('projects.tasks.resume');
-Route::patch('/projects/{project}/task/{task}/return', [App\Http\Controllers\ProjectController::class, 'return'])->name('projects.tasks.return');
+Route::patch('/projects/{project}/task/{task}/update', [App\Http\Controllers\ProjectController::class, 'updateTask'])->name('projects.task.update');
+Route::patch('/projects/{project}/task/{task}/start', [App\Http\Controllers\ProjectController::class, 'start'])->name('projects.task.start');
+Route::patch('/projects/{project}/task/{task}/complete', [App\Http\Controllers\ProjectController::class, 'complete'])->name('projects.task.complete');
+Route::patch('/projects/{project}/task/{task}/stop', [App\Http\Controllers\ProjectController::class, 'stop'])->name('projects.task.stop');
+Route::patch('/projects/{project}/task/{task}/resume', [App\Http\Controllers\ProjectController::class, 'resume'])->name('projects.task.resume');
+Route::patch('/projects/{project}/task/{task}/return', [App\Http\Controllers\ProjectController::class, 'return'])->name('projects.task.return');
+Route::patch('/projects/{project}/tasks/{task}/todo/{todo}/update', [App\Http\Controllers\ProjectController::class, 'updateToDo'])->name('projects.todo.update');
+Route::patch('/projects/{project}/tasks/{task}/todo/{todo}/check', [App\Http\Controllers\ProjectController::class, 'checkToDo'])->name('projects.todo.check');
 
 // Tasks
 Route::get('/tasks', [App\Http\Controllers\TaskController::class, 'index'])->name('tasks.index');

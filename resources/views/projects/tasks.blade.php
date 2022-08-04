@@ -30,6 +30,7 @@
             </div>
 
             <div class="card card-primary card-outline rounded-0">
+                <div class="card-header"><a href="{{ route('projects.task.create', ['project' => $project->id]) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
                 <div class="card-body">
                     <input type="hidden" id="taskform-message" value="{{ Session::get('message') }}">
                     <input type="hidden" id="taskform-message-type" value="{{ Session::get('type') }}">
@@ -49,14 +50,14 @@
                             <tbody>
                                 @forelse ($project->tasks as $task)
                                     <tr>
-                                        <td><a href="{{ route('tasks.detail', $task->id) }}">{{ $task->name }}</a></td>
+                                        <td><a href="{{ route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) }}">{{ $task->name }}</a></td>
                                         <td><img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $task->user->name }} {{ $task->user->surname }}"></td>
                                         <td>{{ $task->due_date->format('d.m.Y') }}</td>
                                         <td>{{ $task->milestone ? $task->milestone->name : '-' }}</td>
                                         <td>{{ $task->status->name }}</td>
                                         <td>
-                                            <a class="btn btn-sm btn-dark" href="{{ route('tasks.edit', $task->id) }}"><i class="fas fa-pencil-alt"></i></a>
-                                            <a class="btn btn-sm btn-info" href="{{ route('tasks.detail', $task->id) }}"><i class="fas fa-eye"></i></a>
+                                            <a class="btn btn-sm btn-dark" href="{{ route('projects.task.edit', ['project' => $project->id, 'task' => $task->id]) }}"><i class="fas fa-pencil-alt"></i></a>
+                                            <a class="btn btn-sm btn-info" href="{{ route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) }}"><i class="fas fa-eye"></i></a>
                                         </td>
                                     </tr>
                                 @empty
