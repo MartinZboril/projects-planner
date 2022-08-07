@@ -49,6 +49,47 @@
     
     @yield('content')
 
+    <div class="modal" id="timers-preview-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h5 class="modal-title">Timers</h5>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Project</th>
+                    <th>Total time</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @foreach(Auth::User()->activeTimers as $timer)
+                    <tr>
+                      <td><a href="{{ route('projects.detail', $timer->project->id) }}">{{ $timer->project->name }}</a></td>
+                      <td><span id="timer-{{ $timer->id }}-display" class="timer-record" data-since="{{ $timer->since }}"></span></td>
+                      <td><a href="#" class="btn btn-sm btn-danger" onclick="event.preventDefault(); document.getElementById('stop-working-on-timer-{{ $timer->id }}').submit();"><i class="fas fa-stop"></i></a></td>
+                    </tr>
+
+                    <form id="stop-working-on-timer-{{ $timer->id }}" action="{{ route('projects.timer.stop', ['project' => $timer->project->id, 'timer' => $timer->id]) }}" method="POST" class="hidden">
+                        @csrf
+                    </form>
+                  @endforeach
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">
       <!-- Control sidebar content goes here -->
@@ -94,6 +135,36 @@
 
     <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
     
+    <script>
+        function displayTimers () { 
+            $('.timer-record').each(function(i, obj) {
+                var since = new Date(Date.parse($(obj).data('since')));
+                var now = new Date($.now());
+
+                var diffMiliseconds = Math.abs(now - since);
+
+                var miliseconds = diffMiliseconds % 1000;
+                s = (diffMiliseconds - miliseconds) / 1000;
+                var seconds = s % 60;
+                s = (s - seconds) / 60;
+                var minutes = s % 60;
+                var hours = (s - minutes) / 60;
+
+                $(obj).html(displayTimer(hours, minutes, seconds));
+            });
+        }
+
+        function displayTimer(hours, minutes, seconds) {
+            var hoursDisplay = (hours < 10) ? '0' + hours : hours;
+            var minutesDisplay = (minutes < 10) ? '0' + minutes : minutes;
+            var secondsDisplay = (seconds < 10) ? '0' + seconds : seconds;
+
+            return hoursDisplay + ':' + minutesDisplay + ':' + secondsDisplay;
+        }
+
+        setInterval(displayTimers, 1000);
+    </script>
+
     @yield('scripts')
   </body>
 </html>

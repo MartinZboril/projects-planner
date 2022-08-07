@@ -46,11 +46,6 @@ class ProjectController extends Controller
         return view('projects.tasks', ['project' => $project]);
     }
 
-    public function getMilestones(Project $project)
-    {
-        return $project->milestones()->select('id', 'name')->get();
-    }
-
     /**
      * Display the specified resource of project tasks with kanban board.
      *
@@ -61,7 +56,6 @@ class ProjectController extends Controller
     {
         return view('projects.kanban', ['project' => $project]);
     }
-
     
     /**
      * Display the specified resource of project milestones.
@@ -72,6 +66,17 @@ class ProjectController extends Controller
     public function milestones(Project $project)
     {
         return view('projects.milestones', ['project' => $project]);
+    }
+
+    /**
+     * Display the specified resource of project timesheets.
+     *
+     * @param  \App\Models\Project  $project
+     * @return \Illuminate\Http\Response
+     */
+    public function timesheets(Project $project)
+    {
+        return view('projects.timesheets', ['project' => $project]);
     }
 
     /**

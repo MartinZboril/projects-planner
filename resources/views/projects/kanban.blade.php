@@ -11,6 +11,11 @@
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('projects.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
         <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
+        @if(Auth::User()->activeTimers->contains('project_id', $project->id))
+            <a href="#" class="btn btn-sm btn-danger" onclick="event.preventDefault(); document.getElementById('stop-working-on-project').submit();"><i class="fas fa-stop mr-1"></i>Stop</a>
+        @else
+            <a href="#" class="btn btn-sm btn-success" onclick="event.preventDefault(); document.getElementById('start-working-on-project').submit();"><i class="fas fa-play mr-1"></i>Start</a>
+        @endif
     </div>
     <!-- /.content-header -->
 
@@ -26,6 +31,7 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('projects.tasks', $project->id) }}">Tasks</a></li>
                     <li class="nav-item"><a class="nav-link active" href="{{ route('projects.kanban', $project->id) }}">Kanban</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('projects.milestones', $project->id) }}">Milestones</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('projects.timesheets', $project->id) }}">Timesheets</a></li>
                 </ul>
             </div>
             <div class="card-body">
@@ -192,6 +198,16 @@
     </section>
 <!-- /.content -->
 </div>
+
+<form id="start-working-on-project" action="{{ route('projects.timer.start', ['project' => $project->id]) }}" method="POST" class="hidden">
+    @csrf
+</form>
+
+@if(Auth::User()->activeTimers->contains('project_id', $project->id))
+    <form id="stop-working-on-project" action="{{ route('projects.timer.stop', ['project' => $project->id, 'timer' => Auth::User()->activeTimers->firstWhere('project_id', $project->id)->id]) }}" method="POST" class="hidden">
+        @csrf
+    </form>
+@endif
 @endsection
 
 @section('scripts')

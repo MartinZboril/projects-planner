@@ -46,6 +46,11 @@ class Project extends Model
         return $this->hasMany(Milestone::class, 'project_id');
     }
 
+    public function timers()
+    {
+        return $this->hasMany(Timer::class, 'project_id');
+    }
+
     public function getDeadlineAttribute()
     {
         return $this->due_date->diffInDays(\Carbon\Carbon::now()->format('Y-m-d'));

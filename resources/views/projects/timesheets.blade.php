@@ -30,49 +30,47 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('projects.detail', $project->id) }}">Dashboard</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('projects.tasks', $project->id) }}">Tasks</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('projects.kanban', $project->id) }}">Kanban</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{{ route('projects.milestones', $project->id) }}">Milestones</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('projects.timesheets', $project->id) }}">Timesheets</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('projects.milestones', $project->id) }}">Milestones</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ route('projects.timesheets', $project->id) }}">Timesheets</a></li>
                 </ul>
             </div>
 
             <div class="card card-primary card-outline rounded-0">
-                <div class="card-header"><a href="{{ route('milestones.create', ['project' => $project->id]) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
+                <div class="card-header"><a href="{{ route('timers.create', ['project' => $project->id]) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
                 <div class="card-body">
-                    <input type="hidden" id="milestoneform-message" value="{{ Session::get('message') }}">
-                    <input type="hidden" id="milestoneform-message-type" value="{{ Session::get('type') }}">
+                    <input type="hidden" id="timesheetform-message" value="{{ Session::get('message') }}">
+                    <input type="hidden" id="timesheetform-message-type" value="{{ Session::get('type') }}">
                     <div class="table-responsive">
-                        <table id="{{ count($project->milestones) > 0 ? 'milestones-table' : '' }}" class="table table-bordered table-striped">
+                        <table id="{{ count($project->timers) > 0 ? 'timesheets-table' : '' }}" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Owner</th>
-                                    <th>Progress</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
+                                    <th>User</th>
+                                    <th>Total time (Hours)</th>
+                                    <th>Start</th>
+                                    <th>Stop</th>
+                                    <th>Date</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($project->milestones as $milestone)
+                                @forelse ($project->timers as $timer)
                                     <tr>
-                                        <td><a href="{{ route('milestones.detail', ['project' => $project->id, 'milestone' => $milestone->id]) }}">{{ $milestone->name }}</a></td>
-                                        <td>{{ $milestone->owner->name }} {{ $milestone->owner->surname }}</td>
+                                        <td>{{ $timer->user->name }} {{ $timer->user->surname }}</td>
+                                        <td>{{ (!$timer->until) ? 'N/A' : (($timer->total_time) ? $timer->total_time : 0) }}</td>
+                                        <td>{{ $timer->since->format('d.m.Y H:i') }}</td>
+                                        <td>{{ ($timer->until) ? $timer->until->format('d.m.Y H:i') : 'N/A' }}</td>
+                                        <td>{{ $timer->since->format('d.m.Y') }}</td>
                                         <td>
-                                            <div class="progress progress-sm">
-                                                <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="{{ $milestone->progress * 100 }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $milestone->progress * 100 }}%"></div>
-                                            </div>
-                                            <small>{{ $milestone->progress * 100 }}% Complete ({{ $milestone->tasksCompleted->count() }}/{{ $milestone->tasks->count() }})</small>
-                                        </td>
-                                        <td>{{ $milestone->start_date->format('d.m.Y') }}</td>
-                                        <td>{{ $milestone->end_date->format('d.m.Y') }}</td>
-                                        <td>
-                                            <a href="{{ route('milestones.edit', ['project' => $project->id, 'milestone' => $milestone->id]) }}" class="btn btn-sm btn-dark" href=""><i class="fas fa-pencil-alt"></i></a>
-                                            <a href="{{ route('milestones.detail', ['project' => $project->id, 'milestone' => $milestone->id]) }}" class="btn btn-sm btn-info" href=""><i class="fas fa-eye"></i></a>
+                                            @if($timer->until)
+                                                <a href="{{ route('timers.edit', ['project' => $project->id, 'timer' => $timer->id]) }}" class="btn btn-sm btn-dark" href=""><i class="fas fa-pencil-alt"></i></a>
+                                            @else
+                                                N/A
+                                            @endif
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center">No milestones were found!</td>
+                                        <td colspan="6" class="text-center">No timesheets were found!</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -114,15 +112,15 @@
 
     <script>
         $(function () {
-            $("#milestones-table").DataTable();
+            $("#timesheets-table").DataTable();
 
-            if($('#milestoneform-message').val()) {
-                if($('#milestoneform-message-type').val() == "success") {
-                    toastr.success($('#milestoneform-message').val());
-                } else if($('#milestoneform-message-type').val() == "info") {
-                    toastr.info($('#milestoneform-message').val());
+            if($('#timesheetform-message').val()) {
+                if($('#timesheetform-message-type').val() == "success") {
+                    toastr.success($('#timesheetform-message').val());
+                } else if($('#timesheetform-message-type').val() == "info") {
+                    toastr.info($('#timesheetform-message').val());
                 } else {
-                    toastr.error($('#milestoneform-message').val());            
+                    toastr.error($('#timesheetform-message').val());            
                 }
             }; 
 

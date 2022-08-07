@@ -46,9 +46,9 @@ Route::get('/projects/{project}/task/{task}/detail', [App\Http\Controllers\Proje
 Route::get('/projects/{project}/task/{task}/edit', [App\Http\Controllers\ProjectController::class, 'editTask'])->name('projects.task.edit');
 Route::get('/projects/{project}/kanban', [App\Http\Controllers\ProjectController::class, 'kanban'])->name('projects.kanban');
 Route::get('/projects/{project}/milestones', [App\Http\Controllers\ProjectController::class, 'milestones'])->name('projects.milestones');
-Route::get('/projects/{project}/milestones/get', [App\Http\Controllers\ProjectController::class, 'getMilestones']);
 Route::get('/projects/{project}/task/{task}/todo/create', [App\Http\Controllers\ProjectController::class, 'createToDo'])->name('projects.todo.create');
 Route::get('/projects/{project}/task/{task}/todo/{todo}/edit', [App\Http\Controllers\ProjectController::class, 'editToDo'])->name('projects.todo.edit');
+Route::get('/projects/{project}/timesheets', [App\Http\Controllers\ProjectController::class, 'timesheets'])->name('projects.timesheets');
 
 Route::post('/projects/store', [App\Http\Controllers\ProjectController::class, 'store'])->name('projects.store');
 Route::post('/projects/{project}/task/store', [App\Http\Controllers\ProjectController::class, 'storeTask'])->name('projects.task.store');
@@ -92,3 +92,12 @@ Route::get('/tasks/{task}/todos/{todo}/edit', [App\Http\Controllers\ToDoControll
 Route::post('/tasks/{task}/todos/store', [App\Http\Controllers\ToDoController::class, 'store'])->name('todos.store');
 Route::patch('/tasks/{task}/todos/{todo}/update', [App\Http\Controllers\ToDoController::class, 'update'])->name('todos.update');
 Route::patch('/tasks/{task}/todos/{todo}/check', [App\Http\Controllers\ToDoController::class, 'check'])->name('todos.check');
+
+// Timer
+Route::get('/projects/{project}/timers/create', [App\Http\Controllers\TimerController::class, 'create'])->name('timers.create');
+Route::get('/projects/{project}/timers/{timer}/edit', [App\Http\Controllers\TimerController::class, 'edit'])->name('timers.edit');
+
+Route::post('/projects/{project}/timer/store', [App\Http\Controllers\TimerController::class, 'store'])->name('timers.store');
+Route::post('/projects/{project}/timer/start', [App\Http\Controllers\TimerController::class, 'start'])->name('projects.timer.start');
+Route::post('/projects/{project}/timer/{timer}/stop', [App\Http\Controllers\TimerController::class, 'stop'])->name('projects.timer.stop');
+Route::patch('/projects/{project}/timer/{timer}/update', [App\Http\Controllers\TimerController::class, 'update'])->name('timers.update');
