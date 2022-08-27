@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use App\Models\Rate;
 
 class UserController extends Controller
 {
@@ -56,6 +57,8 @@ class UserController extends Controller
             'city' => ['string', 'nullable', 'max:255'],
             'country' => ['string', 'nullable', 'max:255'],
             'zip_code' => ['string', 'nullable', 'max:255'],
+            'rate_name' => ['required', 'max:255'],
+            'rate_value' => ['required', 'integer', 'min:0'],
         ]);
 
         if ($validator->fails()) {
@@ -82,6 +85,15 @@ class UserController extends Controller
         $user->country = $request->country;
 
         $user->save();
+
+        $rate = new Rate();
+
+        $rate->user_id = $user->id;
+        $rate->name = $request->rate_name;
+        $rate->is_active = true;
+        $rate->value = $request->rate_value;
+
+        $rate->save();
 
         Session::flash('message', 'User was created!');
         Session::flash('type', 'info');

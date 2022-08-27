@@ -17,7 +17,16 @@
         @if(Auth::User()->activeTimers->contains('project_id', $project->id))
             <a href="#" class="btn btn-sm btn-danger" onclick="event.preventDefault(); document.getElementById('stop-working-on-project').submit();"><i class="fas fa-stop mr-1"></i>Stop</a>
         @else
-            <a href="#" class="btn btn-sm btn-success" onclick="event.preventDefault(); document.getElementById('start-working-on-project').submit();"><i class="fas fa-play mr-1"></i>Start</a>
+            <div class="btn-group">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    Start
+                </button>
+                <div class="dropdown-menu">
+                    @foreach (Auth::User()->rates as $rate)
+                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('start-working-on-project-with-rate-{{ $rate->id }}').submit();">{{ $rate->name }} ({{ $rate->value }})</a>
+                    @endforeach
+                </div>
+            </div>
         @endif
     </div>
     <!-- /.content-header -->
@@ -81,9 +90,12 @@
     <!-- /.content -->
 </div>
 
-<form id="start-working-on-project" action="{{ route('projects.timer.start', ['project' => $project->id]) }}" method="POST" class="hidden">
-    @csrf
-</form>
+@foreach (Auth::User()->rates as $rate)
+    <form id="start-working-on-project-with-rate-{{ $rate->id }}" action="{{ route('projects.timer.start', ['project' => $project->id]) }}" method="POST" class="hidden">
+        @csrf
+        <input type="hidden" name="rate_id" value="{{ $rate->id }}">
+    </form>
+@endforeach
 
 @if(Auth::User()->activeTimers->contains('project_id', $project->id))
     <form id="stop-working-on-project" action="{{ route('projects.timer.stop', ['project' => $project->id, 'timer' => Auth::User()->activeTimers->firstWhere('project_id', $project->id)->id]) }}" method="POST" class="hidden">

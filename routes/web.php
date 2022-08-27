@@ -93,7 +93,7 @@ Route::post('/tasks/{task}/todos/store', [App\Http\Controllers\ToDoController::c
 Route::patch('/tasks/{task}/todos/{todo}/update', [App\Http\Controllers\ToDoController::class, 'update'])->name('todos.update');
 Route::patch('/tasks/{task}/todos/{todo}/check', [App\Http\Controllers\ToDoController::class, 'check'])->name('todos.check');
 
-// Timer
+// Timers
 Route::get('/projects/{project}/timers/create', [App\Http\Controllers\TimerController::class, 'create'])->name('timers.create');
 Route::get('/projects/{project}/timers/{timer}/edit', [App\Http\Controllers\TimerController::class, 'edit'])->name('timers.edit');
 
@@ -101,3 +101,10 @@ Route::post('/projects/{project}/timer/store', [App\Http\Controllers\TimerContro
 Route::post('/projects/{project}/timer/start', [App\Http\Controllers\TimerController::class, 'start'])->name('projects.timer.start');
 Route::post('/projects/{project}/timer/{timer}/stop', [App\Http\Controllers\TimerController::class, 'stop'])->name('projects.timer.stop');
 Route::patch('/projects/{project}/timer/{timer}/update', [App\Http\Controllers\TimerController::class, 'update'])->name('timers.update');
+
+// Rates
+Route::get('/users/{user}/rates/create', [App\Http\Controllers\RateController::class, 'create'])->name('rates.create');
+Route::get('/users/{user}/rates/{rate}/edit', [App\Http\Controllers\RateController::class, 'edit'])->name('rates.edit');
+
+Route::post('/users/{user}/rate/store', [App\Http\Controllers\RateController::class, 'store'])->name('rates.store');
+Route::patch('/users/{user}/rate/{rate}/update', [App\Http\Controllers\RateController::class, 'update'])->name('rates.update');

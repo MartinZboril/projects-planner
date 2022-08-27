@@ -62,4 +62,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Timer::class, 'user_id')->active();
     }
+
+    public function rates()
+    {
+        return $this->hasMany(Rate::class, 'user_id');
+    }
 }

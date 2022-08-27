@@ -22,6 +22,11 @@ class Timer extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function rate()
+    {
+        return $this->belongsTo(Rate::class, 'rate_id');
+    }
+
     public function scopeActive($query)
     {
         return $query->whereNull('until');
@@ -35,5 +40,10 @@ class Timer extends Model
         $diff = $since->diff($until);
         
         return round($diff->s / 3600 + $diff->i / 60 + $diff->h + $diff->days * 24, 2);
+    }
+
+    public function getAmountAttribute()
+    {
+        return round($this->totalTime * $this->rate->value);
     }
 }

@@ -66,6 +66,7 @@
                 <thead>
                   <tr>
                     <th>Project</th>
+                    <th>Type</th>
                     <th>Total time</th>
                     <th></th>
                   </tr>
@@ -74,6 +75,7 @@
                   @foreach(Auth::User()->activeTimers as $timer)
                     <tr>
                       <td><a href="{{ route('projects.detail', $timer->project->id) }}">{{ $timer->project->name }}</a></td>
+                      <td>{{ $timer->rate->name }}</td>
                       <td><span id="timer-{{ $timer->id }}-display" class="timer-record" data-since="{{ $timer->since }}"></span></td>
                       <td><a href="#" class="btn btn-sm btn-danger" onclick="event.preventDefault(); document.getElementById('stop-working-on-timer-{{ $timer->id }}').submit();"><i class="fas fa-stop"></i></a></td>
                     </tr>

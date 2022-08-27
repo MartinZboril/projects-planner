@@ -1,7 +1,10 @@
 @extends('layouts.master')
 
 @section('styles')
-  <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.css') }}">
 @endsection
 
 @section('content')
@@ -77,6 +80,44 @@
                 </div>
                 <div class="col-md-8">
                     <div class="card card-primary card-outline rounded-0">
+                        <div class="card-header">
+                            <h5 class="card-title">Rates</h5> 
+                            <div class="card-tools">
+                                <a href="{{ route('rates.create', ['user' => $user->id]) }}" class="bn btn-primary btn-sm ml-1"><i class="fas fa-plus mr-1"></i>Create</a>
+                            </div>   
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="{{ count($user->rates) > 0 ? 'rates-table' : '' }}" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Rate</th>
+                                            <th>Active</th>
+                                            <th>Value</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($user->rates as $rate)
+                                            <tr>
+                                                <td>{{ $rate->name }}</td>
+                                                <td>{{ $rate->is_active ? 'Yes' : 'No' }}</td>
+                                                <td>{{ $rate->value }}</td>
+                                                <td>                                                    
+                                                    <a href="{{ route('rates.edit', ['user' => $user->id, 'rate' => $rate->id]) }}" class="btn btn-sm btn-dark" href=""><i class="fas fa-pencil-alt"></i></a>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center">No rates were found!</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>  
+                            </div>        
+                        </div>
+                    </div>
+                    <div class="card card-primary card-outline rounded-0">
                         <div class="card-header">Activity Feed</div>
                         <div class="card-body">
                         </div>
@@ -90,10 +131,25 @@
 @endsection
 
 @section('scripts')
+    <!-- DataTables -->
+    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
     <script src="{{ asset('plugins/toastr/toastr.min.js' ) }}"></script>
 
     <script>
         $(function () {
+            $("#rates-table").DataTable();
+
             if($('#userform-message').val()) {
                 if($('#userform-message-type').val() == "success") {
                     toastr.success($('#userform-message').val());

@@ -17,7 +17,16 @@
         @if(Auth::User()->activeTimers->contains('project_id', $project->id))
             <a href="#" class="btn btn-sm btn-danger" onclick="event.preventDefault(); document.getElementById('stop-working-on-project').submit();"><i class="fas fa-stop mr-1"></i>Stop</a>
         @else
-            <a href="#" class="btn btn-sm btn-success" onclick="event.preventDefault(); document.getElementById('start-working-on-project').submit();"><i class="fas fa-play mr-1"></i>Start</a>
+            <div class="btn-group">
+                <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                    Start
+                </button>
+                <div class="dropdown-menu">
+                    @foreach (Auth::User()->rates as $rate)
+                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('start-working-on-project-with-rate-{{ $rate->id }}').submit();">{{ $rate->name }} ({{ $rate->value }})</a>
+                    @endforeach
+                </div>
+            </div>
         @endif
     </div>
     <!-- /.content-header -->
@@ -44,8 +53,10 @@
                         <table id="{{ count($project->timers) > 0 ? 'timesheets-table' : '' }}" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
+                                    <th>Type</th>
                                     <th>User</th>
                                     <th>Total time (Hours)</th>
+                                    <th>Amount</th>
                                     <th>Start</th>
                                     <th>Stop</th>
                                     <th>Date</th>
@@ -55,8 +66,10 @@
                             <tbody>
                                 @forelse ($project->timers as $timer)
                                     <tr>
+                                        <td>{{ $timer->rate->name }}</td>
                                         <td>{{ $timer->user->name }} {{ $timer->user->surname }}</td>
                                         <td>{{ (!$timer->until) ? 'N/A' : (($timer->total_time) ? $timer->total_time : 0) }}</td>
+                                        <td>{{ $timer->amount }}</td>
                                         <td>{{ $timer->since->format('d.m.Y H:i') }}</td>
                                         <td>{{ ($timer->until) ? $timer->until->format('d.m.Y H:i') : 'N/A' }}</td>
                                         <td>{{ $timer->since->format('d.m.Y') }}</td>
@@ -83,9 +96,12 @@
     <!-- /.content -->
 </div>
 
-<form id="start-working-on-project" action="{{ route('projects.timer.start', ['project' => $project->id]) }}" method="POST" class="hidden">
-    @csrf
-</form>
+@foreach (Auth::User()->rates as $rate)
+    <form id="start-working-on-project-with-rate-{{ $rate->id }}" action="{{ route('projects.timer.start', ['project' => $project->id]) }}" method="POST" class="hidden">
+        @csrf
+        <input type="hidden" name="rate_id" value="{{ $rate->id }}">
+    </form>
+@endforeach
 
 @if(Auth::User()->activeTimers->contains('project_id', $project->id))
     <form id="stop-working-on-project" action="{{ route('projects.timer.stop', ['project' => $project->id, 'timer' => Auth::User()->activeTimers->firstWhere('project_id', $project->id)->id]) }}" method="POST" class="hidden">

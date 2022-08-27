@@ -100,6 +100,26 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group required">
+                                            <label for="rate-name" class="control-label">Rate name</label>
+                                            <input type="text" name="rate_name" id="rate-name" class="form-control @error('rate_name') is-invalid @enderror" placeholder="rate name" value="{{ old('rate_name') }}" autocomplete="off">
+                                            @error('rate_name')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group required">
+                                            <label for="rate-value" class="control-label">Rate value</label>
+                                            <input type="text" name="rate_value" id="rate-value" class="form-control @error('rate_value') is-invalid @enderror" placeholder="rate value" value="{{ old('rate_value') }}" autocomplete="off">
+                                            @error('rate_value')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
                                 <hr>
                                 <div class="row">
                                     <div class="col-md-6">

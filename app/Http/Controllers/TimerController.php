@@ -135,6 +135,17 @@ class TimerController extends Controller
      */
     public function start(Request $request, Project $project)
     {
+        $validator = Validator::make($request->all(), [
+            'rate_id' => ['required', 'integer', 'exists:rates,id'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                    ->route('projects.detail', ['project' => $project])
+                    ->withErrors($validator)
+                    ->withInput();
+        }
+
         if(Timer::where('project_id', $project->id)->where('user_id', Auth::id())->whereNull('until')->count() > 0) {
             Session::flash('message', 'Another timer already running!');
             Session::flash('type', 'danger');
@@ -145,6 +156,7 @@ class TimerController extends Controller
         $timer = new Timer();
 
         $timer->project_id = $project->id;
+        $timer->rate_id = $request->rate_id;
         $timer->user_id = Auth::id();
         $timer->since = Carbon::now();
         $timer->until = null;
