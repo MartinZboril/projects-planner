@@ -108,3 +108,12 @@ Route::get('/users/{user}/rates/{rate}/edit', [App\Http\Controllers\RateControll
 
 Route::post('/users/{user}/rate/store', [App\Http\Controllers\RateController::class, 'store'])->name('rates.store');
 Route::patch('/users/{user}/rate/{rate}/update', [App\Http\Controllers\RateController::class, 'update'])->name('rates.update');
+
+// Tickets
+Route::get('/tickets', [App\Http\Controllers\TicketController::class, 'index'])->name('tickets.index');
+Route::get('/tickets/create', [App\Http\Controllers\TicketController::class, 'create'])->name('tickets.create');
+Route::get('/tickets/{ticket}/detail', [App\Http\Controllers\TicketController::class, 'detail'])->name('tickets.detail');
+Route::get('/tickets/{ticket}/edit', [App\Http\Controllers\TicketController::class, 'edit'])->name('tickets.edit');
+
+Route::post('/tickets/store', [App\Http\Controllers\TicketController::class, 'store'])->name('tickets.store');
+Route::patch('/tickets/{ticket}/update', [App\Http\Controllers\TicketController::class, 'update'])->name('tickets.update');
