@@ -117,3 +117,6 @@ Route::get('/tickets/{ticket}/edit', [App\Http\Controllers\TicketController::cla
 
 Route::post('/tickets/store', [App\Http\Controllers\TicketController::class, 'store'])->name('tickets.store');
 Route::patch('/tickets/{ticket}/update', [App\Http\Controllers\TicketController::class, 'update'])->name('tickets.update');
+Route::patch('/tickets/{ticket}/open', [App\Http\Controllers\TicketController::class, 'open'])->name('tickets.open');
+Route::patch('/tickets/{ticket}/close', [App\Http\Controllers\TicketController::class, 'close'])->name('tickets.close');
+Route::patch('/tickets/{ticket}/archive', [App\Http\Controllers\TicketController::class, 'archive'])->name('tickets.archive');

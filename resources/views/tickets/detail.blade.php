@@ -11,6 +11,14 @@
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('tickets.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
         <a href="{{ route('tickets.edit', $ticket->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
+        @if ($ticket->status == 1)
+            <a href="#" class="btn btn-sm btn-success" onclick="event.preventDefault(); document.getElementById('close-ticket-form').submit();"><i class="fas fa-check mr-1"></i> Close</a>
+        @elseif ($ticket->status == 2 || $ticket->status == 3)
+            <a href="#" class="btn btn-sm btn-info" onclick="event.preventDefault(); document.getElementById('open-ticket-form').submit();"><i class="fas fa-bell mr-1"></i> Open</a>
+        @endif
+        @if ($ticket->status != 2 && $ticket->status != 3)
+            <a href="#" class="btn btn-sm btn-primary" onclick="event.preventDefault(); document.getElementById('archive-ticket-form').submit();"><i class="fas fa-archive"></i></a>
+        @endif
     </div>
     <!-- /.content-header -->
 
@@ -77,6 +85,21 @@
     </section>
 <!-- /.content -->
 </div>
+
+<form id="open-ticket-form" action="{{ route('tickets.open', $ticket->id) }}" method="POST" class="hidden">
+    @csrf
+    @method('PATCH')
+</form>
+
+<form id="close-ticket-form" action="{{ route('tickets.close', $ticket->id) }}" method="POST" class="hidden">
+    @csrf
+    @method('PATCH')
+</form>
+
+<form id="archive-ticket-form" action="{{ route('tickets.archive', $ticket->id) }}" method="POST" class="hidden">
+    @csrf
+    @method('PATCH')
+</form>
 
 @endsection
 

@@ -147,6 +147,66 @@ class TicketController extends Controller
     }
 
     /**
+     * Open the ticket.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function open(Request $request, Ticket $ticket)
+    {
+        Ticket::where('id', $ticket->id)
+                    ->update([
+                        'status' => 1,
+                    ]);
+
+        Session::flash('message', 'Ticket has been opened!');
+        Session::flash('type', 'info');
+
+        return redirect()->route('tickets.detail', ['ticket' => $ticket->id]);
+    }
+
+    /**
+     * Close the ticket.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function close(Request $request, Ticket $ticket)
+    {
+        Ticket::where('id', $ticket->id)
+                    ->update([
+                        'status' => 2,
+                    ]);
+
+        Session::flash('message', 'Ticket has been closed!');
+        Session::flash('type', 'info');
+
+        return redirect()->route('tickets.detail', ['ticket' => $ticket->id]);
+    }
+
+    /**
+     * Archive the ticket.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function archive(Request $request, Ticket $ticket)
+    {
+        Ticket::where('id', $ticket->id)
+                    ->update([
+                        'status' => 3,
+                    ]);
+
+        Session::flash('message', 'Ticket has been archived!');
+        Session::flash('type', 'info');
+
+        return redirect()->route('tickets.detail', ['ticket' => $ticket->id]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Ticket  $ticket
