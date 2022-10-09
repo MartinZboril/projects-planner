@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Ticket;
 use App\Models\Project;
 use App\Models\User;
+use App\Models\ProjectUser;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -204,6 +206,58 @@ class TicketController extends Controller
         Session::flash('type', 'info');
 
         return redirect()->route('tickets.detail', ['ticket' => $ticket->id]);
+    }
+
+    /**
+     * Convert the ticket.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function convert(Request $request, Ticket $ticket)
+    {
+        $task = new Task();
+
+        $task->name = $ticket->subject;
+        $task->project_id = $ticket->project_id;
+        $task->status_id = 1;
+        $task->author_id = Auth::id();
+        $task->user_id = $ticket->assignee_id;
+        $task->start_date = $ticket->created_at;
+        $task->due_date = $ticket->due_date;
+        $task->description = $ticket->message;
+
+        $task->save();
+
+        if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', Auth::id())->first()) {
+            $projectUser = new ProjectUser;
+
+            $projectUser->project_id = $ticket->project_id;
+            $projectUser->user_id = Auth::id();
+
+            $projectUser->save();
+        }
+
+        if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', $ticket->assignee_id)->first()) {
+            $projectUser = new ProjectUser;
+
+            $projectUser->project_id = $ticket->project_id;
+            $projectUser->user_id = $ticket->assignee_id;
+
+            $projectUser->save();
+        }
+
+        Ticket::where('id', $ticket->id)
+                    ->update([
+                        'status' => 3,
+                        'is_convert' => true
+                    ]);        
+
+        Session::flash('message', 'Task was created!');
+        Session::flash('type', 'info');
+
+        return redirect()->route('tasks.detail', ['task' => $task]);
     }
 
     /**

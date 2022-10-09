@@ -120,3 +120,4 @@ Route::patch('/tickets/{ticket}/update', [App\Http\Controllers\TicketController:
 Route::patch('/tickets/{ticket}/open', [App\Http\Controllers\TicketController::class, 'open'])->name('tickets.open');
 Route::patch('/tickets/{ticket}/close', [App\Http\Controllers\TicketController::class, 'close'])->name('tickets.close');
 Route::patch('/tickets/{ticket}/archive', [App\Http\Controllers\TicketController::class, 'archive'])->name('tickets.archive');
+Route::patch('/tickets/{ticket}/convert', [App\Http\Controllers\TicketController::class, 'convert'])->name('tickets.convert');
