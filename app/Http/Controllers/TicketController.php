@@ -75,6 +75,24 @@ class TicketController extends Controller
 
         $ticket->save();
 
+        if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', $ticket->reporter_id)->first()) {
+            $projectUser = new ProjectUser;
+
+            $projectUser->project_id = $ticket->project_id;
+            $projectUser->user_id = $ticket->reporter_id;
+
+            $projectUser->save();
+        }
+
+        if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', $ticket->assignee_id)->first()) {
+            $projectUser = new ProjectUser;
+
+            $projectUser->project_id = $ticket->project_id;
+            $projectUser->user_id = $ticket->assignee_id;
+
+            $projectUser->save();
+        }
+
         Session::flash('message', 'Ticket was created!');
         Session::flash('type', 'info');
 
@@ -141,6 +159,15 @@ class TicketController extends Controller
                         'due_date' => $request->due_date,
                         'message' => $request->message,
                     ]);
+
+        if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', $ticket->assignee_id)->first()) {
+            $projectUser = new ProjectUser;
+
+            $projectUser->project_id = $ticket->project_id;
+            $projectUser->user_id = $ticket->assignee_id;
+
+            $projectUser->save();
+        }
 
         Session::flash('message', 'Ticket was updated!');
         Session::flash('type', 'info');
@@ -222,22 +249,13 @@ class TicketController extends Controller
         $task->name = $ticket->subject;
         $task->project_id = $ticket->project_id;
         $task->status_id = 1;
-        $task->author_id = Auth::id();
+        $task->author_id = $ticket->reporter_id;
         $task->user_id = $ticket->assignee_id;
         $task->start_date = $ticket->created_at;
         $task->due_date = $ticket->due_date;
         $task->description = $ticket->message;
 
         $task->save();
-
-        if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', Auth::id())->first()) {
-            $projectUser = new ProjectUser;
-
-            $projectUser->project_id = $ticket->project_id;
-            $projectUser->user_id = Auth::id();
-
-            $projectUser->save();
-        }
 
         if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', $ticket->assignee_id)->first()) {
             $projectUser = new ProjectUser;

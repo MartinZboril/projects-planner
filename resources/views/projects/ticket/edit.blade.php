@@ -5,14 +5,14 @@
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
-        <a href="{{ route('tickets.detail', $ticket->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
+        <a href="{{ route('projects.ticket.detail', ['project' => $project->id, 'ticket' => $ticket->id]) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
     </div>
     <!-- /.content-header -->
 
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <form action="{{ route('tickets.update', $ticket->id) }}" method="post">
+            <form action="{{ route('projects.ticket.update', ['project' => $project->id, 'ticket' => $ticket->id]) }}" method="post">
                 @csrf
                 @method('PATCH')
                 <div class="row">
@@ -27,23 +27,11 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <div class="form-group required">
-                                    <label for="project_id" class="control-label">Project</label>
-                                    <select class="form-control project-select @error('project_id') is-invalid @enderror" name="project_id" id="project_id" style="width: 100%;">
-                                        <option disabled selected value>Choose project</option>
-                                        @foreach($projects as $project)
-                                            <option value="{{ $project->id }}" @if(old('project_id', $ticket->project_id) == $project->id) selected @endif>{{ $project->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('project_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
                                 <div class="form-group">
                                     <label for="assignee_id">Assignee</label>
                                     <select class="form-control assignee-select @error('assignee_id') is-invalid @enderror" name="assignee_id" id="assignee_id" style="width: 100%;">
                                         <option disabled selected value>Choose assignee</option>
-                                        @foreach($users as $user)
+                                        @foreach($project->team as $user)
                                             <option value="{{ $user->id }}" @if(old('assignee_id', $ticket->assignee_id) == $user->id) selected @endif>{{ $user->name }} {{ $user->surname }}</option>
                                         @endforeach
                                     </select>
@@ -114,7 +102,7 @@
                         </div>
                         <div class="card rounded-0">
                             <div class="card-body">
-                                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ route('tickets.detail', $ticket->id) }}" class="cancel-btn">Close</a></span>
+                                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ route('projects.ticket.detail', ['project' => $project->id, 'ticket' => $ticket->id]) }}" class="cancel-btn">Close</a></span>
                             </div>
                         </div>
                     </div>

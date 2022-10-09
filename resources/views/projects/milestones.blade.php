@@ -41,6 +41,7 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('projects.kanban', $project->id) }}">Kanban</a></li>
                     <li class="nav-item"><a class="nav-link active" href="{{ route('projects.milestones', $project->id) }}">Milestones</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('projects.timesheets', $project->id) }}">Timesheets</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('projects.tickets', $project->id) }}">Tickets</a></li>
                 </ul>
             </div>
 

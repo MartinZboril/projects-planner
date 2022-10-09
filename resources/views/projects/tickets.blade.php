@@ -9,7 +9,7 @@
 
 @section('content')
 <!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
+  <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('projects.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
@@ -40,56 +40,57 @@
                     <li class="nav-item"><a class="nav-link" href="{{ route('projects.tasks', $project->id) }}">Tasks</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('projects.kanban', $project->id) }}">Kanban</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('projects.milestones', $project->id) }}">Milestones</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{{ route('projects.timesheets', $project->id) }}">Timesheets</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('projects.tickets', $project->id) }}">Tickets</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('projects.timesheets', $project->id) }}">Timesheets</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="{{ route('projects.tickets', $project->id) }}">Tickets</a></li>
                 </ul>
             </div>
 
             <div class="card card-primary card-outline rounded-0">
-                <div class="card-header"><a href="{{ route('timers.create', ['project' => $project->id]) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
+                <div class="card-header"><a href="{{ route('projects.ticket.create', ['project' => $project->id]) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
                 <div class="card-body">
-                    <input type="hidden" id="timesheetform-message" value="{{ Session::get('message') }}">
-                    <input type="hidden" id="timesheetform-message-type" value="{{ Session::get('type') }}">
+                    <input type="hidden" id="ticketform-message" value="{{ Session::get('message') }}">
+                    <input type="hidden" id="ticketform-message-type" value="{{ Session::get('type') }}">
+       
                     <div class="table-responsive">
-                        <table id="{{ count($project->timers) > 0 ? 'timesheets-table' : '' }}" class="table table-bordered table-striped">
+                        <table id="{{ count($project->tickets) > 0 ? 'tickets-table' : '' }}" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Type</th>
-                                    <th>User</th>
-                                    <th>Total time (Hours)</th>
-                                    <th>Amount</th>
-                                    <th>Start</th>
-                                    <th>Stop</th>
+                                    <th>Subject</th>
+                                    <th>Reporter</th>
+                                    <th>Assignee</th>
                                     <th>Date</th>
-                                    <th></th>
+                                    <th>Status</th>
+                                    <th>Type</th>
+                                    <th>Priority</th>
+                                    <th>Due Date</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($project->timers as $timer)
+                                @forelse ($project->tickets as $ticket)
                                     <tr>
-                                        <td>{{ $timer->rate->name }}</td>
-                                        <td>{{ $timer->user->name }} {{ $timer->user->surname }}</td>
-                                        <td>{{ (!$timer->until) ? 'N/A' : (($timer->total_time) ? $timer->total_time : 0) }}</td>
-                                        <td>{{ $timer->amount }}</td>
-                                        <td>{{ $timer->since->format('d.m.Y H:i') }}</td>
-                                        <td>{{ ($timer->until) ? $timer->until->format('d.m.Y H:i') : 'N/A' }}</td>
-                                        <td>{{ $timer->since->format('d.m.Y') }}</td>
+                                        <td><a href="{{ route('projects.ticket.detail', ['project' => $project->id, 'ticket' => $ticket->id]) }}">{{ $ticket->subject }}</a></td>
+                                        <td><img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $ticket->reporter->name }} {{ $ticket->reporter->surname }}"></td>
                                         <td>
-                                            @if($timer->until)
-                                                <a href="{{ route('timers.edit', ['project' => $project->id, 'timer' => $timer->id]) }}" class="btn btn-sm btn-dark" href=""><i class="fas fa-pencil-alt"></i></a>
+                                            @if($ticket->assignee)
+                                                <img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $ticket->assignee->name }} {{ $ticket->assignee->surname }}">
                                             @else
-                                                N/A
+                                                -
                                             @endif
                                         </td>
+                                        <td>{{ $ticket->created_at->format('d.m.Y') }}</td>
+                                        <td>{{ $ticket->status == 1 ? 'Open' : ($ticket->status == 2 ? 'Closed' : ($ticket->status == 3 ? 'Archived' : $ticket->status)) }}</td>
+                                        <td>{{ $ticket->type == 1 ? 'Error' : ($ticket->type == 2 ? 'Inovation' : ($ticket->type == 3 ? 'Help' : ($ticket->type == 4 ? 'Other' : $ticket->type))) }}</td>
+                                        <td>{{ $ticket->priority == 1 ? 'Low' : ($ticket->priority == 2 ? 'Medium' : ($ticket->priority == 3 ? 'High' : ($ticket->priority == 4 ? 'Urgent' : $ticket->priority))) }}</td>
+                                        <td>{{ $ticket->due_date->format('d.m.Y') }}</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="6" class="text-center">No timesheets were found!</td>
+                                        <td colspan="8" class="text-center">No tickets were found!</td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>  
-                    </div>        
+                    </div>
                 </div>
             </div>
         </div>
@@ -97,18 +98,6 @@
     <!-- /.content -->
 </div>
 
-@foreach (Auth::User()->rates as $rate)
-    <form id="start-working-on-project-with-rate-{{ $rate->id }}" action="{{ route('projects.timer.start', ['project' => $project->id]) }}" method="POST" class="hidden">
-        @csrf
-        <input type="hidden" name="rate_id" value="{{ $rate->id }}">
-    </form>
-@endforeach
-
-@if(Auth::User()->activeTimers->contains('project_id', $project->id))
-    <form id="stop-working-on-project" action="{{ route('projects.timer.stop', ['project' => $project->id, 'timer' => Auth::User()->activeTimers->firstWhere('project_id', $project->id)->id]) }}" method="POST" class="hidden">
-        @csrf
-    </form>
-@endif
 @endsection
 
 @section('scripts')
@@ -129,15 +118,15 @@
 
     <script>
         $(function () {
-            $("#timesheets-table").DataTable();
+            $("#tickets-table").DataTable();
 
-            if($('#timesheetform-message').val()) {
-                if($('#timesheetform-message-type').val() == "success") {
-                    toastr.success($('#timesheetform-message').val());
-                } else if($('#timesheetform-message-type').val() == "info") {
-                    toastr.info($('#timesheetform-message').val());
+            if($('#ticketform-message').val()) {
+                if($('#ticketform-message-type').val() == "success") {
+                    toastr.success($('#ticketform-message').val());
+                } else if($('#ticketform-message-type').val() == "info") {
+                    toastr.info($('#ticketform-message').val());
                 } else {
-                    toastr.error($('#timesheetform-message').val());            
+                    toastr.error($('#ticketform-message').val());            
                 }
             }; 
 

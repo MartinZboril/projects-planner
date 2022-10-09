@@ -49,10 +49,15 @@ Route::get('/projects/{project}/milestones', [App\Http\Controllers\ProjectContro
 Route::get('/projects/{project}/task/{task}/todo/create', [App\Http\Controllers\ProjectController::class, 'createToDo'])->name('projects.todo.create');
 Route::get('/projects/{project}/task/{task}/todo/{todo}/edit', [App\Http\Controllers\ProjectController::class, 'editToDo'])->name('projects.todo.edit');
 Route::get('/projects/{project}/timesheets', [App\Http\Controllers\ProjectController::class, 'timesheets'])->name('projects.timesheets');
+Route::get('/projects/{project}/tickets', [App\Http\Controllers\ProjectController::class, 'tickets'])->name('projects.tickets');
+Route::get('/projects/{project}/ticket/create', [App\Http\Controllers\ProjectController::class, 'createTicket'])->name('projects.ticket.create');
+Route::get('/projects/{project}/ticket/{ticket}/detail', [App\Http\Controllers\ProjectController::class, 'detailTicket'])->name('projects.ticket.detail');
+Route::get('/projects/{project}/ticket/{ticket}/edit', [App\Http\Controllers\ProjectController::class, 'editTicket'])->name('projects.ticket.edit');
 
 Route::post('/projects/store', [App\Http\Controllers\ProjectController::class, 'store'])->name('projects.store');
 Route::post('/projects/{project}/task/store', [App\Http\Controllers\ProjectController::class, 'storeTask'])->name('projects.task.store');
 Route::post('/projects/{project}/tasks/{task}/todo/store', [App\Http\Controllers\ProjectController::class, 'storeToDo'])->name('projects.todo.store');
+Route::post('/projects/{project}/ticket/store', [App\Http\Controllers\ProjectController::class, 'storeTicket'])->name('projects.ticket.store');
 Route::patch('/projects/{project}/update', [App\Http\Controllers\ProjectController::class, 'update'])->name('projects.update');
 Route::patch('/projects/{project}/task/{task}/update', [App\Http\Controllers\ProjectController::class, 'updateTask'])->name('projects.task.update');
 Route::patch('/projects/{project}/task/{task}/start', [App\Http\Controllers\ProjectController::class, 'start'])->name('projects.task.start');
@@ -62,6 +67,11 @@ Route::patch('/projects/{project}/task/{task}/resume', [App\Http\Controllers\Pro
 Route::patch('/projects/{project}/task/{task}/return', [App\Http\Controllers\ProjectController::class, 'return'])->name('projects.task.return');
 Route::patch('/projects/{project}/tasks/{task}/todo/{todo}/update', [App\Http\Controllers\ProjectController::class, 'updateToDo'])->name('projects.todo.update');
 Route::patch('/projects/{project}/tasks/{task}/todo/{todo}/check', [App\Http\Controllers\ProjectController::class, 'checkToDo'])->name('projects.todo.check');
+Route::patch('/projects/{project}/ticket/{ticket}/update', [App\Http\Controllers\ProjectController::class, 'updateTicket'])->name('projects.ticket.update');
+Route::patch('/projects/{project}/ticket/{ticket}/open', [App\Http\Controllers\ProjectController::class, 'openTicket'])->name('projects.ticket.open');
+Route::patch('/projects/{project}/ticket/{ticket}/close', [App\Http\Controllers\ProjectController::class, 'closeTicket'])->name('projects.ticket.close');
+Route::patch('/projects/{project}/ticket/{ticket}/archive', [App\Http\Controllers\ProjectController::class, 'archiveTicket'])->name('projects.ticket.archive');
+Route::patch('/projects/{project}/ticket/{ticket}/convert', [App\Http\Controllers\ProjectController::class, 'convertTicket'])->name('projects.ticket.convert');
 
 // Tasks
 Route::get('/tasks', [App\Http\Controllers\TaskController::class, 'index'])->name('tasks.index');

@@ -9,6 +9,7 @@ use App\Models\ProjectUser;
 use App\Models\Task;
 use App\Models\Milestone;
 use App\Models\ToDo;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -77,6 +78,17 @@ class ProjectController extends Controller
     public function timesheets(Project $project)
     {
         return view('projects.timesheets', ['project' => $project]);
+    }
+
+    /**
+     * Display the specified resource of project tickets.
+     *
+     * @param  \App\Models\Project  $project
+     * @return \Illuminate\Http\Response
+     */
+    public function tickets(Project $project)
+    {
+        return view('projects.tickets', ['project' => $project]);
     }
 
     /**
@@ -578,6 +590,244 @@ class ProjectController extends Controller
             Session::flash('message', 'ToDo was finished!');
         }
 
+        Session::flash('type', 'info');
+
+        return redirect()->route('projects.task.detail', ['project' => $project, 'task' => $task]);
+    }
+
+    
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Project  $project
+     * @return \Illuminate\Http\Response
+     */
+    public function createTicket(Project $project)
+    {
+        return view('projects.ticket.create', ['project' => $project]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Project  $project
+     * @return \Illuminate\Http\Response
+     */
+    public function storeTicket(Request $request, Project $project, Ticket $ticket)
+    {
+        $validator = Validator::make($request->all(), [
+            'subject' => ['required', 'string', 'max:255'],
+            'assignee_id' => ['sometimes', 'required', 'integer', 'exists:users,id'],
+            'type' => ['required', 'integer', 'in:1,2,3,4'],
+            'priority' => ['required', 'integer', 'in:1,2,3,4'],
+            'due_date' => ['required', 'date'],
+            'message' => ['required', 'max:65553'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                    ->route('projects.ticket.create', ['project' => $project])
+                    ->withErrors($validator)
+                    ->withInput();
+        }
+
+        $ticket = new Ticket();
+
+        $ticket->subject = $request->subject;
+        $ticket->project_id = $project->id;
+        $ticket->reporter_id = Auth::id();
+        $ticket->assignee_id = $request->assignee_id;
+        $ticket->type = $request->type;
+        $ticket->priority = $request->priority;
+        $ticket->due_date = $request->due_date;
+        $ticket->message = $request->message;
+
+        $ticket->save();
+
+        Session::flash('message', 'Ticket was created!');
+        Session::flash('type', 'info');
+
+        return ($request->create_and_close) ? redirect()->route('projects.tickets', ['project' => $project]) : redirect()->route('projects.ticket.detail', ['project' => $project, 'ticket' => $ticket]);
+    }
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function detailTicket(Project $project, Ticket $ticket)
+    {
+        return view('projects.ticket.detail', ['project' => $project, 'ticket' => $ticket]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function editTicket(Project $project, Ticket $ticket)
+    {
+        return view('projects.ticket.edit', ['project' => $project, 'ticket' => $ticket]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Project  $project
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function updateTicket(Request $request, Project $project, Ticket $ticket)
+    {
+        $validator = Validator::make($request->all(), [
+            'subject' => ['required', 'string', 'max:255'],
+            'assignee_id' => ['required', 'integer', 'exists:users,id'],
+            'type' => ['required', 'integer', 'in:1,2,3,4'],
+            'priority' => ['required', 'integer', 'in:1,2,3,4'],
+            'status' => ['required', 'integer', 'in:1,2,3'],
+            'due_date' => ['required', 'date'],
+            'message' => ['required', 'max:65553'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                    ->route('projects.ticket.edit', ['project' => $project, 'ticket' => $ticket])
+                    ->withErrors($validator)
+                    ->withInput();
+        }
+
+        Ticket::where('id', $ticket->id)
+                    ->update([
+                        'subject' => $request->subject,
+                        'project_id' => $project->id,
+                        'assignee_id' => $request->assignee_id,
+                        'status' => $request->status,
+                        'type' => $request->type,
+                        'priority' => $request->priority,
+                        'due_date' => $request->due_date,
+                        'message' => $request->message,
+                    ]);
+
+        if(!ProjectUser::where('project_id', $project->id)->where('user_id', $request->assignee_id)->first()) {
+            $projectUser = new ProjectUser;
+
+            $projectUser->project_id = $project->id;
+            $projectUser->user_id = $request->assignee_id;
+
+            $projectUser->save();
+        }
+
+        Session::flash('message', 'Ticket was updated!');
+        Session::flash('type', 'info');
+
+        return ($request->save_and_close) ? redirect()->route('projects.tickets', ['project' => $project]) : redirect()->route('projects.ticket.detail', ['project' => $project, 'ticket' => $ticket]);
+    }
+
+    /**
+     * Open the ticket.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function openTicket(Request $request, Project $project, Ticket $ticket)
+    {
+        Ticket::where('id', $ticket->id)
+                    ->update([
+                        'status' => 1,
+                    ]);
+
+        Session::flash('message', 'Ticket has been opened!');
+        Session::flash('type', 'info');
+
+        return redirect()->route('projects.ticket.detail', ['project' => $project, 'ticket' => $ticket]);
+    }
+
+    /**
+     * Close the ticket.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function closeTicket(Request $request, Project $project, Ticket $ticket)
+    {
+        Ticket::where('id', $ticket->id)
+                    ->update([
+                        'status' => 2,
+                    ]);
+
+        Session::flash('message', 'Ticket has been closed!');
+        Session::flash('type', 'info');
+
+        return redirect()->route('projects.ticket.detail', ['project' => $project, 'ticket' => $ticket]);
+    }
+
+    /**
+     * Archive the ticket.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function archiveTicket(Request $request, Project $project, Ticket $ticket)
+    {
+        Ticket::where('id', $ticket->id)
+                    ->update([
+                        'status' => 3,
+                    ]);
+
+        Session::flash('message', 'Ticket has been archived!');
+        Session::flash('type', 'info');
+
+        return redirect()->route('projects.ticket.detail', ['project' => $project, 'ticket' => $ticket]);
+    }
+
+    /**
+     * Convert the ticket.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Ticket  $ticket
+     * @return \Illuminate\Http\Response
+     */
+    public function convertTicket(Request $request, Project $project, Ticket $ticket)
+    {
+        $task = new Task();
+
+        $task->name = $ticket->subject;
+        $task->project_id = $ticket->project_id;
+        $task->status_id = 1;
+        $task->author_id = Auth::id();
+        $task->user_id = $ticket->assignee_id;
+        $task->start_date = $ticket->created_at;
+        $task->due_date = $ticket->due_date;
+        $task->description = $ticket->message;
+
+        $task->save();
+
+        if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', $ticket->assignee_id)->first()) {
+            $projectUser = new ProjectUser;
+
+            $projectUser->project_id = $ticket->project_id;
+            $projectUser->user_id = $ticket->assignee_id;
+
+            $projectUser->save();
+        }
+
+        Ticket::where('id', $ticket->id)
+                    ->update([
+                        'status' => 3,
+                        'is_convert' => true
+                    ]);        
+
+        Session::flash('message', 'Task was created!');
         Session::flash('type', 'info');
 
         return redirect()->route('projects.task.detail', ['project' => $project, 'task' => $task]);
