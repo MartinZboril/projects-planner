@@ -104,9 +104,10 @@
                                     <div class="tools">
                                         <a href="{{ route('projects.todo.edit', ['project' => $project->id, 'task' => $task->id, 'todo' => $todo->id]) }}"><i class="fas fa-edit"></i></a>
                                     </div>
-                                    <form id="check-todo-{{ $todo->id }}-form" action="{{ route('projects.todo.check', ['project' => $project->id, 'task' => $task->id, 'todo' => $todo->id]) }}" method="POST" class="hidden">
+                                    <form id="check-todo-{{ $todo->id }}-form" action="{{ route('todos.check', $todo->id) }}" method="POST" class="hidden">
                                         @csrf
                                         @method('PATCH')
+                                        <input type="hidden" name="redirect" value="project">
                                     </form>
                                 </li>
                             @endforeach
@@ -125,33 +126,39 @@
 <!-- /.content -->
 </div>
 
-<form id="start-working-on-task-form" action="{{ route('projects.task.start', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
+<form id="start-working-on-task-form" action="{{ route('tasks.change', $task->id) }}" method="POST" class="hidden">
     @csrf
     @method('PATCH')
+
+    <input type="hidden" name="status_id" value="2">
     <input type="hidden" name="type" value="detail">
 </form>
 
-<form id="complete-working-on-task-form" action="{{ route('projects.task.complete', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
+<form id="complete-working-on-task-form" action="{{ route('tasks.change', $task->id) }}" method="POST" class="hidden">
     @csrf
     @method('PATCH')
+
+    <input type="hidden" name="status_id" value="3">
     <input type="hidden" name="type" value="detail">
 </form>
 
-<form id="stop-working-on-task-form" action="{{ route('projects.task.stop', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
+<form id="stop-working-on-task-form" action="{{ route('tasks.pause', $task->id) }}" method="POST" class="hidden">
 @csrf
     @method('PATCH')
     <input type="hidden" name="type" value="detail">
 </form>
 
-<form id="resume-working-on-task-form" action="{{ route('projects.task.resume', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
+<form id="resume-working-on-task-form" action="{{ route('tasks.pause', $task->id) }}" method="POST" class="hidden">
 @csrf
     @method('PATCH')
     <input type="hidden" name="type" value="detail">
 </form>
 
-<form id="return-working-on-task-form" action="{{ route('projects.task.return', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
+<form id="return-working-on-task-form" action="{{ route('tasks.change', $task->id) }}" method="POST" class="hidden">
 @csrf
     @method('PATCH')
+
+    <input type="hidden" name="status_id" value="1">
     <input type="hidden" name="type" value="detail">
 </form>
 @endsection

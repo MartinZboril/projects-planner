@@ -12,7 +12,7 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <form action="{{ route('milestones.update', ['project' => $project->id, 'milestone' => $milestone->id]) }}" method="post">
+            <form action="{{ route('milestones.update', $milestone->id) }}" method="post">
                 @csrf
                 @method('PATCH')
                 <div class="row">

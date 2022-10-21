@@ -80,8 +80,9 @@
                       <td><a href="#" class="btn btn-sm btn-danger" onclick="event.preventDefault(); document.getElementById('stop-working-on-timer-{{ $timer->id }}').submit();"><i class="fas fa-stop"></i></a></td>
                     </tr>
 
-                    <form id="stop-working-on-timer-{{ $timer->id }}" action="{{ route('projects.timer.stop', ['project' => $timer->project->id, 'timer' => $timer->id]) }}" method="POST" class="hidden">
+                    <form id="stop-working-on-timer-{{ $timer->id }}" action="{{ route('timers.stop', $timer->id) }}" method="POST" class="hidden">
                         @csrf
+                        @method('PATCH')
                     </form>
                   @endforeach
                 </tbody>

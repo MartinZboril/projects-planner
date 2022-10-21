@@ -89,19 +89,25 @@
 <!-- /.content -->
 </div>
 
-<form id="open-ticket-form" action="{{ route('tickets.open', $ticket->id) }}" method="POST" class="hidden">
+<form id="open-ticket-form" action="{{ route('tickets.change', $ticket->id) }}" method="POST" class="hidden">
     @csrf
     @method('PATCH')
+
+    <input type="hidden" name="status" value="1">
 </form>
 
-<form id="close-ticket-form" action="{{ route('tickets.close', $ticket->id) }}" method="POST" class="hidden">
+<form id="close-ticket-form" action="{{ route('tickets.change', $ticket->id) }}" method="POST" class="hidden">
     @csrf
     @method('PATCH')
+
+    <input type="hidden" name="status" value="2">
 </form>
 
-<form id="archive-ticket-form" action="{{ route('tickets.archive', $ticket->id) }}" method="POST" class="hidden">
+<form id="archive-ticket-form" action="{{ route('tickets.change', $ticket->id) }}" method="POST" class="hidden">
     @csrf
     @method('PATCH')
+
+    <input type="hidden" name="status" value="3">
 </form>
 
 <form id="convert-ticket-to-task-form" action="{{ route('tickets.convert', $ticket->id) }}" method="POST" class="hidden">

@@ -12,7 +12,7 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <form action="{{ route('rates.store', $user->id) }}" method="post">
+            <form action="{{ route('rates.store') }}" method="post">
                 @csrf
                 <div class="row">
                     <div class="col-md-7">
@@ -57,7 +57,9 @@
                             </div>
                         </div>
                     </div>
-                </div>    
+                </div> 
+                
+                <input type="hidden" name="user_id" value="{{ $user->id }}">
             </form>     
         </div>
     </section>

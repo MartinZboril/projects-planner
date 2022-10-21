@@ -12,7 +12,7 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <form action="{{ route('projects.todo.update', ['project' => $project->id, 'task' => $task->id, 'todo' => $todo->id]) }}" method="post">
+            <form action="{{ route('todos.update', $todo->id) }}" method="post">
                 @csrf
                 @method('PATCH')
                 <div class="row">
@@ -61,11 +61,13 @@
                         </div>
                         <div class="card rounded-0">
                             <div class="card-body">
-                                <input type="submit" class="btn btn-sm btn-primary mr-1" value="Save"> or <a href="{{ route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) }}" class="cancel-btn">Close</a></span>
+                                <input type="submit" name="project_save" class="btn btn-sm btn-primary mr-1" value="Save"> or <a href="{{ route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) }}" class="cancel-btn">Close</a></span>
                             </div>
                         </div>
                     </div>
-                </div>    
+                </div> 
+                                                
+                <input type="hidden" name="task_id" value="{{ $task->id }}">        
             </form>     
         </div>
     </section>

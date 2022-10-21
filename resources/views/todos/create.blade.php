@@ -12,7 +12,7 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <form action="{{ route('todos.store', ['task' => $task->id]) }}" method="post">
+            <form action="{{ route('todos.store') }}" method="post">
                 @csrf
                 <div class="row">
                     <div class="col-md-7">
@@ -55,7 +55,9 @@
                             </div>
                         </div>
                     </div>
-                </div>    
+                </div> 
+                                                                
+                <input type="hidden" name="task_id" value="{{ $task->id }}">           
             </form>     
         </div>
     </section>

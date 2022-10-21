@@ -12,7 +12,7 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <form action="{{ route('todos.update', ['task' => $task->id, 'todo' => $todo->id]) }}" method="post">
+            <form action="{{ route('todos.update', $todo->id) }}" method="post">
                 @csrf
                 @method('PATCH')
                 <div class="row">
@@ -65,7 +65,9 @@
                             </div>
                         </div>
                     </div>
-                </div>    
+                </div> 
+                                                                
+                <input type="hidden" name="task_id" value="{{ $task->id }}">         
             </form>     
         </div>
     </section>

@@ -89,24 +89,35 @@
 <!-- /.content -->
 </div>
 
-<form id="open-ticket-form" action="{{ route('projects.ticket.open', ['project' => $project->id, 'ticket' => $ticket->id]) }}" method="POST" class="hidden">
+<form id="open-ticket-form" action="{{ route('tickets.change', $ticket->id) }}" method="POST" class="hidden">
     @csrf
     @method('PATCH')
+    
+    <input type="hidden" name="status" value="1">
+    <input type="hidden" name="project_redirect" value="1">
 </form>
 
-<form id="close-ticket-form" action="{{ route('projects.ticket.close', ['project' => $project->id, 'ticket' => $ticket->id]) }}" method="POST" class="hidden">
+<form id="close-ticket-form" action="{{ route('tickets.change', $ticket->id) }}" method="POST" class="hidden">
     @csrf
     @method('PATCH')
+
+    <input type="hidden" name="status" value="2">
+    <input type="hidden" name="project_redirect" value="1">
 </form>
 
-<form id="archive-ticket-form" action="{{ route('projects.ticket.archive', ['project' => $project->id, 'ticket' => $ticket->id]) }}" method="POST" class="hidden">
+<form id="archive-ticket-form" action="{{ route('tickets.change', $ticket->id) }}" method="POST" class="hidden">
     @csrf
     @method('PATCH')
+    
+    <input type="hidden" name="status" value="3">
+    <input type="hidden" name="project_redirect" value="1">
 </form>
 
-<form id="convert-ticket-to-task-form" action="{{ route('projects.ticket.convert', ['project' => $project->id, 'ticket' => $ticket->id]) }}" method="POST" class="hidden">
+<form id="convert-ticket-to-task-form" action="{{ route('tickets.convert', $ticket->id) }}" method="POST" class="hidden">
     @csrf
     @method('PATCH')
+    
+    <input type="hidden" name="project_redirect" value="1">
 </form>
 
 @endsection

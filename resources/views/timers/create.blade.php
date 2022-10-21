@@ -16,7 +16,7 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <form action="{{ route('timers.store', $project->id) }}" method="post">
+            <form action="{{ route('timers.store') }}" method="post">
                 @csrf
                 <div class="row">
                     <div class="col-md-7">
@@ -62,7 +62,9 @@
                             </div>
                         </div>
                     </div>
-                </div>    
+                </div> 
+                                                                                
+                <input type="hidden" name="project_id" value="{{ $project->id }}">              
             </form>     
         </div>
     </section>

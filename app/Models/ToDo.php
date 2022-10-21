@@ -13,5 +13,8 @@ class ToDo extends Model
 
     protected $dates = ['deadline'];
 
-
+    public function task()
+    {
+        return $this->belongsTo(Task::class, 'task_id');
+    }
 }

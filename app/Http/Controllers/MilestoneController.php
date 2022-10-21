@@ -36,7 +36,7 @@ class MilestoneController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Project $project)
+    public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
@@ -49,7 +49,7 @@ class MilestoneController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('milestones.create', ['project' => $project])
+                    ->route('milestones.create', ['project' => $request->project_id])
                     ->withErrors($validator)
                     ->withInput();
         }
@@ -57,7 +57,7 @@ class MilestoneController extends Controller
         $milestone = new Milestone();
 
         $milestone->name = $request->name;
-        $milestone->project_id = $project->id;
+        $milestone->project_id = $request->project_id;
         $milestone->owner_id = $request->owner_id;
         $milestone->start_date = $request->start_date;
         $milestone->end_date = $request->end_date;
@@ -69,7 +69,7 @@ class MilestoneController extends Controller
         Session::flash('message', 'Milestone was created!');
         Session::flash('type', 'info');
 
-        return ($request->create_and_close) ? redirect()->route('projects.milestones', ['project' => $project]) : redirect()->route('milestones.detail', ['project' => $project, 'milestone' => $milestone]);
+        return ($request->create_and_close) ? redirect()->route('projects.milestones', ['project' => $milestone->project]) : redirect()->route('milestones.detail', ['project' => $milestone->project, 'milestone' => $milestone]);
     }
 
     /**
@@ -101,7 +101,7 @@ class MilestoneController extends Controller
      * @param  \App\Models\Milestone  $milestone
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project, Milestone $milestone)
+    public function update(Request $request, Milestone $milestone)
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
@@ -114,7 +114,7 @@ class MilestoneController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('milestones.edit', ['project' => $project, 'milestone' => $milestone])
+                    ->route('milestones.edit', ['project' => $milestone->project, 'milestone' => $milestone])
                     ->withErrors($validator)
                     ->withInput();
         }
@@ -132,7 +132,7 @@ class MilestoneController extends Controller
         Session::flash('message', 'Milestone was updated!');
         Session::flash('type', 'info');
 
-        return ($request->save_and_close) ? redirect()->route('projects.milestones', ['project' => $project]) : redirect()->route('milestones.detail', ['project' => $project, 'milestone' => $milestone]);
+        return ($request->save_and_close) ? redirect()->route('projects.milestones', ['project' => $milestone->project]) : redirect()->route('milestones.detail', ['project' => $milestone->project, 'milestone' => $milestone]);
     }
 
     /**

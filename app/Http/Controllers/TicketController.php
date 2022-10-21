@@ -84,18 +84,24 @@ class TicketController extends Controller
             $projectUser->save();
         }
 
-        if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', $ticket->assignee_id)->first()) {
-            $projectUser = new ProjectUser;
-
-            $projectUser->project_id = $ticket->project_id;
-            $projectUser->user_id = $ticket->assignee_id;
-
-            $projectUser->save();
+        if($ticket->assignee_id) {
+            if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', $ticket->assignee_id)->first()) {
+                $projectUser = new ProjectUser;
+    
+                $projectUser->project_id = $ticket->project_id;
+                $projectUser->user_id = $ticket->assignee_id;
+    
+                $projectUser->save();
+            }
         }
 
         Session::flash('message', 'Ticket was created!');
         Session::flash('type', 'info');
 
+        if($request->project_create || $request->project_create_and_close) {
+            return ($request->project_create_and_close) ? redirect()->route('projects.tickets', ['project' => $ticket->project]) : redirect()->route('projects.ticket.detail', ['project' => $ticket->project, 'ticket' => $ticket]);
+        }
+        
         return ($request->create_and_close) ? redirect()->route('tickets.index') : redirect()->route('tickets.detail', ['ticket' => $ticket]);
     }
 
@@ -160,77 +166,65 @@ class TicketController extends Controller
                         'message' => $request->message,
                     ]);
 
-        if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', $ticket->assignee_id)->first()) {
-            $projectUser = new ProjectUser;
+        if($ticket->assignee_id) {
+            if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', $ticket->assignee_id)->first()) {
+                $projectUser = new ProjectUser;
 
-            $projectUser->project_id = $ticket->project_id;
-            $projectUser->user_id = $ticket->assignee_id;
+                $projectUser->project_id = $ticket->project_id;
+                $projectUser->user_id = $ticket->assignee_id;
 
-            $projectUser->save();
+                $projectUser->save();
+            }
         }
 
         Session::flash('message', 'Ticket was updated!');
         Session::flash('type', 'info');
 
+        if($request->project_save || $request->project_save_and_close) {
+            return ($request->save_and_close) ? redirect()->route('projects.tickets', ['project' => $ticket->project]) : redirect()->route('projects.ticket.detail', ['project' => $ticket->project, 'ticket' => $ticket]);
+        }
+
         return ($request->save_and_close) ? redirect()->route('tickets.index') : redirect()->route('tickets.detail', ['ticket' => $ticket->id]);
     }
 
     /**
-     * Open the ticket.
+     * Change status of the ticket.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Http\Response
      */
-    public function open(Request $request, Ticket $ticket)
+    public function change(Request $request, Ticket $ticket)
     {
+        $validator = Validator::make($request->all(), [
+            'status' => ['required', 'integer', 'in:1,2,3'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                    ->route('tickets.detail', ['ticket' => $ticket->id])
+                    ->withErrors($validator)
+                    ->withInput();
+        }
+
         Ticket::where('id', $ticket->id)
                     ->update([
-                        'status' => 1,
+                        'status' => $request->status,
                     ]);
 
-        Session::flash('message', 'Ticket has been opened!');
+        if ($request->status == 1) {
+            Session::flash('message', 'Ticket has been opened!');
+        } elseif ($request->status == 2) {
+            Session::flash('message', 'Ticket has been closed!');
+        } elseif ($request->status == 3) {
+            Session::flash('message', 'Ticket has been archived!');
+        }
+
         Session::flash('type', 'info');
 
-        return redirect()->route('tickets.detail', ['ticket' => $ticket->id]);
-    }
-
-    /**
-     * Close the ticket.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function close(Request $request, Ticket $ticket)
-    {
-        Ticket::where('id', $ticket->id)
-                    ->update([
-                        'status' => 2,
-                    ]);
-
-        Session::flash('message', 'Ticket has been closed!');
-        Session::flash('type', 'info');
-
-        return redirect()->route('tickets.detail', ['ticket' => $ticket->id]);
-    }
-
-    /**
-     * Archive the ticket.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function archive(Request $request, Ticket $ticket)
-    {
-        Ticket::where('id', $ticket->id)
-                    ->update([
-                        'status' => 3,
-                    ]);
-
-        Session::flash('message', 'Ticket has been archived!');
-        Session::flash('type', 'info');
+        if($request->project_redirect) {
+            return redirect()->route('projects.ticket.detail', ['project' => $ticket->project, 'ticket' => $ticket]);
+        }
 
         return redirect()->route('tickets.detail', ['ticket' => $ticket->id]);
     }
@@ -274,6 +268,10 @@ class TicketController extends Controller
 
         Session::flash('message', 'Task was created!');
         Session::flash('type', 'info');
+
+        if($request->project_redirect) {
+            return redirect()->route('projects.task.detail', ['project' => $task->project, 'task' => $task]);
+        }
 
         return redirect()->route('tasks.detail', ['task' => $task]);
     }

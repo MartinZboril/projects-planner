@@ -104,7 +104,7 @@
                                     <div class="tools">
                                         <a href="{{ route('todos.edit', ['task' => $task->id, 'todo' => $todo->id]) }}"><i class="fas fa-edit"></i></a>
                                     </div>
-                                    <form id="check-todo-{{ $todo->id }}-form" action="{{ route('todos.check', ['task' => $task->id, 'todo' => $todo->id]) }}" method="POST" class="hidden">
+                                    <form id="check-todo-{{ $todo->id }}-form" action="{{ route('todos.check', $todo->id) }}" method="POST" class="hidden">
                                         @csrf
                                         @method('PATCH')
                                     </form>
@@ -125,29 +125,35 @@
 <!-- /.content -->
 </div>
 
-<form id="start-working-on-task-form" action="{{ route('tasks.start', $task->id) }}" method="POST" class="hidden">
+<form id="start-working-on-task-form" action="{{ route('tasks.change', $task->id) }}" method="POST" class="hidden">
+    @csrf
+    @method('PATCH')
+
+    <input type="hidden" name="status_id" value="2">
+</form>
+
+<form id="complete-working-on-task-form" action="{{ route('tasks.change', $task->id) }}" method="POST" class="hidden">
+    @csrf
+    @method('PATCH')
+
+    <input type="hidden" name="status_id" value="3">
+</form>
+
+<form id="stop-working-on-task-form" action="{{ route('tasks.pause', $task->id) }}" method="POST" class="hidden">
     @csrf
     @method('PATCH')
 </form>
 
-<form id="complete-working-on-task-form" action="{{ route('tasks.complete', $task->id) }}" method="POST" class="hidden">
+<form id="resume-working-on-task-form" action="{{ route('tasks.pause', $task->id) }}" method="POST" class="hidden">
     @csrf
     @method('PATCH')
 </form>
 
-<form id="stop-working-on-task-form" action="{{ route('tasks.stop', $task->id) }}" method="POST" class="hidden">
+<form id="return-working-on-task-form" action="{{ route('tasks.change', $task->id) }}" method="POST" class="hidden">
     @csrf
     @method('PATCH')
-</form>
 
-<form id="resume-working-on-task-form" action="{{ route('tasks.resume', $task->id) }}" method="POST" class="hidden">
-    @csrf
-    @method('PATCH')
-</form>
-
-<form id="return-working-on-task-form" action="{{ route('tasks.return', $task->id) }}" method="POST" class="hidden">
-    @csrf
-    @method('PATCH')
+    <input type="hidden" name="status_id" value="1">
 </form>
 @endsection
 

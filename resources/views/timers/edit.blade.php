@@ -16,7 +16,7 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <form action="{{ route('timers.update', ['project' => $project->id, 'timer' => $timer->id]) }}" method="post">
+            <form action="{{ route('timers.update', $timer->id) }}" method="post">
                 @csrf
                 @method('PATCH')
                 <div class="row">

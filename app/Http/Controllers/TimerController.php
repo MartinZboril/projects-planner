@@ -38,9 +38,8 @@ class TimerController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-     * @param  \App\Models\Project  $project
      */
-    public function store(Request $request, Project $project)
+    public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'since' => ['required', 'date_format:Y-m-d H:i'],
@@ -49,14 +48,14 @@ class TimerController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('timers.create', ['project' => $project])
+                    ->route('timers.create', ['project' => $request->project_id])
                     ->withErrors($validator)
                     ->withInput();
         }
 
         $timer = new Timer();
 
-        $timer->project_id = $project->id;
+        $timer->project_id = $request->project_id;
         $timer->user_id = Auth::id();
         $timer->since = $request->since;
         $timer->until = $request->until;
@@ -66,7 +65,7 @@ class TimerController extends Controller
         Session::flash('message', 'Timer was created!');
         Session::flash('type', 'info');
 
-        return redirect()->route('projects.timesheets', ['project' => $project]);
+        return redirect()->route('projects.timesheets', ['project' => $timer->project]);
     }
 
     /**
@@ -96,11 +95,10 @@ class TimerController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Project  $project
      * @param  \App\Models\Timer  $timer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project, Timer $timer)
+    public function update(Request $request, Timer $timer)
     {
         $validator = Validator::make($request->all(), [
             'since' => ['required', 'date_format:Y-m-d H:i'],
@@ -109,7 +107,7 @@ class TimerController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('timers.edit', ['project' => $project, 'timer' => $timer])
+                    ->route('timers.edit', ['project' => $timer->project, 'timer' => $timer])
                     ->withErrors($validator)
                     ->withInput();
         }
@@ -123,30 +121,30 @@ class TimerController extends Controller
         Session::flash('message', 'Timer was updated!');
         Session::flash('type', 'info');
 
-        return redirect()->route('projects.timesheets', ['project' => $project]);
+        return redirect()->route('projects.timesheets', ['project' => $timer->project]);
     }
 
     /**
      * Start working on timer.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function start(Request $request, Project $project)
+    public function start(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'project_id' => ['required', 'integer', 'exists:projects,id'],
             'rate_id' => ['required', 'integer', 'exists:rates,id'],
         ]);
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('projects.detail', ['project' => $project])
+                    ->route('projects.detail', ['project' => $request->project_id])
                     ->withErrors($validator)
                     ->withInput();
         }
 
-        if(Timer::where('project_id', $project->id)->where('user_id', Auth::id())->whereNull('until')->count() > 0) {
+        if(Timer::where('project_id', $request->project_id)->where('user_id', Auth::id())->whereNull('until')->count() > 0) {
             Session::flash('message', 'Another timer already running!');
             Session::flash('type', 'danger');
 
@@ -155,7 +153,7 @@ class TimerController extends Controller
 
         $timer = new Timer();
 
-        $timer->project_id = $project->id;
+        $timer->project_id = $request->project_id;
         $timer->rate_id = $request->rate_id;
         $timer->user_id = Auth::id();
         $timer->since = Carbon::now();
@@ -169,16 +167,14 @@ class TimerController extends Controller
         return redirect()->back();
     }
 
-
     /**
      * Stop working on timer.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Project  $project
      * @param  \App\Models\Timer  $timer
      * @return \Illuminate\Http\Response
      */
-    public function stop(Request $request, Project $project, Timer $timer)
+    public function stop(Request $request, Timer $timer)
     {
         Timer::where('id', $timer->id)
                     ->update([

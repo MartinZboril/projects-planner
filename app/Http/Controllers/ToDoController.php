@@ -26,7 +26,7 @@ class ToDoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Task $task)
+    public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
@@ -44,7 +44,7 @@ class ToDoController extends Controller
         $todo = new ToDo();
 
         $todo->name = $request->name;
-        $todo->task_id = $task->id;
+        $todo->task_id = $request->task_id;
         $todo->deadline = $request->deadline;
         $todo->description = $request->description;
 
@@ -53,7 +53,11 @@ class ToDoController extends Controller
         Session::flash('message', 'ToDo was created!');
         Session::flash('type', 'info');
 
-        return redirect()->route('tasks.detail', ['task' => $task]);
+        if($request->project_create) {
+            return redirect()->route('projects.task.detail', ['project' => $todo->task->project, 'task' => $todo->task]);
+        }
+
+        return redirect()->route('tasks.detail', ['task' => $todo->task]);
     }
 
     /**
@@ -74,7 +78,7 @@ class ToDoController extends Controller
      * @param  \App\Models\ToDo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Task $task, ToDo $todo)
+    public function update(Request $request, ToDo $todo)
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
@@ -85,7 +89,7 @@ class ToDoController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('todos.edit', ['task' => $task, 'todo' => $todo])
+                    ->route('todos.edit', ['task' => $todo->task, 'todo' => $todo])
                     ->withErrors($validator)
                     ->withInput();
         }
@@ -93,6 +97,7 @@ class ToDoController extends Controller
         ToDo::where('id', $todo->id)
                     ->update([
                         'name' => $request->name,
+                        'task_id' => $request->task_id,
                         'deadline' => $request->deadline,
                         'is_finished' => $request->is_finished,
                         'description' => $request->description,
@@ -101,7 +106,11 @@ class ToDoController extends Controller
         Session::flash('message', 'ToDo was updated!');
         Session::flash('type', 'info');
 
-        return redirect()->route('tasks.detail', ['task' => $task]);
+        if($request->project_save) {
+            return redirect()->route('projects.task.detail', ['project' => $todo->task->project, 'task' => $todo->task]);
+        }
+
+        return redirect()->route('tasks.detail', ['task' => $todo->task]);
     }
 
     /**
@@ -111,7 +120,7 @@ class ToDoController extends Controller
      * @param  \App\Models\ToDo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function check(Request $request, Task $task, ToDo $todo)
+    public function check(Request $request, ToDo $todo)
     {
         if($todo->is_finished) {
             ToDo::where('id', $todo->id)
@@ -131,7 +140,11 @@ class ToDoController extends Controller
 
         Session::flash('type', 'info');
 
-        return redirect()->route('tasks.detail', ['task' => $task]);
+        if($request->redirect == "project") {
+            return redirect()->route('projects.task.detail', ['project' => $todo->task->project, 'task' => $todo->task]);
+        }
+
+        return redirect()->route('tasks.detail', ['task' => $todo->task]);
     }
 
     /**

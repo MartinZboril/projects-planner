@@ -12,7 +12,7 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <form action="{{ route('projects.todo.store', ['project' => $project->id, 'task' => $task->id]) }}" method="post">
+            <form action="{{ route('todos.store') }}" method="post">
                 @csrf
                 <div class="row">
                     <div class="col-md-7">
@@ -51,11 +51,13 @@
                         </div>
                         <div class="card rounded-0">
                             <div class="card-body">
-                                <input type="submit" class="btn btn-sm btn-primary" value="Create"> or <a href="{{ route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) }}" class="cancel-btn">Close</a></span>
+                                <input type="submit" name="project_create" class="btn btn-sm btn-primary" value="Create"> or <a href="{{ route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) }}" class="cancel-btn">Close</a></span>
                             </div>
                         </div>
                     </div>
-                </div>    
+                </div>  
+                
+                <input type="hidden" name="task_id" value="{{ $task->id }}">   
             </form>     
         </div>
     </section>

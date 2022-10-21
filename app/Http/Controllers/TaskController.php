@@ -81,6 +81,10 @@ class TaskController extends Controller
         Session::flash('message', 'Task was created!');
         Session::flash('type', 'info');
 
+        if($request->project_create || $request->project_create_and_close) {
+            return ($request->project_create_and_close) ? redirect()->route('projects.tasks', ['project' => $task->project]) : redirect()->route('projects.task.detail', ['project' => $task->project, 'task' => $task]);
+        }
+
         return ($request->create_and_close) ? redirect()->route('tasks.index') : redirect()->route('tasks.detail', ['task' => $task]);
     }
 
@@ -145,107 +149,86 @@ class TaskController extends Controller
         Session::flash('message', 'Task was updated!');
         Session::flash('type', 'info');
 
+        if($request->project_save || $request->project_save_and_close) {
+            return ($request->project_save_and_close) ? redirect()->route('projects.tasks', ['project' => $task->project]) : redirect()->route('projects.task.detail', ['project' => $task->project, 'task' => $task]);
+        }
+
         return ($request->save_and_close) ? redirect()->route('tasks.index') : redirect()->route('tasks.detail', ['task' => $task->id]);
     }
 
     /**
-     * Start working on the task.
+     * Change working on the task.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function start(Request $request, Task $task)
+    public function change(Request $request, Task $task)
     {
+        $validator = Validator::make($request->all(), [
+            'status_id' => ['required', 'integer', 'in:1,2,3'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                    ->route('tasks.detail', ['task' => $task->id])
+                    ->withErrors($validator)
+                    ->withInput();
+        }
+
         Task::where('id', $task->id)
                     ->update([
-                        'status_id' => 2,
+                        'status_id' => $request->status_id,
                         'is_returned' => false,
                     ]);
 
-        Session::flash('message', 'Start working on Task!');
+        if ($request->status_id == 1) {
+            Session::flash('message', 'Task was returned!');
+        } elseif ($request->status_id == 2) {
+            Session::flash('message', 'Start working on Task!');
+        } elseif ($request->status_id == 3) {
+            Session::flash('message', 'Task was completed!');
+        }
+
         Session::flash('type', 'info');
 
+        if($request->type) {
+            return ($request->type == 'kanban') ? redirect()->route('projects.kanban', ['project' => $task->project]) : redirect()->route('projects.task.detail', ['project' => $task->project, 'task' => $task]);
+        }
+
         return redirect()->route('tasks.detail', ['task' => $task->id]);
     }
 
     /**
-     * Complete working on the task.
+     * Strat/stop working on the task.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function complete(Request $request, Task $task)
+    public function pause(Request $request, Task $task)
     {
-        Task::where('id', $task->id)
+        if($task->is_stopped) {
+            Task::where('id', $task->id)
                     ->update([
-                        'status_id' => 3,
+                        'is_stopped' => false,
                     ]);
-
-        Session::flash('message', 'Task was completed!');
-        Session::flash('type', 'success');
-
-        return redirect()->route('tasks.detail', ['task' => $task->id]);
-    }
-
-    /**
-     * Stop working on the task.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
-     */
-    public function stop(Request $request, Task $task)
-    {
-        Task::where('id', $task->id)
+            
+            Session::flash('message', 'Task was resumed!');
+        } else {
+            Task::where('id', $task->id)
                     ->update([
                         'is_stopped' => true,
                     ]);
 
-        Session::flash('message', 'Task was stopped!');
-        Session::flash('type', 'danger');
+            Session::flash('message', 'Task was stopped!');
+        }
 
-        return redirect()->route('tasks.detail', ['task' => $task->id]);
-    }
-
-    /**
-     * Resume working on the task.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
-     */
-    public function resume(Request $request, Task $task)
-    {
-        Task::where('id', $task->id)
-                    ->update([
-                        'is_stopped' => false,
-                    ]);
-
-        Session::flash('message', 'Task was resumed!');
         Session::flash('type', 'info');
 
-        return redirect()->route('tasks.detail', ['task' => $task->id]);
-    }
-
-    /**
-     * Return working on the task.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
-     */
-    public function return(Request $request, Task $task)
-    {
-        Task::where('id', $task->id)
-                    ->update([
-                        'is_returned' => true,
-                        'status_id' => 1,
-                    ]);
-
-        Session::flash('message', 'Task was returned!');
-        Session::flash('type', 'danger');
+        if($request->type) {
+            return ($request->type == 'kanban') ? redirect()->route('projects.kanban', ['project' => $task->project]) : redirect()->route('projects.task.detail', ['project' => $task->project, 'task' => $task]);
+        }
 
         return redirect()->route('tasks.detail', ['task' => $task->id]);
     }

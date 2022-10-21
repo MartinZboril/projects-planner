@@ -12,7 +12,7 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <form action="{{ route('projects.ticket.update', ['project' => $project->id, 'ticket' => $ticket->id]) }}" method="post">
+            <form action="{{ route('tickets.update', $ticket->id) }}" method="post">
                 @csrf
                 @method('PATCH')
                 <div class="row">
@@ -102,11 +102,13 @@
                         </div>
                         <div class="card rounded-0">
                             <div class="card-body">
-                                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ route('projects.ticket.detail', ['project' => $project->id, 'ticket' => $ticket->id]) }}" class="cancel-btn">Close</a></span>
+                                <input type="submit" name="project_save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="project_save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ route('projects.ticket.detail', ['project' => $project->id, 'ticket' => $ticket->id]) }}" class="cancel-btn">Close</a></span>
                             </div>
                         </div>
                     </div>
-                </div>    
+                </div> 
+                
+                <input type="hidden" name="project_id" value="{{ $project->id }}"> 
             </form>     
         </div>
     </section>

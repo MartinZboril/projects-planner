@@ -81,9 +81,11 @@
                                         </div>
                                     </div>
 
-                                    <form id="start-working-on-task-{{ $task->id }}-form" action="{{ route('projects.task.start', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
+                                    <form id="start-working-on-task-{{ $task->id }}-form" action="{{ route('tasks.change', $task->id) }}" method="POST" class="hidden">
                                         @csrf
                                         @method('PATCH')
+
+                                        <input type="hidden" name="status_id" value="2">
                                         <input type="hidden" name="type" value="kanban">
                                     </form>
                                 @empty
@@ -129,19 +131,21 @@
                                         </div>
                                     </div>
 
-                                    <form id="complete-working-on-task-{{ $task->id }}-form" action="{{ route('projects.task.complete', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
+                                    <form id="complete-working-on-task-{{ $task->id }}-form" action="{{ route('tasks.change', $task->id) }}" method="POST" class="hidden">
+                                        @csrf
+                                        @method('PATCH')
+
+                                        <input type="hidden" name="status_id" value="3">
+                                        <input type="hidden" name="type" value="kanban">
+                                    </form>
+
+                                    <form id="stop-working-on-task-{{ $task->id }}-form" action="{{ route('tasks.pause', $task->id) }}" method="POST" class="hidden">
                                         @csrf
                                         @method('PATCH')
                                         <input type="hidden" name="type" value="kanban">
                                     </form>
 
-                                    <form id="stop-working-on-task-{{ $task->id }}-form" action="{{ route('projects.task.stop', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="hidden" name="type" value="kanban">
-                                    </form>
-
-                                    <form id="resume-working-on-task-{{ $task->id }}-form" action="{{ route('projects.task.resume', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
+                                    <form id="resume-working-on-task-{{ $task->id }}-form" action="{{ route('tasks.pause', $task->id) }}" method="POST" class="hidden">
                                         @csrf
                                         @method('PATCH')
                                         <input type="hidden" name="type" value="kanban">
@@ -189,9 +193,11 @@
                                         </div>
                                     </div>
 
-                                    <form id="return-working-on-task-{{ $task->id }}-form" action="{{ route('projects.task.return', ['project' => $project->id, 'task' => $task->id]) }}" method="POST" class="hidden">
+                                    <form id="return-working-on-task-{{ $task->id }}-form" action="{{ route('tasks.change', $task->id) }}" method="POST" class="hidden">
                                         @csrf
                                         @method('PATCH')
+
+                                        <input type="hidden" name="status_id" value="1">
                                         <input type="hidden" name="type" value="kanban">
                                     </form>
                                 @empty
@@ -210,15 +216,17 @@
 </div>
 
 @foreach (Auth::User()->rates as $rate)
-    <form id="start-working-on-project-with-rate-{{ $rate->id }}" action="{{ route('projects.timer.start', ['project' => $project->id]) }}" method="POST" class="hidden">
+    <form id="start-working-on-project-with-rate-{{ $rate->id }}" action="{{ route('timers.start') }}" method="POST" class="hidden">
         @csrf
+        <input type="hidden" name="project_id" value="{{ $project->id }}">
         <input type="hidden" name="rate_id" value="{{ $rate->id }}">
     </form>
 @endforeach
 
 @if(Auth::User()->activeTimers->contains('project_id', $project->id))
-    <form id="stop-working-on-project" action="{{ route('projects.timer.stop', ['project' => $project->id, 'timer' => Auth::User()->activeTimers->firstWhere('project_id', $project->id)->id]) }}" method="POST" class="hidden">
+    <form id="stop-working-on-project" action="{{ route('timers.stop', Auth::User()->activeTimers->firstWhere('project_id', $project->id)->id) }}" method="POST" class="hidden">
         @csrf
+        @method('PATCH')
     </form>
 @endif
 @endsection

@@ -16,7 +16,7 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <form action="{{ route('rates.update', ['user' => $user->id, 'rate' => $rate->id]) }}" method="post">
+            <form action="{{ route('rates.update', $rate->id) }}" method="post">
                 @csrf
                 @method('PATCH')
                 <div class="row">

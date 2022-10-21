@@ -70,7 +70,7 @@
                                         <td>{{ $timer->rate->name }}</td>
                                         <td>{{ $timer->user->name }} {{ $timer->user->surname }}</td>
                                         <td>{{ (!$timer->until) ? 'N/A' : (($timer->total_time) ? $timer->total_time : 0) }}</td>
-                                        <td>{{ $timer->amount }}</td>
+                                        <td>{{ ($timer->until) ? $timer->amount : 'N/A' }}</td>
                                         <td>{{ $timer->since->format('d.m.Y H:i') }}</td>
                                         <td>{{ ($timer->until) ? $timer->until->format('d.m.Y H:i') : 'N/A' }}</td>
                                         <td>{{ $timer->since->format('d.m.Y') }}</td>
@@ -98,15 +98,17 @@
 </div>
 
 @foreach (Auth::User()->rates as $rate)
-    <form id="start-working-on-project-with-rate-{{ $rate->id }}" action="{{ route('projects.timer.start', ['project' => $project->id]) }}" method="POST" class="hidden">
+    <form id="start-working-on-project-with-rate-{{ $rate->id }}" action="{{ route('timers.start') }}" method="POST" class="hidden">
         @csrf
+        <input type="hidden" name="project_id" value="{{ $project->id }}">
         <input type="hidden" name="rate_id" value="{{ $rate->id }}">
     </form>
 @endforeach
 
 @if(Auth::User()->activeTimers->contains('project_id', $project->id))
-    <form id="stop-working-on-project" action="{{ route('projects.timer.stop', ['project' => $project->id, 'timer' => Auth::User()->activeTimers->firstWhere('project_id', $project->id)->id]) }}" method="POST" class="hidden">
+    <form id="stop-working-on-project" action="{{ route('timers.stop', Auth::User()->activeTimers->firstWhere('project_id', $project->id)->id) }}" method="POST" class="hidden">
         @csrf
+        @method('PATCH')
     </form>
 @endif
 @endsection

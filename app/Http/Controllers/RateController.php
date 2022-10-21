@@ -38,7 +38,7 @@ class RateController extends Controller
      * @return \Illuminate\Http\Response
      * @param  \App\Models\User  $user
      */
-    public function store(Request $request, User $user)
+    public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'max:255'],
@@ -47,14 +47,14 @@ class RateController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('rates.create', ['user' => $user])
+                    ->route('rates.create', ['user' => $request->user_id])
                     ->withErrors($validator)
                     ->withInput();
         }
 
         $rate = new Rate();
 
-        $rate->user_id = $user->id;
+        $rate->user_id = $request->user_id;
         $rate->name = $request->name;
         $rate->is_active = $request->is_active;
         $rate->value = $request->value;
@@ -64,7 +64,7 @@ class RateController extends Controller
         Session::flash('message', 'Rate was created!');
         Session::flash('type', 'info');
 
-        return redirect()->route('users.detail', ['user' => $user]);
+        return redirect()->route('users.detail', ['user' => $rate->user]);
     }
 
     /**
@@ -94,11 +94,10 @@ class RateController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
      * @param  \App\Models\Rate  $rate
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user, Rate $rate)
+    public function update(Request $request, Rate $rate)
     {
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'max:255'],
@@ -107,7 +106,7 @@ class RateController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('rates.edit', ['user' => $user, 'rate' => $rate])
+                    ->route('rates.edit', ['user' => $rate->user, 'rate' => $rate])
                     ->withErrors($validator)
                     ->withInput();
         }
@@ -122,7 +121,7 @@ class RateController extends Controller
         Session::flash('message', 'Rate was updated!');
         Session::flash('type', 'info');
 
-        return redirect()->route('users.detail', ['user' => $user]);
+        return redirect()->route('users.detail', ['user' => $rate->user]);
     }
 
     /**
