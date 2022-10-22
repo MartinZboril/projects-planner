@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Validator;
 
 class ClientController extends Controller
 {
-    
     public function __construct()
     {
         $this->middleware('auth');
@@ -23,9 +22,7 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clients = Client::all();
-
-        return view('clients.index', ['clients' => $clients]);
+        return view('clients.index', ['clients' => Client::all()]);
     }
 
     /**
@@ -68,13 +65,12 @@ class ClientController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('clients.create')
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
 
         $client = new Client();
-
         $client->name = $request->name;
         $client->email = $request->email;
         $client->contact_person = $request->contact_person;
@@ -93,7 +89,6 @@ class ClientController extends Controller
         $client->facebook = $request->facebook;
         $client->instagram = $request->instagram;
         $client->note = $request->note;
-
         $client->save();
 
         Session::flash('message', 'Client was created!');
@@ -157,7 +152,7 @@ class ClientController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('clients.detail', ['client' => $client->id])
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
@@ -184,12 +179,10 @@ class ClientController extends Controller
                         'note' => $request->note,
                     ]);
 
-        $client = Client::find($client->id);
-
         Session::flash('message', 'Client was updated!');
         Session::flash('type', 'info');
 
-        return ($request->save_and_close) ? redirect()->route('clients.index') : redirect()->route('clients.detail', ['client' => $client->id]);
+        return ($request->save_and_close) ? redirect()->route('clients.index') : redirect()->route('clients.detail', ['client' => $client]);
     }
 
     /**

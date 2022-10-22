@@ -32,136 +32,19 @@
             <input type="hidden" id="taskform-message" value="{{ Session::get('message') }}">
             <input type="hidden" id="taskform-message-type" value="{{ Session::get('type') }}">
 
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="card card-primary card-outline rounded-0">
-                        <div class="card-header">{{ $task->name }} <span class="badge badge-{{ $task->is_stopped ? 'danger' : ($task->is_returned ? 'danger' : ($task->status_id == 1 ? 'info' : ($task->status_id == 2 ? 'warning' : ($task->status_id == 3 ? 'success' : 'info')))) }} ml-2" style='font-size:14px;'>{{ $task->is_stopped ? 'Stopped' : ($task->is_returned ? 'Returned' : $task->status->name) }}</span></div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-12 col-sm-4">
-                                    <div class="info-box bg-light">
-                                        <div class="info-box-content">
-                                            <span class="info-box-text text-center text-muted">Due date</span>
-                                            <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-danger">{{ $task->due_date->format('d.m.Y') }}</span></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-4">
-                                    <div class="info-box bg-light">
-                                        <div class="info-box-content">
-                                            <span class="info-box-text text-center text-muted">Start date</span>
-                                            <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-success">{{ $task->start_date->format('d.m.Y') }}</span></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-4">
-                                    <div class="info-box bg-light">
-                                        <div class="info-box-content">
-                                            <span class="info-box-text text-center text-muted">Created at</span>
-                                            <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-secondary">{{ $task->created_at->format('d.m.Y') }}</span></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <span class="d-block">Project: <b>{{ $task->project->name }}</b></span>
-                            <span class="d-block">Client: <b>{{ $task->project->client->name }}</b></span>
-                            @if ($task->milestone)
-                                <span class="d-block">Milestone: <b>{{ $task->milestone->name }}</b></span>
-                            @endif
-                            <span class="d-block">User: <b>{{ $task->user->name }} {{ $task->user->surname }}</b></span>
-                            @if ($task->user->id != $task->author->id)
-                                <span class="d-block">Author: <b>{{ $task->author->name }} {{ $task->author->surname }}</b></span>
-                            @endif
-                            <span class="d-block">Status: <b>{!! $task->is_stopped ? 'Stopped' : ($task->is_returned ? 'Returned' : $task->status->name) !!}</b></span>
-                            <hr>
-                            {!! $task->description !!}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-7">
-                <div class="card card-primary card-outline rounded-0">
-                    <div class="card-header ui-sortable-handle" style="cursor: move;">
-                        <h3 class="card-title">
-                        <i class="ion ion-clipboard mr-1"></i>
-                        To Do List
-                        </h3>
-                        <div class="card-tools">
-                            <a href="{{ route('projects.todo.create', ['project' => $project->id, 'task' => $task->id]) }}" class="btn btn-primary btn-sm float-right"><i class="fas fa-plus"></i> Add</a>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <ul class="todo-list ui-sortable" data-widget="todo-list">
-                            @foreach ($task->todos as $todo)
-                                <li>
-                                    <div class="icheck-primary d-inline ml-2">
-                                        <input type="checkbox" value="" name="todo-{{ $todo->id }}" id="todo-check-{{ $todo->id }}" onclick="event.preventDefault(); document.getElementById('check-todo-{{ $todo->id }}-form').submit();"
-                                            {{ $todo->is_finished ? 'checked' : '' }}>
-                                        <label for="todo-check-{{ $todo->id }}"></label>
-                                    </div>
-                                    <span class="text">{{ $todo->name }}</span>
-                                    <small class="badge badge-danger"><i class="far fa-clock"></i> {{ $todo->deadline->format('d.m.Y') }}</small>
-                                    @if($todo->description)<small class="ml-1">{{ $todo->description }}</small>@endif
-                                    <div class="tools">
-                                        <a href="{{ route('projects.todo.edit', ['project' => $project->id, 'task' => $task->id, 'todo' => $todo->id]) }}"><i class="fas fa-edit"></i></a>
-                                    </div>
-                                    <form id="check-todo-{{ $todo->id }}-form" action="{{ route('todos.check', $todo->id) }}" method="POST" class="hidden">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="hidden" name="redirect" value="project">
-                                    </form>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-                    <div class="card card-primary card-outline rounded-0">
-                        <div class="card-header">Activity Feed</div>
-                        <div class="card-body">
-                        </div>
-                    </div>
-                </div>
-            </div>         
+            @include('tasks.partials.information', ['task' => $task, 'project' => $project])            
         </div>
     </section>
 <!-- /.content -->
 </div>
 
-<form id="start-working-on-task-form" action="{{ route('tasks.change', $task->id) }}" method="POST" class="hidden">
-    @csrf
-    @method('PATCH')
-
-    <input type="hidden" name="status_id" value="2">
-    <input type="hidden" name="type" value="detail">
-</form>
-
-<form id="complete-working-on-task-form" action="{{ route('tasks.change', $task->id) }}" method="POST" class="hidden">
-    @csrf
-    @method('PATCH')
-
-    <input type="hidden" name="status_id" value="3">
-    <input type="hidden" name="type" value="detail">
-</form>
-
-<form id="stop-working-on-task-form" action="{{ route('tasks.pause', $task->id) }}" method="POST" class="hidden">
-@csrf
-    @method('PATCH')
-    <input type="hidden" name="type" value="detail">
-</form>
-
-<form id="resume-working-on-task-form" action="{{ route('tasks.pause', $task->id) }}" method="POST" class="hidden">
-@csrf
-    @method('PATCH')
-    <input type="hidden" name="type" value="detail">
-</form>
-
-<form id="return-working-on-task-form" action="{{ route('tasks.change', $task->id) }}" method="POST" class="hidden">
-@csrf
-    @method('PATCH')
-
-    <input type="hidden" name="status_id" value="1">
-    <input type="hidden" name="type" value="detail">
-</form>
-@endsection
+<!-- task status change forms -->
+@include('tasks.forms.change', ['id' => 'start-working-on-task-form', 'task' => $task, 'statusId' => 2, 'redirect' => 'projects'])    
+@include('tasks.forms.change', ['id' => 'complete-working-on-task-form', 'task' => $task, 'statusId' => 3, 'redirect' => 'projects'])    
+@include('tasks.forms.change', ['id' => 'return-working-on-task-form', 'task' => $task, 'statusId' => 1, 'redirect' => 'projects'])    
+<!-- pause work on task form -->
+@include('tasks.forms.pause', ['id' => 'stop-working-on-task-form', 'task' => $task, 'action' => 1, 'redirect' => 'projects'])    
+@include('tasks.forms.pause', ['id' => 'resume-working-on-task-form', 'task' => $task, 'action' => 0, 'redirect' => 'projects'])    
 
 @section('scripts')
     <script src="{{ asset('plugins/toastr/toastr.min.js' ) }}"></script>

@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
 {
-    
     public function __construct()
     {
         $this->middleware('auth');
@@ -25,9 +24,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::all();
-
-        return view('tasks.index', ['tasks' => $tasks]);
+        return view('tasks.index', ['tasks' => Task::all()]);
     }
 
     /**
@@ -55,17 +52,17 @@ class TaskController extends Controller
             'start_date' => ['required', 'date'],
             'due_date' => ['required', 'date'],
             'description' => ['required'],
+            'redirect' => ['in:tasks,projects'],            
         ]);
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('tasks.create')
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
 
         $task = new Task();
-
         $task->name = $request->name;
         $task->project_id = $request->project_id;
         $task->milestone_id = $request->milestone_id ? $request->milestone_id : null;
@@ -75,14 +72,13 @@ class TaskController extends Controller
         $task->start_date = $request->start_date;
         $task->due_date = $request->due_date;
         $task->description = $request->description;
-
         $task->save();
 
         Session::flash('message', 'Task was created!');
         Session::flash('type', 'info');
 
-        if($request->project_create || $request->project_create_and_close) {
-            return ($request->project_create_and_close) ? redirect()->route('projects.tasks', ['project' => $task->project]) : redirect()->route('projects.task.detail', ['project' => $task->project, 'task' => $task]);
+        if($request->redirect == 'projects') {
+            return ($request->create_and_close) ? redirect()->route('projects.tasks', ['project' => $task->project]) : redirect()->route('projects.task.detail', ['project' => $task->project, 'task' => $task]);
         }
 
         return ($request->create_and_close) ? redirect()->route('tasks.index') : redirect()->route('tasks.detail', ['task' => $task]);
@@ -126,11 +122,12 @@ class TaskController extends Controller
             'start_date' => ['required', 'date'],
             'due_date' => ['required', 'date'],
             'description' => ['required'],
+            'redirect' => ['in:tasks,projects'],
         ]);
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('tasks.edit', ['task' => $task->id])
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
@@ -149,8 +146,8 @@ class TaskController extends Controller
         Session::flash('message', 'Task was updated!');
         Session::flash('type', 'info');
 
-        if($request->project_save || $request->project_save_and_close) {
-            return ($request->project_save_and_close) ? redirect()->route('projects.tasks', ['project' => $task->project]) : redirect()->route('projects.task.detail', ['project' => $task->project, 'task' => $task]);
+        if($request->redirect == 'projects') {
+            return ($request->save_and_close) ? redirect()->route('projects.tasks', ['project' => $task->project]) : redirect()->route('projects.task.detail', ['project' => $task->project, 'task' => $task]);
         }
 
         return ($request->save_and_close) ? redirect()->route('tasks.index') : redirect()->route('tasks.detail', ['task' => $task->id]);
@@ -167,11 +164,12 @@ class TaskController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'status_id' => ['required', 'integer', 'in:1,2,3'],
+            'redirect' => ['in:tasks,projects,kanban'],            
         ]);
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('tasks.detail', ['task' => $task->id])
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
@@ -192,11 +190,13 @@ class TaskController extends Controller
 
         Session::flash('type', 'info');
 
-        if($request->type) {
-            return ($request->type == 'kanban') ? redirect()->route('projects.kanban', ['project' => $task->project]) : redirect()->route('projects.task.detail', ['project' => $task->project, 'task' => $task]);
+        if($request->redirect == 'kanban') {
+            return redirect()->route('projects.kanban', ['project' => $task->project]);
+        } elseif($request->redirect == 'projects') {
+            return redirect()->route('projects.task.detail', ['project' => $task->project, 'task' => $task]);
+        } else {
+            return redirect()->route('tasks.detail', ['task' => $task->id]);
         }
-
-        return redirect()->route('tasks.detail', ['task' => $task->id]);
     }
 
     /**
@@ -208,29 +208,38 @@ class TaskController extends Controller
      */
     public function pause(Request $request, Task $task)
     {
-        if($task->is_stopped) {
-            Task::where('id', $task->id)
-                    ->update([
-                        'is_stopped' => false,
-                    ]);
-            
-            Session::flash('message', 'Task was resumed!');
-        } else {
-            Task::where('id', $task->id)
-                    ->update([
-                        'is_stopped' => true,
-                    ]);
+        $validator = Validator::make($request->all(), [
+            'action' => ['boolean'],
+            'redirect' => ['in:tasks,projects,kanban'],
+        ]);
+        
+        if ($validator->fails()) {
+            return redirect()
+                    ->back()
+                    ->withErrors($validator)
+                    ->withInput();
+        }
 
+        Task::where('id', $task->id)
+                ->update([
+                    'is_stopped' => $request->action,
+                ]);
+
+        if($action) {            
             Session::flash('message', 'Task was stopped!');
+        } else {
+            Session::flash('message', 'Task was resumed!');
         }
 
         Session::flash('type', 'info');
 
-        if($request->type) {
-            return ($request->type == 'kanban') ? redirect()->route('projects.kanban', ['project' => $task->project]) : redirect()->route('projects.task.detail', ['project' => $task->project, 'task' => $task]);
+        if($request->redirect == 'kanban') {
+            return redirect()->route('projects.kanban', ['project' => $task->project]);
+        } elseif($request->redirect == 'projects') {
+            return redirect()->route('projects.task.detail', ['project' => $task->project, 'task' => $task]);
+        } else {
+            return redirect()->route('tasks.detail', ['task' => $task->id]);
         }
-
-        return redirect()->route('tasks.detail', ['task' => $task->id]);
     }
 
     /**

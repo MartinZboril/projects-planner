@@ -9,15 +9,10 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class MilestoneController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+{   
+    public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     /**
@@ -49,13 +44,12 @@ class MilestoneController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('milestones.create', ['project' => $request->project_id])
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
 
         $milestone = new Milestone();
-
         $milestone->name = $request->name;
         $milestone->project_id = $request->project_id;
         $milestone->owner_id = $request->owner_id;
@@ -63,7 +57,6 @@ class MilestoneController extends Controller
         $milestone->end_date = $request->end_date;
         $milestone->colour = $request->colour;
         $milestone->description = $request->description;
-
         $milestone->save();
 
         Session::flash('message', 'Milestone was created!');
@@ -114,7 +107,7 @@ class MilestoneController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('milestones.edit', ['project' => $milestone->project, 'milestone' => $milestone])
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }

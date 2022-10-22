@@ -98,19 +98,13 @@
 </div>
 
 @foreach (Auth::User()->rates as $rate)
-    <form id="start-working-on-project-with-rate-{{ $rate->id }}" action="{{ route('timers.start') }}" method="POST" class="hidden">
-        @csrf
-        <input type="hidden" name="project_id" value="{{ $project->id }}">
-        <input type="hidden" name="rate_id" value="{{ $rate->id }}">
-    </form>
+    @include('timers.forms.start', ['id' => 'start-working-on-project-with-rate-' . $rate->id, 'projectId' => $project->id, 'rateId' => $rate->id])            
 @endforeach
 
 @if(Auth::User()->activeTimers->contains('project_id', $project->id))
-    <form id="stop-working-on-project" action="{{ route('timers.stop', Auth::User()->activeTimers->firstWhere('project_id', $project->id)->id) }}" method="POST" class="hidden">
-        @csrf
-        @method('PATCH')
-    </form>
+    @include('timers.forms.stop', ['id' => 'stop-working-on-project', 'projectId' => Auth::User()->activeTimers->firstWhere('project_id', $project->id)->id])            
 @endif
+
 @endsection
 
 @section('scripts')

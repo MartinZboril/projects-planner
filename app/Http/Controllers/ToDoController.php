@@ -9,7 +9,12 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class ToDoController extends Controller
-{
+{  
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -32,28 +37,27 @@ class ToDoController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'deadline' => ['required', 'date'],
             'description' => ['max:65553'],
+            'redirect' => ['in:tasks,projects'],
         ]);
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('todos.create', ['task' => $task])
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
 
         $todo = new ToDo();
-
         $todo->name = $request->name;
         $todo->task_id = $request->task_id;
         $todo->deadline = $request->deadline;
         $todo->description = $request->description;
-
         $todo->save();
 
         Session::flash('message', 'ToDo was created!');
         Session::flash('type', 'info');
 
-        if($request->project_create) {
+        if($request->redirect == 'projects') {
             return redirect()->route('projects.task.detail', ['project' => $todo->task->project, 'task' => $todo->task]);
         }
 
@@ -85,11 +89,12 @@ class ToDoController extends Controller
             'deadline' => ['required', 'date'],
             'is_finished' => ['boolean'],
             'description' => ['max:65553'],
+            'redirect' => ['in:tasks,projects'],
         ]);
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('todos.edit', ['task' => $todo->task, 'todo' => $todo])
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
@@ -106,7 +111,7 @@ class ToDoController extends Controller
         Session::flash('message', 'ToDo was updated!');
         Session::flash('type', 'info');
 
-        if($request->project_save) {
+        if($request->redirect == 'projects') {
             return redirect()->route('projects.task.detail', ['project' => $todo->task->project, 'task' => $todo->task]);
         }
 
@@ -122,25 +127,32 @@ class ToDoController extends Controller
      */
     public function check(Request $request, ToDo $todo)
     {
-        if($todo->is_finished) {
-            ToDo::where('id', $todo->id)
+        $validator = Validator::make($request->all(), [
+            'action' => ['boolean'],
+            'redirect' => ['in:tasks,projects'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                    ->back()
+                    ->withErrors($validator)
+                    ->withInput();
+        }
+
+        ToDo::where('id', $todo->id)
                 ->update([
-                    'is_finished' => false,
+                    'is_finished' => $request->action,
                 ]);
 
-            Session::flash('message', 'ToDo was returned!');
-        } else {
-            ToDo::where('id', $todo->id)
-                ->update([
-                    'is_finished' => true,
-                ]);
-
+        if($request->action) {
             Session::flash('message', 'ToDo was finished!');
+        } else {
+            Session::flash('message', 'ToDo was returned!');
         }
 
         Session::flash('type', 'info');
 
-        if($request->redirect == "project") {
+        if($request->redirect == "projects") {
             return redirect()->route('projects.task.detail', ['project' => $todo->task->project, 'task' => $todo->task]);
         }
 

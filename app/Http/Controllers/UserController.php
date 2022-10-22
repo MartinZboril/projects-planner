@@ -14,7 +14,6 @@ use App\Models\Rate;
 
 class UserController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -25,9 +24,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-
-        return view('users.index', ['users' => $users]);
+        return view('users.index', ['users' => User::all()]);
     }
 
     /**
@@ -63,13 +60,12 @@ class UserController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('users.create')
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
 
         $user = new User();
-
         $user->name = $request->name;
         $user->surname = $request->surname;
         $user->email = $request->email;
@@ -83,16 +79,13 @@ class UserController extends Controller
         $user->city = $request->city;
         $user->zip_code = $request->zip_code;
         $user->country = $request->country;
-
         $user->save();
 
         $rate = new Rate();
-
         $rate->user_id = $user->id;
         $rate->name = $request->rate_name;
         $rate->is_active = true;
         $rate->value = $request->rate_value;
-
         $rate->save();
 
         Session::flash('message', 'User was created!');
@@ -146,7 +139,7 @@ class UserController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('users.detail', ['user' => $user->id])
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
@@ -167,8 +160,6 @@ class UserController extends Controller
                         'zip_code' => $request->zip_code,
                         'country' => $request->country
                     ]);
-
-        $user = User::find($user->id);
 
         Session::flash('message', 'User was updated!');
         Session::flash('type', 'info');

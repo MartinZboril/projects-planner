@@ -81,13 +81,7 @@
                                         </div>
                                     </div>
 
-                                    <form id="start-working-on-task-{{ $task->id }}-form" action="{{ route('tasks.change', $task->id) }}" method="POST" class="hidden">
-                                        @csrf
-                                        @method('PATCH')
-
-                                        <input type="hidden" name="status_id" value="2">
-                                        <input type="hidden" name="type" value="kanban">
-                                    </form>
+                                    @include('tasks.forms.change', ['id' => 'start-working-on-task-' . $task->id . '-form', 'task' => $task, 'statusId' => 2, 'redirect' => 'kanban'])    
                                 @empty
                                     <div class="card">
                                         <div class="card-header">There are no tasks!</div>
@@ -131,25 +125,9 @@
                                         </div>
                                     </div>
 
-                                    <form id="complete-working-on-task-{{ $task->id }}-form" action="{{ route('tasks.change', $task->id) }}" method="POST" class="hidden">
-                                        @csrf
-                                        @method('PATCH')
-
-                                        <input type="hidden" name="status_id" value="3">
-                                        <input type="hidden" name="type" value="kanban">
-                                    </form>
-
-                                    <form id="stop-working-on-task-{{ $task->id }}-form" action="{{ route('tasks.pause', $task->id) }}" method="POST" class="hidden">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="hidden" name="type" value="kanban">
-                                    </form>
-
-                                    <form id="resume-working-on-task-{{ $task->id }}-form" action="{{ route('tasks.pause', $task->id) }}" method="POST" class="hidden">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="hidden" name="type" value="kanban">
-                                    </form>
+                                    @include('tasks.forms.change', ['id' => 'complete-working-on-task-' . $task->id . '-form', 'task' => $task, 'statusId' => 3, 'redirect' => 'kanban'])    
+                                    @include('tasks.forms.pause', ['id' => 'stop-working-on-task-' . $task->id . '-form', 'task' => $task, 'action' => 1, 'redirect' => 'kanban'])    
+                                    @include('tasks.forms.pause', ['id' => 'resume-working-on-task-' . $task->id . '-form', 'task' => $task, 'action' => 0, 'redirect' => 'kanban'])    
                                 @empty
                                     <div class="card">
                                         <div class="card-header">There are no tasks!</div>
@@ -193,13 +171,7 @@
                                         </div>
                                     </div>
 
-                                    <form id="return-working-on-task-{{ $task->id }}-form" action="{{ route('tasks.change', $task->id) }}" method="POST" class="hidden">
-                                        @csrf
-                                        @method('PATCH')
-
-                                        <input type="hidden" name="status_id" value="1">
-                                        <input type="hidden" name="type" value="kanban">
-                                    </form>
+                                    @include('tasks.forms.change', ['id' => 'return-working-on-task-' . $task->id . '-form', 'task' => $task, 'statusId' => 1, 'redirect' => 'kanban'])    
                                 @empty
                                     <div class="card">
                                         <div class="card-header">There are no tasks!</div>
@@ -216,19 +188,13 @@
 </div>
 
 @foreach (Auth::User()->rates as $rate)
-    <form id="start-working-on-project-with-rate-{{ $rate->id }}" action="{{ route('timers.start') }}" method="POST" class="hidden">
-        @csrf
-        <input type="hidden" name="project_id" value="{{ $project->id }}">
-        <input type="hidden" name="rate_id" value="{{ $rate->id }}">
-    </form>
+    @include('timers.forms.start', ['id' => 'start-working-on-project-with-rate-' . $rate->id, 'projectId' => $project->id, 'rateId' => $rate->id])            
 @endforeach
 
 @if(Auth::User()->activeTimers->contains('project_id', $project->id))
-    <form id="stop-working-on-project" action="{{ route('timers.stop', Auth::User()->activeTimers->firstWhere('project_id', $project->id)->id) }}" method="POST" class="hidden">
-        @csrf
-        @method('PATCH')
-    </form>
+    @include('timers.forms.stop', ['id' => 'stop-working-on-project', 'projectId' => Auth::User()->activeTimers->firstWhere('project_id', $project->id)->id])            
 @endif
+
 @endsection
 
 @section('scripts')

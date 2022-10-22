@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Validator;
 
 class ProjectController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth');
@@ -30,10 +29,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::all();
-
-        return view('projects.index', ['projects' => $projects]);
-
+        return view('projects.index', ['projects' => Project::all()]);
     }
 
     /**
@@ -122,13 +118,12 @@ class ProjectController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('projects.create')
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
 
         $project = new Project();
-
         $project->name = $request->name;
         $project->client_id = $request->client_id;
         $project->start_date = $request->start_date;
@@ -136,17 +131,14 @@ class ProjectController extends Controller
         $project->estimated_hours = $request->estimated_hours;
         $project->budget = $request->budget;
         $project->description = $request->description;
-
         $project->save();
 
         $team = $request->team;
 
         foreach ($team as $user) {
             $projectUser = new ProjectUser;
-
             $projectUser->project_id = $project->id;
             $projectUser->user_id = $user;
-
             $projectUser->save();
         }
 
@@ -200,7 +192,7 @@ class ProjectController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('projects.edit', ['project' => $project->id])
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
@@ -224,10 +216,8 @@ class ProjectController extends Controller
 
         foreach ($team as $user) {
             $projectUser = new ProjectUser;
-
             $projectUser->project_id = $project->id;
             $projectUser->user_id = $user;
-
             $projectUser->save();
         }
 

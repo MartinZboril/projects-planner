@@ -13,7 +13,12 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class TicketController extends Controller
-{
+{  
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -21,10 +26,7 @@ class TicketController extends Controller
      */
     public function index()
     {
-        $tickets = Ticket::all();
-
-        return view('tickets.index', ['tickets' => $tickets]);
-
+        return view('tickets.index', ['tickets' => Ticket::all()]);
     }
 
     /**
@@ -53,17 +55,17 @@ class TicketController extends Controller
             'priority' => ['required', 'integer', 'in:1,2,3,4'],
             'due_date' => ['required', 'date'],
             'message' => ['required', 'max:65553'],
+            'redirect' => ['in:tickets,projects'],
         ]);
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('tickets.create')
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
 
         $ticket = new Ticket();
-
         $ticket->subject = $request->subject;
         $ticket->project_id = $request->project_id;
         $ticket->reporter_id = Auth::id();
@@ -72,25 +74,20 @@ class TicketController extends Controller
         $ticket->priority = $request->priority;
         $ticket->due_date = $request->due_date;
         $ticket->message = $request->message;
-
         $ticket->save();
 
         if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', $ticket->reporter_id)->first()) {
             $projectUser = new ProjectUser;
-
             $projectUser->project_id = $ticket->project_id;
             $projectUser->user_id = $ticket->reporter_id;
-
             $projectUser->save();
         }
 
         if($ticket->assignee_id) {
             if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', $ticket->assignee_id)->first()) {
                 $projectUser = new ProjectUser;
-    
                 $projectUser->project_id = $ticket->project_id;
                 $projectUser->user_id = $ticket->assignee_id;
-    
                 $projectUser->save();
             }
         }
@@ -98,8 +95,8 @@ class TicketController extends Controller
         Session::flash('message', 'Ticket was created!');
         Session::flash('type', 'info');
 
-        if($request->project_create || $request->project_create_and_close) {
-            return ($request->project_create_and_close) ? redirect()->route('projects.tickets', ['project' => $ticket->project]) : redirect()->route('projects.ticket.detail', ['project' => $ticket->project, 'ticket' => $ticket]);
+        if($request->redirect == 'projects') {
+            return ($request->create_and_close) ? redirect()->route('projects.tickets', ['project' => $ticket->project]) : redirect()->route('projects.ticket.detail', ['project' => $ticket->project, 'ticket' => $ticket]);
         }
         
         return ($request->create_and_close) ? redirect()->route('tickets.index') : redirect()->route('tickets.detail', ['ticket' => $ticket]);
@@ -145,11 +142,12 @@ class TicketController extends Controller
             'status' => ['required', 'integer', 'in:1,2,3'],
             'due_date' => ['required', 'date'],
             'message' => ['required', 'max:65553'],
+            'redirect' => ['in:tickets,projects'],
         ]);
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('tickets.edit', ['ticket' => $ticket->id])
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
@@ -169,10 +167,8 @@ class TicketController extends Controller
         if($ticket->assignee_id) {
             if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', $ticket->assignee_id)->first()) {
                 $projectUser = new ProjectUser;
-
                 $projectUser->project_id = $ticket->project_id;
                 $projectUser->user_id = $ticket->assignee_id;
-
                 $projectUser->save();
             }
         }
@@ -180,7 +176,7 @@ class TicketController extends Controller
         Session::flash('message', 'Ticket was updated!');
         Session::flash('type', 'info');
 
-        if($request->project_save || $request->project_save_and_close) {
+        if($request->redirect == 'projects') {
             return ($request->save_and_close) ? redirect()->route('projects.tickets', ['project' => $ticket->project]) : redirect()->route('projects.ticket.detail', ['project' => $ticket->project, 'ticket' => $ticket]);
         }
 
@@ -198,11 +194,12 @@ class TicketController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'status' => ['required', 'integer', 'in:1,2,3'],
+            'redirect' => ['in:tickets,projects'],
         ]);
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('tickets.detail', ['ticket' => $ticket->id])
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
@@ -222,7 +219,7 @@ class TicketController extends Controller
 
         Session::flash('type', 'info');
 
-        if($request->project_redirect) {
+        if($request->redirect == 'projects') {
             return redirect()->route('projects.ticket.detail', ['project' => $ticket->project, 'ticket' => $ticket]);
         }
 
@@ -238,8 +235,18 @@ class TicketController extends Controller
      */
     public function convert(Request $request, Ticket $ticket)
     {
-        $task = new Task();
+        $validator = Validator::make($request->all(), [
+            'redirect' => ['in:tickets,projects'],
+        ]);
+        
+        if ($validator->fails()) {
+            return redirect()
+                    ->back()
+                    ->withErrors($validator)
+                    ->withInput();
+        }
 
+        $task = new Task();
         $task->name = $ticket->subject;
         $task->project_id = $ticket->project_id;
         $task->status_id = 1;
@@ -248,15 +255,12 @@ class TicketController extends Controller
         $task->start_date = $ticket->created_at;
         $task->due_date = $ticket->due_date;
         $task->description = $ticket->message;
-
         $task->save();
 
         if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', $ticket->assignee_id)->first()) {
             $projectUser = new ProjectUser;
-
             $projectUser->project_id = $ticket->project_id;
             $projectUser->user_id = $ticket->assignee_id;
-
             $projectUser->save();
         }
 
@@ -269,7 +273,7 @@ class TicketController extends Controller
         Session::flash('message', 'Task was created!');
         Session::flash('type', 'info');
 
-        if($request->project_redirect) {
+        if($request->redirect == 'projects') {
             return redirect()->route('projects.task.detail', ['project' => $task->project, 'task' => $task]);
         }
 

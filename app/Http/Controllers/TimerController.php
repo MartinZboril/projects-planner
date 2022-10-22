@@ -11,7 +11,12 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class TimerController extends Controller
-{
+{  
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -48,18 +53,16 @@ class TimerController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('timers.create', ['project' => $request->project_id])
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
 
         $timer = new Timer();
-
         $timer->project_id = $request->project_id;
         $timer->user_id = Auth::id();
         $timer->since = $request->since;
         $timer->until = $request->until;
-
         $timer->save();
 
         Session::flash('message', 'Timer was created!');
@@ -107,7 +110,7 @@ class TimerController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('timers.edit', ['project' => $timer->project, 'timer' => $timer])
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
@@ -139,7 +142,7 @@ class TimerController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('projects.detail', ['project' => $request->project_id])
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
@@ -152,13 +155,11 @@ class TimerController extends Controller
         }
 
         $timer = new Timer();
-
         $timer->project_id = $request->project_id;
         $timer->rate_id = $request->rate_id;
         $timer->user_id = Auth::id();
         $timer->since = Carbon::now();
         $timer->until = null;
-
         $timer->save();
 
         Session::flash('message', 'Timer started succesfully!');

@@ -10,14 +10,9 @@ use Illuminate\Support\Facades\Validator;
 
 class RateController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function __construct()
     {
-        //
+        $this->middleware('auth');
     }
 
     /**
@@ -47,35 +42,22 @@ class RateController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('rates.create', ['user' => $request->user_id])
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
 
         $rate = new Rate();
-
         $rate->user_id = $request->user_id;
         $rate->name = $request->name;
         $rate->is_active = $request->is_active;
         $rate->value = $request->value;
-
         $rate->save();
 
         Session::flash('message', 'Rate was created!');
         Session::flash('type', 'info');
 
         return redirect()->route('users.detail', ['user' => $rate->user]);
-    }
-
-    /**
-     * Display the specified resource.
-     * 
-     * @param  \App\Models\Rate  $rate
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Rate $rate)
-    {
-        //
     }
 
     /**
@@ -106,7 +88,7 @@ class RateController extends Controller
 
         if ($validator->fails()) {
             return redirect()
-                    ->route('rates.edit', ['user' => $rate->user, 'rate' => $rate])
+                    ->back()
                     ->withErrors($validator)
                     ->withInput();
         }
