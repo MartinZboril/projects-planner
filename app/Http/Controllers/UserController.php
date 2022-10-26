@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
-use App\Models\User;
-use App\Models\Rate;
 
 class UserController extends Controller
 {
-    public function __construct()
+    protected $userService;
+
+    public function __construct(UserService $userService)
     {
         $this->middleware('auth');
+        $this->userService = $userService;
     }
     
     /**
@@ -65,33 +64,11 @@ class UserController extends Controller
                     ->withInput();
         }
 
-        $user = new User();
-        $user->name = $request->name;
-        $user->surname = $request->surname;
-        $user->email = $request->email;
-        $user->username = $request->username;
-        $user->job_title = $request->job_title;
-        $user->password = Hash::make(($request->password) ? $request->password : Str::random(8));
-        $user->mobile = $request->mobile;
-        $user->phone = $request->phone;
-        $user->street = $request->street;
-        $user->house_number = $request->house_number;
-        $user->city = $request->city;
-        $user->zip_code = $request->zip_code;
-        $user->country = $request->country;
-        $user->save();
+        $user = $this->userService->store($request);
+        $this->userService->flash('create');
 
-        $rate = new Rate();
-        $rate->user_id = $user->id;
-        $rate->name = $request->rate_name;
-        $rate->is_active = true;
-        $rate->value = $request->rate_value;
-        $rate->save();
-
-        Session::flash('message', 'User was created!');
-        Session::flash('type', 'info');
-
-        return ($request->create_and_close) ? redirect()->route('users.index') : redirect()->route('users.detail', ['user' => $user]);
+        $redirectAction = $request->create_and_close ? 'users' : 'user';
+        return $this->userService->redirect($redirectAction, $user); 
     }
 
     /**
@@ -144,26 +121,10 @@ class UserController extends Controller
                     ->withInput();
         }
 
-        User::where('id', $user->id)
-                    ->update([
-                        'name' => $request->name,
-                        'surname' => $request->surname,
-                        'email' => $request->email,
-                        'username' => $request->username,
-                        'job_title' => $request->job_title,
-                        'password' => ($request->password) ? Hash::make($request->password) : $user->password,
-                        'mobile' => $request->mobile,
-                        'phone' => $request->phone,
-                        'street' => $request->street,
-                        'house_number' => $request->house_number,
-                        'city' => $request->city,
-                        'zip_code' => $request->zip_code,
-                        'country' => $request->country
-                    ]);
+        $user = $this->userService->update($user, $request);
+        $this->userService->flash('update');
 
-        Session::flash('message', 'User was updated!');
-        Session::flash('type', 'info');
-
-        return ($request->save_and_close) ? redirect()->route('users.index') : redirect()->route('users.detail', ['user' => $user->id]);
+        $redirectAction = $request->save_and_close ? 'users' : 'user';
+        return $this->userService->redirect($redirectAction, $user);  
     }
 }

@@ -5,16 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\Project;
 use App\Models\User;
+use App\Services\TaskService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
 {
-    public function __construct()
+    protected $taskService;
+
+    public function __construct(TaskService $taskService)
     {
         $this->middleware('auth');
+        $this->taskService = $taskService;
     }
 
     /**
@@ -62,26 +65,11 @@ class TaskController extends Controller
                     ->withInput();
         }
 
-        $task = new Task();
-        $task->name = $request->name;
-        $task->project_id = $request->project_id;
-        $task->milestone_id = $request->milestone_id ? $request->milestone_id : null;
-        $task->status_id = 1;
-        $task->author_id = Auth::id();
-        $task->user_id = $request->user_id;
-        $task->start_date = $request->start_date;
-        $task->due_date = $request->due_date;
-        $task->description = $request->description;
-        $task->save();
+        $task = $this->taskService->store($request);
+        $this->taskService->flash('create');
 
-        Session::flash('message', 'Task was created!');
-        Session::flash('type', 'info');
-
-        if($request->redirect == 'projects') {
-            return ($request->create_and_close) ? redirect()->route('projects.tasks', ['project' => $task->project]) : redirect()->route('projects.task.detail', ['project' => $task->project, 'task' => $task]);
-        }
-
-        return ($request->create_and_close) ? redirect()->route('tasks.index') : redirect()->route('tasks.detail', ['task' => $task]);
+        $redirectAction =  (($request->redirect == 'projects') ? 'project_' : '') . (($request->create_and_close) ? 'tasks' : 'task');
+        return $this->taskService->redirect($redirectAction, $task);
     }
 
     /**
@@ -132,25 +120,11 @@ class TaskController extends Controller
                     ->withInput();
         }
 
-        Task::where('id', $task->id)
-                    ->update([
-                        'name' => $request->name,
-                        'project_id' => $request->project_id,
-                        'milestone_id' => $request->milestone_id ? $request->milestone_id : null,
-                        'user_id' => $request->user_id,
-                        'start_date' => $request->start_date,
-                        'due_date' => $request->due_date,
-                        'description' => $request->description,
-                    ]);
+        $task = $this->taskService->update($task, $request);
+        $this->taskService->flash('update');
 
-        Session::flash('message', 'Task was updated!');
-        Session::flash('type', 'info');
-
-        if($request->redirect == 'projects') {
-            return ($request->save_and_close) ? redirect()->route('projects.tasks', ['project' => $task->project]) : redirect()->route('projects.task.detail', ['project' => $task->project, 'task' => $task]);
-        }
-
-        return ($request->save_and_close) ? redirect()->route('tasks.index') : redirect()->route('tasks.detail', ['task' => $task->id]);
+        $redirectAction =  (($request->redirect == 'projects') ? 'project_' : '') . (($request->save_and_close) ? 'tasks' : 'task');
+        return $this->taskService->redirect($redirectAction, $task);
     }
 
     /**
@@ -174,29 +148,17 @@ class TaskController extends Controller
                     ->withInput();
         }
 
-        Task::where('id', $task->id)
-                    ->update([
-                        'status_id' => $request->status_id,
-                        'is_returned' => false,
-                    ]);
+        $task = $this->taskService->change($task, $request);
+        $flashAction = match ($request->status_id) {
+            1 => 'return',
+            2 => 'working',
+            3 => 'complete',
+            default => ''
+        };
+        $this->taskService->flash($flashAction);
 
-        if ($request->status_id == 1) {
-            Session::flash('message', 'Task was returned!');
-        } elseif ($request->status_id == 2) {
-            Session::flash('message', 'Start working on Task!');
-        } elseif ($request->status_id == 3) {
-            Session::flash('message', 'Task was completed!');
-        }
-
-        Session::flash('type', 'info');
-
-        if($request->redirect == 'kanban') {
-            return redirect()->route('projects.kanban', ['project' => $task->project]);
-        } elseif($request->redirect == 'projects') {
-            return redirect()->route('projects.task.detail', ['project' => $task->project, 'task' => $task]);
-        } else {
-            return redirect()->route('tasks.detail', ['task' => $task->id]);
-        }
+        $redirectAction =  ($request->redirect == 'kanban') ? 'kanban' : ((($request->redirect == 'projects') ? 'project_' : '') . 'task');
+        return $this->taskService->redirect($redirectAction, $task);
     }
 
     /**
@@ -220,26 +182,12 @@ class TaskController extends Controller
                     ->withInput();
         }
 
-        Task::where('id', $task->id)
-                ->update([
-                    'is_stopped' => $request->action,
-                ]);
+        $task = $this->taskService->pause($task, $request);
+        $flashAction = ($task->is_stopped) ? 'stop' : 'resume';
+        $this->taskService->flash($flashAction);
 
-        if($action) {            
-            Session::flash('message', 'Task was stopped!');
-        } else {
-            Session::flash('message', 'Task was resumed!');
-        }
-
-        Session::flash('type', 'info');
-
-        if($request->redirect == 'kanban') {
-            return redirect()->route('projects.kanban', ['project' => $task->project]);
-        } elseif($request->redirect == 'projects') {
-            return redirect()->route('projects.task.detail', ['project' => $task->project, 'task' => $task]);
-        } else {
-            return redirect()->route('tasks.detail', ['task' => $task->id]);
-        }
+        $redirectAction =  ($request->redirect == 'kanban') ? 'kanban' : ((($request->redirect == 'projects') ? 'project_' : '') . 'task');
+        return $this->taskService->redirect($redirectAction, $task);
     }
 
     /**

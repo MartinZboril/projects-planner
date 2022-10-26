@@ -80,7 +80,7 @@
                       <td><a href="#" class="btn btn-sm btn-danger" onclick="event.preventDefault(); document.getElementById('stop-working-on-timer-{{ $timer->id }}').submit();"><i class="fas fa-stop"></i></a></td>
                     </tr>
 
-                    @include('timers.forms.stop', ['id' => 'stop-working-on-project', 'projectId' => $timer->project->id])            
+                    @include('timers.forms.stop', ['id' => 'stop-working-on-timer-' . $timer->id, 'timerId' => $timer->id])            
                   @endforeach
                 </tbody>
               </table>

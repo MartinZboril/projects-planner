@@ -4,15 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Milestone;
 use App\Models\Project;
+use App\Services\MilestoneService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class MilestoneController extends Controller
 {   
-    public function __construct()
+    protected $milestoneService;
+
+    public function __construct(MilestoneService $milestoneService)
     {
         $this->middleware('auth');
+        $this->milestoneService = $milestoneService;
     }
 
     /**
@@ -49,20 +52,12 @@ class MilestoneController extends Controller
                     ->withInput();
         }
 
-        $milestone = new Milestone();
-        $milestone->name = $request->name;
-        $milestone->project_id = $request->project_id;
-        $milestone->owner_id = $request->owner_id;
-        $milestone->start_date = $request->start_date;
-        $milestone->end_date = $request->end_date;
-        $milestone->colour = $request->colour;
-        $milestone->description = $request->description;
-        $milestone->save();
+        $milestone = $this->milestoneService->store($request);
+        $this->milestoneService->flash('create');
 
-        Session::flash('message', 'Milestone was created!');
-        Session::flash('type', 'info');
+        $redirectAction = $request->create_and_close ? 'project_milestones' : 'milestone';
+        return $this->milestoneService->redirect($redirectAction, $milestone); 
 
-        return ($request->create_and_close) ? redirect()->route('projects.milestones', ['project' => $milestone->project]) : redirect()->route('milestones.detail', ['project' => $milestone->project, 'milestone' => $milestone]);
     }
 
     /**
@@ -112,20 +107,11 @@ class MilestoneController extends Controller
                     ->withInput();
         }
 
-        Milestone::where('id', $milestone->id)
-                    ->update([
-                        'name' => $request->name,
-                        'owner_id' => $request->owner_id,
-                        'start_date' => $request->start_date,
-                        'end_date' => $request->end_date,
-                        'colour' => $request->colour,
-                        'description' => $request->description,
-                    ]);
+        $milestone = $this->milestoneService->update($milestone, $request);
+        $this->milestoneService->flash('update');
 
-        Session::flash('message', 'Milestone was updated!');
-        Session::flash('type', 'info');
-
-        return ($request->save_and_close) ? redirect()->route('projects.milestones', ['project' => $milestone->project]) : redirect()->route('milestones.detail', ['project' => $milestone->project, 'milestone' => $milestone]);
+        $redirectAction = $request->save_and_close ? 'project_milestones' : 'milestone';
+        return $this->milestoneService->redirect($redirectAction, $milestone);  
     }
 
     /**

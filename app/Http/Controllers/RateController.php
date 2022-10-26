@@ -4,15 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Rate;
 use App\Models\User;
+use App\Services\RateService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class RateController extends Controller
 {
-    public function __construct()
+    protected $rateService;
+
+    public function __construct(RateService $rateService)
     {
         $this->middleware('auth');
+        $this->rateService = $rateService;
     }
 
     /**
@@ -47,17 +50,10 @@ class RateController extends Controller
                     ->withInput();
         }
 
-        $rate = new Rate();
-        $rate->user_id = $request->user_id;
-        $rate->name = $request->name;
-        $rate->is_active = $request->is_active;
-        $rate->value = $request->value;
-        $rate->save();
+        $rate = $this->rateService->store($request);
+        $this->rateService->flash('create');
 
-        Session::flash('message', 'Rate was created!');
-        Session::flash('type', 'info');
-
-        return redirect()->route('users.detail', ['user' => $rate->user]);
+        return $this->rateService->redirect('user', $rate); 
     }
 
     /**
@@ -93,17 +89,10 @@ class RateController extends Controller
                     ->withInput();
         }
 
-        Rate::where('id', $rate->id)
-                    ->update([
-                        'name' => $request->name,
-                        'is_active' => $request->is_active,
-                        'value' => $request->value,
-                    ]);
+        $rate = $this->rateService->update($rate, $request);
+        $this->rateService->flash('update');
 
-        Session::flash('message', 'Rate was updated!');
-        Session::flash('type', 'info');
-
-        return redirect()->route('users.detail', ['user' => $rate->user]);
+        return $this->rateService->redirect('user', $rate); 
     }
 
     /**

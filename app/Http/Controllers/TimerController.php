@@ -4,27 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Timer;
 use App\Models\Project;
-use Carbon\Carbon;
+use App\Services\TimerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class TimerController extends Controller
 {  
-    public function __construct()
+    protected $timerService;
+
+    public function __construct(TimerService $timerService)
     {
         $this->middleware('auth');
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
+        $this->timerService = $timerService;
     }
 
     /**
@@ -58,17 +50,10 @@ class TimerController extends Controller
                     ->withInput();
         }
 
-        $timer = new Timer();
-        $timer->project_id = $request->project_id;
-        $timer->user_id = Auth::id();
-        $timer->since = $request->since;
-        $timer->until = $request->until;
-        $timer->save();
+        $timer = $this->timerService->store($request);
+        $this->timerService->flash('create');
 
-        Session::flash('message', 'Timer was created!');
-        Session::flash('type', 'info');
-
-        return redirect()->route('projects.timesheets', ['project' => $timer->project]);
+        return $this->timerService->redirect('project_timesheets', $timer); 
     }
 
     /**
@@ -115,16 +100,10 @@ class TimerController extends Controller
                     ->withInput();
         }
 
-        Timer::where('id', $timer->id)
-                    ->update([
-                        'since' => $request->since,
-                        'until' => $request->until,
-                    ]);
+        $timer = $this->timerService->update($timer, $request);
+        $this->timerService->flash('update');
 
-        Session::flash('message', 'Timer was updated!');
-        Session::flash('type', 'info');
-
-        return redirect()->route('projects.timesheets', ['project' => $timer->project]);
+        return $this->timerService->redirect('project_timesheets', $timer); 
     }
 
     /**
@@ -147,25 +126,15 @@ class TimerController extends Controller
                     ->withInput();
         }
 
-        if(Timer::where('project_id', $request->project_id)->where('user_id', Auth::id())->whereNull('until')->count() > 0) {
-            Session::flash('message', 'Another timer already running!');
-            Session::flash('type', 'danger');
-
-            return redirect()->back();
+        if($this->timerService->checkIfNotRunningAnoutherTimer($request->project_id, Auth::id())) {
+            $this->timerService->flash('collision');            
+            return $this->timerService->redirect(''); 
         }
 
-        $timer = new Timer();
-        $timer->project_id = $request->project_id;
-        $timer->rate_id = $request->rate_id;
-        $timer->user_id = Auth::id();
-        $timer->since = Carbon::now();
-        $timer->until = null;
-        $timer->save();
+        $timer = $this->timerService->start($request);
+        $this->timerService->flash('start');
 
-        Session::flash('message', 'Timer started succesfully!');
-        Session::flash('type', 'info');
-
-        return redirect()->back();
+        return $this->timerService->redirect('', $timer); 
     }
 
     /**
@@ -177,15 +146,10 @@ class TimerController extends Controller
      */
     public function stop(Request $request, Timer $timer)
     {
-        Timer::where('id', $timer->id)
-                    ->update([
-                        'until' => Carbon::now(),
-                    ]);
+        $timer = $this->timerService->stop($timer, $request);
+        $this->timerService->flash('stop');
 
-        Session::flash('message', 'Timer stopped succesfully!');
-        Session::flash('type', 'info');
-
-        return redirect()->back();
+        return $this->timerService->redirect('', $timer);
     }
 
     /**

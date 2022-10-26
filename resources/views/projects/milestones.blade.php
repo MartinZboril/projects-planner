@@ -100,7 +100,7 @@
 @endforeach
 
 @if(Auth::User()->activeTimers->contains('project_id', $project->id))
-    @include('timers.forms.stop', ['id' => 'stop-working-on-project', 'projectId' => Auth::User()->activeTimers->firstWhere('project_id', $project->id)->id])            
+    @include('timers.forms.stop', ['id' => 'stop-working-on-project', 'timerId' => Auth::User()->activeTimers->firstWhere('project_id', $project->id)->id])            
 @endif
 
 @endsection

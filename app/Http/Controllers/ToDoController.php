@@ -4,15 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\ToDo;
 use App\Models\Task;
+use App\Services\ToDoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class ToDoController extends Controller
 {  
-    public function __construct()
+    protected $todoService;
+
+    public function __construct(ToDoService $todoService)
     {
         $this->middleware('auth');
+        $this->todoService = $todoService;
     }
 
     /**
@@ -47,21 +51,11 @@ class ToDoController extends Controller
                     ->withInput();
         }
 
-        $todo = new ToDo();
-        $todo->name = $request->name;
-        $todo->task_id = $request->task_id;
-        $todo->deadline = $request->deadline;
-        $todo->description = $request->description;
-        $todo->save();
+        $todo = $this->todoService->store($request);
+        $this->todoService->flash('create');
 
-        Session::flash('message', 'ToDo was created!');
-        Session::flash('type', 'info');
-
-        if($request->redirect == 'projects') {
-            return redirect()->route('projects.task.detail', ['project' => $todo->task->project, 'task' => $todo->task]);
-        }
-
-        return redirect()->route('tasks.detail', ['task' => $todo->task]);
+        $redirectAction = (($request->redirect == 'projects') ? 'project_' : '') . 'task';
+        return $this->todoService->redirect($redirectAction, $todo);
     }
 
     /**
@@ -99,23 +93,11 @@ class ToDoController extends Controller
                     ->withInput();
         }
 
-        ToDo::where('id', $todo->id)
-                    ->update([
-                        'name' => $request->name,
-                        'task_id' => $request->task_id,
-                        'deadline' => $request->deadline,
-                        'is_finished' => $request->is_finished,
-                        'description' => $request->description,
-                    ]);
+        $todo = $this->todoService->update($todo, $request);
+        $this->todoService->flash('update');
 
-        Session::flash('message', 'ToDo was updated!');
-        Session::flash('type', 'info');
-
-        if($request->redirect == 'projects') {
-            return redirect()->route('projects.task.detail', ['project' => $todo->task->project, 'task' => $todo->task]);
-        }
-
-        return redirect()->route('tasks.detail', ['task' => $todo->task]);
+        $redirectAction = (($request->redirect == 'projects') ? 'project_' : '') . 'task';
+        return $this->todoService->redirect($redirectAction, $todo);
     }
 
     /**
@@ -139,24 +121,12 @@ class ToDoController extends Controller
                     ->withInput();
         }
 
-        ToDo::where('id', $todo->id)
-                ->update([
-                    'is_finished' => $request->action,
-                ]);
+        $todo = $this->todoService->check($todo, $request);
+        $flashAction = ($todo->is_checked) ? 'finish' : 'return';
+        $this->todoService->flash($flashAction);
 
-        if($request->action) {
-            Session::flash('message', 'ToDo was finished!');
-        } else {
-            Session::flash('message', 'ToDo was returned!');
-        }
-
-        Session::flash('type', 'info');
-
-        if($request->redirect == "projects") {
-            return redirect()->route('projects.task.detail', ['project' => $todo->task->project, 'task' => $todo->task]);
-        }
-
-        return redirect()->route('tasks.detail', ['task' => $todo->task]);
+        $redirectAction = (($request->redirect == 'projects') ? 'project_' : '') . 'task';
+        return $this->todoService->redirect($redirectAction, $todo);
     }
 
     /**

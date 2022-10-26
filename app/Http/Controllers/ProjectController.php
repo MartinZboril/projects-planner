@@ -5,21 +5,22 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Client;
 use App\Models\User;
-use App\Models\ProjectUser;
 use App\Models\Task;
 use App\Models\Milestone;
 use App\Models\ToDo;
 use App\Models\Ticket;
+use App\Services\ProjectService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class ProjectController extends Controller
 {
-    public function __construct()
+    protected $projectService;
+
+    public function __construct(ProjectService $projectService)
     {
         $this->middleware('auth');
+        $this->projectService = $projectService;
     }
 
     /**
@@ -123,29 +124,11 @@ class ProjectController extends Controller
                     ->withInput();
         }
 
-        $project = new Project();
-        $project->name = $request->name;
-        $project->client_id = $request->client_id;
-        $project->start_date = $request->start_date;
-        $project->due_date = $request->due_date;
-        $project->estimated_hours = $request->estimated_hours;
-        $project->budget = $request->budget;
-        $project->description = $request->description;
-        $project->save();
+        $project = $this->projectService->store($request);
+        $this->projectService->flash('create');
 
-        $team = $request->team;
-
-        foreach ($team as $user) {
-            $projectUser = new ProjectUser;
-            $projectUser->project_id = $project->id;
-            $projectUser->user_id = $user;
-            $projectUser->save();
-        }
-
-        Session::flash('message', 'Project was created!');
-        Session::flash('type', 'info');
-
-        return ($request->create_and_close) ? redirect()->route('projects.index') : redirect()->route('projects.detail', ['project' => $project]);
+        $redirectAction = $request->create_and_close ? 'projects' : 'project';
+        return $this->projectService->redirect($redirectAction, $project);
     }
 
     /**
@@ -197,34 +180,11 @@ class ProjectController extends Controller
                     ->withInput();
         }
 
-        Project::where('id', $project->id)
-                    ->update([
-                        'name' => $request->name,
-                        'client_id' => $request->client_id,
-                        'start_date' => $request->start_date,
-                        'due_date' => $request->due_date,
-                        'estimated_hours' => $request->estimated_hours,
-                        'budget' => $request->budget,
-                        'description' => $request->description,
-                    ]);
+        $project = $this->projectService->update($project, $request);
+        $this->projectService->flash('update');
 
-        $project = Project::find($project->id);
-
-        ProjectUser::where('project_id', $project->id)->delete();
-
-        $team = $request->team;
-
-        foreach ($team as $user) {
-            $projectUser = new ProjectUser;
-            $projectUser->project_id = $project->id;
-            $projectUser->user_id = $user;
-            $projectUser->save();
-        }
-
-        Session::flash('message', 'Project was updated!');
-        Session::flash('type', 'info');
-
-        return ($request->save_and_close) ? redirect()->route('projects.index') : redirect()->route('projects.detail', ['project' => $project->id]);
+        $redirectAction = $request->save_and_close ? 'projects' : 'project';
+        return $this->projectService->redirect($redirectAction, $project); 
     }
 
     /**

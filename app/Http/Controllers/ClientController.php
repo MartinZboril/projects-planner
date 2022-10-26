@@ -3,16 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Services\ClientService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class ClientController extends Controller
 {
-    public function __construct()
+    protected $clientService;
+
+    public function __construct(ClientService $clientService)
     {
         $this->middleware('auth');
+        $this->clientService = $clientService;
     }
 
     /**
@@ -70,31 +73,11 @@ class ClientController extends Controller
                     ->withInput();
         }
 
-        $client = new Client();
-        $client->name = $request->name;
-        $client->email = $request->email;
-        $client->contact_person = $request->contact_person;
-        $client->contact_email = $request->contact_email;
-        $client->mobile = $request->mobile;
-        $client->phone = $request->phone;
-        $client->street = $request->street;
-        $client->house_number = $request->house_number;
-        $client->city = $request->city;
-        $client->country = $request->country;
-        $client->zip_code = $request->zip_code;
-        $client->website = $request->website;
-        $client->skype = $request->skype;
-        $client->linekedin = $request->linekedin;
-        $client->twitter = $request->twitter;
-        $client->facebook = $request->facebook;
-        $client->instagram = $request->instagram;
-        $client->note = $request->note;
-        $client->save();
+        $client = $this->clientService->store($request);
+        $this->clientService->flash('create');
 
-        Session::flash('message', 'Client was created!');
-        Session::flash('type', 'info');
-
-        return ($request->create_and_close) ? redirect()->route('clients.index') : redirect()->route('clients.detail', ['client' => $client]);
+        $redirectAction = $request->create_and_close ? 'clients' : 'client';
+        return $this->clientService->redirect($redirectAction, $client); 
     }
 
     /**
@@ -157,32 +140,11 @@ class ClientController extends Controller
                     ->withInput();
         }
 
-        Client::where('id', $client->id)
-                    ->update([
-                        'name' => $request->name,
-                        'email' => $request->email,
-                        'contact_person' => $request->contact_person,
-                        'contact_email' => $request->contact_email,
-                        'mobile' => $request->mobile,
-                        'phone' => $request->phone,
-                        'street' => $request->street,
-                        'house_number' => $request->house_number,
-                        'city' => $request->city,
-                        'country' => $request->country,
-                        'zip_code' => $request->zip_code,
-                        'website' => $request->website,
-                        'skype' => $request->skype,
-                        'linekedin' => $request->linekedin,
-                        'twitter' => $request->twitter,
-                        'facebook' => $request->facebook,
-                        'instagram' => $request->instagram,
-                        'note' => $request->note,
-                    ]);
+        $client = $this->clientService->update($client, $request);
+        $this->clientService->flash('update');
 
-        Session::flash('message', 'Client was updated!');
-        Session::flash('type', 'info');
-
-        return ($request->save_and_close) ? redirect()->route('clients.index') : redirect()->route('clients.detail', ['client' => $client]);
+        $redirectAction = $request->save_and_close ? 'clients' : 'client';
+        return $this->clientService->redirect($redirectAction, $client); 
     }
 
     /**
