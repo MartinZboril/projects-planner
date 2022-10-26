@@ -41,6 +41,7 @@ class TimerController extends Controller
         $validator = Validator::make($request->all(), [
             'since' => ['required', 'date_format:Y-m-d H:i'],
             'until' => ['required', 'date_format:Y-m-d H:i', 'after:since'],
+            'rate_id' => ['required', 'integer', 'exists:rates,id'],
         ]);
 
         if ($validator->fails()) {
@@ -91,6 +92,7 @@ class TimerController extends Controller
         $validator = Validator::make($request->all(), [
             'since' => ['required', 'date_format:Y-m-d H:i'],
             'until' => ['required', 'date_format:Y-m-d H:i', 'after:since'],
+            'rate_id' => ['required', 'integer', 'exists:rates,id'],
         ]);
 
         if ($validator->fails()) {

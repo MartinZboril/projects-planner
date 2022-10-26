@@ -48,6 +48,18 @@
                                         @enderror
                                     </div>
                                 </div>
+                                <div class="form-group required">
+                                    <label for="rate_id" class="control-label">Rate</label>
+                                    <select class="form-control rate-select @error('rate_id') is-invalid @enderror" name="rate_id" id="rate_id" style="width: 100%;">
+                                        <option disabled selected value>Choose rate</option>
+                                        @foreach(Auth::User()->rates as $rate)
+                                            <option value="{{ $rate->id }}" @if(old('rate_id', $timer->rate_id) == $rate->id) selected @endif>{{ $rate->name }} ({{ $rate->value }})</option>
+                                        @endforeach
+                                    </select>
+                                    @error('rate_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>  
                             </div>
                         </div>
                     </div>
@@ -106,6 +118,11 @@
 
             $("#until-datetimepicker").on("change.datetimepicker", function (e) {
                 $('#since-datetimepicker').datetimepicker('maxDate', e.date);
+            });
+
+            $('.rate-select').select2({
+                theme: 'bootstrap4',
+                placeholder: 'select rate'
             });
         });
     </script>

@@ -16,6 +16,7 @@ class TimerService
         $timer = new Timer;
         $timer->project_id = $request->project_id;
         $timer->user_id = Auth::id();
+        $timer->rate_id = $request->rate_id;
         $timer->since = $request->since;
         $timer->until = $request->until;
         $timer->save();
@@ -29,6 +30,7 @@ class TimerService
                     ->update([
                         'since' => $request->since,
                         'until' => $request->until,
+                        'rate_id' => $request->rate_id,
                     ]);
 
         return $timer;
