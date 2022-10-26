@@ -1,5 +1,7 @@
 @extends('layouts.master')
 
+@section('title', __('pages.title.ticket'))
+
 @section('styles')
   <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.css') }}">
 @endsection

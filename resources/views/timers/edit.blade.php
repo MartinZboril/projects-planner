@@ -1,5 +1,7 @@
 @extends('layouts.master')
 
+@section('title', __('pages.title.timer'))
+
 @section('styles')
     <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
 @endsection

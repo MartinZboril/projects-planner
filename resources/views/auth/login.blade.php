@@ -1,5 +1,7 @@
 @extends('layouts.auth')
 
+@section('title', __('pages.title.auth'))
+
 @section('content')
 <div class="login-logo">
     <a href="index2.html"><b>Admin</b>LTE</a>

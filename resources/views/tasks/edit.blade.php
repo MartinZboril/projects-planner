@@ -1,5 +1,7 @@
 @extends('layouts.master')
 
+@section('title', __('pages.title.task'))
+
 @section('content')
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
