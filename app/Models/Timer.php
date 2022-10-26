@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -28,12 +29,12 @@ class Timer extends Model
         return $this->belongsTo(Rate::class, 'rate_id');
     }
 
-    public function scopeActive($query)
+    public function scopeActive($query): Builder
     {
         return $query->whereNull('until');
     }
 
-    public function getTotalTimeAttribute()
+    public function getTotalTimeAttribute(): int
     {
         $since = Carbon::parse($this->since);
         $until = Carbon::parse($this->until);
@@ -43,7 +44,7 @@ class Timer extends Model
         return round($diff->s / 3600 + $diff->i / 60 + $diff->h + $diff->days * 24, 2);
     }
 
-    public function getAmountAttribute()
+    public function getAmountAttribute(): int
     {
         return round($this->totalTime * $this->rate->value);
     }

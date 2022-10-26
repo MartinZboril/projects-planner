@@ -58,18 +58,18 @@ class Project extends Model
         return $this->hasMany(Ticket::class, 'project_id');
     }
 
-    public function getDeadlineAttribute()
+    public function getDeadlineAttribute(): int
     {
         return $this->due_date->diffInDays(\Carbon\Carbon::now()->format('Y-m-d'));
     }
 
-    public function getRemainingHoursAttribute()
+    public function getRemainingHoursAttribute(): int
     {
         // Todo
         return $this->estimated_hours;
     }
 
-    public function getUsedBudgetAttribute()
+    public function getUsedBudgetAttribute(): int
     {
         // Todo
         return $this->budget;

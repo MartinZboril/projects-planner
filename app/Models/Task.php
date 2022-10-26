@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -43,17 +44,17 @@ class Task extends Model
         return $this->hasMany(ToDo::class, 'task_id');
     }
 
-    public function scopeNew($query)
+    public function scopeNew($query): Builder
     {
         return $query->where('status_id', 1);
     }
 
-    public function scopeInProgress($query)
+    public function scopeInProgress($query): Builder
     {
         return $query->where('status_id', 2);
     }
 
-    public function scopeCompleted($query)
+    public function scopeCompleted($query): Builder
     {
         return $query->where('status_id', 3);
     }

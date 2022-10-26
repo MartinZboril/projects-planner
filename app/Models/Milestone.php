@@ -33,7 +33,7 @@ class Milestone extends Model
         return $this->hasMany(Task::class, 'milestone_id')->completed();
     }
 
-    public function getProgressAttribute()
+    public function getProgressAttribute(): int
     {
         return (count($this->tasks) > 0) ? count($this->tasksCompleted) / count($this->tasks) : 0;
     }
