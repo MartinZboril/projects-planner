@@ -68,35 +68,35 @@ class TaskService
     {
         switch ($action) {
             case 'create':
-                Session::flash('message', 'Task was created!');
+                Session::flash('message', __('messages.task.create'));
                 Session::flash('type', 'info');
                 break;
             case 'update':
-                Session::flash('message', 'Task was updated!');
+                Session::flash('message', __('messages.task.update'));
                 Session::flash('type', 'info');
                 break;
             case 'working':
-                Session::flash('message', 'Start working on Task!');
+                Session::flash('message', __('messages.task.working'));
                 Session::flash('type', 'info');
                 break;
             case 'complete':
-                Session::flash('message', 'Task was completed!');
+                Session::flash('message', __('messages.task.complete'));
                 Session::flash('type', 'info');
                 break;
             case 'return':
-                Session::flash('message', 'Task was returned!');
+                Session::flash('message', __('messages.task.return'));
                 Session::flash('type', 'info');
                 break;
             case 'stop':
-                Session::flash('message', 'Task was stopped!');
+                Session::flash('message', __('messages.task.stop'));
                 Session::flash('type', 'info');
                 break;
             case 'resume':
-                Session::flash('message', 'Task was resumed!');
+                Session::flash('message', __('messages.task.resume'));
                 Session::flash('type', 'info');
                 break;
             default:
-                Session::flash('message', 'Action was completed!');
+                Session::flash('message', __('messages.complete'));
                 Session::flash('type', 'info');
         }
     }

@@ -43,15 +43,15 @@ class MilestoneService
     {
         switch ($action) {
             case 'create':
-                Session::flash('message', 'Milestone was created!');
+                Session::flash('message', __('messages.milestone.create'));
                 Session::flash('type', 'info');
                 break;
             case 'update':
-                Session::flash('message', 'Milestone was updated!');
+                Session::flash('message', __('messages.milestone.update'));
                 Session::flash('type', 'info');
                 break;
             default:
-                Session::flash('message', 'Action was completed!');
+                Session::flash('message', __('messages.complete'));
                 Session::flash('type', 'info');
         } 
     }

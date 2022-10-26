@@ -37,15 +37,15 @@ class RateService
     {
         switch ($action) {
             case 'create':
-                Session::flash('message', 'Rate was created!');
+                Session::flash('message', __('messages.rate.create'));
                 Session::flash('type', 'info');
                 break;
             case 'update':
-                Session::flash('message', 'Rate was updated!');
+                Session::flash('message', __('messages.rate.update'));
                 Session::flash('type', 'info');
                 break;
             default:
-                Session::flash('message', 'Action was completed!');
+                Session::flash('message', __('messages.complete'));
                 Session::flash('type', 'info');
         }
     }

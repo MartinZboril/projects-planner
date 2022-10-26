@@ -66,15 +66,15 @@ class ClientService
     {
         switch ($action) {
             case 'create':
-                Session::flash('message', 'Client was created!');
+                Session::flash('message', __('messages.client.create'));
                 Session::flash('type', 'info');
                 break;
             case 'update':
-                Session::flash('message', 'Client was updated!');
+                Session::flash('message', __('messages.client.update'));
                 Session::flash('type', 'info');
                 break;
             default:
-                Session::flash('message', 'Action was completed!');
+                Session::flash('message', __('messages.complete'));
                 Session::flash('type', 'info');
         }        
     }

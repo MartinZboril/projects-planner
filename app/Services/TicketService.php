@@ -113,27 +113,27 @@ class TicketService
     {
         switch ($action) {
             case 'create':
-                Session::flash('message', 'Ticket was created!');
+                Session::flash('message', __('messages.ticket.create'));
                 Session::flash('type', 'info');
                 break;
             case 'update':
-                Session::flash('message', 'Ticket was updated!');
+                Session::flash('message', __('messages.ticket.update'));
                 Session::flash('type', 'info');
                 break;
             case 'finish':
-                Session::flash('message', 'Ticket has been opened!');
+                Session::flash('message', __('messages.ticket.open'));
                 Session::flash('type', 'info');
                 break;
             case 'return':
-                Session::flash('message', 'Ticket has been closed!');
+                Session::flash('message', __('messages.ticket.close'));
                 Session::flash('type', 'info');
                 break;
-            case 'task_create':
-                Session::flash('message', 'Task was created!');
+            case 'archive':
+                Session::flash('message', __('messages.ticket.archive'));
                 Session::flash('type', 'info');
                 break;
             default:
-                Session::flash('message', 'Action was completed!');
+                Session::flash('message', __('messages.complete'));
                 Session::flash('type', 'info');
         }
     }

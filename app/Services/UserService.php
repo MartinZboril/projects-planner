@@ -69,15 +69,15 @@ class UserService
     {
         switch ($action) {
             case 'create':
-                Session::flash('message', 'User was created!');
+                Session::flash('message', __('messages.user.create'));
                 Session::flash('type', 'info');
                 break;
             case 'update':
-                Session::flash('message', 'User was updated!');
+                Session::flash('message', __('messages.user.update'));
                 Session::flash('type', 'info');
                 break;
             default:
-                Session::flash('message', 'Action was completed!');
+                Session::flash('message', __('messages.complete'));
                 Session::flash('type', 'info');
         }
     }

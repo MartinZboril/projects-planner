@@ -70,27 +70,27 @@ class TimerService
     {
         switch ($action) {
             case 'create':
-                Session::flash('message', 'Timer was created!');
+                Session::flash('message', __('messages.timer.create'));
                 Session::flash('type', 'info');
                 break;
             case 'update':
-                Session::flash('message', 'Timer was updated!');
+                Session::flash('message', __('messages.timer.update'));
                 Session::flash('type', 'info');
                 break;
             case 'start':
-                Session::flash('message', 'Timer started succesfully!');
+                Session::flash('message', __('messages.timer.start'));
                 Session::flash('type', 'info');
                 break;
             case 'stop':
-                Session::flash('message', 'Timer stopped succesfully!');
+                Session::flash('message', __('messages.timer.stop'));
                 Session::flash('type', 'info');
                 break;
             case 'collision':
-                Session::flash('message', 'Another timer already running!');
+                Session::flash('message', __('messages.timer.collision'));
                 Session::flash('type', 'danger');
                 break;
             default:
-                Session::flash('message', 'Action was completed!');
+                Session::flash('message', __('messages.complete'));
                 Session::flash('type', 'info');
         }
     }
