@@ -4,54 +4,56 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 class Project extends Model
 {
     use HasFactory;
 
     protected $dates = ['start_date', 'due_date'];
 
-    public function client()
+    public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class, 'client_id');
     }
 
-    public function team()
+    public function team(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'project_user', 'project_id', 'user_id');
     }
 
-    public function tasks()
+    public function tasks(): HasMany
     {
         return $this->hasMany(Task::class, 'project_id');
     }
 
-    public function newTasks()
+    public function newTasks(): HasMany
     {
         return $this->hasMany(Task::class, 'project_id')->new();
     }
 
-    public function inProgressTasks()
+    public function inProgressTasks(): HasMany
     {
         return $this->hasMany(Task::class, 'project_id')->inProgress();
     }
 
-    public function completedTasks()
+    public function completedTasks(): HasMany
     {
         return $this->hasMany(Task::class, 'project_id')->completed();
     }
 
-    public function milestones()
+    public function milestones(): HasMany
     {
         return $this->hasMany(Milestone::class, 'project_id');
     }
 
-    public function timers()
+    public function timers(): HasMany
     {
         return $this->hasMany(Timer::class, 'project_id');
     }
     
-    public function tickets()
+    public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class, 'project_id');
     }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Timer extends Model
 {
@@ -12,17 +13,17 @@ class Timer extends Model
 
     protected $dates = ['since', 'until'];
 
-    public function project()
+    public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function rate()
+    public function rate(): BelongsTo
     {
         return $this->belongsTo(Rate::class, 'rate_id');
     }

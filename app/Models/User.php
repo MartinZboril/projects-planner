@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Timer;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -53,17 +54,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function timers()
+    public function timers(): HasMany
     {
         return $this->hasMany(Timer::class, 'user_id');
     }
 
-    public function activeTimers()
+    public function activeTimers(): HasMany
     {
         return $this->hasMany(Timer::class, 'user_id')->active();
     }
 
-    public function rates()
+    public function rates(): HasMany
     {
         return $this->hasMany(Rate::class, 'user_id');
     }
