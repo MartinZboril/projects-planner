@@ -60,12 +60,14 @@ class TicketService
                         'message' => $request->message,
                     ]);
 
-        if(!$request->assignee_id) {
+        $ticket = Ticket::find($ticket->id);
+        
+        if(!$ticket->assignee_id) {
             return $ticket;
         }
 
-        if(!$this->projectUserService->workingOnProject($ticket->project_id, $request->assignee_id)) {
-            $this->projectUserService->store($ticket->project_id, $request->assignee_id);
+        if(!$this->projectUserService->workingOnProject($ticket->project_id, $ticket->assignee_id)) {
+            $this->projectUserService->store($ticket->project_id, $ticket->assignee_id);
         }
 
         return $ticket;

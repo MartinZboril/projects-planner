@@ -10,6 +10,13 @@ use Illuminate\Support\Facades\Session;
 
 class TaskService
 {
+    protected $projectUserService;
+
+    public function __construct(ProjectUserService $projectUserService)
+    {
+        $this->projectUserService = $projectUserService;
+    }
+
     public function store(Request $request): Task
     {
         $task = new Task;
@@ -23,6 +30,14 @@ class TaskService
         $task->due_date = $request->due_date;
         $task->description = $request->description;
         $task->save();
+
+        if(!$this->projectUserService->workingOnProject($task->project_id, $task->author_id)) {
+            $this->projectUserService->store($task->project_id, $task->author_id);
+        }
+
+        if(!$this->projectUserService->workingOnProject($task->project_id, $task->user_id)) {
+            $this->projectUserService->store($task->project_id, $task->user_id);
+        }
 
         return $task;
     }
@@ -39,6 +54,14 @@ class TaskService
                         'due_date' => $request->due_date,
                         'description' => $request->description,
                     ]);
+
+        if(!$this->projectUserService->workingOnProject($task->project_id, $task->author_id)) {
+            $this->projectUserService->store($task->project_id, $task->author_id);
+        }
+
+        if(!$this->projectUserService->workingOnProject($task->project_id, $task->user_id)) {
+            $this->projectUserService->store($task->project_id, $task->user_id);
+        }
 
         return $task;
     }
