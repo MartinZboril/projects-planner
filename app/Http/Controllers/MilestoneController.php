@@ -114,6 +114,22 @@ class MilestoneController extends Controller
         return $this->milestoneService->redirect($redirectAction, $milestone);  
     }
 
+    public function load(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'project_id' => ['required', 'integer', 'exists:projects,id'],
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                    ->back()
+                    ->withErrors($validator)
+                    ->withInput();
+        }
+
+        return Milestone::where('project_id', $request->project_id)->select('id', 'name')->get();
+    }
+
     /**
      * Remove the specified resource from storage.
      *

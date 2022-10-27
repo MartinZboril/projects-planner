@@ -25,7 +25,7 @@
     <script>
         $(document).ready(function() {
             $('#project_id').change(function() {
-                var url = '{{ url('projects') }}/' + $(this).val() + '/milestones/get/';
+                var url = '{{ url('milestones') }}/load/?project_id=' + $(this).val();
 
                 $.get(url, function(data) {
                     var milestoneSelect = $('#milestone_id');

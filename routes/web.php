@@ -78,6 +78,8 @@ Route::patch('/tasks/{task}/change', [App\Http\Controllers\TaskController::class
 Route::patch('/tasks/{task}/pause', [App\Http\Controllers\TaskController::class, 'pause'])->name('tasks.pause');
 
 // Milestones
+Route::get('/milestones/load', [App\Http\Controllers\MilestoneController::class, 'load']);
+
 Route::post('/milestones/store', [App\Http\Controllers\MilestoneController::class, 'store'])->name('milestones.store');
 Route::patch('/milestones/{milestone}/update', [App\Http\Controllers\MilestoneController::class, 'update'])->name('milestones.update');
 
