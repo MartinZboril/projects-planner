@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Ticket;
 use App\Models\Task;
-use App\Models\ProjectUser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +11,13 @@ use Illuminate\Support\Facades\Session;
 
 class TicketService
 {
+    protected $projectUserService;
+
+    public function __construct(ProjectUserService $projectUserService)
+    {
+        $this->projectUserService = $projectUserService;
+    }
+
     public function store(Request $request): Ticket
     {
         $ticket = new Ticket;
@@ -24,21 +30,17 @@ class TicketService
         $ticket->due_date = $request->due_date;
         $ticket->message = $request->message;
         $ticket->save();
-
-        if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', $ticket->reporter_id)->first()) {
-            $projectUser = new ProjectUser;
-            $projectUser->project_id = $ticket->project_id;
-            $projectUser->user_id = $ticket->reporter_id;
-            $projectUser->save();
+        
+        if(!$this->projectUserService->workingOnProject($ticket->project_id, $ticket->reporter_id)) {
+            $this->projectUserService->store($ticket->project_id, $ticket->reporter_id);
         }
 
-        if($ticket->assignee_id) {
-            if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', $ticket->assignee_id)->first()) {
-                $projectUser = new ProjectUser;
-                $projectUser->project_id = $ticket->project_id;
-                $projectUser->user_id = $ticket->assignee_id;
-                $projectUser->save();
-            }
+        if(!$ticket->assignee_id) {
+            return $ticket;
+        }
+
+        if(!$this->projectUserService->workingOnProject($ticket->project_id, $ticket->assignee_id)) {
+            $this->projectUserService->store($ticket->project_id, $ticket->assignee_id);
         }
 
         return $ticket;
@@ -58,13 +60,12 @@ class TicketService
                         'message' => $request->message,
                     ]);
 
-        if($ticket->assignee_id) {
-            if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', $ticket->assignee_id)->first()) {
-                $projectUser = new ProjectUser;
-                $projectUser->project_id = $ticket->project_id;
-                $projectUser->user_id = $ticket->assignee_id;
-                $projectUser->save();
-            }
+        if(!$request->assignee_id) {
+            return $ticket;
+        }
+
+        if(!$this->projectUserService->workingOnProject($ticket->project_id, $request->assignee_id)) {
+            $this->projectUserService->store($ticket->project_id, $request->assignee_id);
         }
 
         return $ticket;
@@ -93,11 +94,8 @@ class TicketService
         $task->description = $ticket->message;
         $task->save();
 
-        if(!ProjectUser::where('project_id', $ticket->project_id)->where('user_id', $ticket->assignee_id)->first()) {
-            $projectUser = new ProjectUser;
-            $projectUser->project_id = $ticket->project_id;
-            $projectUser->user_id = $ticket->assignee_id;
-            $projectUser->save();
+        if(!$this->projectUserService->workingOnProject($ticket->project_id, $ticket->assignee_id)) {
+            $this->projectUserService->store($ticket->project_id, $ticket->assignee_id);
         }
 
         Ticket::where('id', $ticket->id)

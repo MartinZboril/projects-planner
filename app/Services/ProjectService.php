@@ -3,13 +3,19 @@
 namespace App\Services;
 
 use App\Models\Project;
-use App\Models\ProjectUser;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class ProjectService
 {
+    protected $projectUserService;
+
+    public function __construct(ProjectUserService $projectUserService)
+    {
+        $this->projectUserService = $projectUserService;
+    }
+
     public function store(Request $request): Project
     {
         $project = new Project;
@@ -22,13 +28,8 @@ class ProjectService
         $project->description = $request->description;
         $project->save();
 
-        $team = $request->team;
-
-        foreach ($team as $user) {
-            $projectUser = new ProjectUser;
-            $projectUser->project_id = $project->id;
-            $projectUser->user_id = $user;
-            $projectUser->save();
+        foreach ($request->team as $userId) {
+            $this->projectUserService->store($project->id, $userId);
         }
 
         return $project;
@@ -49,15 +50,10 @@ class ProjectService
 
         $project = Project::find($project->id);
 
-        ProjectUser::where('project_id', $project->id)->delete();
+        $this->projectUserService->refresh($project->id);
 
-        $team = $request->team;
-
-        foreach ($team as $user) {
-            $projectUser = new ProjectUser;
-            $projectUser->project_id = $project->id;
-            $projectUser->user_id = $user;
-            $projectUser->save();
+        foreach ($request->team as $userId) {
+            $this->projectUserService->store($project->id, $userId);
         }
 
         return $project;
