@@ -41,7 +41,7 @@
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">
-    <!-- Sidebar -->
+    <!-- Header -->
     @include('site.header')
 
     <!-- Sidebar -->

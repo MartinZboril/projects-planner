@@ -48,6 +48,8 @@
 @include('tasks.forms.pause', ['id' => 'stop-working-on-task-form', 'task' => $task, 'action' => 1, 'redirect' => 'projects'])    
 @include('tasks.forms.pause', ['id' => 'resume-working-on-task-form', 'task' => $task, 'action' => 0, 'redirect' => 'projects'])    
 
+@endsection
+
 @section('scripts')
     <script src="{{ asset('plugins/toastr/toastr.min.js' ) }}"></script>
 
