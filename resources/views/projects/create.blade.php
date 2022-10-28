@@ -29,9 +29,9 @@
                                     @enderror
                                 </div>
                                 <div class="form-group required">
-                                    <label for="client_id" class="control-label">Client</label>
-                                    <select class="form-control client-select @error('client_id') is-invalid @enderror" name="client_id" id="client_id" style="width: 100%;">
-                                        <option disabled selected value>Choose client</option>
+                                    <label for="client-id" class="control-label">Client</label>
+                                    <select class="form-control @error('client_id') is-invalid @enderror" name="client_id" id="client-id" style="width: 100%;">
+                                        <option disabled selected value>select client</option>
                                         @foreach($clients as $client)
                                             <option value="{{ $client->id }}" @if(old('client_id') == $client->id) selected @endif>{{ $client->name }}</option>
                                         @endforeach
@@ -42,7 +42,7 @@
                                 </div>
                                 <div class="form-group required">
                                     <label for="team" class="control-label">Team</label>
-                                    <select class="form-control team-select @error('team') is-invalid @enderror" name="team[]" multiple="multiple" id="team" style="width: 100%;">
+                                    <select class="form-control @error('team') is-invalid @enderror" name="team[]" multiple="multiple" id="team" style="width: 100%;">
                                         @foreach($users as $user)
                                             <option value="{{ $user->id }}"
                                             @if(old('team')) 
@@ -112,15 +112,16 @@
   </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
+    <!-- Custom -->
     <script>
         $(document).ready(function() {
-            $('.client-select').select2({
+            $('#client-id').select2({
                 theme: 'bootstrap4',
                 placeholder: 'select client'
             });
 
-            $('.team-select').select2({
+            $('#team').select2({
                 theme: 'bootstrap4',
                 placeholder: 'select member'
             });
@@ -128,4 +129,4 @@
             $('#description').summernote();
         });
     </script>
-@endsection
+@endpush

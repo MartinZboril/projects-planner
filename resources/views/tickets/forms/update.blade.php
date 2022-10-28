@@ -15,9 +15,9 @@
                     </div>
                     @if($type == 'ticket')            
                         <div class="form-group required">
-                            <label for="project_id" class="control-label">Project</label>
-                            <select class="form-control project-select @error('project_id') is-invalid @enderror" name="project_id" id="project_id" style="width: 100%;">
-                                <option disabled selected value>Choose project</option>
+                            <label for="project-id" class="control-label">Project</label>
+                            <select class="form-control @error('project_id') is-invalid @enderror" name="project_id" id="project-id" style="width: 100%;">
+                                <option disabled selected value>select project</option>
                                 @foreach($projects as $project)
                                     <option value="{{ $project->id }}" @if(old('project_id', $ticket->project_id) == $project->id) selected @endif>{{ $project->name }}</option>
                                 @endforeach
@@ -27,9 +27,9 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="assignee_id">Assignee</label>
-                            <select class="form-control assignee-select @error('assignee_id') is-invalid @enderror" name="assignee_id" id="assignee_id" style="width: 100%;">
-                                <option disabled selected value>Choose assignee</option>
+                            <label for="assignee-id">Assignee</label>
+                            <select class="form-control @error('assignee_id') is-invalid @enderror" name="assignee_id" id="assignee-id" style="width: 100%;">
+                                <option disabled selected value>select assignee</option>
                                 @foreach($users as $user)
                                     <option value="{{ $user->id }}" @if(old('assignee_id', $ticket->assignee_id) == $user->id) selected @endif>{{ $user->name }} {{ $user->surname }}</option>
                                 @endforeach
@@ -41,9 +41,9 @@
                     @else
                         <input type="hidden" name="project_id" value="{{ old('project_id', $project->id) }}">
                         <div class="form-group">
-                            <label for="assignee_id">Assignee</label>
-                            <select class="form-control assignee-select @error('assignee_id') is-invalid @enderror" name="assignee_id" id="assignee_id" style="width: 100%;">
-                                <option disabled selected value>Choose assignee</option>
+                            <label for="assignee-id">Assignee</label>
+                            <select class="form-control @error('assignee_id') is-invalid @enderror" name="assignee_id" id="assignee-id" style="width: 100%;">
+                                <option disabled selected value>select assignee</option>
                                 @foreach($project->team as $user)
                                     <option value="{{ $user->id }}" @if(old('assignee_id', $ticket->assignee_id) == $user->id) selected @endif>{{ $user->name }} {{ $user->surname }}</option>
                                 @endforeach
@@ -55,8 +55,8 @@
                     @endif
                     <div class="form-group required">
                         <label for="status" class="control-label">Status</label>
-                        <select class="form-control status-select @error('status') is-invalid @enderror" name="status" id="status" style="width: 100%;">
-                            <option disabled selected value>Choose status</option>
+                        <select class="form-control @error('status') is-invalid @enderror" name="status" id="status" style="width: 100%;">
+                            <option disabled selected value>select status</option>
                             <option value="1" @if(old('status', $ticket->status) == '1') selected @endif>Open</option>
                             <option value="2" @if(old('status', $ticket->status) == '2') selected @endif>Closed</option>
                             <option value="3" @if(old('status', $ticket->status) == '3') selected @endif>Archived</option>
@@ -67,8 +67,8 @@
                     </div>
                     <div class="form-group required">
                         <label for="type" class="control-label">Type</label>
-                        <select class="form-control type-select @error('type') is-invalid @enderror" name="type" id="type" style="width: 100%;">
-                            <option disabled selected value>Choose type</option>
+                        <select class="form-control @error('type') is-invalid @enderror" name="type" id="type" style="width: 100%;">
+                            <option disabled selected value>select type</option>
                             <option value="1" @if(old('type', $ticket->type) == '1') selected @endif>Error</option>
                             <option value="2" @if(old('type', $ticket->type) == '2') selected @endif>Inovation</option>
                             <option value="3" @if(old('type', $ticket->type) == '3') selected @endif>Help</option>
@@ -80,8 +80,8 @@
                     </div>
                     <div class="form-group required">
                         <label for="priority" class="control-label">Priority</label>
-                        <select class="form-control priority-select @error('priority') is-invalid @enderror" name="priority" id="priority" style="width: 100%;">
-                            <option disabled selected value>Choose priority</option>
+                        <select class="form-control @error('priority') is-invalid @enderror" name="priority" id="priority" style="width: 100%;">
+                            <option disabled selected value>select priority</option>
                             <option value="1" @if(old('priority', $ticket->priority) == '1') selected @endif>Low</option>
                             <option value="2" @if(old('priority', $ticket->priority) == '2') selected @endif>Medium</option>
                             <option value="3" @if(old('priority', $ticket->priority) == '3') selected @endif>High</option>

@@ -15,9 +15,9 @@
                     </div>
                     @if($type == 'task')            
                         <div class="form-group required">
-                            <label for="project_id" class="control-label">Project</label>
-                            <select class="form-control project-select @error('project_id') is-invalid @enderror" name="project_id" id="project_id" style="width: 100%;">
-                                <option disabled selected value>Choose project</option>
+                            <label for="project-id" class="control-label">Project</label>
+                            <select class="form-control @error('project_id') is-invalid @enderror" name="project_id" id="project-id" style="width: 100%;">
+                                <option disabled selected value>select project</option>
                                 @foreach($projects as $project)
                                     <option value="{{ $project->id }}" @if(old('project_id', $task->project_id) == $project->id) selected @endif>{{ $project->name }}</option>
                                 @endforeach
@@ -27,9 +27,9 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="milestone_id">Milestone</label>
-                            <select class="form-control milestone-select @error('milestone_id') is-invalid @enderror" name="milestone_id" id="milestone_id" style="width: 100%;">
-                                <option disabled selected value>Choose project</option>
+                            <label for="milestone-id">Milestone</label>
+                            <select class="form-control @error('milestone_id') is-invalid @enderror" name="milestone_id" id="milestone-id" style="width: 100%;">
+                                <option disabled selected value>select project</option>
                                 @if($task->project)
                                     @foreach($task->project->milestones as $milestone)
                                         <option value="{{ $milestone->id }}" @if(old('milestone_id', $task->milestone_id) == $milestone->id) selected @endif>{{ $milestone->name }}</option>
@@ -43,9 +43,9 @@
                     @else
                         <input type="hidden" name="project_id" value="{{ $project->id }}">
                         <div class="form-group">
-                            <label for="milestone_id">Milestone</label>
-                            <select class="form-control milestone-select @error('milestone_id') is-invalid @enderror" name="milestone_id" id="milestone_id" style="width: 100%;">
-                                <option disabled selected value>Choose project</option>
+                            <label for="milestone-id">Milestone</label>
+                            <select class="form-control @error('milestone_id') is-invalid @enderror" name="milestone_id" id="milestone-id" style="width: 100%;">
+                                <option disabled selected value>select project</option>
                                 @if($task->project)
                                     @foreach($task->project->milestones as $milestone)
                                         <option value="{{ $milestone->id }}" @if(old('milestone_id', $task->milestone_id) == $milestone->id) selected @endif>{{ $milestone->name }}</option>
@@ -58,9 +58,9 @@
                         </div>
                     @endif
                     <div class="form-group required">
-                        <label for="user_id" class="control-label">User</label>
-                        <select class="form-control user-select @error('user_id') is-invalid @enderror" name="user_id" id="user_id" style="width: 100%;">
-                            <option disabled selected value>Choose user</option>
+                        <label for="user-id" class="control-label">User</label>
+                        <select class="form-control @error('user_id') is-invalid @enderror" name="user_id" id="user-id" style="width: 100%;">
+                            <option disabled selected value>select user</option>
                             @foreach($users as $user)
                                 <option value="{{ $user->id }}" @if(old('user_id', $task->user_id) == $user->id) selected @endif>{{ $user->name }} {{ $user->surname }}</option>
                             @endforeach

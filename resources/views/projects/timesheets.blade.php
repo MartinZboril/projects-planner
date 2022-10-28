@@ -50,8 +50,9 @@
             <div class="card card-primary card-outline rounded-0">
                 <div class="card-header"><a href="{{ route('timers.create', ['project' => $project->id]) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
                 <div class="card-body">
-                    <input type="hidden" id="timesheetform-message" value="{{ Session::get('message') }}">
-                    <input type="hidden" id="timesheetform-message-type" value="{{ Session::get('type') }}">
+                    <input type="hidden" id="message-content" value="{{ Session::get('message') }}">
+                    <input type="hidden" id="message-type" value="{{ Session::get('type') }}">
+                    
                     <div class="table-responsive">
                         <table id="{{ count($project->timers) > 0 ? 'timesheets-table' : '' }}" class="table table-bordered table-striped">
                             <thead>
@@ -109,7 +110,7 @@
 
 @endsection
 
-@section('scripts')
+@push('scripts')
     <!-- DataTables -->
     <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -123,23 +124,14 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    <!-- Toastr -->
     <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
-
+    <script src="{{ asset('js/toastr.js') }}"></script>
+    <!-- Custom -->
     <script>
         $(function () {
             $("#timesheets-table").DataTable();
-
-            if($('#timesheetform-message').val()) {
-                if($('#timesheetform-message-type').val() == "success") {
-                    toastr.success($('#timesheetform-message').val());
-                } else if($('#timesheetform-message-type').val() == "info") {
-                    toastr.info($('#timesheetform-message').val());
-                } else {
-                    toastr.error($('#timesheetform-message').val());            
-                }
-            }; 
-
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
-@endsection
+@endpush

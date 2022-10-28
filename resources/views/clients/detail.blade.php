@@ -19,8 +19,8 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <input type="hidden" id="clientform-message" value="{{ Session::get('message') }}">
-            <input type="hidden" id="clientform-message-type" value="{{ Session::get('type') }}">
+            <input type="hidden" id="message-content" value="{{ Session::get('message') }}">
+            <input type="hidden" id="message-type" value="{{ Session::get('type') }}">
 
             <div class="row">
                 <div class="col-md-5">
@@ -84,20 +84,8 @@
   </div>
 @endsection
 
-@section('scripts')
-    <script src="{{ asset('plugins/toastr/toastr.min.js' ) }}"></script>
-
-    <script>
-        $(function () {
-            if($('#clientform-message').val()) {
-                if($('#clientform-message-type').val() == "success") {
-                    toastr.success($('#clientform-message').val());
-                } else if($('#clientform-message-type').val() == "info") {
-                    toastr.info($('#clientform-message').val());
-                } else {
-                    toastr.error($('#clientform-message').val());            
-                }
-            }; 
-        });
-    </script>
-@endsection
+@push('scripts')
+    <!-- Toastr -->
+    <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
+    <script src="{{ asset('js/toastr.js') }}"></script>
+@endpush

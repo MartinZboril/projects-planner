@@ -24,8 +24,8 @@
         <div class="container-fluid">
             <div class="card card-primary card-outline rounded-0">
                 <div class="card-body">
-                    <input type="hidden" id="projectform-message" value="{{ Session::get('message') }}">
-                    <input type="hidden" id="projectform-message-type" value="{{ Session::get('type') }}">
+                    <input type="hidden" id="message-content" value="{{ Session::get('message') }}">
+                    <input type="hidden" id="message-type" value="{{ Session::get('type') }}">
 
                     <div class="table-responsive">
                         <table id="{{ count($projects) > 0 ? 'projects-table' : '' }}" class="table table-bordered table-striped">
@@ -71,7 +71,7 @@
   </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <!-- DataTables -->
     <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -85,23 +85,14 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    <!-- Toastr -->
     <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
-
+    <script src="{{ asset('js/toastr.js') }}"></script>
+    <!-- Custom -->
     <script>
         $(function () {
             $("#projects-table").DataTable();
-
-            if($('#projectform-message').val()) {
-                if($('#projectform-message-type').val() == "success") {
-                    toastr.success($('#projectform-message').val());
-                } else if($('#projectform-message-type').val() == "info") {
-                    toastr.info($('#projectform-message').val());
-                } else {
-                    toastr.error($('#projectform-message').val());            
-                }
-            }; 
-
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
-@endsection
+@endpush

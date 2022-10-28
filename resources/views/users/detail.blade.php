@@ -22,8 +22,8 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <input type="hidden" id="userform-message" value="{{ Session::get('message') }}">
-            <input type="hidden" id="userform-message-type" value="{{ Session::get('type') }}">
+            <input type="hidden" id="message-content" value="{{ Session::get('message') }}">
+            <input type="hidden" id="message-type" value="{{ Session::get('type') }}">
 
             <div class="row">
                 <div class="col-md-4">
@@ -132,7 +132,7 @@
   </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <!-- DataTables -->
     <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -146,21 +146,13 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    <!-- Toastr -->
     <script src="{{ asset('plugins/toastr/toastr.min.js' ) }}"></script>
-
+    <script src="{{ asset('js/toastr.js') }}"></script>
+    <!-- Custom -->
     <script>
         $(function () {
             $("#rates-table").DataTable();
-
-            if($('#userform-message').val()) {
-                if($('#userform-message-type').val() == "success") {
-                    toastr.success($('#userform-message').val());
-                } else if($('#userform-message-type').val() == "info") {
-                    toastr.info($('#userform-message').val());
-                } else {
-                    toastr.error($('#userform-message').val());            
-                }
-            }; 
         });
     </script>
-@endsection
+@endpush

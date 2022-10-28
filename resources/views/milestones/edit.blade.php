@@ -30,9 +30,9 @@
                                     @enderror
                                 </div>
                                 <div class="form-group required">
-                                    <label for="owner_id" class="control-label">Owner</label>
-                                    <select class="form-control owner-select @error('owner_id') is-invalid @enderror" name="owner_id" id="owner_id" style="width: 100%;">
-                                        <option disabled selected value>Choose user</option>
+                                    <label for="owner-id" class="control-label">Owner</label>
+                                    <select class="form-control @error('owner_id') is-invalid @enderror" name="owner_id" id="owner-id" style="width: 100%;">
+                                        <option disabled selected value>select owner</option>
                                         @foreach($project->team as $user)
                                             <option value="{{ $user->id }}" @if(old('owner_id', $milestone->owner->id) == $user->id) selected @endif>{{ $user->name }} {{ $user->surname }}</option>
                                         @endforeach
@@ -92,10 +92,11 @@
   </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
+    <!-- Custom -->
     <script>
         $(document).ready(function() {
-            $('.owner-select').select2({
+            $('#owner-id').select2({
                 theme: 'bootstrap4',
                 placeholder: 'select owner'
             });
@@ -103,4 +104,4 @@
             $('#description').summernote();
         });
     </script>
-@endsection
+@endpush

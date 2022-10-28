@@ -21,30 +21,31 @@
   </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
+    <!-- Custom -->
     <script>
         $(document).ready(function() {
-            $('.project-select').select2({
+            $('#project-id').select2({
                 theme: 'bootstrap4',
                 placeholder: 'select project'
             });
 
-            $('.milestone-select').select2({
+            $('#milestone-id').select2({
                 theme: 'bootstrap4',
                 placeholder: 'select milestone'
             });
 
-            $('.assignee-select').select2({
+            $('#assignee-id').select2({
                 theme: 'bootstrap4',
                 placeholder: 'select assignee',
             });
 
-            $('.type-select').select2({
+            $('#type-id').select2({
                 theme: 'bootstrap4',
                 placeholder: 'select type'
             });
 
-            $('.priority-select').select2({
+            $('#priority-id').select2({
                 theme: 'bootstrap4',
                 placeholder: 'select priority'
             });
@@ -52,4 +53,4 @@
             $('#message').summernote();
         });
     </script>
-@endsection
+@endpush

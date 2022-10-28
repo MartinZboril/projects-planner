@@ -31,8 +31,8 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <input type="hidden" id="taskform-message" value="{{ Session::get('message') }}">
-            <input type="hidden" id="taskform-message-type" value="{{ Session::get('type') }}">
+            <input type="hidden" id="message-content" value="{{ Session::get('message') }}">
+            <input type="hidden" id="message-type" value="{{ Session::get('type') }}">
 
             @include('tasks.partials.information', ['task' => $task, 'project' => null])                    
         </div>
@@ -50,20 +50,8 @@
 
 @endsection
 
-@section('scripts')
+@push('scripts')
+    <!-- Toastr -->
     <script src="{{ asset('plugins/toastr/toastr.min.js' ) }}"></script>
-
-    <script>
-        $(function () {
-            if($('#taskform-message').val()) {
-                if($('#taskform-message-type').val() == "success") {
-                    toastr.success($('#taskform-message').val());
-                } else if($('#taskform-message-type').val() == "info") {
-                    toastr.info($('#taskform-message').val());
-                } else {
-                    toastr.error($('#taskform-message').val());            
-                }
-            }; 
-        });
-    </script>
-@endsection
+    <script src="{{ asset('js/toastr.js') }}"></script>
+@endpush

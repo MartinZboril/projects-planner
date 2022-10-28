@@ -24,7 +24,7 @@
                 <div class="row">
                     <div class="col-md-7">
                         <div class="card card-primary card-outline rounded-0">
-                            <div class="card-header">Edit timer</div>
+                            <div class="card-header">Edit rate</div>
                             <div class="card-body">
                                 <div class="form-group required">
                                     <label for="name" class="control-label">Name</label>
@@ -70,44 +70,4 @@
     </section>
     <!-- /.content -->
   </div>
-@endsection
-
-@section('scripts')
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.js"></script>
-    
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('#since-datetimepicker').datetimepicker({
-                locale: 'cs',
-                format: 'YYYY-MM-DD HH:mm',
-                icons: {
-                    time: "fas fa-clock",
-                    date: "fa fa-calendar",
-                    up: "fa fa-arrow-up",
-                    down: "fa fa-arrow-down"
-                }
-            });
-
-            $('#until-datetimepicker').datetimepicker({
-                locale: 'cs',
-                format: 'YYYY-MM-DD HH:mm',
-                useCurrent: false,
-                icons: {
-                    time: "fas fa-clock",
-                    date: "fa fa-calendar",
-                    up: "fa fa-arrow-up",
-                    down: "fa fa-arrow-down"
-                }
-            });
-
-            $("#since-datetimepicker").on("change.datetimepicker", function (e) {
-                $('#until-datetimepicker').datetimepicker('minDate', e.date);
-            });
-
-            $("#until-datetimepicker").on("change.datetimepicker", function (e) {
-                $('#since-datetimepicker').datetimepicker('maxDate', e.date);
-            });
-        });
-    </script>
 @endsection

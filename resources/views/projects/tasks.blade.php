@@ -50,8 +50,8 @@
             <div class="card card-primary card-outline rounded-0">
                 <div class="card-header"><a href="{{ route('projects.task.create', ['project' => $project->id]) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
                 <div class="card-body">
-                    <input type="hidden" id="taskform-message" value="{{ Session::get('message') }}">
-                    <input type="hidden" id="taskform-message-type" value="{{ Session::get('type') }}">
+                    <input type="hidden" id="message-content" value="{{ Session::get('message') }}">
+                    <input type="hidden" id="message-type" value="{{ Session::get('type') }}">
 
                     <div class="table-responsive">
                         <table id="{{ count($project->tasks) > 0 ? 'tasks-table' : '' }}" class="table table-bordered table-striped">
@@ -103,7 +103,7 @@
 
 @endsection
 
-@section('scripts')
+@push('scripts')
     <!-- DataTables -->
     <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -117,23 +117,14 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    <!-- Toastr -->
     <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
-
+    <script src="{{ asset('js/toastr.js') }}"></script>
+    <!-- Custom -->
     <script>
         $(function () {
             $("#tasks-table").DataTable();
-
-            if($('#taskform-message').val()) {
-                if($('#taskform-message-type').val() == "success") {
-                    toastr.success($('#taskform-message').val());
-                } else if($('#taskform-message-type').val() == "info") {
-                    toastr.info($('#taskform-message').val());
-                } else {
-                    toastr.error($('#taskform-message').val());            
-                }
-            }; 
-
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
-@endsection
+@endpush

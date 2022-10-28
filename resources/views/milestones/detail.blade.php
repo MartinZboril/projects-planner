@@ -22,8 +22,8 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <input type="hidden" id="milestoneform-message" value="{{ Session::get('message') }}">
-            <input type="hidden" id="milestoneform-message-type" value="{{ Session::get('type') }}">
+            <input type="hidden" id="message-content" value="{{ Session::get('message') }}">
+            <input type="hidden" id="message-type" value="{{ Session::get('type') }}">
 
             <div class="row">
                 <div class="col-md-5">
@@ -87,7 +87,8 @@
 </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
+    <!-- DataTables -->
     <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
@@ -100,21 +101,13 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    <!-- Toastr -->
     <script src="{{ asset('plugins/toastr/toastr.min.js' ) }}"></script>
-
+    <script src="{{ asset('js/toastr.js') }}"></script>
+    <!-- Custom -->
     <script>
         $(function () {
             $("#tasks-table").DataTable();
-
-            if($('#milestoneform-message').val()) {
-                if($('#milestoneform-message-type').val() == "success") {
-                    toastr.success($('#milestoneform-message').val());
-                } else if($('#milestoneform-message-type').val() == "info") {
-                    toastr.info($('#milestoneform-message').val());
-                } else {
-                    toastr.error($('#milestoneform-message').val());            
-                }
-            }; 
         });
     </script>
-@endsection
+@endpush

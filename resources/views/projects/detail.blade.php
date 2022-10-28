@@ -33,8 +33,8 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <input type="hidden" id="projectform-message" value="{{ Session::get('message') }}">
-            <input type="hidden" id="projectform-message-type" value="{{ Session::get('type') }}">
+            <input type="hidden" id="message-content" value="{{ Session::get('message') }}">
+            <input type="hidden" id="message-type" value="{{ Session::get('type') }}">
 
             <div class="card-header p-0 pb-2 mb-2">
                 <ul class="nav nav-pills">
@@ -120,20 +120,8 @@
 
 @endsection
 
-@section('scripts')
+@push('scripts')
+    <!-- Toastr -->
     <script src="{{ asset('plugins/toastr/toastr.min.js' ) }}"></script>
-
-    <script>
-        $(function () {
-            if($('#projectform-message').val()) {
-                if($('#projectform-message-type').val() == "success") {
-                    toastr.success($('#projectform-message').val());
-                } else if($('#projectform-message-type').val() == "info") {
-                    toastr.info($('#projectform-message').val());
-                } else {
-                    toastr.error($('#projectform-message').val());            
-                }
-            }; 
-        });
-    </script>
-@endsection
+    <script src="{{ asset('js/toastr.js') }}"></script>
+@endpush

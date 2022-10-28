@@ -24,8 +24,8 @@
         <div class="container-fluid">
             <div class="card card-primary card-outline rounded-0">
                 <div class="card-body">
-                    <input type="hidden" id="userform-message" value="{{ Session::get('message') }}">
-                    <input type="hidden" id="userform-message-type" value="{{ Session::get('type') }}">
+                    <input type="hidden" id="message-content" value="{{ Session::get('message') }}">
+                    <input type="hidden" id="message-type" value="{{ Session::get('type') }}">
 
                     <div class="table-responsive">
                         <table id="{{ count($users) > 0? 'users-table' : '' }}" class="table table-bordered table-striped">
@@ -65,7 +65,7 @@
   </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
     <!-- DataTables -->
     <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -79,21 +79,13 @@
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    <!-- Toastr -->
     <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
-
+    <script src="{{ asset('js/toastr.js') }}"></script>
+    <!-- Custom -->
     <script>
         $(function () {
             $("#users-table").DataTable();
-
-            if($('#userform-message').val()) {
-                if($('#userform-message-type').val() == "success") {
-                    toastr.success($('#userform-message').val());
-                } else if($('#userform-message-type').val() == "info") {
-                    toastr.info($('#userform-message').val());
-                } else {
-                    toastr.error($('#userform-message').val());            
-                }
-            }; 
         });
     </script>
-@endsection
+@endpush

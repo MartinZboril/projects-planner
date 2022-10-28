@@ -21,34 +21,35 @@
   </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
+    <!-- Custom -->
     <script>
         $(document).ready(function() {
-            $('#project_id').change(function() {
+            $('#project-id').change(function() {
                 var url = '{{ url('projects') }}/' + $(this).val() + '/milestones/get/';
 
                 $.get(url, function(data) {
-                    var milestoneSelect = $('#milestone_id');
+                    var milestoneSelect = $('#milestone-id');
                     milestoneSelect.empty();
+                    milestoneSelect.append('<option disabled selected value>select milestone</option>');
 
                     $.each(data,function(key, value) {
-                        milestoneSelect.append('<option disabled selected value>Choose milestone</option>');
                         milestoneSelect.append('<option value=' + value.id + '>' + value.name + '</option>');
                     });
                 });
             });
 
-            $('.project-select').select2({
+            $('#project-id').select2({
                 theme: 'bootstrap4',
                 placeholder: 'select project'
             });
 
-            $('.milestone-select').select2({
+            $('#milestone-id').select2({
                 theme: 'bootstrap4',
                 placeholder: 'select milestone'
             });
 
-            $('.user-select').select2({
+            $('#user-id').select2({
                 theme: 'bootstrap4',
                 placeholder: 'select user'
             });
@@ -56,4 +57,4 @@
             $('#description').summernote();
         });
     </script>
-@endsection
+@endpush

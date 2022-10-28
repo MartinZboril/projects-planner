@@ -51,8 +51,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group required">
-                                    <label for="rate_id" class="control-label">Rate</label>
-                                    <select class="form-control rate-select @error('rate_id') is-invalid @enderror" name="rate_id" id="rate_id" style="width: 100%;">
+                                    <label for="rate-id" class="control-label">Rate</label>
+                                    <select class="form-control @error('rate_id') is-invalid @enderror" name="rate_id" id="rate-id" style="width: 100%;">
                                         <option disabled selected value>Choose rate</option>
                                         @foreach(Auth::User()->rates as $rate)
                                             <option value="{{ $rate->id }}" @if(old('rate_id', $timer->rate_id) == $rate->id) selected @endif>{{ $rate->name }} ({{ $rate->value }})</option>
@@ -85,10 +85,11 @@
   </div>
 @endsection
 
-@section('scripts')
+@push('scripts')
+    <!-- DatePickers -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.js"></script>
-    
+    <!-- Custom -->
     <script type="text/javascript">
         $(document).ready(function(){
             $('#since-datetimepicker').datetimepicker({
@@ -122,10 +123,10 @@
                 $('#since-datetimepicker').datetimepicker('maxDate', e.date);
             });
 
-            $('.rate-select').select2({
+            $('#rate-id').select2({
                 theme: 'bootstrap4',
                 placeholder: 'select rate'
             });
         });
     </script>
-@endsection
+@endpush

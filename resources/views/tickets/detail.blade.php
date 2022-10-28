@@ -30,8 +30,8 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <input type="hidden" id="ticketform-message" value="{{ Session::get('message') }}">
-            <input type="hidden" id="ticketform-message-type" value="{{ Session::get('type') }}">
+            <input type="hidden" id="message-content" value="{{ Session::get('message') }}">
+            <input type="hidden" id="message-type" value="{{ Session::get('type') }}">
 
             @include('tickets.partials.information', ['ticket' => $ticket])                    
         </div>
@@ -48,20 +48,8 @@
 
 @endsection
 
-@section('scripts')
+@push('scripts')
+    <!-- Toastr -->
     <script src="{{ asset('plugins/toastr/toastr.min.js' ) }}"></script>
-
-    <script>
-        $(function () {
-            if($('#ticketform-message').val()) {
-                if($('#ticketform-message-type').val() == "success") {
-                    toastr.success($('#ticketform-message').val());
-                } else if($('#ticketform-message-type').val() == "info") {
-                    toastr.info($('#ticketform-message').val());
-                } else {
-                    toastr.error($('#ticketform-message').val());            
-                }
-            }; 
-        });
-    </script>
-@endsection
+    <script src="{{ asset('js/toastr.js') }}"></script>
+@endpush

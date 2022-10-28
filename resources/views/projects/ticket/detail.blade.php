@@ -48,20 +48,8 @@
 
 @endsection
 
-@section('scripts')
+@push('scripts')
+    <!-- Toastr -->
     <script src="{{ asset('plugins/toastr/toastr.min.js' ) }}"></script>
-
-    <script>
-        $(function () {
-            if($('#ticketform-message').val()) {
-                if($('#ticketform-message-type').val() == "success") {
-                    toastr.success($('#ticketform-message').val());
-                } else if($('#ticketform-message-type').val() == "info") {
-                    toastr.info($('#ticketform-message').val());
-                } else {
-                    toastr.error($('#ticketform-message').val());            
-                }
-            }; 
-        });
-    </script>
-@endsection
+    <script src="{{ asset('js/toastr.js') }}"></script>
+@endpush
