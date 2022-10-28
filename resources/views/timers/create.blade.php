@@ -2,9 +2,10 @@
 
 @section('title', __('pages.title.timer'))
 
-@section('styles')
+@push('styles')
+    <!-- Toastr -->
     <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
-@endsection
+@endpush
 
 @section('content')
 <!-- Content Wrapper. Contains page content -->

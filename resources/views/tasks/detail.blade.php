@@ -2,9 +2,10 @@
 
 @section('title', __('pages.title.task'))
 
-@section('styles')
-  <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.css') }}">
-@endsection
+@push('styles')
+    <!-- Toastr -->
+    <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.css') }}">
+@endpush
 
 @section('content')
 <!-- Content Wrapper. Contains page content -->

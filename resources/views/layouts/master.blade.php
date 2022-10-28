@@ -30,14 +30,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     
-    @yield('styles')
-
-    <style>
-      .form-group.required .control-label:after {
-          content:" *";
-          color:red;
-      }
-    </style>
+    @stack('styles')
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
   </head>
   <body class="hold-transition sidebar-mini layout-fixed">
   <div class="wrapper">

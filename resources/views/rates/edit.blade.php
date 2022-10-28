@@ -2,10 +2,6 @@
 
 @section('title', __('pages.title.rate'))
 
-@section('styles')
-    <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
-@endsection
-
 @section('content')
 <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
