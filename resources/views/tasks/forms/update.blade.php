@@ -19,7 +19,7 @@
                             <select class="form-control @error('project_id') is-invalid @enderror" name="project_id" id="project-id" style="width: 100%;">
                                 <option disabled selected value>select project</option>
                                 @foreach($projects as $project)
-                                    <option value="{{ $project->id }}" @if(old('project_id', $task->project_id) == $project->id) selected @endif>{{ $project->name }}</option>
+                                    <option value="{{ $project->id }}" @selected(old('project_id', $task->project_id) == $project->id)>{{ $project->name }}</option>
                                 @endforeach
                             </select>
                             @error('project_id')
@@ -32,7 +32,7 @@
                                 <option disabled selected value>select project</option>
                                 @if($task->project)
                                     @foreach($task->project->milestones as $milestone)
-                                        <option value="{{ $milestone->id }}" @if(old('milestone_id', $task->milestone_id) == $milestone->id) selected @endif>{{ $milestone->name }}</option>
+                                        <option value="{{ $milestone->id }}" @selected(old('milestone_id', $task->milestone_id) == $milestone->id)>{{ $milestone->name }}</option>
                                     @endforeach
                                 @endif
                             </select>
@@ -48,7 +48,7 @@
                                 <option disabled selected value>select project</option>
                                 @if($task->project)
                                     @foreach($task->project->milestones as $milestone)
-                                        <option value="{{ $milestone->id }}" @if(old('milestone_id', $task->milestone_id) == $milestone->id) selected @endif>{{ $milestone->name }}</option>
+                                        <option value="{{ $milestone->id }}" @selected(old('milestone_id', $task->milestone_id) == $milestone->id)>{{ $milestone->name }}</option>
                                     @endforeach
                                 @endif
                             </select>
@@ -62,7 +62,7 @@
                         <select class="form-control @error('user_id') is-invalid @enderror" name="user_id" id="user-id" style="width: 100%;">
                             <option disabled selected value>select user</option>
                             @foreach($users as $user)
-                                <option value="{{ $user->id }}" @if(old('user_id', $task->user_id) == $user->id) selected @endif>{{ $user->name }} {{ $user->surname }}</option>
+                                <option value="{{ $user->id }}" @selected(old('user_id', $task->user_id) == $user->id)>{{ $user->name }} {{ $user->surname }}</option>
                             @endforeach
                         </select>
                         @error('user_id')
@@ -106,6 +106,5 @@
             </div>
         </div>
     </div>   
-
     <input type="hidden" name="redirect" value="{{ $redirect }}"> 
 </form> 

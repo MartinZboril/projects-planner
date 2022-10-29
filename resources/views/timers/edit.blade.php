@@ -8,17 +8,15 @@
 @endpush
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+<div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('projects.timesheets', $project->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
     </div>
-    <!-- /.content-header -->
-
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
+            <!-- Form -->
             <form action="{{ route('timers.update', $timer->id) }}" method="post">
                 @csrf
                 @method('PATCH')
@@ -42,7 +40,7 @@
                                 <div class="form-group required">
                                     <label for="until-datetimepicker" class="control-label">Until</label>
                                     <div class="input-group date" id="until-datetimepicker" data-target-input="nearest">
-                                        <input type="text" name="until" class="form-control datetimepicker-input @error('until') is-invalid @enderror" data-target="#until-datetimepicker" value="{{ old('until', ($timer->until) ? $timer->until->format('Y-m-d H:i') : '') }}" autocomplete="off"/>
+                                        <input type="text" name="until" class="form-control datetimepicker-input @error('until') is-invalid @enderror" data-target="#until-datetimepicker" value="{{ old('until', $timer->until->format('Y-m-d H:i')) }}" autocomplete="off"/>
                                         <div class="input-group-append" data-target="#until-datetimepicker" data-toggle="datetimepicker">
                                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                                         </div>
@@ -56,7 +54,7 @@
                                     <select class="form-control @error('rate_id') is-invalid @enderror" name="rate_id" id="rate-id" style="width: 100%;">
                                         <option disabled selected value>Choose rate</option>
                                         @foreach(Auth::User()->rates as $rate)
-                                            <option value="{{ $rate->id }}" @if(old('rate_id', $timer->rate_id) == $rate->id) selected @endif>{{ $rate->name }} ({{ $rate->value }})</option>
+                                            <option value="{{ $rate->id }}" @selected(old('rate_id', $timer->rate_id) == $rate->id)>{{ $rate->name }} ({{ $rate->value }})</option>
                                         @endforeach
                                     </select>
                                     @error('rate_id')
@@ -82,8 +80,7 @@
             </form>     
         </div>
     </section>
-    <!-- /.content -->
-  </div>
+</div>
 @endsection
 
 @push('scripts')

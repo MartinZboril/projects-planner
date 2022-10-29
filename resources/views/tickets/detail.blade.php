@@ -8,9 +8,8 @@
 @endpush
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+    <!-- Content Header -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('tickets.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
         <a href="{{ route('tickets.edit', $ticket->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
@@ -26,18 +25,15 @@
             <a href="#" class="btn btn-sm btn-primary" onclick="event.preventDefault(); document.getElementById('archive-ticket-form').submit();"><i class="fas fa-archive"></i></a>
         @endif
     </div>
-    <!-- /.content-header -->
-
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <input type="hidden" id="message-content" value="{{ Session::get('message') }}">
-            <input type="hidden" id="message-type" value="{{ Session::get('type') }}">
-
+            <!-- Message -->
+            @include('site.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+            <!-- Content -->
             @include('tickets.partials.information', ['ticket' => $ticket])                    
         </div>
     </section>
-<!-- /.content -->
 </div>
 
 <!-- ticket status change forms -->

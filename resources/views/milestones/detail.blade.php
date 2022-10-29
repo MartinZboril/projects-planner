@@ -11,21 +11,18 @@
 @endpush
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+    <!-- Content Header -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('projects.milestones', $project->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
         <a href="{{ route('milestones.edit', ['project' => $project->id, 'milestone' => $milestone->id]) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
     </div>
-    <!-- /.content-header -->
-
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <input type="hidden" id="message-content" value="{{ Session::get('message') }}">
-            <input type="hidden" id="message-type" value="{{ Session::get('type') }}">
-
+            <!-- Message -->
+            @include('site.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+            <!-- Content -->
             <div class="row">
                 <div class="col-md-5">
                     <div class="card card-primary card-outline rounded-0">
@@ -51,7 +48,7 @@
                         <div class="card-header">Tasks</div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="{{ count($milestone->tasks) > 0 ? 'tasks-table' : '' }}" class="table table-bordered table-striped">
+                                <table id="@if(count($milestone->tasks) > 0){{ 'tasks-table' }}@endif" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>Name</th>
@@ -72,7 +69,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="5" class="text-center">No tasks were found!</td>
+                                                <td colspan="100%" class="text-center">No tasks were found!</td>
                                             </tr>
                                         @endforelse
                                     </tbody>
@@ -84,7 +81,6 @@
             </div>         
         </div>
     </section>
-<!-- /.content -->
 </div>
 @endsection
 

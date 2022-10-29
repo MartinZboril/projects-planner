@@ -3,19 +3,18 @@
 @section('title', __('pages.title.user'))
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+<div class="content-wrapper">
+    <!-- Content Header -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('users.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
     </div>
-    <!-- /.content-header -->
-
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
+            <!-- Form -->
             <form action="{{ route('users.store') }}" method="post">
                 @csrf
+                @method('POST')
                 <div class="row">
                     <div class="col-md-7">
                         <div class="card card-primary card-outline rounded-0">
@@ -191,6 +190,5 @@
             </form>     
         </div>
     </section>
-    <!-- /.content -->
-  </div>
+</div>
 @endsection

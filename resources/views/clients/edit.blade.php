@@ -3,17 +3,15 @@
 @section('title', __('pages.title.client'))
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+<div class="content-wrapper">
+    <!-- Content Header -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('clients.detail', $client->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
     </div>
-    <!-- /.content-header -->
-
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
+            <!-- Form -->
             <form action="{{ route('clients.update', $client->id) }}" method="post">
                 @csrf
                 @method('PATCH')
@@ -222,6 +220,5 @@
             </form>     
         </div>
     </section>
-    <!-- /.content -->
-  </div>
+</div>
 @endsection

@@ -1,5 +1,6 @@
 <form action="{{ route('tickets.store') }}" method="post">
     @csrf
+    @method('POST')
     <div class="row">
         <div class="col-md-7">
             <div class="card card-primary card-outline rounded-0">
@@ -18,7 +19,7 @@
                             <select class="form-control @error('project_id') is-invalid @enderror" name="project_id" id="project-id" style="width: 100%;">
                                 <option disabled selected value>select project</option>
                                 @foreach($projects as $project)
-                                    <option value="{{ $project->id }}" @if(old('project_id') == $project->id) selected @endif>{{ $project->name }}</option>
+                                    <option value="{{ $project->id }}" @selected(old('project_id') == $project->id)>{{ $project->name }}</option>
                                 @endforeach
                             </select>
                             @error('project_id')
@@ -30,7 +31,7 @@
                             <select class="form-control @error('assignee_id') is-invalid @enderror" name="assignee_id" id="assignee-id" style="width: 100%;">
                                 <option disabled selected value>select assignee</option>
                                 @foreach($users as $user)
-                                    <option value="{{ $user->id }}" @if(old('assignee_id') == $user->id) selected @endif>{{ $user->name }} {{ $user->surname }}</option>
+                                    <option value="{{ $user->id }}" @selected(old('assignee_id') == $user->id)>{{ $user->name }} {{ $user->surname }}</option>
                                 @endforeach
                             </select>
                             @error('assignee_id')
@@ -44,7 +45,7 @@
                             <select class="form-control @error('assignee_id') is-invalid @enderror" name="assignee_id" id="assignee-id" style="width: 100%;">
                                 <option disabled selected value>select assignee</option>
                                 @foreach($project->team as $user)
-                                    <option value="{{ $user->id }}" @if(old('assignee_id') == $user->id) selected @endif>{{ $user->name }} {{ $user->surname }}</option>
+                                    <option value="{{ $user->id }}" @selected(old('assignee_id') == $user->id)>{{ $user->name }} {{ $user->surname }}</option>
                                 @endforeach
                             </select>
                             @error('assignee_id')
@@ -56,10 +57,10 @@
                         <label for="type" class="control-label">Type</label>
                         <select class="form-control @error('type') is-invalid @enderror" name="type" id="type" style="width: 100%;">
                             <option disabled selected value>select type</option>
-                            <option value="1" @if(old('type') == '1') selected @endif>Error</option>
-                            <option value="2" @if(old('type') == '2') selected @endif>Inovation</option>
-                            <option value="3" @if(old('type') == '3') selected @endif>Help</option>
-                            <option value="4" @if(old('type') == '4') selected @endif>Other</option>
+                            <option value="1" @selected(old('type') == 1)>Error</option>
+                            <option value="2" @selected(old('type') == 2)>Inovation</option>
+                            <option value="3" @selected(old('type') == 3)>Help</option>
+                            <option value="4" @selected(old('type') == 4)>Other</option>
                         </select>
                         @error('type')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -69,10 +70,10 @@
                         <label for="priority" class="control-label">Priority</label>
                         <select class="form-control @error('priority') is-invalid @enderror" name="priority" id="priority" style="width: 100%;">
                             <option disabled selected value>select priority</option>
-                            <option value="1" @if(old('priority') == '1') selected @endif>Low</option>
-                            <option value="2" @if(old('priority') == '2') selected @endif>Medium</option>
-                            <option value="3" @if(old('priority') == '3') selected @endif>High</option>
-                            <option value="4" @if(old('priority') == '4') selected @endif>Urgent</option>
+                            <option value="1" @selected(old('priority') == 1)>Low</option>
+                            <option value="2" @selected(old('priority') == 2)>Medium</option>
+                            <option value="3" @selected(old('priority') == 3)>High</option>
+                            <option value="4" @selected(old('priority') == 4)>Urgent</option>
                         </select>
                         @error('priority')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -108,6 +109,5 @@
             </div>
         </div>
     </div>
-    
     <input type="hidden" name="redirect" value="{{ $redirect }}">
 </form>         

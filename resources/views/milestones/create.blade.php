@@ -3,19 +3,18 @@
 @section('title', __('pages.title.milestone'))
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+<div class="content-wrapper">
+    <!-- Content Header -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('projects.milestones', $project->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
     </div>
-    <!-- /.content-header -->
-
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
+            <!-- Form -->
             <form action="{{ route('milestones.store') }}" method="post">
                 @csrf
+                @method('POST')
                 <div class="row">
                     <div class="col-md-7">
                         <div class="card card-primary card-outline rounded-0">
@@ -33,7 +32,7 @@
                                     <select class="form-control @error('owner_id') is-invalid @enderror" name="owner_id" id="owner-id" style="width: 100%;">
                                         <option disabled selected value>select owner</option>
                                         @foreach($project->team as $user)
-                                            <option value="{{ $user->id }}" @if(old('owner_id') == $user->id) selected @endif>{{ $user->name }} {{ $user->surname }}</option>
+                                            <option value="{{ $user->id }}" @selected(old('owner_id') == $user->id)>{{ $user->name }} {{ $user->surname }}</option>
                                         @endforeach
                                     </select>
                                     @error('owner_id')
@@ -83,14 +82,12 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                                                                                                
+                </div>                                                                                            
                 <input type="hidden" name="project_id" value="{{ $project->id }}">                  
             </form>     
         </div>
     </section>
-    <!-- /.content -->
-  </div>
+</div>
 @endsection
 
 @push('scripts')

@@ -12,7 +12,7 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <a href="{{ route('home') }}" class="nav-link {{ (request()->is('/')) ? 'active' : '' }}">
+                    <a href="{{ route('home') }}" class="nav-link @if(request()->is('/')){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-home"></i>
                         <p>
                             Home
@@ -20,7 +20,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('clients.index') }}" class="nav-link {{ (str_contains(url()->current(), 'clients')) ? 'active' : '' }}">
+                    <a href="{{ route('clients.index') }}" class="nav-link @if(str_contains(url()->current(), 'clients')){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-address-book"></i>
                         <p>
                             Clients
@@ -28,7 +28,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('projects.index') }}" class="nav-link {{ (str_contains(url()->current(), 'projects')) ? 'active' : '' }}">
+                    <a href="{{ route('projects.index') }}" class="nav-link @if(str_contains(url()->current(), 'projects')){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-clock"></i>
                         <p>
                             Projects
@@ -36,7 +36,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('tasks.index') }}" class="nav-link {{ (str_contains(url()->current(), 'tasks') && !str_contains(url()->current(), 'projects')) ? 'active' : '' }}">
+                    <a href="{{ route('tasks.index') }}" class="nav-link @if(str_contains(url()->current(), 'tasks') && !str_contains(url()->current(), 'projects')){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-tasks"></i>
                         <p>
                             Tasks
@@ -44,7 +44,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('tickets.index') }}" class="nav-link {{ (str_contains(url()->current(), 'tickets') && !str_contains(url()->current(), 'projects')) ? 'active' : '' }}">
+                    <a href="{{ route('tickets.index') }}" class="nav-link @if(str_contains(url()->current(), 'tickets') && !str_contains(url()->current(), 'projects')){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-bug"></i>
                         <p>
                             Tickets
@@ -52,7 +52,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('users.index') }}" class="nav-link {{ (str_contains(url()->current(), 'users')) ? 'active' : '' }}">
+                    <a href="{{ route('users.index') }}" class="nav-link @if(str_contains(url()->current(), 'users')){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-users"></i>
                         <p>
                             Users
@@ -69,7 +69,5 @@
                 </li>
             </ul>
         </nav>
-        <!-- /.sidebar-menu -->
     </div>
-    <!-- /.sidebar -->
 </aside>

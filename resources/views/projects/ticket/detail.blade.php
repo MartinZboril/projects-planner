@@ -8,9 +8,8 @@
 @endpush
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+    <!-- Content Header -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('projects.tickets', $project->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
         <a href="{{ route('projects.ticket.edit', ['project' => $project->id, 'ticket' => $ticket->id]) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
@@ -26,25 +25,22 @@
             <a href="#" class="btn btn-sm btn-primary" onclick="event.preventDefault(); document.getElementById('archive-ticket-form').submit();"><i class="fas fa-archive"></i></a>
         @endif
     </div>
-    <!-- /.content-header -->
-
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <input type="hidden" id="ticketform-message" value="{{ Session::get('message') }}">
-            <input type="hidden" id="ticketform-message-type" value="{{ Session::get('type') }}">
-
+            <!-- Message -->
+            @include('site.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+            <!-- Content -->
             @include('tickets.partials.information', ['ticket' => $ticket])                            
         </div>
     </section>
-<!-- /.content -->
 </div>
 
-<!-- ticket status change forms -->
+<!-- Ticket status change forms -->
 @include('tickets.forms.change', ['id' => 'open-ticket-form', 'ticket' => $ticket, 'status' => 1, 'redirect' => 'projects'])    
 @include('tickets.forms.change', ['id' => 'close-ticket-form', 'ticket' => $ticket, 'status' => 2, 'redirect' => 'projects'])    
 @include('tickets.forms.change', ['id' => 'archive-ticket-form', 'ticket' => $ticket, 'status' => 3, 'redirect' => 'projects'])    
-<!-- convert ticket to task form -->
+<!-- Convert ticket to task form -->
 @include('tickets.forms.convert', ['id' => 'convert-ticket-to-task-form', 'ticket' => $ticket, 'redirect' => 'projects']) 
 
 @endsection

@@ -3,17 +3,15 @@
 @section('title', __('pages.title.milestone'))
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+<div class="content-wrapper">
+    <!-- Content Header -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('milestones.detail', ['project' => $project->id, 'milestone' => $milestone->id]) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
     </div>
-    <!-- /.content-header -->
-
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
+            <!-- Form -->
             <form action="{{ route('milestones.update', $milestone->id) }}" method="post">
                 @csrf
                 @method('PATCH')
@@ -34,7 +32,7 @@
                                     <select class="form-control @error('owner_id') is-invalid @enderror" name="owner_id" id="owner-id" style="width: 100%;">
                                         <option disabled selected value>select owner</option>
                                         @foreach($project->team as $user)
-                                            <option value="{{ $user->id }}" @if(old('owner_id', $milestone->owner->id) == $user->id) selected @endif>{{ $user->name }} {{ $user->surname }}</option>
+                                            <option value="{{ $user->id }}" @selected(old('owner_id', $milestone->owner_id) == $user->id)>{{ $user->name }} {{ $user->surname }}</option>
                                         @endforeach
                                     </select>
                                     @error('owner_id')
@@ -88,8 +86,7 @@
             </form>     
         </div>
     </section>
-    <!-- /.content -->
-  </div>
+</div>
 @endsection
 
 @push('scripts')

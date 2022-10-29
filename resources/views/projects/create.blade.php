@@ -3,19 +3,18 @@
 @section('title', __('pages.title.project'))
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+<div class="content-wrapper">
+    <!-- Content Header -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('projects.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
     </div>
-    <!-- /.content-header -->
-
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
+            <!-- Form -->
             <form action="{{ route('projects.store') }}" method="post">
                 @csrf
+                @method('POST')
                 <div class="row">
                     <div class="col-md-7">
                         <div class="card card-primary card-outline rounded-0">
@@ -33,7 +32,7 @@
                                     <select class="form-control @error('client_id') is-invalid @enderror" name="client_id" id="client-id" style="width: 100%;">
                                         <option disabled selected value>select client</option>
                                         @foreach($clients as $client)
-                                            <option value="{{ $client->id }}" @if(old('client_id') == $client->id) selected @endif>{{ $client->name }}</option>
+                                            <option value="{{ $client->id }}" @selected(old('client_id) == $client->id)>{{ $client->name }}</option>
                                         @endforeach
                                     </select>
                                     @error('client_id')
@@ -46,7 +45,7 @@
                                         @foreach($users as $user)
                                             <option value="{{ $user->id }}"
                                             @if(old('team')) 
-                                                @foreach(old('team') as $formUser) @if($formUser == $user->id) selected @endif @endforeach
+                                                @foreach(old('team') as $formUser) @selected($formUser == $user->id) @endforeach
                                             @endif>{{ $user->name }} {{ $user->surname }}</option>
                                         @endforeach
                                     </select>
@@ -108,8 +107,7 @@
             </form>     
         </div>
     </section>
-    <!-- /.content -->
-  </div>
+</div>
 @endsection
 
 @push('scripts')

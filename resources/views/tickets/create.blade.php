@@ -3,22 +3,19 @@
 @section('title', __('pages.title.ticket'))
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+<div class="content-wrapper">
+    <!-- Content Header -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('tickets.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
     </div>
-    <!-- /.content-header -->
-
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
+            <!-- Form -->
             @include('tickets.forms.store', ['type' => 'ticket', 'projects' => $projects, 'redirect' => 'tickets'])
         </div>
     </section>
-    <!-- /.content -->
-  </div>
+</div>
 @endsection
 
 @push('scripts')
@@ -41,12 +38,12 @@
                 allowClear: true
             });
 
-            $('#type-id').select2({
+            $('#type').select2({
                 theme: 'bootstrap4',
                 placeholder: 'select type'
             });
 
-            $('#priority-id').select2({
+            $('#priority').select2({
                 theme: 'bootstrap4',
                 placeholder: 'select priority'
             });

@@ -8,21 +8,18 @@
 @endpush
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+<div class="content-wrapper">
+    <!-- Content Header -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('clients.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
         <a href="{{ route('clients.edit', $client->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
     </div>
-    <!-- /.content-header -->
-
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <input type="hidden" id="message-content" value="{{ Session::get('message') }}">
-            <input type="hidden" id="message-type" value="{{ Session::get('type') }}">
-
+            <!-- Message -->
+            @include('site.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+            <!-- Content -->
             <div class="row">
                 <div class="col-md-5">
                     <div class="card card-primary card-outline rounded-0">
@@ -81,8 +78,7 @@
             </div>         
         </div>
     </section>
-    <!-- /.content -->
-  </div>
+</div>
 @endsection
 
 @push('scripts')

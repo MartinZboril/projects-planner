@@ -22,7 +22,7 @@
                     </div>
                     <div class="form-group">
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" name="is_finished" class="custom-control-input @error('is_finished') is-invalid @enderror" id="is-finished" value="1">
+                            <input type="checkbox" name="is_finished" class="custom-control-input @error('is_finished') is-invalid @enderror" id="is-finished" value="1" @checked(old('is_finished', $todo->is_finished))>
                             <label class="custom-control-label" for="is-finished">Finished</label>
                         </div>
                         @error('is_finished')
@@ -51,8 +51,7 @@
                 </div>
             </div>
         </div>
-    </div> 
-                                  
+    </div>                                   
     <input type="hidden" name="redirect" value="{{ $redirect }}">           
     <input type="hidden" name="task_id" value="{{ $task->id }}">         
 </form> 

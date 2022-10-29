@@ -3,17 +3,15 @@
 @section('title', __('pages.title.rate'))
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+<div class="content-wrapper">
+    <!-- Content Header -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('users.detail', $user->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
     </div>
-    <!-- /.content-header -->
-
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
+            <!-- Form -->
             <form action="{{ route('rates.update', $rate->id) }}" method="post">
                 @csrf
                 @method('PATCH')
@@ -31,7 +29,7 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="custom-control custom-switch">
-                                        <input type="checkbox" name="is_active" class="custom-control-input @error('is_active') is-invalid @enderror" id="is-active" value="1" {{ (old('is_active', $rate->is_active)) ? 'checked' : '' }}>
+                                        <input type="checkbox" name="is_active" class="custom-control-input @error('is_active') is-invalid @enderror" id="is-active" value="1" @checked(old('is_active', $rate->is_active))>
                                         <label class="custom-control-label" for="is-active">Active</label>
                                     </div>
                                     @error('is_active')
@@ -64,6 +62,5 @@
             </form>     
         </div>
     </section>
-    <!-- /.content -->
-  </div>
+</div>
 @endsection

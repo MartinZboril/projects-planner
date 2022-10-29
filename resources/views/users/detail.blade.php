@@ -11,21 +11,18 @@
 @endpush
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+<div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('users.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
     </div>
-    <!-- /.content-header -->
-
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <input type="hidden" id="message-content" value="{{ Session::get('message') }}">
-            <input type="hidden" id="message-type" value="{{ Session::get('type') }}">
-
+            <!-- Message -->
+            @include('site.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+            <!-- Content -->
             <div class="row">
                 <div class="col-md-4">
                     <div class="card card-primary card-outline rounded-0">
@@ -91,7 +88,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="{{ count($user->rates) > 0 ? 'rates-table' : '' }}" class="table table-bordered table-striped">
+                                <table id="@if(count($user->rates) > 0){{ 'rates-table' }}@endif" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>Rate</th>
@@ -112,7 +109,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="4" class="text-center">No rates were found!</td>
+                                                <td colspan="100%" class="text-center">No rates were found!</td>
                                             </tr>
                                         @endforelse
                                     </tbody>

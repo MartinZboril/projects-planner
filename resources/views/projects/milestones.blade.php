@@ -11,9 +11,8 @@
 @endpush
 
 @section('content')
-<!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+    <!-- Content Header -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('projects.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
         <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
@@ -32,30 +31,20 @@
             </div>
         @endif
     </div>
-    <!-- /.content-header -->
-
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
             <div class="card-header p-0 pb-2 mb-2">
-                <ul class="nav nav-pills">
-                    <li class="nav-item"><a class="nav-link" href="{{ route('projects.detail', $project->id) }}">Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('projects.tasks', $project->id) }}">Tasks</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('projects.kanban', $project->id) }}">Kanban</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="{{ route('projects.milestones', $project->id) }}">Milestones</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('projects.timesheets', $project->id) }}">Timesheets</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('projects.tickets', $project->id) }}">Tickets</a></li>
-                </ul>
+                @include('projects.partials.header', ['active' => 'milestone'])
             </div>
-
             <div class="card card-primary card-outline rounded-0">
                 <div class="card-header"><a href="{{ route('milestones.create', ['project' => $project->id]) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
                 <div class="card-body">
-                    <input type="hidden" id="message-content" value="{{ Session::get('message') }}">
-                    <input type="hidden" id="message-type" value="{{ Session::get('type') }}">
-                    
+                    <!-- Message -->
+                    @include('site.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                    <!-- Content -->
                     <div class="table-responsive">
-                        <table id="{{ count($project->milestones) > 0 ? 'milestones-table' : '' }}" class="table table-bordered table-striped">
+                        <table id="@if(count($project->milestones) > 0){{ 'milestones-table' }}@endif" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -86,7 +75,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center">No milestones were found!</td>
+                                        <td colspan="100%" class="text-center">No milestones were found!</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -96,16 +85,9 @@
             </div>
         </div>
     </section>
-    <!-- /.content -->
 </div>
 
-@foreach (Auth::User()->rates as $rate)
-    @include('timers.forms.start', ['id' => 'start-working-on-project-with-rate-' . $rate->id, 'projectId' => $project->id, 'rateId' => $rate->id])            
-@endforeach
-
-@if(Auth::User()->activeTimers->contains('project_id', $project->id))
-    @include('timers.forms.stop', ['id' => 'stop-working-on-project', 'timerId' => Auth::User()->activeTimers->firstWhere('project_id', $project->id)->id])            
-@endif
+@include('projects.partials.timers')
 
 @endsection
 

@@ -1,5 +1,6 @@
 <form action="{{ route('todos.store') }}" method="post">
     @csrf
+    @method('POST')
     <div class="row">
         <div class="col-md-7">
             <div class="card card-primary card-outline rounded-0">
@@ -41,8 +42,7 @@
                 </div>
             </div>
         </div>
-    </div> 
-                                                    
+    </div>                                                     
     <input type="hidden" name="redirect" value="{{ $redirect }}">           
     <input type="hidden" name="task_id" value="{{ $task->id }}">           
 </form>
