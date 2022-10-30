@@ -5,8 +5,7 @@ namespace App\Services;
 use App\Models\Timer;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\{Auth, Session};
 
 class TimerService
 {

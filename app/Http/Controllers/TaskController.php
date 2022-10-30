@@ -3,9 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Task\{ChangeTaskRequest, StoreTaskRequest, PauseTaskRequest, UpdateTaskRequest};
-use App\Models\Task;
-use App\Models\Project;
-use App\Models\User;
+use App\Models\{Project, Task, User};
 use App\Services\TaskService;
 
 class TaskController extends Controller

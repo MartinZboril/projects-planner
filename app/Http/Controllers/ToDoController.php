@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ToDo\{CheckToDoRequest, StoreToDoRequest, UpdateToDoRequest};
-use App\Models\ToDo;
-use App\Models\Task;
+use App\Models\{Task, ToDo};
 use App\Services\ToDoService;
 
 class ToDoController extends Controller

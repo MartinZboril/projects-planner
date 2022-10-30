@@ -4,8 +4,7 @@ namespace App\Services;
 
 use App\Models\Task;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\{Auth, Session};
 
 class TaskService
 {

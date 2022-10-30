@@ -3,12 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Ticket\{ConvertTicketRequest, ChangeTicketRequest, StoreTicketRequest, UpdateTicketRequest};
-use App\Models\Ticket;
-use App\Models\Project;
-use App\Models\User;
-use App\Services\TicketService;
-use App\Services\TaskService;
-use App\Services\ProjectUserService;
+use App\Models\{Project, Ticket, User};
+use App\Services\{TaskService, TicketService, ProjectUserService};
 
 class TicketController extends Controller
 {  

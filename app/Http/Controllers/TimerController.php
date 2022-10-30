@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Timer\{StartTimerRequest, StoreTimerRequest, UpdateTimerRequest};
-use App\Models\Timer;
-use App\Models\Project;
+use App\Models\{Project, Timer};
 use App\Services\TimerService;
 use Illuminate\Support\Facades\Auth;
 

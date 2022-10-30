@@ -3,13 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Project\{StoreProjectRequest, UpdateProjectRequest};
-use App\Models\Project;
-use App\Models\Client;
-use App\Models\User;
-use App\Models\Task;
-use App\Models\Milestone;
-use App\Models\ToDo;
-use App\Models\Ticket;
+use App\Models\{Client, Milestone, Project, Task, Ticket, ToDo, User};
 use App\Services\ProjectService;
 
 class ProjectController extends Controller

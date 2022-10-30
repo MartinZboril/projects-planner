@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Rate\{StoreRateRequest, UpdateRateRequest};
-use App\Models\Rate;
-use App\Models\User;
+use App\Models\{Rate, User};
 use App\Services\RateService;
 
 class RateController extends Controller

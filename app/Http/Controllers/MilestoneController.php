@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Milestone\{LoadMilestoneRequest, StoreMilestoneRequest, UpdateMilestoneRequest};
-use App\Models\Milestone;
-use App\Models\Project;
+use App\Models\{Milestone, Project};
 use App\Services\MilestoneService;
 
 class MilestoneController extends Controller
