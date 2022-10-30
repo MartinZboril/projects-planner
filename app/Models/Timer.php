@@ -14,6 +14,14 @@ class Timer extends Model
 
     protected $dates = ['since', 'until'];
 
+    public const VALIDATION_RULES = [
+        'project_id' => ['required', 'integer', 'exists:projects,id'],
+        'user_id' => ['required', 'integer', 'exists:users,id'],
+        'rate_id' => ['required', 'integer', 'exists:rates,id'],
+        'since' => ['required', 'date_format:Y-m-d H:i'],
+        'until' => ['required', 'date_format:Y-m-d H:i', 'after:since'],
+    ];
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');

@@ -13,6 +13,18 @@ class Project extends Model
 
     protected $dates = ['start_date', 'due_date'];
 
+    public const VALIDATION_RULES = [
+        'client_id' => ['required', 'integer', 'exists:clients,id'],
+        'name' => ['required', 'string', 'max:255'],
+        'team' => ['required', 'array'],
+        'start_date' => ['required', 'date'],
+        'due_date' => ['required', 'date'],
+        'estimated_hours' => ['required', 'date'],
+        'estimated_hours' => ['required', 'integer', 'min:0'],
+        'budget' => ['required', 'integer', 'min:0'],
+        'description' => ['required', 'string', 'max:65553'],
+    ];
+
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class, 'client_id');

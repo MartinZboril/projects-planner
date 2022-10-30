@@ -13,6 +13,16 @@ class Milestone extends Model
 
     protected $dates = ['start_date', 'end_date'];
 
+    public const VALIDATION_RULES = [
+        'project_id' => ['required', 'integer', 'exists:projects,id'],
+        'owner_id' => ['required', 'integer', 'exists:users,id'],
+        'name' => ['required', 'string', 'max:255'],
+        'start_date' => ['required', 'date'],
+        'end_date' => ['required', 'date', 'after:start_date'],
+        'colour' => ['required', 'string', 'max:255'],
+        'description' => ['nullable', 'string', 'max:65553'],
+    ];
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');

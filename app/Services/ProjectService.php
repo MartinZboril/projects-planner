@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Project;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class ProjectService
@@ -16,43 +15,43 @@ class ProjectService
         $this->projectUserService = $projectUserService;
     }
 
-    public function store(Request $request): Project
+    public function store(array $fields): Project
     {
         $project = new Project;
-        $project->name = $request->name;
-        $project->client_id = $request->client_id;
-        $project->start_date = $request->start_date;
-        $project->due_date = $request->due_date;
-        $project->estimated_hours = $request->estimated_hours;
-        $project->budget = $request->budget;
-        $project->description = $request->description;
+        $project->client_id = $fields['client_id'];
+        $project->name = $fields['name'];
+        $project->start_date = $fields['start_date'];
+        $project->due_date = $fields['due_date'];
+        $project->estimated_hours = $fields['estimated_hours'];
+        $project->budget = $fields['budget'];
+        $project->description = $fields['description'];
         $project->save();
 
-        foreach ($request->team as $userId) {
+        foreach ($fields['team'] as $userId) {
             $this->projectUserService->store($project->id, $userId);
         }
 
         return $project;
     }
 
-    public function update(Project $project, Request $request): Project
+    public function update(Project $project, array $fields): Project
     {
         Project::where('id', $project->id)
                     ->update([
-                        'name' => $request->name,
-                        'client_id' => $request->client_id,
-                        'start_date' => $request->start_date,
-                        'due_date' => $request->due_date,
-                        'estimated_hours' => $request->estimated_hours,
-                        'budget' => $request->budget,
-                        'description' => $request->description,
+                        'client_id' => $fields['client_id'],
+                        'name' => $fields['name'],
+                        'start_date' => $fields['start_date'],
+                        'due_date' => $fields['due_date'],
+                        'estimated_hours' => $fields['estimated_hours'],
+                        'budget' => $fields['budget'],
+                        'description' => $fields['description'],
                     ]);
 
         $project = Project::find($project->id);
 
         $this->projectUserService->refresh($project->id);
 
-        foreach ($request->team as $userId) {
+        foreach ($fields['team'] as $userId) {
             $this->projectUserService->store($project->id, $userId);
         }
 

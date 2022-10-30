@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Project\{StoreProjectRequest, UpdateProjectRequest};
 use App\Models\Project;
 use App\Models\Client;
 use App\Models\User;
@@ -10,8 +11,6 @@ use App\Models\Milestone;
 use App\Models\ToDo;
 use App\Models\Ticket;
 use App\Services\ProjectService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class ProjectController extends Controller
 {
@@ -100,34 +99,14 @@ class ProjectController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProjectRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'client_id' => ['required', 'integer', 'exists:clients,id'],
-            'team' => ['required', 'array'],
-            'due_date' => ['required', 'date'],
-            'estimated_hours' => ['required', 'date'],
-            'estimated_hours' => ['required', 'integer', 'min:0'],
-            'budget' => ['required', 'integer', 'min:0'],
-            'description' => ['required'],
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
-
-        $project = $this->projectService->store($request);
+        $fields = $request->validated();
+        $project = $this->projectService->store($fields);
         $this->projectService->flash('create');
 
-        $redirectAction = $request->create_and_close ? 'projects' : 'project';
+        $redirectAction = isset($fields['create_and_close']) ? 'projects' : 'project';
         return $this->projectService->redirect($redirectAction, $project);
     }
 
@@ -155,35 +134,14 @@ class ProjectController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Project  $project
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project)
+    public function update(UpdateProjectRequest $request, Project $project)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'client_id' => ['required', 'integer', 'exists:clients,id'],
-            'team' => ['required', 'array'],
-            'due_date' => ['required', 'date'],
-            'estimated_hours' => ['required', 'date'],
-            'estimated_hours' => ['required', 'integer', 'min:0'],
-            'budget' => ['required', 'integer', 'min:0'],
-            'description' => ['required'],
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
-
-        $project = $this->projectService->update($project, $request);
+        $fields = $request->validated();
+        $project = $this->projectService->update($project, $fields);
         $this->projectService->flash('update');
 
-        $redirectAction = $request->save_and_close ? 'projects' : 'project';
+        $redirectAction = isset($fields['save_and_close']) ? 'projects' : 'project';
         return $this->projectService->redirect($redirectAction, $project); 
     }
 

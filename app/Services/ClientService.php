@@ -4,59 +4,58 @@ namespace App\Services;
 
 use App\Models\Client;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class ClientService
 {
-    public function store(Request $request): Client
+    public function store(array $fields): Client
     {
         $client = new Client;
-        $client->name = $request->name;
-        $client->email = $request->email;
-        $client->contact_person = $request->contact_person;
-        $client->contact_email = $request->contact_email;
-        $client->mobile = $request->mobile;
-        $client->phone = $request->phone;
-        $client->street = $request->street;
-        $client->house_number = $request->house_number;
-        $client->city = $request->city;
-        $client->country = $request->country;
-        $client->zip_code = $request->zip_code;
-        $client->website = $request->website;
-        $client->skype = $request->skype;
-        $client->linekedin = $request->linekedin;
-        $client->twitter = $request->twitter;
-        $client->facebook = $request->facebook;
-        $client->instagram = $request->instagram;
-        $client->note = $request->note;
+        $client->name = $fields['name'];
+        $client->email = $fields['email'];
+        $client->contact_person = $fields['contact_person'];
+        $client->contact_email = $fields['contact_email'];
+        $client->mobile = $fields['mobile'];
+        $client->phone = $fields['phone'];
+        $client->street = $fields['street'];
+        $client->house_number = $fields['house_number'];
+        $client->city = $fields['city'];
+        $client->country = $fields['country'];
+        $client->zip_code = $fields['zip_code'];
+        $client->website = $fields['website'];
+        $client->skype = $fields['skype'];
+        $client->linekedin = $fields['linekedin'];
+        $client->twitter = $fields['twitter'];
+        $client->facebook = $fields['facebook'];
+        $client->instagram = $fields['instagram'];
+        $client->note = $fields['note'];
         $client->save();
 
         return $client;
     }
 
-    public function update(Client $client, Request $request): Client
+    public function update(Client $client, array $fields): Client
     {
         Client::where('id', $client->id)
                     ->update([
-                        'name' => $request->name,
-                        'email' => $request->email,
-                        'contact_person' => $request->contact_person,
-                        'contact_email' => $request->contact_email,
-                        'mobile' => $request->mobile,
-                        'phone' => $request->phone,
-                        'street' => $request->street,
-                        'house_number' => $request->house_number,
-                        'city' => $request->city,
-                        'country' => $request->country,
-                        'zip_code' => $request->zip_code,
-                        'website' => $request->website,
-                        'skype' => $request->skype,
-                        'linekedin' => $request->linekedin,
-                        'twitter' => $request->twitter,
-                        'facebook' => $request->facebook,
-                        'instagram' => $request->instagram,
-                        'note' => $request->note,
+                        'name' => $fields['name'],
+                        'email' => $fields['email'],
+                        'contact_person' => $fields['contact_person'],
+                        'contact_email' => $fields['contact_email'],
+                        'mobile' => $fields['mobile'],
+                        'phone' => $fields['phone'],
+                        'street' => $fields['street'],
+                        'house_number' => $fields['house_number'],
+                        'city' => $fields['city'],
+                        'country' => $fields['country'],
+                        'zip_code' => $fields['zip_code'],
+                        'website' => $fields['website'],
+                        'skype' => $fields['skype'],
+                        'linekedin' => $fields['linekedin'],
+                        'twitter' => $fields['twitter'],
+                        'facebook' => $fields['facebook'],
+                        'instagram' => $fields['instagram'],
+                        'note' => $fields['note'],
                     ]);
 
         return $client;

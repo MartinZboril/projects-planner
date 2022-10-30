@@ -4,36 +4,35 @@ namespace App\Services;
 
 use App\Models\Milestone;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class MilestoneService
 {
-    public function store(Request $request): Milestone
+    public function store(array $fields): Milestone
     {
         $milestone = new Milestone;
-        $milestone->name = $request->name;
-        $milestone->project_id = $request->project_id;
-        $milestone->owner_id = $request->owner_id;
-        $milestone->start_date = $request->start_date;
-        $milestone->end_date = $request->end_date;
-        $milestone->colour = $request->colour;
-        $milestone->description = $request->description;
+        $milestone->project_id = $fields['project_id'];
+        $milestone->owner_id = $fields['owner_id'];
+        $milestone->name = $fields['name'];
+        $milestone->start_date = $fields['start_date'];
+        $milestone->end_date = $fields['end_date'];
+        $milestone->colour = $fields['colour'];
+        $milestone->description = $fields['description'];
         $milestone->save();
 
         return $milestone;
     }
 
-    public function update(Milestone $milestone, Request $request): Milestone
+    public function update(Milestone $milestone, array $fields): Milestone
     {
         Milestone::where('id', $milestone->id)
                     ->update([
-                        'name' => $request->name,
-                        'owner_id' => $request->owner_id,
-                        'start_date' => $request->start_date,
-                        'end_date' => $request->end_date,
-                        'colour' => $request->colour,
-                        'description' => $request->description,
+                        'owner_id' => $fields['owner_id'],
+                        'name' => $fields['name'],
+                        'start_date' => $fields['start_date'],
+                        'end_date' => $fields['end_date'],
+                        'colour' => $fields['colour'],
+                        'description' => $fields['description'],
                     ]);
 
         return $milestone;

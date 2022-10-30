@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Client\{StoreClientRequest, UpdateClientRequest};
 use App\Models\Client;
 use App\Services\ClientService;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Validator;
 
 class ClientController extends Controller
 {
@@ -40,43 +38,14 @@ class ClientController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreClientRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255', 'unique:clients'],
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'contact_person' => ['string', 'nullable', 'max:255'],
-            'contact_email' => ['string', 'nullable', 'max:255'],
-            'mobile' => ['string', 'nullable', 'max:255'],
-            'phone' => ['string', 'nullable', 'max:255'],
-            'street' => ['string', 'nullable', 'max:255'],
-            'house_number' => ['string', 'nullable', 'max:255'],
-            'city' => ['string', 'nullable', 'max:255'],
-            'country' => ['string', 'nullable', 'max:255'],
-            'zip_code' => ['string', 'nullable', 'max:255'],
-            'website' => ['string', 'nullable'],
-            'skype' => ['string', 'nullable'],
-            'linekedin' => ['string', 'nullable'],
-            'twitter' => ['string', 'nullable'],
-            'facebook' => ['string', 'nullable'],
-            'instagram' => ['string', 'nullable'],
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
-
-        $client = $this->clientService->store($request);
+        $fields = $request->validated();
+        $client = $this->clientService->store($fields);
         $this->clientService->flash('create');
 
-        $redirectAction = $request->create_and_close ? 'clients' : 'client';
+        $redirectAction = isset($fields['create_and_close']) ? 'clients' : 'client';
         return $this->clientService->redirect($redirectAction, $client); 
     }
 
@@ -104,46 +73,14 @@ class ClientController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Client  $client
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Client $client)
+    public function update(UpdateClientRequest $request, Client $client)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255',
-                Rule::unique('clients')->ignore($client->id),
-            ],
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'contact_person' => ['string', 'nullable', 'max:255'],
-            'contact_email' => ['string', 'nullable', 'max:255'],
-            'mobile' => ['string', 'nullable', 'max:255'],
-            'phone' => ['string', 'nullable', 'max:255'],
-            'street' => ['string', 'nullable', 'max:255'],
-            'house_number' => ['string', 'nullable', 'max:255'],
-            'city' => ['string', 'nullable', 'max:255'],
-            'country' => ['string', 'nullable', 'max:255'],
-            'zip_code' => ['string', 'nullable', 'max:255'],
-            'website' => ['string', 'nullable'],
-            'skype' => ['string', 'nullable'],
-            'linekedin' => ['string', 'nullable'],
-            'twitter' => ['string', 'nullable'],
-            'facebook' => ['string', 'nullable'],
-            'instagram' => ['string', 'nullable'],
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
-
-        $client = $this->clientService->update($client, $request);
+        $fields = $request->validated();
+        $client = $this->clientService->update($client, $fields);
         $this->clientService->flash('update');
 
-        $redirectAction = $request->save_and_close ? 'clients' : 'client';
+        $redirectAction = isset($fields['save_and_close']) ? 'clients' : 'client';
         return $this->clientService->redirect($redirectAction, $client); 
     }
 

@@ -12,6 +12,18 @@ class Ticket extends Model
 
     protected $dates = ['due_date'];
 
+    public const VALIDATION_RULES = [
+        'project_id' => ['required', 'integer', 'exists:projects,id'],
+        'reporter_id' => ['required', 'integer', 'exists:users,id'],
+        'assignee_id' => ['nullable', 'integer', 'exists:users,id'],
+        'subject' => ['required', 'string', 'max:255'],
+        'type' => ['required', 'integer', 'in:1,2,3,4'],
+        'priority' => ['required', 'integer', 'in:1,2,3,4'],
+        'status' => ['required', 'integer', 'in:1,2,3'],
+        'due_date' => ['required', 'date'],
+        'message' => ['required', 'max:65553'],
+    ];
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');

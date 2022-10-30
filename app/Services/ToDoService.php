@@ -4,42 +4,40 @@ namespace App\Services;
 
 use App\Models\ToDo;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class ToDoService
 {
-    public function store(Request $request): ToDo
+    public function store(array $fields): ToDo
     {
         $todo = new ToDo;
-        $todo->name = $request->name;
-        $todo->task_id = $request->task_id;
-        $todo->deadline = $request->deadline;
-        $todo->description = $request->description;
+        $todo->task_id = $fields['task_id'];
+        $todo->name = $fields['name'];
+        $todo->deadline = $fields['deadline'];
+        $todo->description = $fields['description'];
         $todo->save();
 
         return $todo;
     }
 
-    public function update(ToDo $todo, Request $request): ToDo
+    public function update(ToDo $todo, array $fields): ToDo
     {
         ToDo::where('id', $todo->id)
                     ->update([
-                        'name' => $request->name,
-                        'task_id' => $request->task_id,
-                        'deadline' => $request->deadline,
-                        'is_finished' => $request->is_finished,
-                        'description' => $request->description,
+                        'name' => $fields['name'],
+                        'deadline' => $fields['deadline'],
+                        'is_finished' => isset($fields['is_finished']) ? 1 : 0,
+                        'description' => $fields['description'],
                     ]);
 
         return $todo;
     }
     
-    public function check(ToDo $todo, Request $request): ToDo
+    public function check(ToDo $todo, array $fields): ToDo
     {
         ToDo::where('id', $todo->id)
                 ->update([
-                    'is_finished' => $request->action,
+                    'is_finished' => $fields['action'],
                 ]);
 
         return $todo;

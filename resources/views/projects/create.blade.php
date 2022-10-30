@@ -32,7 +32,7 @@
                                     <select class="form-control @error('client_id') is-invalid @enderror" name="client_id" id="client-id" style="width: 100%;">
                                         <option disabled selected value>select client</option>
                                         @foreach($clients as $client)
-                                            <option value="{{ $client->id }}" @selected(old('client_id) == $client->id)>{{ $client->name }}</option>
+                                            <option value="{{ $client->id }}" @selected(old('client_id') == $client->id)>{{ $client->name }}</option>
                                         @endforeach
                                     </select>
                                     @error('client_id')

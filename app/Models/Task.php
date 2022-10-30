@@ -14,6 +14,17 @@ class Task extends Model
 
     protected $dates = ['start_date', 'due_date'];
 
+    public const VALIDATION_RULES = [
+        'project_id' => ['required', 'integer', 'exists:projects,id'],
+        'author_id' => ['required', 'integer', 'exists:users,id'],
+        'user_id' => ['required', 'integer', 'exists:users,id'],
+        'status_id' => ['required', 'integer', 'exists:statuses,id'],
+        'name' => ['required', 'string', 'max:255'],
+        'start_date' => ['required', 'date'],
+        'due_date' => ['required', 'date'],
+        'description' => ['required', 'string', 'max:65553'],
+    ];
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');

@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Task\{ChangeTaskRequest, StoreTaskRequest, PauseTaskRequest, UpdateTaskRequest};
 use App\Models\Task;
 use App\Models\Project;
 use App\Models\User;
 use App\Services\TaskService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
 {
@@ -42,33 +40,14 @@ class TaskController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTaskRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'project_id' => ['required', 'integer', 'exists:projects,id'],
-            'user_id' => ['required', 'integer', 'exists:users,id'],
-            'start_date' => ['required', 'date'],
-            'due_date' => ['required', 'date'],
-            'description' => ['required'],
-            'redirect' => ['in:tasks,projects'],            
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
-
-        $task = $this->taskService->store($request);
+        $fields = $request->validated();
+        $task = $this->taskService->store($fields);
         $this->taskService->flash('create');
 
-        $redirectAction =  (($request->redirect == 'projects') ? 'project_' : '') . (($request->create_and_close) ? 'tasks' : 'task');
+        $redirectAction =  (($fields['redirect'] == 'projects') ? 'project_' : '') . ((isset($fields['create_and_close'])) ? 'tasks' : 'task');
         return $this->taskService->redirect($redirectAction, $task);
     }
 
@@ -96,60 +75,25 @@ class TaskController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Task $task)
+    public function update(UpdateTaskRequest $request, Task $task)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'project_id' => ['required', 'integer', 'exists:projects,id'],
-            'user_id' => ['required', 'integer', 'exists:users,id'],
-            'start_date' => ['required', 'date'],
-            'due_date' => ['required', 'date'],
-            'description' => ['required'],
-            'redirect' => ['in:tasks,projects'],
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
-
-        $task = $this->taskService->update($task, $request);
+        $fields = $request->validated();
+        $task = $this->taskService->update($task, $fields);
         $this->taskService->flash('update');
 
-        $redirectAction =  (($request->redirect == 'projects') ? 'project_' : '') . (($request->save_and_close) ? 'tasks' : 'task');
+        $redirectAction =  (($fields['redirect'] == 'projects') ? 'project_' : '') . ((isset($fields['save_and_close'])) ? 'tasks' : 'task');
         return $this->taskService->redirect($redirectAction, $task);
     }
 
     /**
      * Change working on the task.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
      */
-    public function change(Request $request, Task $task)
+    public function change(ChangeTaskRequest $request, Task $task)
     {
-        $validator = Validator::make($request->all(), [
-            'status_id' => ['required', 'integer', 'in:1,2,3'],
-            'redirect' => ['in:tasks,projects,kanban'],            
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
-
-        $task = $this->taskService->change($task, $request);
-        $flashAction = match ($request->status_id) {
+        $fields = $request->validated();
+        $task = $this->taskService->change($task, $fields);
+        $flashAction = match ($fields['status_id']) {
             1 => 'return',
             2 => 'working',
             3 => 'complete',
@@ -157,36 +101,21 @@ class TaskController extends Controller
         };
         $this->taskService->flash($flashAction);
 
-        $redirectAction =  ($request->redirect == 'kanban') ? 'kanban' : ((($request->redirect == 'projects') ? 'project_' : '') . 'task');
+        $redirectAction =  ($fields['redirect'] == 'kanban') ? 'kanban' : ((($fields['redirect'] == 'projects') ? 'project_' : '') . 'task');
         return $this->taskService->redirect($redirectAction, $task);
     }
 
     /**
-     * Strat/stop working on the task.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
+     * Start/stop working on the task.
      */
-    public function pause(Request $request, Task $task)
+    public function pause(PauseTaskRequest $request, Task $task)
     {
-        $validator = Validator::make($request->all(), [
-            'action' => ['boolean'],
-            'redirect' => ['in:tasks,projects,kanban'],
-        ]);
-        
-        if ($validator->fails()) {
-            return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
-
-        $task = $this->taskService->pause($task, $request);
+        $fields = $request->validated();
+        $task = $this->taskService->pause($task, $fields);
         $flashAction = ($task->is_stopped) ? 'stop' : 'resume';
         $this->taskService->flash($flashAction);
 
-        $redirectAction =  ($request->redirect == 'kanban') ? 'kanban' : ((($request->redirect == 'projects') ? 'project_' : '') . 'task');
+        $redirectAction =  ($fields['redirect'] == 'kanban') ? 'kanban' : ((($fields['redirect'] == 'projects') ? 'project_' : '') . 'task');
         return $this->taskService->redirect($redirectAction, $task);
     }
 

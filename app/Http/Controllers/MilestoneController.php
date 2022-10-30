@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Milestone\{LoadMilestoneRequest, StoreMilestoneRequest, UpdateMilestoneRequest};
 use App\Models\Milestone;
 use App\Models\Project;
 use App\Services\MilestoneService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class MilestoneController extends Controller
 {   
@@ -30,34 +29,15 @@ class MilestoneController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreMilestoneRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'owner_id' => ['required', 'integer', 'exists:users,id'],
-            'start_date' => ['required', 'date'],
-            'end_date' => ['required', 'date', 'after:start_date'],
-            'colour' => ['required', 'string', 'max:255'],
-            'description' => ['required'],
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
-
-        $milestone = $this->milestoneService->store($request);
+        $fields = $request->validated();
+        $milestone = $this->milestoneService->store($fields);
         $this->milestoneService->flash('create');
 
-        $redirectAction = $request->create_and_close ? 'project_milestones' : 'milestone';
+        $redirectAction = isset($fields['create_and_close']) ? 'project_milestones' : 'milestone';
         return $this->milestoneService->redirect($redirectAction, $milestone); 
-
     }
 
     /**
@@ -84,50 +64,21 @@ class MilestoneController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Milestone  $milestone
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Milestone $milestone)
+    public function update(UpdateMilestoneRequest $request, Milestone $milestone)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'owner_id' => ['required', 'integer', 'exists:users,id'],
-            'start_date' => ['required', 'date'],
-            'end_date' => ['required', 'date', 'after:start_date'],
-            'colour' => ['required', 'string', 'max:255'],
-            'description' => ['required'],
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
-
-        $milestone = $this->milestoneService->update($milestone, $request);
+        $fields = $request->validated();
+        $milestone = $this->milestoneService->update($milestone, $fields);
         $this->milestoneService->flash('update');
 
-        $redirectAction = $request->save_and_close ? 'project_milestones' : 'milestone';
+        $redirectAction = isset($fields['save_and_close']) ? 'project_milestones' : 'milestone';
         return $this->milestoneService->redirect($redirectAction, $milestone);  
     }
 
-    public function load(Request $request)
+    public function load(LoadMilestoneRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'project_id' => ['required', 'integer', 'exists:projects,id'],
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
-
-        return Milestone::where('project_id', $request->project_id)->select('id', 'name')->get();
+        $fields = $request->validated();
+        return Milestone::where('project_id', $fields['project_id'])->select('id', 'name')->get();
     }
 
     /**

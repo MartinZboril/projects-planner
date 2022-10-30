@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Timer\{StartTimerRequest, StoreTimerRequest, UpdateTimerRequest};
 use App\Models\Timer;
 use App\Models\Project;
 use App\Services\TimerService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class TimerController extends Controller
 {  
@@ -32,26 +31,12 @@ class TimerController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTimerRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'since' => ['required', 'date_format:Y-m-d H:i'],
-            'until' => ['required', 'date_format:Y-m-d H:i', 'after:since'],
-            'rate_id' => ['required', 'integer', 'exists:rates,id'],
-        ]);
+        $fields = $request->validated();
 
-        if ($validator->fails()) {
-            return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
-
-        $timer = $this->timerService->store($request);
+        $timer = $this->timerService->store($fields);
         $this->timerService->flash('create');
 
         return $this->timerService->redirect('project_timesheets', $timer); 
@@ -82,27 +67,12 @@ class TimerController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Timer  $timer
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Timer $timer)
+    public function update(UpdateTimerRequest $request, Timer $timer)
     {
-        $validator = Validator::make($request->all(), [
-            'since' => ['required', 'date_format:Y-m-d H:i'],
-            'until' => ['required', 'date_format:Y-m-d H:i', 'after:since'],
-            'rate_id' => ['required', 'integer', 'exists:rates,id'],
-        ]);
+        $fields = $request->validated();
 
-        if ($validator->fails()) {
-            return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
-
-        $timer = $this->timerService->update($timer, $request);
+        $timer = $this->timerService->update($timer, $fields);
         $this->timerService->flash('update');
 
         return $this->timerService->redirect('project_timesheets', $timer); 
@@ -110,30 +80,17 @@ class TimerController extends Controller
 
     /**
      * Start working on timer.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
-    public function start(Request $request)
+    public function start(StartTimerRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'project_id' => ['required', 'integer', 'exists:projects,id'],
-            'rate_id' => ['required', 'integer', 'exists:rates,id'],
-        ]);
+        $fields = $request->validated();
 
-        if ($validator->fails()) {
-            return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
-
-        if($this->timerService->checkIfNotRunningAnoutherTimer($request->project_id, Auth::id())) {
+        if($this->timerService->checkIfNotRunningAnoutherTimer($fields['project_id'], Auth::id())) {
             $this->timerService->flash('collision');            
             return $this->timerService->redirect(''); 
         }
 
-        $timer = $this->timerService->start($request);
+        $timer = $this->timerService->start($fields);
         $this->timerService->flash('start');
 
         return $this->timerService->redirect('', $timer); 
@@ -141,14 +98,10 @@ class TimerController extends Controller
 
     /**
      * Stop working on timer.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Timer  $timer
-     * @return \Illuminate\Http\Response
      */
-    public function stop(Request $request, Timer $timer)
+    public function stop(Timer $timer)
     {
-        $timer = $this->timerService->stop($timer, $request);
+        $timer = $this->timerService->stop($timer);
         $this->timerService->flash('stop');
 
         return $this->timerService->redirect('', $timer);

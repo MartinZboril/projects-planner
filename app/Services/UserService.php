@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -12,54 +11,52 @@ use Illuminate\Support\Str;
 
 class UserService
 {
-    public function store(Request $request): User
+    public function store(array $fields): User
     {
         $user = new User;
-        $user->name = $request->name;
-        $user->surname = $request->surname;
-        $user->email = $request->email;
-        $user->username = $request->username;
-        $user->job_title = $request->job_title;
-        $user->password = Hash::make(($request->password) ? $request->password : Str::random(8));
-        $user->mobile = $request->mobile;
-        $user->phone = $request->phone;
-        $user->street = $request->street;
-        $user->house_number = $request->house_number;
-        $user->city = $request->city;
-        $user->zip_code = $request->zip_code;
-        $user->country = $request->country;
+        $user->name = $fields['name'];
+        $user->surname = $fields['surname'];
+        $user->email = $fields['email'];
+        $user->username = $fields['username'];
+        $user->job_title = $fields['job_title'];
+        $user->password = Hash::make(($fields['password']) ? $fields['password'] : Str::random(8));
+        $user->mobile = $fields['mobile'];
+        $user->phone = $fields['phone'];
+        $user->street = $fields['street'];
+        $user->house_number = $fields['house_number'];
+        $user->city = $fields['city'];
+        $user->zip_code = $fields['zip_code'];
+        $user->country = $fields['country'];
         $user->save();
 
-        $request->request->add([
-            'user_id' => $user->id,
-            'name' => $request->rate_name,
-            'is_active' => true,
-            'value' => $request->rate_value,
-        ]);
+        $fields['user_id'] = $user->id;
+        $fields['name'] = $fields['rate_name'];
+        $fields['is_active'] = true;
+        $fields['value'] = $fields['rate_value'];
 
         $rateService = new RateService;
-        $rateService->store($request);
+        $rateService->store($fields);
 
         return $user;
     }
 
-    public function update(User $user, Request $request): User
+    public function update(User $user, array $fields): User
     {
         User::where('id', $user->id)
                     ->update([
-                        'name' => $request->name,
-                        'surname' => $request->surname,
-                        'email' => $request->email,
-                        'username' => $request->username,
-                        'job_title' => $request->job_title,
-                        'password' => ($request->password) ? Hash::make($request->password) : $user->password,
-                        'mobile' => $request->mobile,
-                        'phone' => $request->phone,
-                        'street' => $request->street,
-                        'house_number' => $request->house_number,
-                        'city' => $request->city,
-                        'zip_code' => $request->zip_code,
-                        'country' => $request->country
+                        'name' => $fields['name'],
+                        'surname' => $fields['surname'],
+                        'email' => $fields['email'],
+                        'username' => $fields['username'],
+                        'job_title' => $fields['job_title'],
+                        'password' => ($fields['password']) ? Hash::make($fields['password']) : $user->password,
+                        'mobile' => $fields['mobile'],
+                        'phone' => $fields['phone'],
+                        'street' => $fields['street'],
+                        'house_number' => $fields['house_number'],
+                        'city' => $fields['city'],
+                        'zip_code' => $fields['zip_code'],
+                        'country' => $fields['country']
                     ]);
 
         return $user;

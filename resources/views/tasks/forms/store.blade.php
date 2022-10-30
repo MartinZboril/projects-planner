@@ -29,7 +29,7 @@
                         <div class="form-group">
                             <label for="milestone-id">Milestone</label>
                             <select class="form-control @error('milestone_id') is-invalid @enderror" name="milestone_id" id="milestone-id" style="width: 100%;">
-                                <option disabled selected value>select project</option>
+                                <option disabled selected value>select milestone</option>
                             </select>
                             @error('milestone_id')
                                 <div class="invalid-feedback">{{ $message }}</div>

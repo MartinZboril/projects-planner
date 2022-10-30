@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Rate\{StoreRateRequest, UpdateRateRequest};
 use App\Models\Rate;
 use App\Models\User;
 use App\Services\RateService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class RateController extends Controller
 {
@@ -31,26 +30,11 @@ class RateController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     * @param  \App\Models\User  $user
      */
-    public function store(Request $request)
+    public function store(StoreRateRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'max:255'],
-            'value' => ['required', 'integer', 'min:0'],
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
-
-        $rate = $this->rateService->store($request);
+        $fields = $request->validated();
+        $rate = $this->rateService->store($fields);
         $this->rateService->flash('create');
 
         return $this->rateService->redirect('user', $rate); 
@@ -70,26 +54,11 @@ class RateController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Rate  $rate
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Rate $rate)
+    public function update(UpdateRateRequest $request, Rate $rate)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'max:255'],
-            'value' => ['required', 'integer', 'min:0'],
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
-
-        $rate = $this->rateService->update($rate, $request);
+        $fields = $request->validated();
+        $rate = $this->rateService->update($rate, $fields);
         $this->rateService->flash('update');
 
         return $this->rateService->redirect('user', $rate); 

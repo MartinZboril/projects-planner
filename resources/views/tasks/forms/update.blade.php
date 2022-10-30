@@ -29,7 +29,7 @@
                         <div class="form-group">
                             <label for="milestone-id">Milestone</label>
                             <select class="form-control @error('milestone_id') is-invalid @enderror" name="milestone_id" id="milestone-id" style="width: 100%;">
-                                <option disabled selected value>select project</option>
+                                <option disabled selected value>select milestone</option>
                                 @if($task->project)
                                     @foreach($task->project->milestones as $milestone)
                                         <option value="{{ $milestone->id }}" @selected(old('milestone_id', $task->milestone_id) == $milestone->id)>{{ $milestone->name }}</option>
@@ -45,7 +45,7 @@
                         <div class="form-group">
                             <label for="milestone-id">Milestone</label>
                             <select class="form-control @error('milestone_id') is-invalid @enderror" name="milestone_id" id="milestone-id" style="width: 100%;">
-                                <option disabled selected value>select project</option>
+                                <option disabled selected value>select milestone</option>
                                 @if($task->project)
                                     @foreach($task->project->milestones as $milestone)
                                         <option value="{{ $milestone->id }}" @selected(old('milestone_id', $task->milestone_id) == $milestone->id)>{{ $milestone->name }}</option>

@@ -10,6 +10,7 @@ return [
         'rate' => 'Rate',
         'task' => 'Task',
         'ticket' => 'Ticket',
+        'timer' => 'Timer',
         'todo' => 'ToDo',
         'user' => 'User',
     ]

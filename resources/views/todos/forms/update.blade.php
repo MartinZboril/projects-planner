@@ -53,5 +53,4 @@
         </div>
     </div>                                   
     <input type="hidden" name="redirect" value="{{ $redirect }}">           
-    <input type="hidden" name="task_id" value="{{ $task->id }}">         
 </form> 

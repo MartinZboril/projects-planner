@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\User\{StoreUserRequest, UpdateUserRequest};
 use App\Models\User;
 use App\Services\UserService;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -37,37 +35,14 @@ class UserController extends Controller
     /**
      * Create new user
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'surname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'nullable', 'min:8'],
-            'job_title' => ['string', 'nullable', 'max:255'],
-            'mobile' => ['string', 'nullable', 'max:255'],
-            'phone' => ['string', 'nullable', 'max:255'],
-            'street' => ['string', 'nullable', 'max:255'],
-            'house_number' => ['string', 'nullable', 'max:255'],
-            'city' => ['string', 'nullable', 'max:255'],
-            'country' => ['string', 'nullable', 'max:255'],
-            'zip_code' => ['string', 'nullable', 'max:255'],
-            'rate_name' => ['required', 'max:255'],
-            'rate_value' => ['required', 'integer', 'min:0'],
-        ]);
+        $fields = $request->validated();
 
-        if ($validator->fails()) {
-            return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
-
-        $user = $this->userService->store($request);
+        $user = $this->userService->store($fields);
         $this->userService->flash('create');
 
-        $redirectAction = $request->create_and_close ? 'users' : 'user';
+        $redirectAction = isset($fields['create_and_close']) ? 'users' : 'user';
         return $this->userService->redirect($redirectAction, $user); 
     }
 
@@ -90,41 +65,14 @@ class UserController extends Controller
     /**
      * Update edited user
      */
-    public function update(User $user, Request $request)
+    public function update(User $user, UpdateUserRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'surname' => ['required', 'string', 'max:255'],
-            'email' => [
-                'required', 'string', 'email', 'max:255',
-                Rule::unique('users')->ignore($user->id),
-            ],
-            'username' => [
-                'required', 'string', 'max:255',
-                Rule::unique('users')->ignore($user->id),
-            ],
-            'password' => ['string', 'nullable', 'min:8'],
-            'job_title' => ['string', 'nullable', 'max:255'],
-            'mobile' => ['string', 'nullable', 'max:255'],
-            'phone' => ['string', 'nullable', 'max:255'],
-            'street' => ['string', 'nullable', 'max:255'],
-            'house_number' => ['string', 'nullable', 'max:255'],
-            'city' => ['string', 'nullable', 'max:255'],
-            'country' => ['string', 'nullable', 'max:255'],
-            'zip_code' => ['string', 'nullable', 'max:255'],
-        ]);
+        $fields = $request->validated();
 
-        if ($validator->fails()) {
-            return redirect()
-                    ->back()
-                    ->withErrors($validator)
-                    ->withInput();
-        }
-
-        $user = $this->userService->update($user, $request);
+        $user = $this->userService->update($user, $fields);
         $this->userService->flash('update');
 
-        $redirectAction = $request->save_and_close ? 'users' : 'user';
+        $redirectAction = isset($fields['save_and_close']) ? 'users' : 'user';
         return $this->userService->redirect($redirectAction, $user);  
     }
 }

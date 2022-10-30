@@ -5,42 +5,41 @@ namespace App\Services;
 use App\Models\Timer;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class TimerService
 {
-    public function store(Request $request): Timer
+    public function store(array $fields): Timer
     {
         $timer = new Timer;
-        $timer->project_id = $request->project_id;
+        $timer->project_id = $fields['project_id'];
         $timer->user_id = Auth::id();
-        $timer->rate_id = $request->rate_id;
-        $timer->since = $request->since;
-        $timer->until = $request->until;
+        $timer->rate_id = $fields['rate_id'];
+        $timer->since = $fields['since'];
+        $timer->until = $fields['until'];
         $timer->save();
 
         return $timer;
     }
 
-    public function update(Timer $timer, Request $request): Timer
+    public function update(Timer $timer, array $fields): Timer
     {
         Timer::where('id', $timer->id)
                     ->update([
-                        'since' => $request->since,
-                        'until' => $request->until,
-                        'rate_id' => $request->rate_id,
+                        'rate_id' => $fields['rate_id'],
+                        'since' => $fields['since'],
+                        'until' => $fields['until'],
                     ]);
 
         return $timer;
     }
 
-    public function start(Request $request): Timer
+    public function start(array $fields): Timer
     {
         $timer = new Timer;
-        $timer->project_id = $request->project_id;
-        $timer->rate_id = $request->rate_id;
+        $timer->project_id = $fields['project_id'];
+        $timer->rate_id = $fields['rate_id'];
         $timer->user_id = Auth::id();
         $timer->since = Carbon::now();
         $timer->until = null;
@@ -49,7 +48,7 @@ class TimerService
         return $timer;
     }
 
-    public function stop(Timer $timer, Request $request): Timer
+    public function stop(Timer $timer): Timer
     {
         Timer::where('id', $timer->id)
                     ->update([

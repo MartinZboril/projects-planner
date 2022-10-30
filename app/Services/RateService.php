@@ -4,30 +4,29 @@ namespace App\Services;
 
 use App\Models\Rate;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class RateService
 {
-    public function store(Request $request): Rate
+    public function store(array $fields): Rate
     {
         $rate = new Rate;
-        $rate->user_id = $request->user_id;
-        $rate->name = $request->name;
-        $rate->is_active = $request->is_active;
-        $rate->value = $request->value;
+        $rate->user_id = $fields['user_id'];
+        $rate->name = $fields['name'];
+        $rate->is_active = isset($fields['is_active']) ? 1 : 0;
+        $rate->value = $fields['value'];
         $rate->save();
 
         return $rate;
     }
 
-    public function update(Rate $rate, Request $request): Rate
+    public function update(Rate $rate, array $fields): Rate
     {
         Rate::where('id', $rate->id)
                     ->update([
-                        'name' => $request->name,
-                        'is_active' => $request->is_active,
-                        'value' => $request->value,
+                        'name' => $fields['name'],
+                        'is_active' => isset($fields['is_active']) ? 1 : 0,
+                        'value' => $fields['value'],
                     ]);
 
         return $rate;
