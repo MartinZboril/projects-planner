@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\Timer;
-use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\{Auth, Session};
 
@@ -40,7 +39,7 @@ class TimerService
         $timer->project_id = $fields['project_id'];
         $timer->rate_id = $fields['rate_id'];
         $timer->user_id = Auth::id();
-        $timer->since = Carbon::now();
+        $timer->since = now();
         $timer->until = null;
         $timer->save();
 
@@ -51,7 +50,7 @@ class TimerService
     {
         Timer::where('id', $timer->id)
                     ->update([
-                        'until' => Carbon::now(),
+                        'until' => now(),
                     ]);
 
         return $timer;

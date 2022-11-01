@@ -10,6 +10,8 @@ class Milestone extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id']; 
+
     protected $dates = ['start_date', 'end_date'];
 
     public const VALIDATION_RULES = [
@@ -39,7 +41,7 @@ class Milestone extends Model
 
     public function tasksCompleted(): HasMany
     {
-        return $this->hasMany(Task::class, 'milestone_id')->completed();
+        return $this->hasMany(Task::class, 'milestone_id')->status(3);
     }
 
     public function getProgressAttribute(): int

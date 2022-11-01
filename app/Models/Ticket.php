@@ -10,6 +10,8 @@ class Ticket extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id']; 
+
     protected $dates = ['due_date'];
 
     public const VALIDATION_RULES = [

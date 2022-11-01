@@ -47,7 +47,7 @@
             </div>
             <div class="card rounded-0">
                 <div class="card-body">
-                    <input type="submit" class="btn btn-sm btn-primary mr-1" value="Save"> or <a href="{{ route('tasks.detail', $task->id) }}" class="cancel-btn">Close</a></span>
+                    <input type="submit" class="btn btn-sm btn-primary mr-1" value="Save"> or <a href="{{ $redirect == 'projects' ? route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) : route('tasks.detail', $task->id) }}" class="cancel-btn">Close</a></span>
                 </div>
             </div>
         </div>

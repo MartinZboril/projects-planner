@@ -10,6 +10,8 @@ class Rate extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id']; 
+
     public const VALIDATION_RULES = [
         'user_id' => ['required', 'integer', 'exists:users,id'],
         'name' => ['required', 'max:255'],

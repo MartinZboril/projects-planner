@@ -77,7 +77,7 @@ class MilestoneController extends Controller
     public function load(LoadMilestoneRequest $request)
     {
         $fields = $request->validated();
-        return Milestone::where('project_id', $fields['project_id'])->select('id', 'name')->get();
+        return Milestone::where('project_id', $fields['project_id'])->get(['id', 'name']);
     }
 
     /**

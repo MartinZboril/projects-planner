@@ -10,6 +10,8 @@ class Task extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id']; 
+
     protected $dates = ['start_date', 'due_date'];
 
     public const VALIDATION_RULES = [
@@ -53,18 +55,8 @@ class Task extends Model
         return $this->hasMany(ToDo::class, 'task_id');
     }
 
-    public function scopeNew($query): Builder
+    public function scopeStatus(Builder $query, int $type): Builder
     {
-        return $query->where('status_id', 1);
-    }
-
-    public function scopeInProgress($query): Builder
-    {
-        return $query->where('status_id', 2);
-    }
-
-    public function scopeCompleted($query): Builder
-    {
-        return $query->where('status_id', 3);
+        return $query->where('status_id', $type);
     }
 }

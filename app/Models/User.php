@@ -77,7 +77,7 @@ class User extends Authenticatable
 
     public function activeTimers(): HasMany
     {
-        return $this->hasMany(Timer::class, 'user_id')->active();
+        return $this->hasMany(Timer::class, 'user_id')->active(true);
     }
 
     public function rates(): HasMany

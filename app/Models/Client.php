@@ -9,6 +9,8 @@ class Client extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id']; 
+
     public const VALIDATION_RULES = [
         'name' => ['required', 'string', 'max:255', 'unique:clients'],
         'email' => ['required', 'string', 'email', 'max:255'],

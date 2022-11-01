@@ -92,9 +92,9 @@ class TaskController extends Controller
         $fields = $request->validated();
         $task = $this->taskService->change($task, $fields);
         $flashAction = match ($fields['status_id']) {
-            1 => 'return',
-            2 => 'working',
-            3 => 'complete',
+            '1' => 'return',
+            '2' => 'working',
+            '3' => 'complete',
             default => ''
         };
         $this->taskService->flash($flashAction);

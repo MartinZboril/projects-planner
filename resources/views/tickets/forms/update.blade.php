@@ -54,18 +54,6 @@
                         </div> 
                     @endif
                     <div class="form-group required">
-                        <label for="status" class="control-label">Status</label>
-                        <select class="form-control @error('status') is-invalid @enderror" name="status" id="status" style="width: 100%;">
-                            <option selected value>select status</option>
-                            <option value="1" @selected(old('status', $ticket->status) == 1)>Open</option>
-                            <option value="2" @selected(old('status', $ticket->status) == 2)>Closed</option>
-                            <option value="3" @selected(old('status', $ticket->status) == 3)>Archived</option>
-                        </select>
-                        @error('status')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group required">
                         <label for="type" class="control-label">Type</label>
                         <select class="form-control @error('type') is-invalid @enderror" name="type" id="type" style="width: 100%;">
                             <option selected value>select type</option>
@@ -116,7 +104,7 @@
             </div>
             <div class="card rounded-0">
                 <div class="card-body">
-                    <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ route('tickets.detail', $ticket->id) }}" class="cancel-btn">Close</a></span>
+                    <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $redirect == 'projects' ? route('projects.ticket.detail', ['project' => $project->id, 'ticket' => $ticket->id]) : route('tickets.detail', $ticket->id) }}" class="cancel-btn">Close</a></span>
                 </div>
             </div>
         </div>

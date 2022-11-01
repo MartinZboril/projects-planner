@@ -94,7 +94,7 @@
             </div>
             <div class="card rounded-0">
                 <div class="card-body">
-                    <input type="submit" name="create" class="btn btn-sm btn-primary mr-1" value="Create"><input type="submit" name="create_and_close" class="btn btn-sm btn-secondary" value="Create and close"> or <a href="{{ route('tasks.index') }}" class="cancel-btn">Close</a></span>
+                    <input type="submit" name="create" class="btn btn-sm btn-primary mr-1" value="Create"><input type="submit" name="create_and_close" class="btn btn-sm btn-secondary" value="Create and close"> or <a href="{{ $redirect == 'projects' ? route('projects.tasks', $project->id) : route('tasks.index') }}" class="cancel-btn">Close</a></span>
                 </div>
             </div>
         </div>

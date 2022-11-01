@@ -11,6 +11,8 @@ class Timer extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id']; 
+
     protected $dates = ['since', 'until'];
 
     public const VALIDATION_RULES = [
@@ -36,9 +38,9 @@ class Timer extends Model
         return $this->belongsTo(Rate::class, 'rate_id');
     }
 
-    public function scopeActive($query): Builder
+    public function scopeActive(Builder $query, bool $type): Builder
     {
-        return $query->whereNull('until');
+        return ($type) ? $query->whereNull('until') : $query->whereNotNull('until');
     }
 
     public function getTotalTimeAttribute(): int

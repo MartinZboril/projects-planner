@@ -50,7 +50,6 @@ class TicketService
                         'project_id' => $fields['project_id'],
                         'assignee_id' => $fields['assignee_id'],
                         'subject' => $fields['subject'],
-                        'status' => $fields['status'],
                         'type' => $fields['type'],
                         'priority' => $fields['priority'],
                         'due_date' => $fields['due_date'],

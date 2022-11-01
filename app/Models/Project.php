@@ -10,6 +10,8 @@ class Project extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id']; 
+
     protected $dates = ['start_date', 'due_date'];
 
     public const VALIDATION_RULES = [
@@ -41,17 +43,17 @@ class Project extends Model
 
     public function newTasks(): HasMany
     {
-        return $this->hasMany(Task::class, 'project_id')->new();
+        return $this->hasMany(Task::class, 'project_id')->status(1);
     }
 
     public function inProgressTasks(): HasMany
     {
-        return $this->hasMany(Task::class, 'project_id')->inProgress();
+        return $this->hasMany(Task::class, 'project_id')->status(2);
     }
 
     public function completedTasks(): HasMany
     {
-        return $this->hasMany(Task::class, 'project_id')->completed();
+        return $this->hasMany(Task::class, 'project_id')->status(3);
     }
 
     public function milestones(): HasMany
@@ -71,7 +73,7 @@ class Project extends Model
 
     public function getDeadlineAttribute(): int
     {
-        return $this->due_date->diffInDays(\Carbon\Carbon::now()->format('Y-m-d'));
+        return $this->due_date->diffInDays(now()->format('Y-m-d'));
     }
 
     public function getRemainingHoursAttribute(): int

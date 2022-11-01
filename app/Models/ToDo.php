@@ -12,6 +12,8 @@ class ToDo extends Model
 
     protected $table = 'todos';
     
+    protected $guarded = ['id']; 
+
     protected $dates = ['deadline'];
 
     public const VALIDATION_RULES = [

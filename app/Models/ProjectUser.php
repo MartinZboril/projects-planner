@@ -12,6 +12,13 @@ class ProjectUser extends Model
 
     protected $table = 'project_user';
 
+    protected $guarded = ['id']; 
+
+    public const VALIDATION_RULES = [
+        'project_id' => ['required', 'integer', 'exists:projects,id'],
+        'user_id' => ['required', 'integer', 'exists:users,id'],
+    ];
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');

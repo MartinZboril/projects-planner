@@ -27,7 +27,10 @@ class UpdateTaskRequest extends FormRequest
         $rules = Task::VALIDATION_RULES;
         $rules['redirect'] = ['in:tasks,projects'];
         
-        unset($rules['status_id']);
+        unset(
+            $rules['author_id'],
+            $rules['status_id']
+        );
 
         return $rules;
     }
