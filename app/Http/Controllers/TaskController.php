@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Task\{ChangeTaskRequest, StoreTaskRequest, PauseTaskRequest, UpdateTaskRequest};
 use App\Models\{Project, Task, User};
 use App\Services\TaskService;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class TaskController extends Controller
 {
@@ -41,12 +43,17 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        $fields = $request->validated();
-        $task = $this->taskService->store($fields);
-        $this->taskService->flash('create');
+        try {
+            $fields = $request->validated();
+            $task = $this->taskService->store($fields);
+            $this->taskService->flash('create');
 
-        $redirectAction =  (($fields['redirect'] == 'projects') ? 'project_' : '') . ((isset($fields['create_and_close'])) ? 'tasks' : 'task');
-        return $this->taskService->redirect($redirectAction, $task);
+            $redirectAction =  (($fields['redirect'] == 'projects') ? 'project_' : '') . ((isset($fields['create_and_close'])) ? 'tasks' : 'task');
+            return $this->taskService->redirect($redirectAction, $task);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**
@@ -76,12 +83,17 @@ class TaskController extends Controller
      */
     public function update(UpdateTaskRequest $request, Task $task)
     {
-        $fields = $request->validated();
-        $task = $this->taskService->update($task, $fields);
-        $this->taskService->flash('update');
+        try {
+            $fields = $request->validated();
+            $task = $this->taskService->update($task, $fields);
+            $this->taskService->flash('update');
 
-        $redirectAction =  (($fields['redirect'] == 'projects') ? 'project_' : '') . ((isset($fields['save_and_close'])) ? 'tasks' : 'task');
-        return $this->taskService->redirect($redirectAction, $task);
+            $redirectAction =  (($fields['redirect'] == 'projects') ? 'project_' : '') . ((isset($fields['save_and_close'])) ? 'tasks' : 'task');
+            return $this->taskService->redirect($redirectAction, $task);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**
@@ -89,18 +101,23 @@ class TaskController extends Controller
      */
     public function change(ChangeTaskRequest $request, Task $task)
     {
-        $fields = $request->validated();
-        $task = $this->taskService->change($task, $fields);
-        $flashAction = match ($fields['status_id']) {
-            '1' => 'return',
-            '2' => 'working',
-            '3' => 'complete',
-            default => ''
-        };
-        $this->taskService->flash($flashAction);
+        try {
+            $fields = $request->validated();
+            $task = $this->taskService->change($task, $fields);
+            $flashAction = match ($fields['status_id']) {
+                '1' => 'return',
+                '2' => 'working',
+                '3' => 'complete',
+                default => ''
+            };
+            $this->taskService->flash($flashAction);
 
-        $redirectAction =  ($fields['redirect'] == 'kanban') ? 'kanban' : ((($fields['redirect'] == 'projects') ? 'project_' : '') . 'task');
-        return $this->taskService->redirect($redirectAction, $task);
+            $redirectAction =  ($fields['redirect'] == 'kanban') ? 'kanban' : ((($fields['redirect'] == 'projects') ? 'project_' : '') . 'task');
+            return $this->taskService->redirect($redirectAction, $task);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**
@@ -108,13 +125,18 @@ class TaskController extends Controller
      */
     public function pause(PauseTaskRequest $request, Task $task)
     {
-        $fields = $request->validated();
-        $task = $this->taskService->pause($task, $fields);
-        $flashAction = ($task->is_stopped) ? 'stop' : 'resume';
-        $this->taskService->flash($flashAction);
+        try {
+            $fields = $request->validated();
+            $task = $this->taskService->pause($task, $fields);
+            $flashAction = ($task->is_stopped) ? 'stop' : 'resume';
+            $this->taskService->flash($flashAction);
 
-        $redirectAction =  ($fields['redirect'] == 'kanban') ? 'kanban' : ((($fields['redirect'] == 'projects') ? 'project_' : '') . 'task');
-        return $this->taskService->redirect($redirectAction, $task);
+            $redirectAction =  ($fields['redirect'] == 'kanban') ? 'kanban' : ((($fields['redirect'] == 'projects') ? 'project_' : '') . 'task');
+            return $this->taskService->redirect($redirectAction, $task);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**

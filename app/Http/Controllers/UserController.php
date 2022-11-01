@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\User\{StoreUserRequest, UpdateUserRequest};
 use App\Models\User;
 use App\Services\UserService;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -37,13 +39,17 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        $fields = $request->validated();
+        try {
+            $fields = $request->validated();
+            $user = $this->userService->store($fields);
+            $this->userService->flash('create');
 
-        $user = $this->userService->store($fields);
-        $this->userService->flash('create');
-
-        $redirectAction = isset($fields['create_and_close']) ? 'users' : 'user';
-        return $this->userService->redirect($redirectAction, $user); 
+            $redirectAction = isset($fields['create_and_close']) ? 'users' : 'user';
+            return $this->userService->redirect($redirectAction, $user); 
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**
@@ -67,12 +73,16 @@ class UserController extends Controller
      */
     public function update(User $user, UpdateUserRequest $request)
     {
-        $fields = $request->validated();
+        try {
+            $fields = $request->validated();
+            $user = $this->userService->update($user, $fields);
+            $this->userService->flash('update');
 
-        $user = $this->userService->update($user, $fields);
-        $this->userService->flash('update');
-
-        $redirectAction = isset($fields['save_and_close']) ? 'users' : 'user';
-        return $this->userService->redirect($redirectAction, $user);  
+            $redirectAction = isset($fields['save_and_close']) ? 'users' : 'user';
+            return $this->userService->redirect($redirectAction, $user);  
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Client\{StoreClientRequest, UpdateClientRequest};
 use App\Models\Client;
 use App\Services\ClientService;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class ClientController extends Controller
 {
@@ -41,12 +43,17 @@ class ClientController extends Controller
      */
     public function store(StoreClientRequest $request)
     {
-        $fields = $request->validated();
-        $client = $this->clientService->store($fields);
-        $this->clientService->flash('create');
+        try {
+            $fields = $request->validated();
+            $client = $this->clientService->store($fields);
+            $this->clientService->flash('create');
 
-        $redirectAction = isset($fields['create_and_close']) ? 'clients' : 'client';
-        return $this->clientService->redirect($redirectAction, $client); 
+            $redirectAction = isset($fields['create_and_close']) ? 'clients' : 'client';
+            return $this->clientService->redirect($redirectAction, $client);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        } 
     }
 
     /**
@@ -76,12 +83,17 @@ class ClientController extends Controller
      */
     public function update(UpdateClientRequest $request, Client $client)
     {
-        $fields = $request->validated();
-        $client = $this->clientService->update($client, $fields);
-        $this->clientService->flash('update');
-
-        $redirectAction = isset($fields['save_and_close']) ? 'clients' : 'client';
-        return $this->clientService->redirect($redirectAction, $client); 
+        try {
+            $fields = $request->validated();
+            $client = $this->clientService->update($client, $fields);
+            $this->clientService->flash('update');
+    
+            $redirectAction = isset($fields['save_and_close']) ? 'clients' : 'client';
+            return $this->clientService->redirect($redirectAction, $client);         
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**

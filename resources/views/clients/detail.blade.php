@@ -2,11 +2,6 @@
 
 @section('title', __('pages.title.client'))
 
-@push('styles')
-    <!-- Toastr -->
-    <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.css') }}">
-@endpush
-
 @section('content')
 <div class="content-wrapper">
     <!-- Content Header -->
@@ -83,6 +78,5 @@
 
 @push('scripts')
     <!-- Toastr -->
-    <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
     <script src="{{ asset('js/toastr.js') }}"></script>
 @endpush

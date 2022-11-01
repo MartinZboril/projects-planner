@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Timer\{StartTimerRequest, StoreTimerRequest, UpdateTimerRequest};
 use App\Models\{Project, Timer};
 use App\Services\TimerService;
-use Illuminate\Support\Facades\Auth;
+use Exception;
+use Illuminate\Support\Facades\{Auth, Log};
 
 class TimerController extends Controller
 {  
@@ -33,12 +34,16 @@ class TimerController extends Controller
      */
     public function store(StoreTimerRequest $request)
     {
-        $fields = $request->validated();
+        try {
+            $fields = $request->validated();
+            $timer = $this->timerService->store($fields);
+            $this->timerService->flash('create');
 
-        $timer = $this->timerService->store($fields);
-        $this->timerService->flash('create');
-
-        return $this->timerService->redirect('project_timesheets', $timer); 
+            return $this->timerService->redirect('project_timesheets', $timer); 
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**
@@ -69,12 +74,16 @@ class TimerController extends Controller
      */
     public function update(UpdateTimerRequest $request, Timer $timer)
     {
-        $fields = $request->validated();
+        try {
+            $fields = $request->validated();
+            $timer = $this->timerService->update($timer, $fields);
+            $this->timerService->flash('update');
 
-        $timer = $this->timerService->update($timer, $fields);
-        $this->timerService->flash('update');
-
-        return $this->timerService->redirect('project_timesheets', $timer); 
+            return $this->timerService->redirect('project_timesheets', $timer); 
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**
@@ -82,17 +91,22 @@ class TimerController extends Controller
      */
     public function start(StartTimerRequest $request)
     {
-        $fields = $request->validated();
+        try {
+            $fields = $request->validated();
 
-        if($this->timerService->checkIfNotRunningAnoutherTimer($fields['project_id'], Auth::id())) {
-            $this->timerService->flash('collision');            
-            return $this->timerService->redirect(''); 
+            if($this->timerService->checkIfNotRunningAnoutherTimer($fields['project_id'], Auth::id())) {
+                $this->timerService->flash('collision');            
+                return $this->timerService->redirect(''); 
+            }
+
+            $timer = $this->timerService->start($fields);
+            $this->timerService->flash('start');
+
+            return $this->timerService->redirect('', $timer); 
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
         }
-
-        $timer = $this->timerService->start($fields);
-        $this->timerService->flash('start');
-
-        return $this->timerService->redirect('', $timer); 
     }
 
     /**
@@ -100,10 +114,15 @@ class TimerController extends Controller
      */
     public function stop(Timer $timer)
     {
-        $timer = $this->timerService->stop($timer);
-        $this->timerService->flash('stop');
+        try {
+            $timer = $this->timerService->stop($timer);
+            $this->timerService->flash('stop');
 
-        return $this->timerService->redirect('', $timer);
+            return $this->timerService->redirect('', $timer);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**

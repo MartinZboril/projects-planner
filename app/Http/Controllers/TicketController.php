@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Ticket\{ConvertTicketRequest, ChangeTicketRequest, StoreTicketRequest, UpdateTicketRequest};
 use App\Models\{Project, Ticket, User};
 use App\Services\{TaskService, TicketService, ProjectUserService};
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class TicketController extends Controller
 {  
@@ -41,12 +43,17 @@ class TicketController extends Controller
      */
     public function store(StoreTicketRequest $request)
     {
-        $fields = $request->validated();
-        $ticket = $this->ticketService->store($fields);
-        $this->ticketService->flash('create');
+        try {
+            $fields = $request->validated();
+            $ticket = $this->ticketService->store($fields);
+            $this->ticketService->flash('create');
 
-        $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . (isset(($fields['create_and_close'])) ? 'tickets' : 'ticket');
-        return $this->ticketService->redirect($redirectAction, $ticket);
+            $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . (isset(($fields['create_and_close'])) ? 'tickets' : 'ticket');
+            return $this->ticketService->redirect($redirectAction, $ticket);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**
@@ -76,12 +83,17 @@ class TicketController extends Controller
      */
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
-        $fields = $request->validated();
-        $ticket = $this->ticketService->update($ticket, $fields);
-        $this->ticketService->flash('update');
+        try {
+            $fields = $request->validated();
+            $ticket = $this->ticketService->update($ticket, $fields);
+            $this->ticketService->flash('update');
 
-        $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . ((isset($fields['save_and_close'])) ? 'tickets' : 'ticket');
-        return $this->ticketService->redirect($redirectAction, $ticket);
+            $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . ((isset($fields['save_and_close'])) ? 'tickets' : 'ticket');
+            return $this->ticketService->redirect($redirectAction, $ticket);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**
@@ -89,18 +101,23 @@ class TicketController extends Controller
      */
     public function change(ChangeTicketRequest $request, Ticket $ticket)
     {
-        $fields = $request->validated();
-        $ticket = $this->ticketService->change($ticket, $fields);
-        $flashAction = match ($fields['status']) {
-            '1' => 'open',
-            '2' => 'close',
-            '3' => 'archive',
-            default => ''
-        };
-        $this->ticketService->flash($flashAction);
+        try {
+            $fields = $request->validated();
+            $ticket = $this->ticketService->change($ticket, $fields);
+            $flashAction = match ($fields['status']) {
+                '1' => 'open',
+                '2' => 'close',
+                '3' => 'archive',
+                default => ''
+            };
+            $this->ticketService->flash($flashAction);
 
-        $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . 'ticket';
-        return $this->ticketService->redirect($redirectAction, $ticket);
+            $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . 'ticket';
+            return $this->ticketService->redirect($redirectAction, $ticket);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**
@@ -108,13 +125,18 @@ class TicketController extends Controller
      */
     public function convert(ConvertTicketRequest $request, Ticket $ticket)
     {
-        $fields = $request->validated();
-        $task = $this->ticketService->convert($ticket);      
-        $taskService = new TaskService(new ProjectUserService);
-        $taskService->flash('create');
+        try {
+            $fields = $request->validated();
+            $task = $this->ticketService->convert($ticket);      
+            $taskService = new TaskService(new ProjectUserService);
+            $taskService->flash('create');
 
-        $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . 'task';
-        return $taskService->redirect($redirectAction, $task);
+            $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . 'task';
+            return $taskService->redirect($redirectAction, $task);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**

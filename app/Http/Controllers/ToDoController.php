@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ToDo\{CheckToDoRequest, StoreToDoRequest, UpdateToDoRequest};
 use App\Models\{Task, ToDo};
 use App\Services\ToDoService;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class ToDoController extends Controller
 {  
@@ -31,12 +33,17 @@ class ToDoController extends Controller
      */
     public function store(StoreToDoRequest $request)
     {
-        $fields = $request->validated();
-        $todo = $this->todoService->store($fields);
-        $this->todoService->flash('create');
+        try {
+            $fields = $request->validated();
+            $todo = $this->todoService->store($fields);
+            $this->todoService->flash('create');
 
-        $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . 'task';
-        return $this->todoService->redirect($redirectAction, $todo);
+            $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . 'task';
+            return $this->todoService->redirect($redirectAction, $todo);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**
@@ -55,12 +62,17 @@ class ToDoController extends Controller
      */
     public function update(UpdateToDoRequest $request, ToDo $todo)
     {
-        $fields = $request->validated();
-        $todo = $this->todoService->update($todo, $fields);
-        $this->todoService->flash('update');
+        try {
+            $fields = $request->validated();
+            $todo = $this->todoService->update($todo, $fields);
+            $this->todoService->flash('update');
 
-        $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . 'task';
-        return $this->todoService->redirect($redirectAction, $todo);
+            $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . 'task';
+            return $this->todoService->redirect($redirectAction, $todo);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**
@@ -72,14 +84,18 @@ class ToDoController extends Controller
      */
     public function check(CheckToDoRequest $request, ToDo $todo)
     {
-        $fields = $request->validated();
+        try {
+            $fields = $request->validated();
+            $todo = $this->todoService->check($todo, $fields);
+            $flashAction = ($todo->is_checked) ? 'finish' : 'return';
+            $this->todoService->flash($flashAction);
 
-        $todo = $this->todoService->check($todo, $fields);
-        $flashAction = ($todo->is_checked) ? 'finish' : 'return';
-        $this->todoService->flash($flashAction);
-
-        $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . 'task';
-        return $this->todoService->redirect($redirectAction, $todo);
+            $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . 'task';
+            return $this->todoService->redirect($redirectAction, $todo);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**

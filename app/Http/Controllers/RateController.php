@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Rate\{StoreRateRequest, UpdateRateRequest};
 use App\Models\{Rate, User};
 use App\Services\RateService;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class RateController extends Controller
 {
@@ -32,11 +34,16 @@ class RateController extends Controller
      */
     public function store(StoreRateRequest $request)
     {
-        $fields = $request->validated();
-        $rate = $this->rateService->store($fields);
-        $this->rateService->flash('create');
+        try {
+            $fields = $request->validated();
+            $rate = $this->rateService->store($fields);
+            $this->rateService->flash('create');
 
-        return $this->rateService->redirect('user', $rate); 
+            return $this->rateService->redirect('user', $rate); 
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**
@@ -56,11 +63,16 @@ class RateController extends Controller
      */
     public function update(UpdateRateRequest $request, Rate $rate)
     {
-        $fields = $request->validated();
-        $rate = $this->rateService->update($rate, $fields);
-        $this->rateService->flash('update');
+        try {
+            $fields = $request->validated();
+            $rate = $this->rateService->update($rate, $fields);
+            $this->rateService->flash('update');
 
-        return $this->rateService->redirect('user', $rate); 
+            return $this->rateService->redirect('user', $rate); 
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**

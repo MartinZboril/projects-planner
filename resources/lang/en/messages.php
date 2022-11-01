@@ -51,4 +51,5 @@ return [
     'update' => 'User was updated!',
   ],
   'complete' => 'Action was completed!',
+  'error' => 'An error has occurred!',
 ];

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Milestone\{LoadMilestoneRequest, StoreMilestoneRequest, UpdateMilestoneRequest};
 use App\Models\{Milestone, Project};
 use App\Services\MilestoneService;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class MilestoneController extends Controller
 {   
@@ -31,12 +33,17 @@ class MilestoneController extends Controller
      */
     public function store(StoreMilestoneRequest $request)
     {
-        $fields = $request->validated();
-        $milestone = $this->milestoneService->store($fields);
-        $this->milestoneService->flash('create');
+        try {
+            $fields = $request->validated();
+            $milestone = $this->milestoneService->store($fields);
+            $this->milestoneService->flash('create');
 
-        $redirectAction = isset($fields['create_and_close']) ? 'project_milestones' : 'milestone';
-        return $this->milestoneService->redirect($redirectAction, $milestone); 
+            $redirectAction = isset($fields['create_and_close']) ? 'project_milestones' : 'milestone';
+            return $this->milestoneService->redirect($redirectAction, $milestone);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        } 
     }
 
     /**
@@ -66,18 +73,28 @@ class MilestoneController extends Controller
      */
     public function update(UpdateMilestoneRequest $request, Milestone $milestone)
     {
-        $fields = $request->validated();
-        $milestone = $this->milestoneService->update($milestone, $fields);
-        $this->milestoneService->flash('update');
+        try {
+            $fields = $request->validated();
+            $milestone = $this->milestoneService->update($milestone, $fields);
+            $this->milestoneService->flash('update');
 
-        $redirectAction = isset($fields['save_and_close']) ? 'project_milestones' : 'milestone';
-        return $this->milestoneService->redirect($redirectAction, $milestone);  
+            $redirectAction = isset($fields['save_and_close']) ? 'project_milestones' : 'milestone';
+            return $this->milestoneService->redirect($redirectAction, $milestone); 
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        } 
     }
 
     public function load(LoadMilestoneRequest $request)
     {
-        $fields = $request->validated();
-        return Milestone::where('project_id', $fields['project_id'])->get(['id', 'name']);
+        try {
+            $fields = $request->validated();
+            return Milestone::where('project_id', $fields['project_id'])->get(['id', 'name']);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**

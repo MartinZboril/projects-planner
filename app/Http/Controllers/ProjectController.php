@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Project\{StoreProjectRequest, UpdateProjectRequest};
 use App\Models\{Client, Milestone, Project, Task, Ticket, ToDo, User};
 use App\Services\ProjectService;
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 class ProjectController extends Controller
 {
@@ -96,12 +98,17 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        $fields = $request->validated();
-        $project = $this->projectService->store($fields);
-        $this->projectService->flash('create');
+        try {
+            $fields = $request->validated();
+            $project = $this->projectService->store($fields);
+            $this->projectService->flash('create');
 
-        $redirectAction = isset($fields['create_and_close']) ? 'projects' : 'project';
-        return $this->projectService->redirect($redirectAction, $project);
+            $redirectAction = isset($fields['create_and_close']) ? 'projects' : 'project';
+            return $this->projectService->redirect($redirectAction, $project);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 
     /**
@@ -131,12 +138,17 @@ class ProjectController extends Controller
      */
     public function update(UpdateProjectRequest $request, Project $project)
     {
-        $fields = $request->validated();
-        $project = $this->projectService->update($project, $fields);
-        $this->projectService->flash('update');
+        try {
+            $fields = $request->validated();
+            $project = $this->projectService->update($project, $fields);
+            $this->projectService->flash('update');
 
-        $redirectAction = isset($fields['save_and_close']) ? 'projects' : 'project';
-        return $this->projectService->redirect($redirectAction, $project); 
+            $redirectAction = isset($fields['save_and_close']) ? 'projects' : 'project';
+            return $this->projectService->redirect($redirectAction, $project);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        } 
     }
 
     /**

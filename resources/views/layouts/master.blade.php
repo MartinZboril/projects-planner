@@ -28,6 +28,8 @@
     <!-- Select -->
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.css') }}">
     <!-- Custom -->
     @stack('styles')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
@@ -42,6 +44,10 @@
       @yield('content')
       <!-- Timer -->
       @include('site.timer')
+      <!-- Error -->
+      @if(Session::has('error'))
+        <input type="hidden" id="error-content" value="{{ Session::get('error') }}">
+      @endif
     </div>
     <!-- jQuery -->
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
@@ -79,8 +85,11 @@
     <script src="{{ asset('dist/js/pages/dashboard.js') }}"></script>
     <!-- Select2 -->
     <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
+    <!-- Toastr -->
+    <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
     <!-- Custom scripts -->
     <script src="{{ asset('js/timer.js') }}"></script>
+    <script src="{{ asset('js/error.js') }}"></script>
     @stack('scripts')
   </body>
 </html>
