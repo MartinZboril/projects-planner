@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Data;
 
 use App\Models\Client;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Session;
 
 class ClientService
 {
@@ -59,23 +58,6 @@ class ClientService
                     ]);
 
         return $client;
-    }
-
-    public function flash(string $action): void
-    {
-        switch ($action) {
-            case 'create':
-                Session::flash('message', __('messages.client.create'));
-                Session::flash('type', 'info');
-                break;
-            case 'update':
-                Session::flash('message', __('messages.client.update'));
-                Session::flash('type', 'info');
-                break;
-            default:
-                Session::flash('message', __('messages.complete'));
-                Session::flash('type', 'info');
-        }        
     }
 
     public function redirect(string $action, Client $client): RedirectResponse 

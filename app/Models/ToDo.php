@@ -24,6 +24,9 @@ class ToDo extends Model
         'description' => ['max:65553'],
     ];
 
+    public const FINISH = 'finish';
+    public const RETURN = 'return';
+
     public function task(): BelongsTo
     {
         return $this->belongsTo(Task::class, 'task_id');

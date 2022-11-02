@@ -4,18 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Task\{ChangeTaskRequest, StoreTaskRequest, PauseTaskRequest, UpdateTaskRequest};
 use App\Models\{Project, Task, User};
-use App\Services\TaskService;
+use App\Services\FlashService;
+use App\Services\Data\TaskService;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
 class TaskController extends Controller
 {
     protected $taskService;
+    protected $flashService;
 
-    public function __construct(TaskService $taskService)
+    public function __construct(TaskService $taskService, FlashService $flashService)
     {
         $this->middleware('auth');
         $this->taskService = $taskService;
+        $this->flashService = $flashService;
     }
 
     /**
@@ -46,7 +49,7 @@ class TaskController extends Controller
         try {
             $fields = $request->validated();
             $task = $this->taskService->store($fields);
-            $this->taskService->flash('create');
+            $this->flashService->flash(__('messages.task.create'), 'info');
 
             $redirectAction =  (($fields['redirect'] == 'projects') ? 'project_' : '') . ((isset($fields['create_and_close'])) ? 'tasks' : 'task');
             return $this->taskService->redirect($redirectAction, $task);
@@ -86,7 +89,7 @@ class TaskController extends Controller
         try {
             $fields = $request->validated();
             $task = $this->taskService->update($task, $fields);
-            $this->taskService->flash('update');
+            $this->flashService->flash(__('messages.task.update'), 'info');
 
             $redirectAction =  (($fields['redirect'] == 'projects') ? 'project_' : '') . ((isset($fields['save_and_close'])) ? 'tasks' : 'task');
             return $this->taskService->redirect($redirectAction, $task);
@@ -104,7 +107,7 @@ class TaskController extends Controller
         try {
             $fields = $request->validated();
             $task = $this->taskService->change($task, $fields);
-            $this->taskService->flash(Task::STATUSES[$fields['status']]);
+            $this->flashService->flash(__('messages.task.' . Task::STATUSES[$fields['status']]), 'info');
 
             $redirectAction =  ($fields['redirect'] == 'kanban') ? 'kanban' : ((($fields['redirect'] == 'projects') ? 'project_' : '') . 'task');
             return $this->taskService->redirect($redirectAction, $task);
@@ -122,8 +125,7 @@ class TaskController extends Controller
         try {
             $fields = $request->validated();
             $task = $this->taskService->pause($task, $fields);
-            $flashAction = ($task->is_stopped) ? 'stop' : 'resume';
-            $this->taskService->flash($flashAction);
+            $this->flashService->flash(__('messages.task.' . (($fields['action']) ? Task::STOP : Task::RESUME)), 'info');
 
             $redirectAction =  ($fields['redirect'] == 'kanban') ? 'kanban' : ((($fields['redirect'] == 'projects') ? 'project_' : '') . 'task');
             return $this->taskService->redirect($redirectAction, $task);

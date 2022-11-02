@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Data;
 
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\{Auth, Hash, Session};
+use Illuminate\Support\Facades\{Auth, Hash};
 use Illuminate\Support\Str;
 
 class UserService
@@ -58,23 +58,6 @@ class UserService
                     ]);
 
         return $user;
-    }
-
-    public function flash(string $action): void
-    {
-        switch ($action) {
-            case 'create':
-                Session::flash('message', __('messages.user.create'));
-                Session::flash('type', 'info');
-                break;
-            case 'update':
-                Session::flash('message', __('messages.user.update'));
-                Session::flash('type', 'info');
-                break;
-            default:
-                Session::flash('message', __('messages.complete'));
-                Session::flash('type', 'info');
-        }
     }
 
     public function redirect(string $action, User $user): RedirectResponse

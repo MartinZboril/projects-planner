@@ -4,18 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Project\{StoreProjectRequest, UpdateProjectRequest};
 use App\Models\{Client, Milestone, Project, Task, Ticket, ToDo, User};
-use App\Services\ProjectService;
+use App\Services\FlashService;
+use App\Services\Data\ProjectService;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
 class ProjectController extends Controller
 {
     protected $projectService;
+    protected $flashService;
 
-    public function __construct(ProjectService $projectService)
+    public function __construct(ProjectService $projectService, FlashService $flashService)
     {
         $this->middleware('auth');
         $this->projectService = $projectService;
+        $this->flashService = $flashService;
     }
 
     /**
@@ -101,7 +104,7 @@ class ProjectController extends Controller
         try {
             $fields = $request->validated();
             $project = $this->projectService->store($fields);
-            $this->projectService->flash('create');
+            $this->flashService->flash(__('messages.project.create'), 'info');
 
             $redirectAction = isset($fields['create_and_close']) ? 'projects' : 'project';
             return $this->projectService->redirect($redirectAction, $project);
@@ -141,7 +144,7 @@ class ProjectController extends Controller
         try {
             $fields = $request->validated();
             $project = $this->projectService->update($project, $fields);
-            $this->projectService->flash('update');
+            $this->flashService->flash(__('messages.project.update'), 'info');
 
             $redirectAction = isset($fields['save_and_close']) ? 'projects' : 'project';
             return $this->projectService->redirect($redirectAction, $project);

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Data;
 
 use App\Models\Timer;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\{Auth, Session};
+use Illuminate\Support\Facades\Auth;
 
 class TimerService
 {
@@ -63,35 +63,6 @@ class TimerService
         }
 
         return false;
-    }
-
-    public function flash(string $action): void
-    {
-        switch ($action) {
-            case 'create':
-                Session::flash('message', __('messages.timer.create'));
-                Session::flash('type', 'info');
-                break;
-            case 'update':
-                Session::flash('message', __('messages.timer.update'));
-                Session::flash('type', 'info');
-                break;
-            case 'start':
-                Session::flash('message', __('messages.timer.start'));
-                Session::flash('type', 'info');
-                break;
-            case 'stop':
-                Session::flash('message', __('messages.timer.stop'));
-                Session::flash('type', 'info');
-                break;
-            case 'collision':
-                Session::flash('message', __('messages.timer.collision'));
-                Session::flash('type', 'danger');
-                break;
-            default:
-                Session::flash('message', __('messages.complete'));
-                Session::flash('type', 'info');
-        }
     }
 
     public function redirect(string $action, Timer $timer = null): RedirectResponse 

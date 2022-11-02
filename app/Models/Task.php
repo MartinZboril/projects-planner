@@ -35,6 +35,9 @@ class Task extends Model
         3 => 'complete',
     ];
 
+    public const STOP = 'stop';
+    public const RESUME = 'resume';
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');

@@ -4,18 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\User\{StoreUserRequest, UpdateUserRequest};
 use App\Models\User;
-use App\Services\UserService;
+use App\Services\FlashService;
+use App\Services\Data\UserService;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
     protected $userService;
+    protected $flashService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, FlashService $flashService)
     {
         $this->middleware('auth');
         $this->userService = $userService;
+        $this->flashService = $flashService;
     }
     
     /**
@@ -42,7 +45,7 @@ class UserController extends Controller
         try {
             $fields = $request->validated();
             $user = $this->userService->store($fields);
-            $this->userService->flash('create');
+            $this->flashService->flash(__('messages.user.create'), 'info');
 
             $redirectAction = isset($fields['create_and_close']) ? 'users' : 'user';
             return $this->userService->redirect($redirectAction, $user); 
@@ -76,7 +79,7 @@ class UserController extends Controller
         try {
             $fields = $request->validated();
             $user = $this->userService->update($user, $fields);
-            $this->userService->flash('update');
+            $this->flashService->flash(__('messages.user.update'), 'info');
 
             $redirectAction = isset($fields['save_and_close']) ? 'users' : 'user';
             return $this->userService->redirect($redirectAction, $user);  

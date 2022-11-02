@@ -20,9 +20,9 @@ return [
   'task' => [
     'create' => 'Task was created!',
     'update' => 'Task was updated!',
+    'new' => 'Task was returned!',
     'in_progress' => 'Start working on Task!',
     'complete' => 'Task was completed!',
-    'return' => 'Task was returned!',
     'stop' => 'Task was stopped!',
     'resume' => 'Task was resumed!',
   ],

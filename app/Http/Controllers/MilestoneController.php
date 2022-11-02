@@ -4,18 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Milestone\{LoadMilestoneRequest, StoreMilestoneRequest, UpdateMilestoneRequest};
 use App\Models\{Milestone, Project};
-use App\Services\MilestoneService;
+use App\Services\FlashService;
+use App\Services\Data\MilestoneService;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
 class MilestoneController extends Controller
 {   
     protected $milestoneService;
+    protected $flashService;
 
-    public function __construct(MilestoneService $milestoneService)
+    public function __construct(MilestoneService $milestoneService, FlashService $flashService)
     {
         $this->middleware('auth');
         $this->milestoneService = $milestoneService;
+        $this->flashService = $flashService;
     }
 
     /**
@@ -36,7 +39,7 @@ class MilestoneController extends Controller
         try {
             $fields = $request->validated();
             $milestone = $this->milestoneService->store($fields);
-            $this->milestoneService->flash('create');
+            $this->flashService->flash(__('messages.milestone.create'), 'info');
 
             $redirectAction = isset($fields['create_and_close']) ? 'project_milestones' : 'milestone';
             return $this->milestoneService->redirect($redirectAction, $milestone);
@@ -76,7 +79,7 @@ class MilestoneController extends Controller
         try {
             $fields = $request->validated();
             $milestone = $this->milestoneService->update($milestone, $fields);
-            $this->milestoneService->flash('update');
+            $this->flashService->flash(__('messages.milestone.update'), 'info');
 
             $redirectAction = isset($fields['save_and_close']) ? 'project_milestones' : 'milestone';
             return $this->milestoneService->redirect($redirectAction, $milestone); 

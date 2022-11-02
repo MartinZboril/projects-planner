@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Data;
 
 use App\Models\{Task, Ticket};
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\{Auth, Session};
+use Illuminate\Support\Facades\Auth;
 
 class TicketService
 {
@@ -103,35 +103,6 @@ class TicketService
                     ]);  
 
         return $task;
-    }
-
-    public function flash(string $action): void
-    {
-        switch ($action) {
-            case 'create':
-                Session::flash('message', __('messages.ticket.create'));
-                Session::flash('type', 'info');
-                break;
-            case 'update':
-                Session::flash('message', __('messages.ticket.update'));
-                Session::flash('type', 'info');
-                break;
-            case 'open':
-                Session::flash('message', __('messages.ticket.open'));
-                Session::flash('type', 'info');
-                break;
-            case 'close':
-                Session::flash('message', __('messages.ticket.close'));
-                Session::flash('type', 'info');
-                break;
-            case 'archive':
-                Session::flash('message', __('messages.ticket.archive'));
-                Session::flash('type', 'info');
-                break;
-            default:
-                Session::flash('message', __('messages.complete'));
-                Session::flash('type', 'info');
-        }
     }
 
     public function redirect(string $action, Ticket $ticket): RedirectResponse 

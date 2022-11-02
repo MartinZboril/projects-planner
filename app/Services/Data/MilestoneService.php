@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Data;
 
 use App\Models\Milestone;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Session;
 
 class MilestoneService
 {
@@ -36,23 +35,6 @@ class MilestoneService
                     ]);
 
         return $milestone;
-    }
-
-    public function flash(string $action): void
-    {
-        switch ($action) {
-            case 'create':
-                Session::flash('message', __('messages.milestone.create'));
-                Session::flash('type', 'info');
-                break;
-            case 'update':
-                Session::flash('message', __('messages.milestone.update'));
-                Session::flash('type', 'info');
-                break;
-            default:
-                Session::flash('message', __('messages.complete'));
-                Session::flash('type', 'info');
-        } 
     }
 
     public function redirect(string $action, Milestone $milestone): RedirectResponse 

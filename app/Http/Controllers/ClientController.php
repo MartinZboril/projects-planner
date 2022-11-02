@@ -4,18 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Client\{StoreClientRequest, UpdateClientRequest};
 use App\Models\Client;
-use App\Services\ClientService;
+use App\Services\FlashService;
+use App\Services\Data\ClientService;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
 class ClientController extends Controller
 {
     protected $clientService;
+    protected $flashService;
 
-    public function __construct(ClientService $clientService)
+    public function __construct(ClientService $clientService, FlashService $flashService)
     {
         $this->middleware('auth');
         $this->clientService = $clientService;
+        $this->flashService = $flashService;
     }
 
     /**
@@ -46,7 +49,7 @@ class ClientController extends Controller
         try {
             $fields = $request->validated();
             $client = $this->clientService->store($fields);
-            $this->clientService->flash('create');
+            $this->flashService->flash(__('messages.client.create'), 'info');
 
             $redirectAction = isset($fields['create_and_close']) ? 'clients' : 'client';
             return $this->clientService->redirect($redirectAction, $client);
@@ -86,7 +89,7 @@ class ClientController extends Controller
         try {
             $fields = $request->validated();
             $client = $this->clientService->update($client, $fields);
-            $this->clientService->flash('update');
+            $this->flashService->flash(__('messages.client.update'), 'info');
     
             $redirectAction = isset($fields['save_and_close']) ? 'clients' : 'client';
             return $this->clientService->redirect($redirectAction, $client);         

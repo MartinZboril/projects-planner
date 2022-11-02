@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Timer\{StartTimerRequest, StoreTimerRequest, UpdateTimerRequest};
 use App\Models\{Project, Timer};
-use App\Services\TimerService;
+use App\Services\FlashService;
+use App\Services\Data\TimerService;
 use Exception;
 use Illuminate\Support\Facades\{Auth, Log};
 
@@ -12,10 +13,11 @@ class TimerController extends Controller
 {  
     protected $timerService;
 
-    public function __construct(TimerService $timerService)
+    public function __construct(TimerService $timerService, FlashService $flashService)
     {
         $this->middleware('auth');
         $this->timerService = $timerService;
+        $this->flashService = $flashService;
     }
 
     /**
@@ -37,7 +39,7 @@ class TimerController extends Controller
         try {
             $fields = $request->validated();
             $timer = $this->timerService->store($fields);
-            $this->timerService->flash('create');
+            $this->flashService->flash(__('messages.timer.create'), 'info');
 
             return $this->timerService->redirect('project_timesheets', $timer); 
         } catch (Exception $exception) {
@@ -77,7 +79,7 @@ class TimerController extends Controller
         try {
             $fields = $request->validated();
             $timer = $this->timerService->update($timer, $fields);
-            $this->timerService->flash('update');
+            $this->flashService->flash(__('messages.timer.create'), 'info');
 
             return $this->timerService->redirect('project_timesheets', $timer); 
         } catch (Exception $exception) {
@@ -95,12 +97,12 @@ class TimerController extends Controller
             $fields = $request->validated();
 
             if($this->timerService->checkIfNotRunningAnoutherTimer($fields['project_id'], Auth::id())) {
-                $this->timerService->flash('collision');            
+                $this->flashService->flash(__('messages.timer.collision'), 'info');
                 return $this->timerService->redirect(''); 
             }
 
             $timer = $this->timerService->start($fields);
-            $this->timerService->flash('start');
+            $this->flashService->flash(__('messages.timer.start'), 'info');
 
             return $this->timerService->redirect('', $timer); 
         } catch (Exception $exception) {
@@ -116,7 +118,7 @@ class TimerController extends Controller
     {
         try {
             $timer = $this->timerService->stop($timer);
-            $this->timerService->flash('stop');
+            $this->flashService->flash(__('messages.timer.stop'), 'info');
 
             return $this->timerService->redirect('', $timer);
         } catch (Exception $exception) {

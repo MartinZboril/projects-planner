@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Data;
 
 use App\Models\Task;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\{Auth, Session};
+use Illuminate\Support\Facades\Auth;
 
 class TaskService
 {
@@ -83,43 +83,6 @@ class TaskService
                 ]);
 
         return $task;
-    }
-
-    public function flash(string $action): void
-    {
-        switch ($action) {
-            case 'create':
-                Session::flash('message', __('messages.task.create'));
-                Session::flash('type', 'info');
-                break;
-            case 'update':
-                Session::flash('message', __('messages.task.update'));
-                Session::flash('type', 'info');
-                break;
-            case 'in_progress':
-                Session::flash('message', __('messages.task.in_progress'));
-                Session::flash('type', 'info');
-                break;
-            case 'complete':
-                Session::flash('message', __('messages.task.complete'));
-                Session::flash('type', 'info');
-                break;
-            case 'return':
-                Session::flash('message', __('messages.task.return'));
-                Session::flash('type', 'info');
-                break;
-            case 'stop':
-                Session::flash('message', __('messages.task.stop'));
-                Session::flash('type', 'info');
-                break;
-            case 'resume':
-                Session::flash('message', __('messages.task.resume'));
-                Session::flash('type', 'info');
-                break;
-            default:
-                Session::flash('message', __('messages.complete'));
-                Session::flash('type', 'info');
-        }
     }
 
     public function redirect(string $action, Task $task): RedirectResponse 

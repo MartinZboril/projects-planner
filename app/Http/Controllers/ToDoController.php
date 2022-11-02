@@ -4,18 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ToDo\{CheckToDoRequest, StoreToDoRequest, UpdateToDoRequest};
 use App\Models\{Task, ToDo};
-use App\Services\ToDoService;
+use App\Services\FlashService;
+use App\Services\Data\ToDoService;
 use Exception;
 use Illuminate\Support\Facades\Log;
 
 class ToDoController extends Controller
 {  
     protected $todoService;
+    protected $flashService;
 
-    public function __construct(ToDoService $todoService)
+    public function __construct(ToDoService $todoService, FlashService $flashService)
     {
         $this->middleware('auth');
         $this->todoService = $todoService;
+        $this->flashService = $flashService;
     }
 
     /**
@@ -36,7 +39,7 @@ class ToDoController extends Controller
         try {
             $fields = $request->validated();
             $todo = $this->todoService->store($fields);
-            $this->todoService->flash('create');
+            $this->flashService->flash(__('messages.todo.create'), 'info');
 
             $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . 'task';
             return $this->todoService->redirect($redirectAction, $todo);
@@ -65,7 +68,7 @@ class ToDoController extends Controller
         try {
             $fields = $request->validated();
             $todo = $this->todoService->update($todo, $fields);
-            $this->todoService->flash('update');
+            $this->flashService->flash(__('messages.todo.update'), 'info');
 
             $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . 'task';
             return $this->todoService->redirect($redirectAction, $todo);
@@ -87,8 +90,8 @@ class ToDoController extends Controller
         try {
             $fields = $request->validated();
             $todo = $this->todoService->check($todo, $fields);
-            $flashAction = ($todo->is_checked) ? 'finish' : 'return';
-            $this->todoService->flash($flashAction);
+            $this->flashService->flash(__('messages.todo.' . ($fields['action'] ? ToDo::FINISH : ToDo::RETURN)), 'info');
+
 
             $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . 'task';
             return $this->todoService->redirect($redirectAction, $todo);
