@@ -34,9 +34,9 @@
                 @if ($task->milestone)
                     <span class="d-block">Milestone: <b>{{ $task->milestone->name }}</b></span>
                 @endif
-                <span class="d-block">User: <b>{{ $task->user->name }} {{ $task->user->surname }}</b></span>
+                <span class="d-block">User: <b>{{ $task->user->full_name }}</b></span>
                 @if ($task->user->id != $task->author->id)
-                    <span class="d-block">Author: <b>{{ $task->author->name }} {{ $task->author->surname }}</b></span>
+                    <span class="d-block">Author: <b>{{ $task->author->full_name }}</b></span>
                 @endif
                 <span class="d-block">Status: <b>@include('tasks.partials.status', ['task' => $task])</b></span>
                 <hr>

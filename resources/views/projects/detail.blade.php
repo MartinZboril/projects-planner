@@ -69,9 +69,7 @@
                                             <li class="list-group-item">
                                                 <div class="user-block">
                                                     <img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;">
-                                                    <span class="username">
-                                                    {{ $user->name }} {{ $user->surname }}
-                                                    </span>
+                                                    <span class="username">{{ $user->full_name }}</span>
                                                     <span class="description">Member</span>
                                                 </div> 
                                             </li>

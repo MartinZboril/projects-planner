@@ -62,7 +62,7 @@
                         <select class="form-control @error('user_id') is-invalid @enderror" name="user_id" id="user-id" style="width: 100%;">
                             <option disabled selected value>select user</option>
                             @foreach($users as $user)
-                                <option value="{{ $user->id }}" @selected(old('user_id', $task->user_id) == $user->id)>{{ $user->name }} {{ $user->surname }}</option>
+                                <option value="{{ $user->id }}" @selected(old('user_id', $task->user_id) == $user->id)>{{ $user->full_name }}</option>
                             @endforeach
                         </select>
                         @error('user_id')

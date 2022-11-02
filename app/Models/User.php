@@ -54,6 +54,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'full_name'
+    ];
+
     public const VALIDATION_RULES = [
         'name' => ['required', 'string', 'max:255'],
         'surname' => ['required', 'string', 'max:255'],
@@ -83,5 +87,10 @@ class User extends Authenticatable
     public function rates(): HasMany
     {
         return $this->hasMany(Rate::class, 'user_id');
+    }
+
+    public function getFullNameAttribute(): string
+    {
+        return $this->name . ' ' . $this->surname;
     }
 }

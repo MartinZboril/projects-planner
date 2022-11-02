@@ -58,7 +58,7 @@
                                 @forelse ($project->tasks as $task)
                                     <tr>
                                         <td><a href="{{ route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) }}">{{ $task->name }}</a></td>
-                                        <td><img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $task->user->name }} {{ $task->user->surname }}"></td>
+                                        <td><img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $task->user->full_name }}"></td>
                                         <td>{{ $task->due_date->format('d.m.Y') }}</td>
                                         <td>{{ $task->milestone ? $task->milestone->name : '-' }}</td>
                                         <td>@include('tasks.partials.status', ['task' => $task])</td>

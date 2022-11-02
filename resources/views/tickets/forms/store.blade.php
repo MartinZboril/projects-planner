@@ -31,7 +31,7 @@
                             <select class="form-control @error('assignee_id') is-invalid @enderror" name="assignee_id" id="assignee-id" style="width: 100%;">
                                 <option disabled selected value>select assignee</option>
                                 @foreach($users as $user)
-                                    <option value="{{ $user->id }}" @selected(old('assignee_id') == $user->id)>{{ $user->name }} {{ $user->surname }}</option>
+                                    <option value="{{ $user->id }}" @selected(old('assignee_id') == $user->id)>{{ $user->full_name }}</option>
                                 @endforeach
                             </select>
                             @error('assignee_id')
@@ -45,7 +45,7 @@
                             <select class="form-control @error('assignee_id') is-invalid @enderror" name="assignee_id" id="assignee-id" style="width: 100%;">
                                 <option disabled selected value>select assignee</option>
                                 @foreach($project->team as $user)
-                                    <option value="{{ $user->id }}" @selected(old('assignee_id') == $user->id)>{{ $user->name }} {{ $user->surname }}</option>
+                                    <option value="{{ $user->id }}" @selected(old('assignee_id') == $user->id)>{{ $user->full_name }}</option>
                                 @endforeach
                             </select>
                             @error('assignee_id')

@@ -38,7 +38,7 @@
                             <tbody>
                                 @forelse ($users as $user)
                                     <tr>
-                                        <td><a href="{{ route('users.detail', $user->id) }}">{{ $user->name }} {{ $user->surname }}</a></td>
+                                        <td><a href="{{ route('users.detail', $user->id) }}">{{ $user->full_name }}</a></td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->job_title }}</td>
                                         <td>{{ $user->mobile }}</td>

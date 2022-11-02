@@ -71,9 +71,9 @@
                                         </div>
                                         <div class="card-body">
                                             <span class="d-block">Due date: <span class="btn btn-sm btn-outline-danger disabled mb-1" style="font-size:14px;">{{ $task->due_date->format('d.m.Y') }}</span></span>
-                                            <span class="d-block">User: <b>{{ $task->user->name }} {{ $task->user->surname }}</b></span>
+                                            <span class="d-block">User: <b>{{ $task->user->full_name }}</b></span>
                                             @if ($task->user->id != $task->author->id)
-                                                <span class="d-block">Author: <b>{{ $task->author->name }} {{ $task->author->surname }}</b></span>
+                                                <span class="d-block">Author: <b>{{ $task->author->full_name }}</b></span>
                                             @endif
                                             @if ($task->milestone)
                                                 <span class="d-block">Milestone: <b>{{ $task->milestone->name }}</b></span>
@@ -122,9 +122,9 @@
                                         </div>
                                         <div class="card-body">
                                             <span class="d-block">Due date: <span class="btn btn-sm btn-outline-danger disabled mb-1" style="font-size:14px;">{{ $task->due_date->format('d.m.Y') }}</span></span>
-                                            <span class="d-block">User: <b>{{ $task->user->name }} {{ $task->user->surname }}</b></span>
+                                            <span class="d-block">User: <b>{{ $task->user->full_name }}</b></span>
                                             @if ($task->user->id != $task->author->id)
-                                                <span class="d-block">Author: <b>{{ $task->author->name }} {{ $task->author->surname }}</b></span>
+                                                <span class="d-block">Author: <b>{{ $task->author->full_name }}</b></span>
                                             @endif
                                             @if ($task->milestone)
                                                 <span class="d-block">Milestone: <b>{{ $task->milestone->name }}</b></span>
@@ -174,9 +174,9 @@
                                         </div>
                                         <div class="card-body">
                                             <span class="d-block">Due date: <span class="btn btn-sm btn-outline-danger disabled mb-1" style="font-size:14px;">{{ $task->due_date->format('d.m.Y') }}</span></span>
-                                            <span class="d-block">User: <b>{{ $task->user->name }} {{ $task->user->surname }}</b></span>
+                                            <span class="d-block">User: <b>{{ $task->user->full_name }}</b></span>
                                             @if ($task->user->id != $task->author->id)
-                                                <span class="d-block">Author: <b>{{ $task->author->name }} {{ $task->author->surname }}</b></span>
+                                                <span class="d-block">Author: <b>{{ $task->author->full_name }}</b></span>
                                             @endif
                                             @if ($task->milestone)
                                                 <span class="d-block">Milestone: <b>{{ $task->milestone->name }}</b></span>

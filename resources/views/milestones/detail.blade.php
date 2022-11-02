@@ -29,7 +29,7 @@
                         <div class="card-header">{{ $milestone->name }}</div>
                         <div class="card-body">
                             <span class="d-block">Project: <b>{{ $milestone->project->name }}</b></span>
-                            <span class="d-block">User: <b>{{ $milestone->owner->name }} {{ $milestone->owner->surname }}</b></span>
+                            <span class="d-block">User: <b>{{ $milestone->owner->full_name }}</b></span>
                             <span class="d-block">Start date: <b>{{ $milestone->start_date->format('d.m.Y') }}</b></span>
                             <span class="d-block">End date: <b>{{ $milestone->end_date->format('d.m.Y') }}</b></span>
                             <span class="d-block">Tasks: <b>{{ $milestone->progress * 100 }}% Complete ({{ $milestone->tasksCompleted->count() }}/{{ $milestone->tasks->count() }})</b></span>
@@ -63,7 +63,7 @@
                                             <tr>
                                                 <td><a href="{{ route('tasks.detail', $task->id) }}">{{ $task->name }}</a></td>
                                                 <td>{{ $task->project->name }}</td>
-                                                <td><img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $task->user->name }} {{ $task->user->surname }}"></td>
+                                                <td><img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $task->user->full_name }}"></td>
                                                 <td>{{ $task->due_date->format('d.m.Y') }}</td>
                                                 <td>@include('tasks.partials.status', ['task' => $task])</td>
                                             </tr>

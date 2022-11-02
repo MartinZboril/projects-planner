@@ -43,10 +43,10 @@
                                     <tr>
                                         <td><a href="{{ route('tickets.detail', $ticket->id) }}">{{ $ticket->subject }}</a></td>
                                         <td>{{ $ticket->project->name }}</td>
-                                        <td><img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $ticket->reporter->name }} {{ $ticket->reporter->surname }}"></td>
+                                        <td><img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $ticket->reporter->full_name }}"></td>
                                         <td>
                                             @if($ticket->assignee)
-                                                <img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $ticket->assignee->name }} {{ $ticket->assignee->surname }}">
+                                                <img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $ticket->assignee->full_name }}">
                                             @else
                                                 -
                                             @endif

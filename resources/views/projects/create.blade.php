@@ -46,7 +46,7 @@
                                             <option value="{{ $user->id }}"
                                             @if(old('team')) 
                                                 @foreach(old('team') as $formUser) @selected($formUser == $user->id) @endforeach
-                                            @endif>{{ $user->name }} {{ $user->surname }}</option>
+                                            @endif>{{ $user->full_name }}</option>
                                         @endforeach
                                     </select>
                                     @error('team')

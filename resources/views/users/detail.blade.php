@@ -29,7 +29,7 @@
                         <div class="card-header">Profile</div>
                         <div class="card-body">
                             <div class="text-center">
-                                <h5>{{ $user->name }} {{ $user->surname }}</h5>
+                                <h5>{{ $user->full_name }}</h5>
                                 <img src="{{ asset('dist/img/user.png') }}" class="img-circle mb-2" alt="User Image" style="width: 100px;height: 100px;">
                             </div>
                             <table class="table">

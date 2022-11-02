@@ -31,9 +31,9 @@
                 </div>
                 <span class="d-block">Project: <b>{{ $ticket->project->name }}</b></span>
                 <span class="d-block">Client: <b>{{ $ticket->project->client->name }}</b></span>
-                <span class="d-block">Reporter: <b>{{ $ticket->reporter->name }} {{ $ticket->reporter->surname }}</b></span>
+                <span class="d-block">Reporter: <b>{{ $ticket->reporter->full_name }}</b></span>
                 @if ($ticket->assignee)
-                    <span class="d-block">Author: <b>{{ $ticket->assignee->name }} {{ $ticket->assignee->surname }}</b></span>
+                    <span class="d-block">Author: <b>{{ $ticket->assignee->full_name }}</b></span>
                 @endif
                 <span class="d-block">Status: <b>@include('tickets.partials.status', ['status' => $ticket->status])</b></span>
                 <span class="d-block">Priority: <b>@include('tickets.partials.priority', ['priority' => $ticket->priority])</b></span>

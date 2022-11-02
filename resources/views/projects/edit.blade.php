@@ -52,7 +52,7 @@
                                                 @foreach($project->team as $projectUser)
                                                     @selected($projectUser->id == $user->id)
                                                 @endforeach 
-                                            @endif>{{ $user->name }} {{ $user->surname }}</option>
+                                            @endif>{{ $user->full_name }}</option>
                                         @endforeach
                                     </select>
                                     @error('team')

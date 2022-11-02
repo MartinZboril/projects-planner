@@ -58,7 +58,7 @@
                                 @forelse ($project->milestones as $milestone)
                                     <tr>
                                         <td><a href="{{ route('milestones.detail', ['project' => $project->id, 'milestone' => $milestone->id]) }}">{{ $milestone->name }}</a></td>
-                                        <td>{{ $milestone->owner->name }} {{ $milestone->owner->surname }}</td>
+                                        <td>{{ $milestone->owner->full_name }}</td>
                                         <td>
                                             <div class="progress progress-sm">
                                                 <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="{{ $milestone->progress * 100 }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $milestone->progress * 100 }}%"></div>

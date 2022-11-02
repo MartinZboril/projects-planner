@@ -43,7 +43,7 @@
                                         <td>{{ $project->client->name }}</td>
                                         <td>
                                             @foreach ($project->team as $user)
-                                                <img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $user->name }} {{ $user->surname }}">
+                                                <img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $user->full_name }}">
                                             @endforeach
                                         </td>
                                         <td>0 %</td>

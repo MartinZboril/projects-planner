@@ -60,7 +60,7 @@
                                 @forelse ($project->timers as $timer)
                                     <tr>
                                         <td>{{ $timer->rate->name }}</td>
-                                        <td>{{ $timer->user->name }} {{ $timer->user->surname }}</td>
+                                        <td>{{ $timer->user->full_name }}</td>
                                         <td>{{ (!$timer->until) ? 'N/A' : (($timer->total_time) ? $timer->total_time : 0) }}</td>
                                         <td>{{ ($timer->until) ? $timer->amount : 'N/A' }}</td>
                                         <td>{{ $timer->since->format('d.m.Y H:i') }}</td>
