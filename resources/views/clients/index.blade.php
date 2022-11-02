@@ -21,7 +21,7 @@
             <div class="card card-primary card-outline rounded-0">
                 <div class="card-body">
                     <!-- Message -->
-                    @include('site.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                    @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                     <!-- Table -->
                     <div class="table-responsive">
                         <table id="@if(count($clients) > 0){{ 'clients-table' }}@endif" class="table table-bordered table-striped">
@@ -37,8 +37,8 @@
                                 @forelse ($clients as $client)
                                     <tr>
                                         <td><a href="{{ route('clients.detail', $client->id) }}">{{ $client->name }}</a></td>
-                                        <td>{{ $client->contact_person }}</td>
-                                        <td>{{ $client->email }}</td>
+                                        <td>{{ $client->contact_person_label }}</td>
+                                        <td>{{ $client->email_label }}</td>
                                         <td>{{ $client->created_at->format('d.m.Y') }}</td>
                                     </tr>
                                 @empty

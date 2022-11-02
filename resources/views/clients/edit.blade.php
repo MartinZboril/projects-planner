@@ -161,7 +161,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="linekedin">LinekedIn</label>
-                                            <input type="text" name="linekedin" id="linekedin" class="form-control @error('linekedin') is-invalid @enderror" placeholder="LinekedIn" value="{{ old('linekedin', $client->linekedin) ? old('linekedin', $client->linekedin) : 'https://linkedin.com/in/' }}" autocomplete="off">
+                                            <input type="text" name="linekedin" id="linekedin" class="form-control @error('linekedin') is-invalid @enderror" placeholder="LinekedIn" value="{{ old('linekedin', $client->linekedin) }}" autocomplete="off">
                                             @error('linekedin')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -170,7 +170,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="twitter">Twitter</label>
-                                            <input type="text" name="twitter" id="twitter" class="form-control @error('twitter') is-invalid @enderror" placeholder="Twitter" value="{{ old('twitter', $client->twitter) ? old('twitter', $client->twitter) : 'https://twitter.com/' }}" autocomplete="off">
+                                            <input type="text" name="twitter" id="twitter" class="form-control @error('twitter') is-invalid @enderror" placeholder="Twitter" value="{{ old('twitter', $client->twitter) }}" autocomplete="off">
                                             @error('twitter')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -181,7 +181,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="facebook">Facebook</label>
-                                            <input type="text" name="facebook" id="facebook" class="form-control @error('facebook') is-invalid @enderror" placeholder="Facebook" value="{{ old('facebook', $client->facebook) ? old('facebook', $client->facebook) : 'https://facebook.com/' }}" autocomplete="off">
+                                            <input type="text" name="facebook" id="facebook" class="form-control @error('facebook') is-invalid @enderror" placeholder="Facebook" value="{{ old('facebook', $client->facebook) }}" autocomplete="off">
                                             @error('facebook')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -190,7 +190,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="instagram">Instagram</label>
-                                            <input type="text" name="instagram" id="instagram" class="form-control @error('instagram') is-invalid @enderror" placeholder="Instagram" value="{{ old('instagram', $client->instagram) ? old('instagram', $client->instagram) : 'https://www.instagram.com/' }}" autocomplete="off">
+                                            <input type="text" name="instagram" id="instagram" class="form-control @error('instagram') is-invalid @enderror" placeholder="Instagram" value="{{ old('instagram', $client->instagram) }}" autocomplete="off">
                                             @error('instagram')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror

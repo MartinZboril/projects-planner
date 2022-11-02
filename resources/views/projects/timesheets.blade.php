@@ -40,7 +40,7 @@
                 <div class="card-header"><a href="{{ route('timers.create', ['project' => $project->id]) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
                 <div class="card-body">
                     <!-- Message -->
-                    @include('site.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                    @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                     <!-- Content -->
                     <div class="table-responsive">
                         <table id="@if(count($project->timers) > 0){{ 'timesheets-table' }}@endif" class="table table-bordered table-striped">
@@ -61,10 +61,10 @@
                                     <tr>
                                         <td>{{ $timer->rate->name }}</td>
                                         <td>{{ $timer->user->full_name }}</td>
-                                        <td>{{ (!$timer->until) ? 'N/A' : (($timer->total_time) ? $timer->total_time : 0) }}</td>
-                                        <td>{{ ($timer->until) ? $timer->amount : 'N/A' }}</td>
+                                        <td>{{ $timer->until ? $timer->total_time : 'N/A' }}</td>
+                                        <td>{{ $timer->until ? $timer->amount : 'N/A' }}</td>
                                         <td>{{ $timer->since->format('d.m.Y H:i') }}</td>
-                                        <td>{{ ($timer->until) ? $timer->until->format('d.m.Y H:i') : 'N/A' }}</td>
+                                        <td>{{ $timer->until ? $timer->until->format('d.m.Y H:i') : 'N/A' }}</td>
                                         <td>{{ $timer->since->format('d.m.Y') }}</td>
                                         <td>
                                             @if($timer->until)

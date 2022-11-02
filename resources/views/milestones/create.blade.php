@@ -48,7 +48,7 @@
                                 </div>
                                 <div class="form-group required">
                                     <label for="end_date" class="control-label">End date</label>
-                                    <input type="date" name="end_date" id="end_date" class="form-control @error('end_date') is-invalid @enderror" placeholder="due date" value="{{ old('end_date', date("Y-m-d", strtotime('+ 7 day', strtotime(date('Y-m-d'))))) }}" autocomplete="off">
+                                    <input type="date" name="end_date" id="end_date" class="form-control @error('end_date') is-invalid @enderror" placeholder="due date" value="{{ old('end_date', date('Y-m-d', strtotime('+7 days'))) }}" autocomplete="off">
                                     @error('end_date')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror

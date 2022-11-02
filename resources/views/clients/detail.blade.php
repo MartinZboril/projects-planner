@@ -13,7 +13,7 @@
     <section class="content">
         <div class="container-fluid">
             <!-- Message -->
-            @include('site.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+            @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
             <!-- Content -->
             <div class="row">
                 <div class="col-md-5">
@@ -24,8 +24,8 @@
                                 <img src="{{ asset('dist/img/user.png') }}" class="img-circle mr-3" alt="Client Image" style="width: 75px;height: 75px;">
                                 <div class="">
                                     <h5>{{ $client->name }}</h5>
-                                    <i class="fas fa-envelope"></i> {{ $client->email ? $client->email : '-' }}<br>
-                                    <i class="fas fa-user-circle"></i> {{ $client->contact_person ? $client->contact_person : '-' }} ({{ $client->contact_email ? $client->contact_email : '-' }})<br>
+                                    <i class="fas fa-envelope"></i> {{ $client->email_label }}<br>
+                                    <i class="fas fa-user-circle"></i> {{ $client->contact_person_label }} ({{ $client->contact_email_label }})<br>
                                 </div>                            
                             </div>
                             @if ($client->note)
@@ -35,11 +35,11 @@
                             @endif
                             <ul class="list-group">
                                 <li class="list-group-item active"><i class="fas fa-address-card mr-2"></i>Contacts</li>
-                                <li class="list-group-item"><i class="fas fa-phone mr-2"></i>Phone: {{ $client->phone ? $client->phone : '-' }}</li>
-                                <li class="list-group-item"><i class="fas fa-mobile-alt mr-2"></i>Mobile: {{ $client->mobile ? $client->mobile : '-' }}</li>
-                                <li class="list-group-item"><i class="fas fa-pager mr-2"></i></i>Website: @if ($client->website) <a href="{{ $client->website }}">{{ $client->website }}</a> @else - @endif</li>
-                                <li class="list-group-item"><i class="fas fa-envelope mr-2"></i>Email: {{ $client->email ? $client->email : '-' }}</li>
-                                <li class="list-group-item"><i class="fas fa-map mr-2"></i>Address: @if ($client->street || $client->house_number || $client->city || $client->country || $client->zip_code){{ $client->street ? $client->street . ' ' . $client->house_number : '-' }} ; {{ $client->city ? $client->city : '-' }} ; {{ $client->country ? $client->country : '-' }} ; {{ $client->zip_code ? $client->zip_code : '-' }}</li>@else-@endif
+                                <li class="list-group-item"><i class="fas fa-phone mr-2"></i>Phone: {{ $client->phone_label }}</li>
+                                <li class="list-group-item"><i class="fas fa-mobile-alt mr-2"></i>Mobile: {{ $client->mobile_label }}</li>
+                                <li class="list-group-item"><i class="fas fa-pager mr-2"></i></i>Website: @if ($client->website) <a href="{{ $client->website }}">{{ $client->website }}</a> @else NaN @endif</li>
+                                <li class="list-group-item"><i class="fas fa-envelope mr-2"></i>Email: {{ $client->email_label }}</li>
+                                <li class="list-group-item"><i class="fas fa-map mr-2"></i>Address: {{ $client->street_label }}; {{ $client->city_label }}; {{ $client->zip_code_label }}; {{ $client->country_label }}
                             </ul>
                             @if ($client->facebook || $client->twitter || $client->instagram || $client->linekedin || $client->skype)
                                 <hr>

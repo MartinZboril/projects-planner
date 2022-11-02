@@ -15,7 +15,7 @@
                     </div>
                     <div class="form-group required">
                         <label for="deadline" class="control-label">Deadline</label>
-                        <input type="date" name="deadline" id="deadline" class="form-control @error('deadline') is-invalid @enderror" placeholder="deadline" value="{{ old('deadline', date("Y-m-d", strtotime('+ 7 day', strtotime(date('Y-m-d'))))) }}" autocomplete="off">
+                        <input type="date" name="deadline" id="deadline" class="form-control @error('deadline') is-invalid @enderror" placeholder="deadline" value="{{ old('deadline', date('Y-m-d', strtotime('+7 days'))) }}" autocomplete="off">
                         @error('deadline')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

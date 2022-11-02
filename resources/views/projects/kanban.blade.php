@@ -41,46 +41,22 @@
                             <div class="card-header">New</div>
                             <div class="card-body">
                                 <!-- Message -->
-                                @include('site.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                                @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                                 <!-- Content -->
                                 @forelse ($project->newTasks as $task)
                                     <div class="card card-info card-outline">
                                         <div class="card-header">
                                             <div class="card-title">
                                                 <a href="{{ route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) }}">{{ $task->name }}</a>
-                                                @if($task->is_stopped)
-                                                    <span class='badge badge-danger ml-2' style='font-size:14px;'>Stopped</span>
-                                                @elseif($task->is_returned)
-                                                    <span class='badge badge-danger ml-2' style='font-size:14px;'>Returned</span>                                            
-                                                @endif
                                             </div>
                                             <div class="card-tools">
-                                                @if ($task->status == 1)
-                                                    <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('start-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-play" data-toggle="tooltip" data-placement="bottom" title="Start"></i></a>
-                                                @elseif ($task->status == 2)
-                                                    @if ($task->is_stopped)
-                                                        <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('resume-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-hourglass-start" data-toggle="tooltip" data-placement="bottom" title="Resume"></i></a>
-                                                    @else
-                                                        <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('complete-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-check" data-toggle="tooltip" data-placement="bottom" title="Complete"></i></a>
-                                                        <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('stop-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-stop" data-toggle="tooltip" data-placement="bottom" title="Stop"></i></a>
-                                                    @endif
-                                                @else
-                                                    <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('return-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-undo" data-toggle="tooltip" data-placement="bottom" title="Return"></i></a>
-                                                @endif
+                                                <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('start-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-play" data-toggle="tooltip" data-placement="bottom" title="Start"></i></a>
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <span class="d-block">Due date: <span class="btn btn-sm btn-outline-danger disabled mb-1" style="font-size:14px;">{{ $task->due_date->format('d.m.Y') }}</span></span>
-                                            <span class="d-block">User: <b>{{ $task->user->full_name }}</b></span>
-                                            @if ($task->user->id != $task->author->id)
-                                                <span class="d-block">Author: <b>{{ $task->author->full_name }}</b></span>
-                                            @endif
-                                            @if ($task->milestone)
-                                                <span class="d-block">Milestone: <b>{{ $task->milestone->name }}</b></span>
-                                            @endif
+                                            @include('projects.task.information')
                                         </div>
                                     </div>
-
                                     @include('tasks.forms.change', ['id' => 'start-working-on-task-' . $task->id . '-form', 'task' => $task, 'statusId' => 2, 'redirect' => 'kanban'])    
                                 @empty
                                     <div class="card">
@@ -100,35 +76,22 @@
                                             <div class="card-title">
                                                 <a href="{{ route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) }}">{{ $task->name }}</a>
                                                 @if($task->is_stopped)
-                                                    <span class='badge badge-danger ml-2' style='font-size:14px;'>Stopped</span>
+                                                    <span class="badge badge-@include('tasks.partials.colour', ['task' => $task]) ml-2" style='font-size:14px;'>@include('tasks.partials.status', ['task' => $task])</span>
                                                 @elseif($task->is_returned)
-                                                    <span class='badge badge-danger ml-2' style='font-size:14px;'>Returned</span>
+                                                    <span class="badge badge-@include('tasks.partials.colour', ['task' => $task]) ml-2" style='font-size:14px;'>@include('tasks.partials.status', ['task' => $task])</span>
                                                 @endif
                                             </div>
                                             <div class="card-tools">
-                                                @if ($task->status == 1)
-                                                    <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('start-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-play" data-toggle="tooltip" data-placement="bottom" title="Start"></i></a>
-                                                @elseif ($task->status == 2)
-                                                    @if ($task->is_stopped)
-                                                        <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('resume-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-hourglass-start" data-toggle="tooltip" data-placement="bottom" title="Resume"></i></a>
-                                                    @else
-                                                        <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('complete-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-check" data-toggle="tooltip" data-placement="bottom" title="Complete"></i></a>
-                                                        <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('stop-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-stop" data-toggle="tooltip" data-placement="bottom" title="Stop"></i></a>
-                                                    @endif
+                                                @if ($task->is_stopped)
+                                                    <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('resume-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-hourglass-start" data-toggle="tooltip" data-placement="bottom" title="Resume"></i></a>
                                                 @else
-                                                    <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('return-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-undo" data-toggle="tooltip" data-placement="bottom" title="Return"></i></a>
+                                                    <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('complete-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-check" data-toggle="tooltip" data-placement="bottom" title="Complete"></i></a>
+                                                    <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('stop-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-stop" data-toggle="tooltip" data-placement="bottom" title="Stop"></i></a>
                                                 @endif
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <span class="d-block">Due date: <span class="btn btn-sm btn-outline-danger disabled mb-1" style="font-size:14px;">{{ $task->due_date->format('d.m.Y') }}</span></span>
-                                            <span class="d-block">User: <b>{{ $task->user->full_name }}</b></span>
-                                            @if ($task->user->id != $task->author->id)
-                                                <span class="d-block">Author: <b>{{ $task->author->full_name }}</b></span>
-                                            @endif
-                                            @if ($task->milestone)
-                                                <span class="d-block">Milestone: <b>{{ $task->milestone->name }}</b></span>
-                                            @endif
+                                            @include('projects.task.information')
                                         </div>
                                     </div>
                                     @include('tasks.forms.change', ['id' => 'complete-working-on-task-' . $task->id . '-form', 'task' => $task, 'statusId' => 3, 'redirect' => 'kanban'])    
@@ -151,39 +114,15 @@
                                         <div class="card-header">
                                             <div class="card-title">
                                                 <a href="{{ route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) }}">{{ $task->name }}</a>
-                                                @if($task->is_stopped)
-                                                    <span class='badge badge-danger ml-2' style='font-size:14px;'>Stopped</span>
-                                                @elseif($task->is_returned)
-                                                    <span class='badge badge-danger ml-2' style='font-size:14px;'>Returned</span>
-                                                @endif
                                             </div>
                                             <div class="card-tools">
-                                                @if ($task->status == 1)
-                                                    <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('start-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-play" data-toggle="tooltip" data-placement="bottom" title="Start"></i></a>
-                                                @elseif ($task->status == 2)
-                                                    @if ($task->is_stopped)
-                                                        <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('resume-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-hourglass-start" data-toggle="tooltip" data-placement="bottom" title="Resume"></i></a>
-                                                    @else
-                                                        <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('complete-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-check" data-toggle="tooltip" data-placement="bottom" title="Complete"></i></a>
-                                                        <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('stop-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-stop" data-toggle="tooltip" data-placement="bottom" title="Stop"></i></a>
-                                                    @endif
-                                                @else
-                                                    <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('return-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-undo" data-toggle="tooltip" data-placement="bottom" title="Return"></i></a>
-                                                @endif
+                                                <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('return-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-undo" data-toggle="tooltip" data-placement="bottom" title="Return"></i></a>
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <span class="d-block">Due date: <span class="btn btn-sm btn-outline-danger disabled mb-1" style="font-size:14px;">{{ $task->due_date->format('d.m.Y') }}</span></span>
-                                            <span class="d-block">User: <b>{{ $task->user->full_name }}</b></span>
-                                            @if ($task->user->id != $task->author->id)
-                                                <span class="d-block">Author: <b>{{ $task->author->full_name }}</b></span>
-                                            @endif
-                                            @if ($task->milestone)
-                                                <span class="d-block">Milestone: <b>{{ $task->milestone->name }}</b></span>
-                                            @endif
+                                            @include('projects.task.information')
                                         </div>
                                     </div>
-
                                     @include('tasks.forms.change', ['id' => 'return-working-on-task-' . $task->id . '-form', 'task' => $task, 'statusId' => 1, 'redirect' => 'kanban'])    
                                 @empty
                                     <div class="card">

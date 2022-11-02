@@ -21,7 +21,7 @@
     <section class="content">
         <div class="container-fluid">
             <!-- Message -->
-            @include('site.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+            @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
             <!-- Content -->
             <div class="row">
                 <div class="col-md-5">
@@ -63,7 +63,7 @@
                                             <tr>
                                                 <td><a href="{{ route('tasks.detail', $task->id) }}">{{ $task->name }}</a></td>
                                                 <td>{{ $task->project->name }}</td>
-                                                <td><img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $task->user->full_name }}"></td>
+                                                <td>@include('site.partials.user', ['user' => $task->user])</td>
                                                 <td>{{ $task->due_date->format('d.m.Y') }}</td>
                                                 <td>@include('tasks.partials.status', ['task' => $task])</td>
                                             </tr>

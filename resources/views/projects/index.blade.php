@@ -21,7 +21,7 @@
             <div class="card card-primary card-outline rounded-0">
                 <div class="card-body">
                     <!-- Message -->
-                    @include('site.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                    @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                     <!-- Content -->
                     <div class="table-responsive">
                         <table id="@if(count($projects) > 0){{ 'projects-table' }}@endif" class="table table-bordered table-striped">
@@ -43,7 +43,7 @@
                                         <td>{{ $project->client->name }}</td>
                                         <td>
                                             @foreach ($project->team as $user)
-                                                <img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $user->full_name }}">
+                                                @include('site.partials.user', ['user' => $user])
                                             @endforeach
                                         </td>
                                         <td>0 %</td>

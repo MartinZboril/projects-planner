@@ -40,7 +40,7 @@
                 <div class="card-header"><a href="{{ route('milestones.create', ['project' => $project->id]) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
                 <div class="card-body">
                     <!-- Message -->
-                    @include('site.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                    @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                     <!-- Content -->
                     <div class="table-responsive">
                         <table id="@if(count($project->milestones) > 0){{ 'milestones-table' }}@endif" class="table table-bordered table-striped">

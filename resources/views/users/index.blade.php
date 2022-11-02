@@ -21,7 +21,7 @@
             <div class="card card-primary card-outline rounded-0">
                 <div class="card-body">
                     <!-- Message -->
-                    @include('site.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                    @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                     <!-- Content -->
                     <div class="table-responsive">
                         <table id="@if(count($users) > 0){{ 'users-table' }}@endif" class="table table-bordered table-striped">

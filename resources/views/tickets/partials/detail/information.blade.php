@@ -24,7 +24,7 @@
                         <div class="info-box bg-light">
                             <div class="info-box-content">
                                 <span class="info-box-text text-center text-muted">Status</span>
-                                <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-info">@include('tickets.partials.status', ['status' => $ticket->status])</span></span>
+                                <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-@include('tickets.partials.colour', ['ticket' => $ticket])">@include('tickets.partials.status', ['status' => $ticket->status])</span></span>
                             </div>
                         </div>
                     </div>
@@ -32,9 +32,7 @@
                 <span class="d-block">Project: <b>{{ $ticket->project->name }}</b></span>
                 <span class="d-block">Client: <b>{{ $ticket->project->client->name }}</b></span>
                 <span class="d-block">Reporter: <b>{{ $ticket->reporter->full_name }}</b></span>
-                @if ($ticket->assignee)
-                    <span class="d-block">Author: <b>{{ $ticket->assignee->full_name }}</b></span>
-                @endif
+                <span class="d-block">Author: <b>{{ $ticket->assignee->full_name }}</b></span>
                 <span class="d-block">Status: <b>@include('tickets.partials.status', ['status' => $ticket->status])</b></span>
                 <span class="d-block">Priority: <b>@include('tickets.partials.priority', ['priority' => $ticket->priority])</b></span>
                 <span class="d-block">Type: <b>@include('tickets.partials.type', ['type' => $ticket->type])</b></span>

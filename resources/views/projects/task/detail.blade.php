@@ -19,7 +19,7 @@
     <section class="content">
         <div class="container-fluid">
             <!-- Message -->
-            @include('site.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+            @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
             <!-- Content -->
             @include('tasks.partials.detail.information', ['task' => $task, 'project' => $project])            
         </div>

@@ -14,6 +14,10 @@ class Task extends Model
 
     protected $dates = ['start_date', 'due_date'];
 
+    protected $appends = [
+        'milestone_label'
+    ];
+
     public const VALIDATION_RULES = [
         'project_id' => ['required', 'integer', 'exists:projects,id'],
         'author_id' => ['required', 'integer', 'exists:users,id'],
@@ -59,5 +63,9 @@ class Task extends Model
     public function scopeStatus(Builder $query, int $type): Builder
     {
         return $query->where('status', $type);
+    }
+    public function getMilestoneLabelAttribute(): string
+    {
+        return $this->milestone ? $task->milestone->name : 'NaN';
     }
 }

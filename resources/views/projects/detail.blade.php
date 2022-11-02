@@ -40,7 +40,7 @@
                         <div class="card-header">Project</div>
                         <div class="card-body">
                             <!-- Message -->
-                            @include('site.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                            @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                             <!-- Content -->
                             <div class="text-muted">
                                 <p class="text-sm">Name
@@ -68,7 +68,7 @@
                                         @foreach ($project->team as $user)
                                             <li class="list-group-item">
                                                 <div class="user-block">
-                                                    <img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;">
+                                                    @include('site.partials.user', ['user' => $user])
                                                     <span class="username">{{ $user->full_name }}</span>
                                                     <span class="description">Member</span>
                                                 </div> 

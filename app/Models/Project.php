@@ -26,6 +26,12 @@ class Project extends Model
         'description' => ['required', 'string', 'max:65553'],
     ];
 
+    protected $appends = [
+        'deadline',
+        'remaining_hours',
+        'used_budget',
+    ];
+
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class, 'client_id');

@@ -43,7 +43,7 @@
       <!-- Content -->    
       @yield('content')
       <!-- Timer -->
-      @include('site.timer')
+      @include('site.partials.timer')
       <!-- Error -->
       @if(Session::has('error'))
         <input type="hidden" id="error-content" value="{{ Session::get('error') }}">

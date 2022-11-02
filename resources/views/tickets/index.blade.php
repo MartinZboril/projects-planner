@@ -21,7 +21,7 @@
             <div class="card card-primary card-outline rounded-0">
                 <div class="card-body">
                     <!-- Message -->
-                    @include('site.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                    @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                     <!-- Content -->
                     <div class="table-responsive">
                         <table id="@if(count($tickets) > 0){{ 'tickets-table' }}@endif" class="table table-bordered table-striped">
@@ -43,12 +43,12 @@
                                     <tr>
                                         <td><a href="{{ route('tickets.detail', $ticket->id) }}">{{ $ticket->subject }}</a></td>
                                         <td>{{ $ticket->project->name }}</td>
-                                        <td><img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $ticket->reporter->full_name }}"></td>
+                                        <td>@include('site.partials.user', ['user' => $ticket->reporter])</td>
                                         <td>
-                                            @if($ticket->assignee)
-                                                <img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $ticket->assignee->full_name }}">
+                                            @if($ticket->assignee)                                            
+                                                @include('site.partials.user', ['user' => $ticket->assignee])
                                             @else
-                                                -
+                                                NaN
                                             @endif
                                         </td>
                                         <td>{{ $ticket->created_at->format('d.m.Y') }}</td>

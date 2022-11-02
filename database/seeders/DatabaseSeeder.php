@@ -14,18 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('statuses')->insert([[
-            'name' => 'New',
-            'created_at' => now()->toDateTimeString(),
-            'updated_at' => now()->toDateTimeString(),
-        ],[
-            'name' => 'In Progress',
-            'created_at' => now()->toDateTimeString(),
-            'updated_at' => now()->toDateTimeString(),
-        ],[
-            'name' => 'Completed',
-            'created_at' => now()->toDateTimeString(),
-            'updated_at' => now()->toDateTimeString(),
-        ]]);
+
     }
 }

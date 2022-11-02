@@ -23,6 +23,11 @@ class Timer extends Model
         'until' => ['required', 'date_format:Y-m-d H:i', 'after:since'],
     ];
 
+    protected $appends = [
+        'total_time',
+        'amount',
+    ];
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');

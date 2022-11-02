@@ -40,7 +40,7 @@
                 <div class="card-header"><a href="{{ route('projects.task.create', ['project' => $project->id]) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
                 <div class="card-body">
                     <!-- Message -->
-                    @include('site.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                    @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                     <!-- Content -->
                     <div class="table-responsive">
                         <table id="@if(count($project->tasks) > 0){{ 'tasks-table' }}@endif" class="table table-bordered table-striped">
@@ -58,9 +58,9 @@
                                 @forelse ($project->tasks as $task)
                                     <tr>
                                         <td><a href="{{ route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) }}">{{ $task->name }}</a></td>
-                                        <td><img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $task->user->full_name }}"></td>
+                                        <td>@include('site.partials.user', ['user' => $task->user])</td>
                                         <td>{{ $task->due_date->format('d.m.Y') }}</td>
-                                        <td>{{ $task->milestone ? $task->milestone->name : '-' }}</td>
+                                        <td>{{ $task->milestone_label }}</td>
                                         <td>@include('tasks.partials.status', ['task' => $task])</td>
                                         <td>
                                             <a class="btn btn-sm btn-dark" href="{{ route('projects.task.edit', ['project' => $project->id, 'task' => $task->id]) }}"><i class="fas fa-pencil-alt"></i></a>
