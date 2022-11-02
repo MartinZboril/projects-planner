@@ -20,9 +20,9 @@
         <div class="container-fluid">
             <div class="card card-primary card-outline rounded-0">
                 <div class="card-body">
-                    <input type="hidden" id="message-content" value="{{ Session::get('message') }}">
-                    <input type="hidden" id="message-type" value="{{ Session::get('type') }}">
-
+                    <!-- Message -->
+                    @include('site.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                    <!-- Content -->
                     <div class="table-responsive">
                         <table id="@if(count($tasks) > 0){{ 'tasks-table' }}@endif" class="table table-bordered table-striped">
                             <thead>
@@ -41,7 +41,7 @@
                                         <td>{{ $task->project->name }}</td>
                                         <td><img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $task->user->name }} {{ $task->user->surname }}"></td>
                                         <td>{{ $task->due_date->format('d.m.Y') }}</td>
-                                        <td>{{ $task->is_stopped ? 'Stopped' : ($task->is_returned ? 'Returned' : $task->status->name) }}</td>
+                                        <td>@include('tasks.partials.status', ['task' => $task])</td>
                                     </tr>
                                 @empty
                                     <tr>

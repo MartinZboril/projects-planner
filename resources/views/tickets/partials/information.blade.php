@@ -24,7 +24,7 @@
                         <div class="info-box bg-light">
                             <div class="info-box-content">
                                 <span class="info-box-text text-center text-muted">Status</span>
-                                <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-info">{{ $ticket->status == 1 ? 'Open' : ($ticket->status == 2 ? 'Closed' : ($ticket->status == 3 ? 'Archived' : $ticket->status)) }}</span></span>
+                                <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-info">@include('tickets.partials.status', ['status' => $ticket->status])</span></span>
                             </div>
                         </div>
                     </div>
@@ -35,9 +35,9 @@
                 @if ($ticket->assignee)
                     <span class="d-block">Author: <b>{{ $ticket->assignee->name }} {{ $ticket->assignee->surname }}</b></span>
                 @endif
-                <span class="d-block">Status: <b>{{ $ticket->status == 1 ? 'Open' : ($ticket->status == 2 ? 'Closed' : ($ticket->status == 3 ? 'Archived' : $ticket->status)) }}</b></span>
-                <span class="d-block">Priority: <b>{{ $ticket->priority == 1 ? 'Error' : ($ticket->priority == 2 ? 'Inovation' : ($ticket->priority == 3 ? 'Help' : ($ticket->priority == 4 ? 'Other' : $ticket->priority))) }}</b></span>
-                <span class="d-block">Type: <b>{{ $ticket->type == 1 ? 'Low' : ($ticket->type == 2 ? 'Medium' : ($ticket->type == 3 ? 'High' : ($ticket->type == 4 ? 'Urgent' : $ticket->type))) }}</b></span>
+                <span class="d-block">Status: <b>@include('tickets.partials.status', ['status' => $ticket->status])</b></span>
+                <span class="d-block">Priority: <b>@include('tickets.partials.priority', ['priority' => $ticket->priority])</b></span>
+                <span class="d-block">Type: <b>@include('tickets.partials.type', ['type' => $ticket->type])</b></span>
                 <hr>
                 {!! $ticket->message !!}
             </div>

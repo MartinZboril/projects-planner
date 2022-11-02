@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-5">
         <div class="card card-primary card-outline rounded-0">
-            <div class="card-header">{{ $task->name }} <span class="badge badge-{{ $task->is_stopped ? 'danger' : ($task->is_returned ? 'danger' : ($task->status_id == 1 ? 'info' : ($task->status_id == 2 ? 'warning' : ($task->status_id == 3 ? 'success' : 'info')))) }} ml-2" style='font-size:14px;'>{{ $task->is_stopped ? 'Stopped' : ($task->is_returned ? 'Returned' : $task->status->name) }}</span></div>
+            <div class="card-header">{{ $task->name }} <span class="badge badge-{{ $task->is_stopped ? 'danger' : ($task->is_returned ? 'danger' : ($task->status == 1 ? 'info' : ($task->status == 2 ? 'warning' : ($task->status == 3 ? 'success' : 'info')))) }} ml-2" style='font-size:14px;'>@include('tasks.partials.status', ['task' => $task])</span></div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-12 col-sm-4">
@@ -38,7 +38,7 @@
                 @if ($task->user->id != $task->author->id)
                     <span class="d-block">Author: <b>{{ $task->author->name }} {{ $task->author->surname }}</b></span>
                 @endif
-                <span class="d-block">Status: <b>{!! $task->is_stopped ? 'Stopped' : ($task->is_returned ? 'Returned' : $task->status->name) !!}</b></span>
+                <span class="d-block">Status: <b>@include('tasks.partials.status', ['task' => $task])</b></span>
                 <hr>
                 {!! $task->description !!}
             </div>

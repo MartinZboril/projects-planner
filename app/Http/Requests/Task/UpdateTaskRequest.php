@@ -29,7 +29,7 @@ class UpdateTaskRequest extends FormRequest
         
         unset(
             $rules['author_id'],
-            $rules['status_id']
+            $rules['status']
         );
 
         return $rules;

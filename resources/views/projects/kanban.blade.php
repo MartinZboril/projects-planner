@@ -55,9 +55,9 @@
                                                 @endif
                                             </div>
                                             <div class="card-tools">
-                                                @if ($task->status->id == 1)
+                                                @if ($task->status == 1)
                                                     <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('start-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-play" data-toggle="tooltip" data-placement="bottom" title="Start"></i></a>
-                                                @elseif ($task->status->id == 2)
+                                                @elseif ($task->status == 2)
                                                     @if ($task->is_stopped)
                                                         <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('resume-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-hourglass-start" data-toggle="tooltip" data-placement="bottom" title="Resume"></i></a>
                                                     @else
@@ -106,9 +106,9 @@
                                                 @endif
                                             </div>
                                             <div class="card-tools">
-                                                @if ($task->status->id == 1)
+                                                @if ($task->status == 1)
                                                     <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('start-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-play" data-toggle="tooltip" data-placement="bottom" title="Start"></i></a>
-                                                @elseif ($task->status->id == 2)
+                                                @elseif ($task->status == 2)
                                                     @if ($task->is_stopped)
                                                         <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('resume-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-hourglass-start" data-toggle="tooltip" data-placement="bottom" title="Resume"></i></a>
                                                     @else
@@ -158,9 +158,9 @@
                                                 @endif
                                             </div>
                                             <div class="card-tools">
-                                                @if ($task->status->id == 1)
+                                                @if ($task->status == 1)
                                                     <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('start-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-play" data-toggle="tooltip" data-placement="bottom" title="Start"></i></a>
-                                                @elseif ($task->status->id == 2)
+                                                @elseif ($task->status == 2)
                                                     @if ($task->is_stopped)
                                                         <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('resume-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-hourglass-start" data-toggle="tooltip" data-placement="bottom" title="Resume"></i></a>
                                                     @else

@@ -104,13 +104,7 @@ class TicketController extends Controller
         try {
             $fields = $request->validated();
             $ticket = $this->ticketService->change($ticket, $fields);
-            $flashAction = match ($fields['status']) {
-                '1' => 'open',
-                '2' => 'close',
-                '3' => 'archive',
-                default => ''
-            };
-            $this->ticketService->flash($flashAction);
+            $this->ticketService->flash(Ticket::STATUSES[$fields['status']]);
 
             $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . 'ticket';
             return $this->ticketService->redirect($redirectAction, $ticket);

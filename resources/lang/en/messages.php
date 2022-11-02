@@ -20,7 +20,7 @@ return [
   'task' => [
     'create' => 'Task was created!',
     'update' => 'Task was updated!',
-    'working' => 'Start working on Task!',
+    'in_progress' => 'Start working on Task!',
     'complete' => 'Task was completed!',
     'return' => 'Task was returned!',
     'stop' => 'Task was stopped!',

@@ -104,13 +104,7 @@ class TaskController extends Controller
         try {
             $fields = $request->validated();
             $task = $this->taskService->change($task, $fields);
-            $flashAction = match ($fields['status_id']) {
-                '1' => 'return',
-                '2' => 'working',
-                '3' => 'complete',
-                default => ''
-            };
-            $this->taskService->flash($flashAction);
+            $this->taskService->flash(Task::STATUSES[$fields['status']]);
 
             $redirectAction =  ($fields['redirect'] == 'kanban') ? 'kanban' : ((($fields['redirect'] == 'projects') ? 'project_' : '') . 'task');
             return $this->taskService->redirect($redirectAction, $task);

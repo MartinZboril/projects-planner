@@ -24,7 +24,7 @@ class ChangeTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status_id' => ['required', 'integer', 'in:1,2,3'],
+            'status' => ['required', 'integer', 'in:1,2,3'],
             'redirect' => ['in:tasks,projects,kanban'],            
         ];
     }

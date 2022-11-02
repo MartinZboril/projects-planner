@@ -65,7 +65,7 @@
                                                 <td>{{ $task->project->name }}</td>
                                                 <td><img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $task->user->name }} {{ $task->user->surname }}"></td>
                                                 <td>{{ $task->due_date->format('d.m.Y') }}</td>
-                                                <td>{{ $task->is_stopped ? 'Stopped' : ($task->is_returned ? 'Returned' : $task->status->name) }}</td>
+                                                <td>@include('tasks.partials.status', ['task' => $task])</td>
                                             </tr>
                                         @empty
                                             <tr>

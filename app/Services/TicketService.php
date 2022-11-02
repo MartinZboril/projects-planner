@@ -83,7 +83,7 @@ class TicketService
     {
         $task = new Task();
         $task->project_id = $ticket->project_id;
-        $task->status_id = 1;
+        $task->status = 1;
         $task->author_id = $ticket->reporter_id;
         $task->user_id = $ticket->assignee_id;
         $task->name = $ticket->subject;
@@ -116,11 +116,11 @@ class TicketService
                 Session::flash('message', __('messages.ticket.update'));
                 Session::flash('type', 'info');
                 break;
-            case 'finish':
+            case 'open':
                 Session::flash('message', __('messages.ticket.open'));
                 Session::flash('type', 'info');
                 break;
-            case 'return':
+            case 'close':
                 Session::flash('message', __('messages.ticket.close'));
                 Session::flash('type', 'info');
                 break;

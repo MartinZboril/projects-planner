@@ -61,7 +61,7 @@
                                         <td><img class="img-circle" src="{{ asset('dist/img/user.png') }}" alt="User Image" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $task->user->name }} {{ $task->user->surname }}"></td>
                                         <td>{{ $task->due_date->format('d.m.Y') }}</td>
                                         <td>{{ $task->milestone ? $task->milestone->name : '-' }}</td>
-                                        <td>{{ $task->status->name }}</td>
+                                        <td>@include('tasks.partials.status', ['task' => $task])</td>
                                         <td>
                                             <a class="btn btn-sm btn-dark" href="{{ route('projects.task.edit', ['project' => $project->id, 'task' => $task->id]) }}"><i class="fas fa-pencil-alt"></i></a>
                                             <a class="btn btn-sm btn-info" href="{{ route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) }}"><i class="fas fa-eye"></i></a>

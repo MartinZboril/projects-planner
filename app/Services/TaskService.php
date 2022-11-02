@@ -20,7 +20,7 @@ class TaskService
         $task = new Task;
         $task->project_id = $fields['project_id'];
         $task->milestone_id = isset($fields['milestone_id']) ? $fields['milestone_id'] : null;
-        $task->status_id = 1;
+        $task->status = 1;
         $task->author_id = Auth::id();
         $task->user_id = $fields['user_id'];
         $task->name = $fields['name'];
@@ -68,7 +68,7 @@ class TaskService
     {
         Task::where('id', $task->id)
                     ->update([
-                        'status_id' => $fields['status_id'],
+                        'status' => $fields['status'],
                         'is_returned' => false,
                     ]);
 
@@ -96,8 +96,8 @@ class TaskService
                 Session::flash('message', __('messages.task.update'));
                 Session::flash('type', 'info');
                 break;
-            case 'working':
-                Session::flash('message', __('messages.task.working'));
+            case 'in_progress':
+                Session::flash('message', __('messages.task.in_progress'));
                 Session::flash('type', 'info');
                 break;
             case 'complete':

@@ -28,7 +28,7 @@ class StoreTaskRequest extends FormRequest
         $rules['redirect'] = ['in:tasks,projects'];
         unset(
             $rules['author_id'],
-            $rules['status_id']
+            $rules['status']
         );
 
         return $rules;

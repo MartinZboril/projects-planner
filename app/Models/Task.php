@@ -18,11 +18,17 @@ class Task extends Model
         'project_id' => ['required', 'integer', 'exists:projects,id'],
         'author_id' => ['required', 'integer', 'exists:users,id'],
         'user_id' => ['required', 'integer', 'exists:users,id'],
-        'status_id' => ['required', 'integer', 'exists:statuses,id'],
+        'status' => ['required', 'integer', 'in:1,2,3'],
         'name' => ['required', 'string', 'max:255'],
         'start_date' => ['required', 'date'],
         'due_date' => ['required', 'date'],
         'description' => ['required', 'string', 'max:65553'],
+    ];
+
+    public const STATUSES = [
+        1 => 'new',
+        2 => 'in_progress',
+        3 => 'complete',
     ];
 
     public function project(): BelongsTo
@@ -40,11 +46,6 @@ class Task extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function status(): BelongsTo
-    {
-        return $this->belongsTo(Status::class, 'status_id');
-    }
-
     public function milestone(): BelongsTo
     {
         return $this->belongsTo(Milestone::class, 'milestone_id');
@@ -57,6 +58,6 @@ class Task extends Model
 
     public function scopeStatus(Builder $query, int $type): Builder
     {
-        return $query->where('status_id', $type);
+        return $query->where('status', $type);
     }
 }

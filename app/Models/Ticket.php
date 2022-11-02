@@ -26,6 +26,12 @@ class Ticket extends Model
         'message' => ['required', 'max:65553'],
     ];
 
+    public const STATUSES = [
+        1 => 'open',
+        2 => 'close',
+        3 => 'archive',
+    ];
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');

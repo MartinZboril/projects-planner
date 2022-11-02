@@ -52,9 +52,9 @@
                                             @endif
                                         </td>
                                         <td>{{ $ticket->created_at->format('d.m.Y') }}</td>
-                                        <td>{{ $ticket->status == 1 ? 'Open' : ($ticket->status == 2 ? 'Closed' : ($ticket->status == 3 ? 'Archived' : $ticket->status)) }}</td>
-                                        <td>{{ $ticket->type == 1 ? 'Error' : ($ticket->type == 2 ? 'Inovation' : ($ticket->type == 3 ? 'Help' : ($ticket->type == 4 ? 'Other' : $ticket->type))) }}</td>
-                                        <td>{{ $ticket->priority == 1 ? 'Low' : ($ticket->priority == 2 ? 'Medium' : ($ticket->priority == 3 ? 'High' : ($ticket->priority == 4 ? 'Urgent' : $ticket->priority))) }}</td>
+                                        <td>@include('tickets.partials.status', ['status' => $ticket->status])</td>
+                                        <td>@include('tickets.partials.type', ['type' => $ticket->type])</td>
+                                        <td>@include('tickets.partials.priority', ['priority' => $ticket->priority])</td>
                                         <td>{{ $ticket->due_date->format('d.m.Y') }}</td>
                                     </tr>
                                 @empty
