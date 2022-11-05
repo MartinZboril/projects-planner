@@ -51,7 +51,7 @@ class TicketController extends Controller
             $ticket = $this->ticketService->store($fields);
             $this->flashService->flash(__('messages.ticket.create'), 'info');
 
-            $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . (isset(($fields['create_and_close'])) ? 'tickets' : 'ticket');
+            $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . (isset(($request->create_and_close)) ? 'tickets' : 'ticket');
             return $this->ticketService->redirect($redirectAction, $ticket);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -91,7 +91,7 @@ class TicketController extends Controller
             $ticket = $this->ticketService->update($ticket, $fields);
             $this->flashService->flash(__('messages.ticket.update'), 'info');
 
-            $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . ((isset($fields['save_and_close'])) ? 'tickets' : 'ticket');
+            $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . ((isset($request->save_and_close)) ? 'tickets' : 'ticket');
             return $this->ticketService->redirect($redirectAction, $ticket);
         } catch (Exception $exception) {
             Log::error($exception);

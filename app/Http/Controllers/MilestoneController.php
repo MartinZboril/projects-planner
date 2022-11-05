@@ -41,7 +41,7 @@ class MilestoneController extends Controller
             $milestone = $this->milestoneService->store($fields);
             $this->flashService->flash(__('messages.milestone.create'), 'info');
 
-            $redirectAction = isset($fields['create_and_close']) ? 'project_milestones' : 'milestone';
+            $redirectAction = isset($request->create_and_close) ? 'project_milestones' : 'milestone';
             return $this->milestoneService->redirect($redirectAction, $milestone);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -81,7 +81,7 @@ class MilestoneController extends Controller
             $milestone = $this->milestoneService->update($milestone, $fields);
             $this->flashService->flash(__('messages.milestone.update'), 'info');
 
-            $redirectAction = isset($fields['save_and_close']) ? 'project_milestones' : 'milestone';
+            $redirectAction = isset($request->save_and_close) ? 'project_milestones' : 'milestone';
             return $this->milestoneService->redirect($redirectAction, $milestone); 
         } catch (Exception $exception) {
             Log::error($exception);

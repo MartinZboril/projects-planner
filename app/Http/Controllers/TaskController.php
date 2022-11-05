@@ -51,7 +51,7 @@ class TaskController extends Controller
             $task = $this->taskService->store($fields);
             $this->flashService->flash(__('messages.task.create'), 'info');
 
-            $redirectAction =  (($fields['redirect'] == 'projects') ? 'project_' : '') . ((isset($fields['create_and_close'])) ? 'tasks' : 'task');
+            $redirectAction =  (($fields['redirect'] == 'projects') ? 'project_' : '') . ((isset($request->create_and_close)) ? 'tasks' : 'task');
             return $this->taskService->redirect($redirectAction, $task);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -91,7 +91,7 @@ class TaskController extends Controller
             $task = $this->taskService->update($task, $fields);
             $this->flashService->flash(__('messages.task.update'), 'info');
 
-            $redirectAction =  (($fields['redirect'] == 'projects') ? 'project_' : '') . ((isset($fields['save_and_close'])) ? 'tasks' : 'task');
+            $redirectAction =  (($fields['redirect'] == 'projects') ? 'project_' : '') . ((isset($request->save_and_close)) ? 'tasks' : 'task');
             return $this->taskService->redirect($redirectAction, $task);
         } catch (Exception $exception) {
             Log::error($exception);

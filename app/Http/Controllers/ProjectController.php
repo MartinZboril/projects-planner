@@ -106,7 +106,7 @@ class ProjectController extends Controller
             $project = $this->projectService->store($fields);
             $this->flashService->flash(__('messages.project.create'), 'info');
 
-            $redirectAction = isset($fields['create_and_close']) ? 'projects' : 'project';
+            $redirectAction = isset($request->create_and_close) ? 'projects' : 'project';
             return $this->projectService->redirect($redirectAction, $project);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -146,7 +146,7 @@ class ProjectController extends Controller
             $project = $this->projectService->update($project, $fields);
             $this->flashService->flash(__('messages.project.update'), 'info');
 
-            $redirectAction = isset($fields['save_and_close']) ? 'projects' : 'project';
+            $redirectAction = isset($request->save_and_close) ? 'projects' : 'project';
             return $this->projectService->redirect($redirectAction, $project);
         } catch (Exception $exception) {
             Log::error($exception);

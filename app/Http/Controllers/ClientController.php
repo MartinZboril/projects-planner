@@ -51,7 +51,7 @@ class ClientController extends Controller
             $client = $this->clientService->store($fields);
             $this->flashService->flash(__('messages.client.create'), 'info');
 
-            $redirectAction = isset($fields['create_and_close']) ? 'clients' : 'client';
+            $redirectAction = isset($request->create_and_close) ? 'clients' : 'client';
             return $this->clientService->redirect($redirectAction, $client);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -91,7 +91,7 @@ class ClientController extends Controller
             $client = $this->clientService->update($client, $fields);
             $this->flashService->flash(__('messages.client.update'), 'info');
     
-            $redirectAction = isset($fields['save_and_close']) ? 'clients' : 'client';
+            $redirectAction = isset($request->save_and_close) ? 'clients' : 'client';
             return $this->clientService->redirect($redirectAction, $client);         
         } catch (Exception $exception) {
             Log::error($exception);
