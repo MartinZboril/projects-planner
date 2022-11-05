@@ -10,7 +10,7 @@ class ProjectUser extends Model
 {
     use HasFactory;
 
-    protected $table = 'project_user';
+    protected $table = 'projects_users';
 
     protected $guarded = ['id']; 
 

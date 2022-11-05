@@ -31,6 +31,7 @@ class CreateClientsTable extends Migration
             $table->text('linekedin')->nullable();
             $table->text('facebook')->nullable();
             $table->text('twitter')->nullable();
+            $table->text('instagram')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
         });

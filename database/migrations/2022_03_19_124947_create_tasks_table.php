@@ -17,12 +17,14 @@ class CreateTasksTable extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('project_id');
-            $table->foreignId('status_id');
             $table->foreignId('author_id');
             $table->foreignId('user_id');
+            $table->integer('status');
             $table->date('start_date')->nullable();
             $table->date('due_date')->nullable();
             $table->longText('description');
+            $table->boolean('is_stopped')->nullable()->default(0);
+            $table->boolean('is_returned')->nullable()->default(0);
             $table->timestamps();
         });
     }
