@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Data;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Rate\{StoreRateRequest, UpdateRateRequest};
 use App\Models\{Rate, User};
 use App\Services\FlashService;
 use App\Services\Data\RateService;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class RateController extends Controller
 {
@@ -22,20 +25,17 @@ class RateController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
+     * Show the form for creating a new rate.
      */
-    public function create(User $user)
+    public function create(User $user): View
     {
         return view('rates.create', ['user' => $user]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created rate in storage.
      */
-    public function store(StoreRateRequest $request)
+    public function store(StoreRateRequest $request): RedirectResponse
     {
         try {
             $fields = $request->validated();
@@ -50,21 +50,17 @@ class RateController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     * 
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Rate  $rate
-     * @return \Illuminate\Http\Response
+     * Show the form for editing the rate.
      */
-    public function edit(User $user, Rate $rate)
+    public function edit(User $user, Rate $rate): View
     {
         return view('rates.edit', ['user' => $user, 'rate' => $rate]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the rate in storage.
      */
-    public function update(UpdateRateRequest $request, Rate $rate)
+    public function update(UpdateRateRequest $request, Rate $rate): RedirectResponse
     {
         try {
             $fields = $request->validated();
@@ -76,16 +72,5 @@ class RateController extends Controller
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Rate  $rate
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Rate $rate)
-    {
-        //
     }
 }

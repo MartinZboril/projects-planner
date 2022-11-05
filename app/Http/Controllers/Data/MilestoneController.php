@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Data;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Milestone\{LoadMilestoneRequest, StoreMilestoneRequest, UpdateMilestoneRequest};
 use App\Models\{Milestone, Project};
 use App\Services\FlashService;
 use App\Services\Data\MilestoneService;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class MilestoneController extends Controller
 {   
@@ -22,19 +25,17 @@ class MilestoneController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Show the form for creating a new milestone.
      */
-    public function create(Project $project)
+    public function create(Project $project): View
     {
         return view('milestones.create', ['project' => $project]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created milestone in storage.
      */
-    public function store(StoreMilestoneRequest $request)
+    public function store(StoreMilestoneRequest $request): RedirectResponse
     {
         try {
             $fields = $request->validated();
@@ -50,31 +51,25 @@ class MilestoneController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Milestone  $milestone
-     * @return \Illuminate\Http\Response
+     * Display the milestone.
      */
-    public function detail(Project $project, Milestone $milestone)
+    public function detail(Project $project, Milestone $milestone): View
     {
         return view('milestones.detail', ['project' => $project, 'milestone' => $milestone]);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Milestone  $milestone
-     * @return \Illuminate\Http\Response
+     * Show the form for editing the milestone.
      */
-    public function edit(Project $project, Milestone $milestone)
+    public function edit(Project $project, Milestone $milestone): View
     {
         return view('milestones.edit', ['project' => $project, 'milestone' => $milestone]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the milestone in storage.
      */
-    public function update(UpdateMilestoneRequest $request, Milestone $milestone)
+    public function update(UpdateMilestoneRequest $request, Milestone $milestone): RedirectResponse
     {
         try {
             $fields = $request->validated();
@@ -89,25 +84,12 @@ class MilestoneController extends Controller
         } 
     }
 
-    public function load(LoadMilestoneRequest $request)
-    {
-        try {
-            $fields = $request->validated();
-            return Milestone::where('project_id', $fields['project_id'])->get(['id', 'name']);
-        } catch (Exception $exception) {
-            Log::error($exception);
-            return redirect()->back()->with(['error' => __('messages.error')]);
-        }
-    }
-
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Milestone  $milestone
-     * @return \Illuminate\Http\Response
+     * Load the milestones by project.
      */
-    public function destroy(Milestone $milestone)
+    public function load(LoadMilestoneRequest $request): Milestone
     {
-        //
+        $fields = $request->validated();
+        return Milestone::where('project_id', $fields['project_id'])->get(['id', 'name']);
     }
 }

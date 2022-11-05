@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Data;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\User\{StoreUserRequest, UpdateUserRequest};
 use App\Models\User;
 use App\Services\FlashService;
 use App\Services\Data\UserService;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
@@ -22,25 +25,25 @@ class UserController extends Controller
     }
     
     /**
-     * Displays view of users
+     * Display a listing of the users.
      */
-    public function index()
+    public function index(): Response
     {
         return view('users.index', ['users' => User::all()]);
     }
 
     /**
-     * Displays form for creating user
+     * Show the form for creating a new user.
      */
-    public function create()
+    public function create(): Response
     {
         return view('users.create');
     }
 
     /**
-     * Create new user
+     * Store a newly created user in storage.
      */
-    public function store(StoreUserRequest $request)
+    public function store(StoreUserRequest $request): RedirectResponse
     {
         try {
             $fields = $request->validated();
@@ -56,25 +59,25 @@ class UserController extends Controller
     }
 
     /**
-     * Displays detail of user
+     * Display the user.
      */
-    public function detail(User $user)
+    public function detail(User $user): Response
     {
         return view('users.detail', ['user' => $user]);
     }
 
     /**
-     * Displays form for editing user
+     * Show the form for editing the user.
      */
-    public function edit(User $user)
+    public function edit(User $user): Response
     {
         return view('users.edit', ['user' => $user]);
     }
 
     /**
-     * Update edited user
+     * Update the user in storage.
      */
-    public function update(User $user, UpdateUserRequest $request)
+    public function update(User $user, UpdateUserRequest $request): RedirectResponse
     {
         try {
             $fields = $request->validated();

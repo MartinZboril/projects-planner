@@ -7,6 +7,9 @@ use Illuminate\Http\RedirectResponse;
 
 class ToDoService
 {
+    /**
+     * Store new todo.
+     */
     public function store(array $fields): ToDo
     {
         $todo = new ToDo;
@@ -19,6 +22,9 @@ class ToDoService
         return $todo;
     }
 
+    /**
+     * Update todo.
+     */
     public function update(ToDo $todo, array $fields): ToDo
     {
         ToDo::where('id', $todo->id)
@@ -32,6 +38,9 @@ class ToDoService
         return $todo;
     }
     
+    /**
+     * Un/check the todo
+     */
     public function check(ToDo $todo, array $fields): ToDo
     {
         ToDo::where('id', $todo->id)
@@ -42,6 +51,9 @@ class ToDoService
         return $todo;
     }
 
+    /**
+     * Get route for the action
+     */
     public function redirect(string $action, ToDo $todo): RedirectResponse 
     {   
         switch ($action) {

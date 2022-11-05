@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Data;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Ticket\{ConvertTicketRequest, ChangeTicketRequest, StoreTicketRequest, UpdateTicketRequest};
 use App\Models\{Project, Ticket, User};
 use App\Services\FlashService;
 use App\Services\Data\{TaskService, TicketService, ProjectUserService};
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class TicketController extends Controller
 {  
@@ -22,29 +25,25 @@ class TicketController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Display a listing of the tickets.
      */
-    public function index()
+    public function index(): View
     {
         return view('tickets.index', ['tickets' => Ticket::all()]);
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Show the form for creating a new ticket.
      */
-    public function create()
+    public function create(): View
     {
         return view('tickets.create', ['projects' => Project::all(), 'users' => User::all()]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created ticket in storage.
      */
-    public function store(StoreTicketRequest $request)
+    public function store(StoreTicketRequest $request): RedirectResponse
     {
         try {
             $fields = $request->validated();
@@ -60,31 +59,25 @@ class TicketController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Ticket  $ticket
-     * @return \Illuminate\Http\Response
+     * Display the ticket.
      */
-    public function detail(Ticket $ticket)
+    public function detail(Ticket $ticket): View
     {
         return view('tickets.detail', ['ticket' => $ticket]);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Ticket  $ticket
-     * @return \Illuminate\Http\Response
+     * Show the form for editing the ticket.
      */
-    public function edit(Ticket $ticket)
+    public function edit(Ticket $ticket): View
     {
         return view('tickets.edit', ['ticket' => $ticket, 'projects' => Project::all(), 'users' => User::all()]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the ticket in storage.
      */
-    public function update(UpdateTicketRequest $request, Ticket $ticket)
+    public function update(UpdateTicketRequest $request, Ticket $ticket): RedirectResponse
     {
         try {
             $fields = $request->validated();
@@ -100,9 +93,9 @@ class TicketController extends Controller
     }
 
     /**
-     * Change status of the ticket.
+     * Change working status of the ticket.
      */
-    public function change(ChangeTicketRequest $request, Ticket $ticket)
+    public function change(ChangeTicketRequest $request, Ticket $ticket): RedirectResponse
     {
         try {
             $fields = $request->validated();
@@ -118,9 +111,9 @@ class TicketController extends Controller
     }
 
     /**
-     * Convert the ticket to task.
+     * Convert the ticket to new task.
      */
-    public function convert(ConvertTicketRequest $request, Ticket $ticket)
+    public function convert(ConvertTicketRequest $request, Ticket $ticket): RedirectResponse
     {
         try {
             $fields = $request->validated();
@@ -134,16 +127,5 @@ class TicketController extends Controller
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Ticket  $ticket
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Ticket $ticket)
-    {
-        //
     }
 }

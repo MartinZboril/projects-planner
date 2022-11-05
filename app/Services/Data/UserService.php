@@ -9,6 +9,9 @@ use Illuminate\Support\Str;
 
 class UserService
 {
+    /**
+     * Store new user.
+     */
     public function store(array $fields): User
     {
         $user = new User;
@@ -38,6 +41,9 @@ class UserService
         return $user;
     }
 
+    /**
+     * Update user.
+     */
     public function update(User $user, array $fields): User
     {
         User::where('id', $user->id)
@@ -60,6 +66,9 @@ class UserService
         return $user;
     }
 
+    /**
+     * Get route for the action
+     */
     public function redirect(string $action, User $user): RedirectResponse
     {
         switch ($action) {

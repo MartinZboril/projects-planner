@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Data;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\{StoreClientRequest, UpdateClientRequest};
 use App\Models\Client;
 use App\Services\FlashService;
 use App\Services\Data\ClientService;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class ClientController extends Controller
 {
@@ -22,29 +25,25 @@ class ClientController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Display a listing of the clients.
      */
-    public function index()
+    public function index(): View
     {
         return view('clients.index', ['clients' => Client::all()]);
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Show the form for creating a new client.
      */
-    public function create()
+    public function create(): View
     {
         return view('clients.create');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created client in storage.
      */
-    public function store(StoreClientRequest $request)
+    public function store(StoreClientRequest $request): RedirectResponse
     {
         try {
             $fields = $request->validated();
@@ -60,31 +59,25 @@ class ClientController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Client  $client
-     * @return \Illuminate\Http\Response
+     * Display the client.
      */
-    public function detail(Client $client)
+    public function detail(Client $client): View
     {
         return view('clients.detail', ['client' => $client]);
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Client  $client
-     * @return \Illuminate\Http\Response
+     * Show the form for editing the client.
      */
-    public function edit(Client $client)
+    public function edit(Client $client): View
     {
         return view('clients.edit', ['client' => $client]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the client in storage.
      */
-    public function update(UpdateClientRequest $request, Client $client)
+    public function update(UpdateClientRequest $request, Client $client): RedirectResponse
     {
         try {
             $fields = $request->validated();
@@ -97,16 +90,5 @@ class ClientController extends Controller
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Client  $client
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Client $client)
-    {
-        //
     }
 }

@@ -7,6 +7,9 @@ use Illuminate\Http\RedirectResponse;
 
 class ClientService
 {
+    /**
+     * Store new client.
+     */
     public function store(array $fields): Client
     {
         $client = new Client;
@@ -33,6 +36,9 @@ class ClientService
         return $client;
     }
 
+    /**
+     * Update client.
+     */
     public function update(Client $client, array $fields): Client
     {
         Client::where('id', $client->id)
@@ -60,6 +66,9 @@ class ClientService
         return $client;
     }
 
+    /**
+     * Get route for the action
+     */
     public function redirect(string $action, Client $client): RedirectResponse 
     {
         switch ($action) {

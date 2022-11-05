@@ -7,6 +7,9 @@ use Illuminate\Http\RedirectResponse;
 
 class MilestoneService
 {
+    /**
+     * Store new milestone.
+     */
     public function store(array $fields): Milestone
     {
         $milestone = new Milestone;
@@ -22,6 +25,9 @@ class MilestoneService
         return $milestone;
     }
 
+    /**
+     * Update milestone.
+     */
     public function update(Milestone $milestone, array $fields): Milestone
     {
         Milestone::where('id', $milestone->id)
@@ -37,6 +43,9 @@ class MilestoneService
         return $milestone;
     }
 
+    /**
+     * Get route for the action
+     */    
     public function redirect(string $action, Milestone $milestone): RedirectResponse 
     {
         switch ($action) {

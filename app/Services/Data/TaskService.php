@@ -15,6 +15,9 @@ class TaskService
         $this->projectUserService = $projectUserService;
     }
 
+    /**
+     * Store new task.
+     */
     public function store(array $fields): Task
     {
         $task = new Task;
@@ -40,6 +43,9 @@ class TaskService
         return $task;
     }
 
+    /**
+     * Update task.
+     */
     public function update(Task $task, array $fields): Task
     {
         Task::where('id', $task->id)
@@ -64,6 +70,9 @@ class TaskService
         return $task;
     }
     
+    /**
+     * Change working status of the task
+     */
     public function change(Task $task, array $fields): Task
     {
         Task::where('id', $task->id)
@@ -75,6 +84,9 @@ class TaskService
         return $task;
     }
         
+    /**
+     * Pause work on the task
+     */
     public function pause(Task $task, array $fields): Task
     {
         Task::where('id', $task->id)
@@ -85,6 +97,9 @@ class TaskService
         return $task;
     }
 
+    /**
+     * Get route for the action
+     */
     public function redirect(string $action, Task $task): RedirectResponse 
     {   
         switch ($action) {

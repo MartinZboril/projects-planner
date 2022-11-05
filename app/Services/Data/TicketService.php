@@ -15,6 +15,9 @@ class TicketService
         $this->projectUserService = $projectUserService;
     }
 
+    /**
+     * Store new ticket.
+     */
     public function store(array $fields): Ticket
     {
         $ticket = new Ticket;
@@ -43,6 +46,9 @@ class TicketService
         return $ticket;
     }
 
+    /**
+     * Update ticket.
+     */
     public function update(Ticket $ticket, array $fields): Ticket
     {
         Ticket::where('id', $ticket->id)
@@ -69,6 +75,9 @@ class TicketService
         return $ticket;
     }
 
+    /**
+     * Change working status of the ticket
+     */
     public function change(Ticket $ticket, array $fields): Ticket
     {
         Ticket::where('id', $ticket->id)
@@ -79,6 +88,9 @@ class TicketService
         return $ticket;
     }
 
+    /**
+     * Convert ticket to new task
+     */
     public function convert(Ticket $ticket): Task
     {
         $task = new Task();
@@ -105,6 +117,9 @@ class TicketService
         return $task;
     }
 
+    /**
+     * Get route for the action
+     */
     public function redirect(string $action, Ticket $ticket): RedirectResponse 
     {   
         switch ($action) {

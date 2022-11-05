@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Data;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Timer\{StartTimerRequest, StoreTimerRequest, UpdateTimerRequest};
 use App\Models\{Project, Timer};
 use App\Services\FlashService;
 use App\Services\Data\TimerService;
 use Exception;
 use Illuminate\Support\Facades\{Auth, Log};
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class TimerController extends Controller
 {  
@@ -21,20 +24,17 @@ class TimerController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     * 
-     * @param  \App\Models\Project  $project
-     * @return \Illuminate\Http\Response
+     * Show the form for creating a new timer.
      */
-    public function create(Project $project)
+    public function create(Project $project): View
     {
         return view('timers.create', ['project' => $project]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created timer in storage.
      */
-    public function store(StoreTimerRequest $request)
+    public function store(StoreTimerRequest $request): RedirectResponse
     {
         try {
             $fields = $request->validated();
@@ -49,32 +49,17 @@ class TimerController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Timer  $timer
-     * @return \Illuminate\Http\Response
+     * Show the form for editing the timer.
      */
-    public function show(Timer $timer)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Project  $project
-     * @param  \App\Models\Timer  $timer
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Project $project, Timer $timer)
+    public function edit(Project $project, Timer $timer): View
     {
         return view('timers.edit', ['project' => $project, 'timer' => $timer]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the timer in storage.
      */
-    public function update(UpdateTimerRequest $request, Timer $timer)
+    public function update(UpdateTimerRequest $request, Timer $timer): RedirectResponse
     {
         try {
             $fields = $request->validated();
@@ -89,9 +74,9 @@ class TimerController extends Controller
     }
 
     /**
-     * Start working on timer.
+     * Start working on new timer.
      */
-    public function start(StartTimerRequest $request)
+    public function start(StartTimerRequest $request): RedirectResponse
     {
         try {
             $fields = $request->validated();
@@ -112,9 +97,9 @@ class TimerController extends Controller
     }
 
     /**
-     * Stop working on timer.
+     * Stop working on the timer.
      */
-    public function stop(Timer $timer)
+    public function stop(Timer $timer): RedirectResponse
     {
         try {
             $timer = $this->timerService->stop($timer);
@@ -125,16 +110,5 @@ class TimerController extends Controller
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Timer  $timer
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Timer $timer)
-    {
-        //
     }
 }

@@ -7,6 +7,9 @@ use Illuminate\Http\RedirectResponse;
 
 class RateService
 {
+    /**
+     * Store new rate.
+     */
     public function store(array $fields): Rate
     {
         $rate = new Rate;
@@ -19,6 +22,9 @@ class RateService
         return $rate;
     }
 
+    /**
+     * Update rate.
+     */
     public function update(Rate $rate, array $fields): Rate
     {
         Rate::where('id', $rate->id)
@@ -31,6 +37,9 @@ class RateService
         return $rate;
     }
 
+    /**
+     * Get route for the action
+     */
     public function redirect(string $action, Rate $rate): RedirectResponse 
     {   
         switch ($action) {

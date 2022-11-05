@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Data;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ToDo\{CheckToDoRequest, StoreToDoRequest, UpdateToDoRequest};
 use App\Models\{Task, ToDo};
 use App\Services\FlashService;
 use App\Services\Data\ToDoService;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class ToDoController extends Controller
 {  
@@ -22,19 +25,17 @@ class ToDoController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Show the form for creating a new todo.
      */
-    public function create(Task $task)
+    public function create(Task $task): View
     {
         return view('todos.create', ['task' => $task]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created todo in storage.
      */
-    public function store(StoreToDoRequest $request)
+    public function store(StoreToDoRequest $request): RedirectResponse
     {
         try {
             $fields = $request->validated();
@@ -50,20 +51,17 @@ class ToDoController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\ToDo  $todo
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Task $task, ToDo $todo)
+     * Show the form for editing the todo.
+=    */
+    public function edit(Task $task, ToDo $todo): View
     {
         return view('todos.edit', ['task' => $task, 'todo' => $todo]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the todo in storage.
      */
-    public function update(UpdateToDoRequest $request, ToDo $todo)
+    public function update(UpdateToDoRequest $request, ToDo $todo): RedirectResponse
     {
         try {
             $fields = $request->validated();
@@ -79,13 +77,9 @@ class ToDoController extends Controller
     }
 
     /**
-     * Check the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\ToDo\CheckToDoRequest  $request
-     * @param  \App\Models\ToDo  $todo
-     * @return \Illuminate\Http\Response
-     */
-    public function check(CheckToDoRequest $request, ToDo $todo)
+     * Check the todo in storage.
+=     */
+    public function check(CheckToDoRequest $request, ToDo $todo): RedirectResponse
     {
         try {
             $fields = $request->validated();
@@ -99,16 +93,5 @@ class ToDoController extends Controller
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\ToDo  $toDo
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(ToDo $toDo)
-    {
-        //
     }
 }

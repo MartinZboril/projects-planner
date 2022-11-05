@@ -14,6 +14,9 @@ class ProjectService
         $this->projectUserService = $projectUserService;
     }
 
+    /**
+     * Store new project.
+     */
     public function store(array $fields): Project
     {
         $project = new Project;
@@ -33,6 +36,9 @@ class ProjectService
         return $project;
     }
 
+    /**
+     * Update project.
+     */
     public function update(Project $project, array $fields): Project
     {
         Project::where('id', $project->id)
@@ -57,6 +63,9 @@ class ProjectService
         return $project;
     }
 
+    /**
+     * Get route for the action
+     */
     public function redirect(string $action, Project $project): RedirectResponse 
     {
         switch ($action) {
