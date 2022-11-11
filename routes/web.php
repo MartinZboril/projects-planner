@@ -63,6 +63,8 @@ Route::get('/projects/{project}/ticket/{ticket}/edit', [App\Http\Controllers\Dat
 
 Route::post('/projects/store', [App\Http\Controllers\Data\ProjectController::class, 'store'])->name('projects.store');
 Route::patch('/projects/{project}/update', [App\Http\Controllers\Data\ProjectController::class, 'update'])->name('projects.update');
+Route::patch('/projects/{project}/change', [App\Http\Controllers\Data\ProjectController::class, 'change'])->name('projects.change');
+
 
 // Tasks
 Route::get('/tasks', [App\Http\Controllers\Data\TaskController::class, 'index'])->name('tasks.index');
@@ -108,3 +110,9 @@ Route::post('/tickets/store', [App\Http\Controllers\Data\TicketController::class
 Route::patch('/tickets/{ticket}/update', [App\Http\Controllers\Data\TicketController::class, 'update'])->name('tickets.update');
 Route::patch('/tickets/{ticket}/change', [App\Http\Controllers\Data\TicketController::class, 'change'])->name('tickets.change');
 Route::patch('/tickets/{ticket}/convert', [App\Http\Controllers\Data\TicketController::class, 'convert'])->name('tickets.convert');
+
+// Reporting
+Route::get('/report/projects', [App\Http\Controllers\ReportController::class, 'projects'])->name('reports.projects');
+
+// Analysis
+Route::get('/analyze/projects', [App\Http\Controllers\AnalyticsController::class, 'projects'])->name('analysis.projects');

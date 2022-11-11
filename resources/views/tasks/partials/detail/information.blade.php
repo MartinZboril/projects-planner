@@ -49,9 +49,9 @@
             </h3>
             <div class="card-tools">
                 @if($project)
-                    <a href="{{ route('projects.todo.create', ['project' => $project->id, 'task' => $task->id]) }}" class="btn btn-primary btn-sm float-right"><i class="fas fa-plus"></i> Add</a>
+                    <a href="{{ route('projects.todo.create', ['project' => $project->id, 'task' => $task->id]) }}" class="btn btn-primary btn-sm float-right"><i class="fas fa-plus"></i>Add</a>
                 @else
-                    <a href="{{ route('todos.create', $task->id) }}" class="btn btn-primary btn-sm float-right"><i class="fas fa-plus"></i> Add</a>
+                    <a href="{{ route('todos.create', $task->id) }}" class="btn btn-primary btn-sm float-right"><i class="fas fa-plus"></i>Add</a>
                 @endif
             </div>
         </div>
@@ -64,7 +64,7 @@
                             <label for="todo-check-{{ $todo->id }}"></label>
                         </div>
                         <span class="text">{{ $todo->name }}</span>
-                        <small class="badge badge-danger"><i class="far fa-clock"></i> {{ $todo->deadline->format('d.m.Y') }}</small>
+                        <small class="badge badge-danger"><i class="far fa-clock"></i>{{ $todo->deadline->format('d.m.Y') }}</small>
                         @if($todo->description)
                             <small class="ml-1">{{ $todo->description }}</small>
                         @endif

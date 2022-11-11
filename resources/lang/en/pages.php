@@ -13,8 +13,17 @@ return [
         'timer' => 'Timer',
         'todo' => 'ToDo',
         'user' => 'User',
+        'report' => 'Report',
+        'analysis' => 'Analysis',
     ],
     'content' => [
+        'projects' => [
+            'statuses' => [
+                'active' => 'Active',
+                'finish' => 'Finished',
+                'archive' => 'Archived',
+            ],
+        ],
         'tasks' => [
             'statuses' => [
                 'new' => 'New',

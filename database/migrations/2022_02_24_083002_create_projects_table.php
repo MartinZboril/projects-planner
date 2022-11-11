@@ -22,6 +22,7 @@ class CreateProjectsTable extends Migration
             $table->integer('estimated_hours')->nullable();
             $table->integer('budget')->nullable();
             $table->longText('description');
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Data;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Project\{StoreProjectRequest, UpdateProjectRequest};
+use App\Http\Requests\Project\{ChangeProjectRequest, StoreProjectRequest, UpdateProjectRequest};
 use App\Models\{Client, Milestone, Project, Task, Ticket, ToDo, User};
 use App\Services\FlashService;
 use App\Services\Data\ProjectService;
@@ -26,8 +26,6 @@ class ProjectController extends Controller
 
     /**
      * Display a listing of the projects.
-     *
-     * @return \Illuminate\Http\View
      */
     public function index(): View
     {
@@ -196,5 +194,22 @@ class ProjectController extends Controller
     public function editTicket(Project $project, Ticket $ticket): View
     {
         return view('projects.ticket.edit', ['project' => $project, 'ticket' => $ticket]);
+    }
+
+    /**
+     * Change working status of the project.
+     */
+    public function change(ChangeProjectRequest $request, Project $project): RedirectResponse
+    {
+        try {
+            $fields = $request->validated();
+            $project = $this->projectService->change($project, $fields);
+            $this->flashService->flash(__('messages.project.' . Project::STATUSES[$fields['status']]), 'info');
+
+            return redirect()->back();
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 }

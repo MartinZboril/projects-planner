@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Rate;
+namespace App\Http\Requests\Project;
 
-use App\Models\Rate;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateRateRequest extends FormRequest
+class ChangeProjectRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -20,9 +19,8 @@ class UpdateRateRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules = Rate::VALIDATION_RULES;
-        unset($rules['user_id']);
-
-        return $rules;
+        return [
+            'status' => ['required', 'integer', 'in:1,2,3'],
+        ];
     }
 }

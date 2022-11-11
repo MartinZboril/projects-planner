@@ -20,6 +20,11 @@ class StoreProjectRequest extends FormRequest
      */
     public function rules(): array
     {
-        return Project::VALIDATION_RULES;
+        $rules = Project::VALIDATION_RULES;
+        unset(
+            $rules['status']
+        );
+
+        return $rules;
     }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', __('pages.title.project'))
+@section('title', __('pages.title.analysis'))
 
 @push('styles')
     <!-- DataTables -->
@@ -13,68 +13,51 @@
 <div class="content-wrapper">
     <!-- Content Header -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
-        @include('projects.partials.action', ['project' => $project])
+        <a href="{{ route('reports.projects') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
     </div>
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <div class="card-header p-0 pb-2 mb-2">
-                @include('projects.partials.header', ['active' => 'timesheets'])
-            </div>          
             <div class="card card-primary card-outline rounded-0">
-                <div class="card-header"><a href="{{ route('timers.create', ['project' => $project->id]) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
                 <div class="card-body">
-                    <!-- Message -->
-                    @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                     <!-- Content -->
                     <div class="table-responsive">
-                        <table id="@if(count($project->timers) > 0){{ 'timesheets-table' }}@endif" class="table table-bordered table-striped">
+                        <table id="@if($projects->count() > 0){{ 'projects-table' }}@endif" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Type</th>
-                                    <th>User</th>
-                                    <th>Total time (Hours)</th>
+                                    <th>Name</th>
+                                    <th>Client</th>
+                                    <th>Status</th>
                                     <th>Amount</th>
-                                    <th>Start</th>
-                                    <th>Stop</th>
-                                    <th>Date</th>
-                                    <th></th>
+                                    <th>Plan</th>
+                                    <th>Total Time</th>
+                                    <th>Budget</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($project->timers as $timer)
+                                @forelse ($projects as $project)
                                     <tr>
-                                        <td>{{ $timer->rate->name }}</td>
-                                        <td>{{ $timer->user->full_name }}</td>
-                                        <td>{{ $timer->until ? $timer->total_time : 'N/A' }}</td>
-                                        <td>{{ $timer->until ? $timer->amount : 'N/A' }}</td>
-                                        <td>{{ $timer->since->format('d.m.Y H:i') }}</td>
-                                        <td>{{ $timer->until ? $timer->until->format('d.m.Y H:i') : 'N/A' }}</td>
-                                        <td>{{ $timer->since->format('d.m.Y') }}</td>
-                                        <td>
-                                            @if($timer->until)
-                                                <a href="{{ route('timers.edit', ['project' => $project->id, 'timer' => $timer->id]) }}" class="btn btn-sm btn-dark" href=""><i class="fas fa-pencil-alt"></i></a>
-                                            @else
-                                                N/A
-                                            @endif
-                                        </td>
+                                        <td><a href="{{ route('projects.detail', $project->id) }}">{{ $project->name }}</a></td>
+                                        <td>{{ $project->client->name }}</td>
+                                        <td>@include('projects.partials.status', ['status' => $project->status])</td>
+                                        <td>{{ number_format($project->amount, 2) }}</td>
+                                        <td>{{ $project->time_plan }} %</td>
+                                        <td>{{ $project->total_time }} Hours</td>
+                                        <td>{{ $project->budget_plan }} %</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="100%" class="text-center">No timesheets were found!</td>
+                                        <td colspan="100%" class="text-center">No projects were found!</td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>  
-                    </div>        
+                    </div>
                 </div>
-            </div>
+            </div>            
         </div>
     </section>
 </div>
-
-@include('projects.partials.forms', ['project' => $project])
-
 @endsection
 
 @push('scripts')
@@ -96,7 +79,7 @@
     <!-- Custom -->
     <script>
         $(function () {
-            $("#timesheets-table").DataTable();
+            $("#projects-table").DataTable();
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>

@@ -28,7 +28,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('projects.index') }}" class="nav-link @if(str_contains(url()->current(), 'projects')){{ 'active' }}@endif">
+                    <a href="{{ route('projects.index') }}" class="nav-link @if(str_contains(url()->current(), 'projects') && (!str_contains(url()->current(), 'report') && !str_contains(url()->current(), 'analyze'))){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-clock"></i>
                         <p>
                             Projects
@@ -60,7 +60,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('reports.projects') }}" class="nav-link @if(str_contains(url()->current(), 'report') || str_contains(url()->current(), 'analyze')){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-chart-line"></i>
                         <p>
                             Reports

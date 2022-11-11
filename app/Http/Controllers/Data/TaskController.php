@@ -34,8 +34,6 @@ class TaskController extends Controller
 
     /**
      * Show the form for creating a new task.
-     *
-     * @return \Illuminate\Http\View
      */
     public function create(): View
     {

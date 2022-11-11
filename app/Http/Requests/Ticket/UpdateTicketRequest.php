@@ -22,7 +22,6 @@ class UpdateTicketRequest extends FormRequest
     {
         $rules = Ticket::VALIDATION_RULES;
         $rules['redirect'] = ['in:tickets,projects'];
-        
         unset(
             $rules['reporter_id'],
             $rules['status']

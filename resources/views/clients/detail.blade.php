@@ -24,8 +24,8 @@
                                 <img src="{{ asset('dist/img/user.png') }}" class="img-circle mr-3" alt="Client Image" style="width: 75px;height: 75px;">
                                 <div class="">
                                     <h5>{{ $client->name }}</h5>
-                                    <i class="fas fa-envelope"></i> {{ $client->email_label }}<br>
-                                    <i class="fas fa-user-circle"></i> {{ $client->contact_person_label }} ({{ $client->contact_email_label }})<br>
+                                    <i class="fas fa-envelope"></i>{{ $client->email_label }}<br>
+                                    <i class="fas fa-user-circle"></i>{{ $client->contact_person_label }} ({{ $client->contact_email_label }})<br>
                                 </div>                            
                             </div>
                             @if ($client->note)

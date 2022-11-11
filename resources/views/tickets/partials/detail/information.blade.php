@@ -24,7 +24,7 @@
                         <div class="info-box bg-light">
                             <div class="info-box-content">
                                 <span class="info-box-text text-center text-muted">Status</span>
-                                <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-@include('tickets.partials.colour', ['ticket' => $ticket])">@include('tickets.partials.status', ['status' => $ticket->status])</span></span>
+                                <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-@include('tickets.partials.colour', ['status' => $ticket->status])">@include('tickets.partials.status', ['status' => $ticket->status])</span></span>
                             </div>
                         </div>
                     </div>

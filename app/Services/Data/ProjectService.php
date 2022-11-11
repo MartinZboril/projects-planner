@@ -64,6 +64,19 @@ class ProjectService
     }
 
     /**
+     * Change working status of the project
+     */
+    public function change(Project $project, array $fields): Project
+    {
+        Project::where('id', $project->id)
+                    ->update([
+                        'status' => $fields['status'],
+                    ]);
+
+        return $project;
+    }
+
+    /**
      * Get route for the action
      */
     public function redirect(string $action, Project $project): RedirectResponse 

@@ -12,6 +12,9 @@ return [
   'project' => [
     'create' => 'Project was created!',
     'update' => 'Project was updated!',
+    'active' => 'Project has been activated!',
+    'finish' => 'Project has been finished!',
+    'archive' => 'Project has been archived!',
   ],
   'rate' => [
     'create' => 'Rate was created!',

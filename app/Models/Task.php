@@ -67,6 +67,7 @@ class Task extends Model
     {
         return $query->where('status', $type);
     }
+    
     public function getMilestoneLabelAttribute(): string
     {
         return $this->milestone ? $task->milestone->name : 'NaN';

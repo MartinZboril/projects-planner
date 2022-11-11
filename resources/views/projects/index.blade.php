@@ -29,6 +29,7 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Client</th>
+                                    <th>Status</th>
                                     <th>Team</th>
                                     <th>Plan</th>
                                     <th>Total Time</th>
@@ -41,15 +42,16 @@
                                     <tr>
                                         <td><a href="{{ route('projects.detail', $project->id) }}">{{ $project->name }}</a></td>
                                         <td>{{ $project->client->name }}</td>
+                                        <td>@include('projects.partials.status', ['status' => $project->status])</td>
                                         <td>
                                             @foreach ($project->team as $user)
                                                 @include('site.partials.user', ['user' => $user])
                                             @endforeach
                                         </td>
-                                        <td>0 %</td>
-                                        <td>0 Hours</td>
-                                        <td>0 %</td>
-                                        <td>0</td>
+                                        <td>{{ $project->time_plan }} %</td>
+                                        <td>{{ $project->total_time }} Hours</td>
+                                        <td>{{ $project->budget_plan }} %</td>
+                                        <td>{{ number_format($project->amount, 2) }}</td>
                                     </tr>
                                 @empty
                                     <tr>
