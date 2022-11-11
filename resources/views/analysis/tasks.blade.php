@@ -13,7 +13,7 @@
 <div class="content-wrapper">
     <!-- Content Header -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
-        <a href="{{ route('reports.projects') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
+        <a href="{{ route('reports.tasks') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
     </div>
     <!-- Main content -->
     <section class="content">
@@ -22,38 +22,28 @@
                 <div class="card-body">
                     <!-- Content -->
                     <div class="table-responsive">
-                        <table id="@if($projects->count() > 0){{ 'projects-table' }}@endif" class="table table-bordered table-striped">
+                        <table id="@if($tasks->count() > 0){{ 'tasks-table' }}@endif" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Client</th>
+                                    <th>Project</th>
+                                    <th>User</th>
+                                    <th>Due Date</th>
                                     <th>Status</th>
-                                    <th>Team</th>
-                                    <th>Plan</th>
-                                    <th>Total Time</th>
-                                    <th>Budget</th>
-                                    <th>Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($projects as $project)
+                                @forelse ($tasks as $task)
                                     <tr>
-                                        <td><a href="{{ route('projects.detail', $project->id) }}">{{ $project->name }}</a></td>
-                                        <td>{{ $project->client->name }}</td>
-                                        <td>@include('projects.partials.status', ['status' => $project->status])</td>
-                                        <td>
-                                            @foreach ($project->team as $user)
-                                                @include('site.partials.user', ['user' => $user])
-                                            @endforeach
-                                        </td>
-                                        <td>{{ $project->time_plan }} %</td>
-                                        <td>{{ $project->total_time }} Hours</td>
-                                        <td>{{ $project->budget_plan }} %</td>
-                                        <td>{{ number_format($project->amount, 2) }}</td>
+                                        <td><a href="{{ route('tasks.detail', $task->id) }}">{{ $task->name }}</a></td>
+                                        <td>{{ $task->project->name }}</td>
+                                        <td>@include('site.partials.user', ['user' => $task->user])</td>
+                                        <td>{{ $task->due_date->format('d.m.Y') }}</td>
+                                        <td>@include('tasks.partials.status', ['task' => $task])</td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="100%" class="text-center">No projects were found!</td>
+                                        <td colspan="100%" class="text-center">No tasks were found!</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -85,7 +75,7 @@
     <!-- Custom -->
     <script>
         $(function () {
-            $("#projects-table").DataTable();
+            $("#tasks-table").DataTable();
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>

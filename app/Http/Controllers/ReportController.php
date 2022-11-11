@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\Report\ProjectReport;
+use App\Services\Report\TaskReport;
 use Illuminate\View\View;
 
 class ReportController extends Controller
@@ -23,5 +24,13 @@ class ReportController extends Controller
     public function projects(): View
     {
         return view('reports.projects', ['data' => (new ProjectReport)->getReportPerYear()]);
+    }
+    
+    /**
+     * Display a report for tasks.
+     */
+    public function tasks(): View
+    {
+        return view('reports.tasks', ['data' => (new TaskReport)->getReportPerYear()]);
     }
 }

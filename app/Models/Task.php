@@ -68,6 +68,21 @@ class Task extends Model
         return $query->where('status', $type);
     }
     
+    public function scopeDone(Builder $query): Builder
+    {
+        return $query->where('status', 3);
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->whereIn('status', [1, 2]);
+    }
+
+    public function scopeOverdue(Builder $query): Builder
+    {
+        return $query->whereDate('due_date', '<=', date('Y-m-d'));
+    }
+
     public function getMilestoneLabelAttribute(): string
     {
         return $this->milestone ? $task->milestone->name : 'NaN';

@@ -21,8 +21,6 @@ class ProjectReport
             'spent_time_avg' => Timer::whereYear('created_at', $year)->get()->avg('total_time'),
             'report_months' => sprintf("'%s'", implode("','", $this->getReportMonths())),
             'total_projects_by_month' => $this->getProjectsByMonths($year),
-            'active_projects_by_month' => $this->getProjectsByMonths($year),
-            'done_projects_by_month' => $this->getProjectsByMonths($year),
             'quarterly_created_projects' => [
                 1 => (
                     Project::whereYear('created_at', $year)->whereMonth('created_at', 1)->count() +

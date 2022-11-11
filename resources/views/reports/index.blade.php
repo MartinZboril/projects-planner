@@ -22,7 +22,16 @@
                                 <span class="info-box-icon bg-primary"><a href="{{ route('reports.projects') }}"><i class="fas fa-clock"></i></a></span>                            
                                 <div class="info-box-content">
                                     <a href="{{ route('reports.projects') }}"><span class="info-box-number">Projects</span></a>
-                                    <a href="{{ route('reports.projects') }}"><span class="info-box-text">View modre</span></a>
+                                    <a href="{{ route('reports.projects') }}"><span class="info-box-text">View more</span></a>
+                                </div>
+                            </div>                
+                        </div>
+                        <div class="col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-primary"><a href="{{ route('reports.tasks') }}"><i class="fas fa-tasks"></i></a></span>                            
+                                <div class="info-box-content">
+                                    <a href="{{ route('reports.tasks') }}"><span class="info-box-number">Tasks</span></a>
+                                    <a href="{{ route('reports.tasks') }}"><span class="info-box-text">View more</span></a>
                                 </div>
                             </div>                
                         </div>
