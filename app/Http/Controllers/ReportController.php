@@ -12,6 +12,11 @@ class ReportController extends Controller
         $this->middleware('auth');
     }
 
+    public function index(): View
+    {
+        return view('reports.index');
+    }
+
     /**
      * Display a report for projects.
      */

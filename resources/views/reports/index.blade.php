@@ -1,0 +1,35 @@
+@extends('layouts.master')
+
+@section('title', __('pages.title.report'))
+
+@section('content')
+<div class="content-wrapper">
+    <!-- Content Header -->
+    <div class="p-3 rounded-0 mb-3" style="background-color:white;">
+        <a href="" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
+        <a href="{{ route('analysis.projects') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-chart-bar mr-1"></i>Analyze</a>
+    </div>
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-primary card-outline rounded-0">
+                <div class="card-header">Available reports</div>
+                <div class="card-body">
+                    <!-- Content -->
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-primary"><a href="{{ route('reports.projects') }}"><i class="fas fa-clock"></i></a></span>                            
+                                <div class="info-box-content">
+                                    <a href="{{ route('reports.projects') }}"><span class="info-box-number">Projects</span></a>
+                                    <a href="{{ route('reports.projects') }}"><span class="info-box-text">View modre</span></a>
+                                </div>
+                            </div>                
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </section>
+</div>
+@endsection

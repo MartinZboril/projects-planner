@@ -112,6 +112,7 @@ Route::patch('/tickets/{ticket}/change', [App\Http\Controllers\Data\TicketContro
 Route::patch('/tickets/{ticket}/convert', [App\Http\Controllers\Data\TicketController::class, 'convert'])->name('tickets.convert');
 
 // Reporting
+Route::get('/report', [App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
 Route::get('/report/projects', [App\Http\Controllers\ReportController::class, 'projects'])->name('reports.projects');
 
 // Analysis
