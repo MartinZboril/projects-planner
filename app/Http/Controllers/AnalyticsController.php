@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\Analysis\{ProjectAnalysis, TaskAnalysis, TicketAnalysis, MilestoneAnalysis};
+use App\Services\Analysis\{ProjectAnalysis, TaskAnalysis, TicketAnalysis, MilestoneAnalysis, TimesheetAnalysis};
 use Illuminate\View\View;
 
 class AnalyticsController extends Controller
@@ -42,5 +42,13 @@ class AnalyticsController extends Controller
     public function milestones(): View
     {
         return view('analysis.milestones', ['milestones' => (new MilestoneAnalysis)->getAnalyze()]);
+    }
+                
+    /**
+     * Display an analyze for timesheets.
+     */
+    public function timesheets(): View
+    {
+        return view('analysis.timesheets', ['timers' => (new TimesheetAnalysis)->getAnalyze()]);
     }
 }

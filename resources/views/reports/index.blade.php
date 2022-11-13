@@ -52,6 +52,15 @@
                                 </div>
                             </div>                
                         </div>
+                        <div class="col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-primary"><a href="{{ route('reports.timesheets') }}"><i class="fas fa-stopwatch"></i></a></span>                            
+                                <div class="info-box-content">
+                                    <a href="{{ route('reports.timesheets') }}"><span class="info-box-number">Timesheets</span></a>
+                                    <a href="{{ route('reports.timesheets') }}"><span class="info-box-text">View more</span></a>
+                                </div>
+                            </div>                
+                        </div>
                     </div>
                 </div>
             </div>            
