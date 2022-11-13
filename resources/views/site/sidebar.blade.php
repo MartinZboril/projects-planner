@@ -44,7 +44,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('tickets.index') }}" class="nav-link @if(str_contains(url()->current(), 'tickets') && !str_contains(url()->current(), 'projects')){{ 'active' }}@endif">
+                    <a href="{{ route('tickets.index') }}" class="nav-link @if(str_contains(url()->current(), 'tickets') && !str_contains(url()->current(), 'projects')  && (!str_contains(url()->current(), 'report') && !str_contains(url()->current(), 'analyze'))){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-life-ring"></i>
                         <p>
                             Tickets
