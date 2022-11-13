@@ -116,8 +116,10 @@ Route::get('/report', [App\Http\Controllers\ReportController::class, 'index'])->
 Route::get('/report/projects', [App\Http\Controllers\ReportController::class, 'projects'])->name('reports.projects');
 Route::get('/report/tasks', [App\Http\Controllers\ReportController::class, 'tasks'])->name('reports.tasks');
 Route::get('/report/tickets', [App\Http\Controllers\ReportController::class, 'tickets'])->name('reports.tickets');
+Route::get('/report/milestones', [App\Http\Controllers\ReportController::class, 'milestones'])->name('reports.milestones');
 
 // Analysis
 Route::get('/analyze/projects', [App\Http\Controllers\AnalyticsController::class, 'projects'])->name('analysis.projects');
 Route::get('/analyze/tasks', [App\Http\Controllers\AnalyticsController::class, 'tasks'])->name('analysis.tasks');
 Route::get('/analyze/tickets', [App\Http\Controllers\AnalyticsController::class, 'tickets'])->name('analysis.tickets');
+Route::get('/analyze/milestones', [App\Http\Controllers\AnalyticsController::class, 'milestones'])->name('analysis.milestones');

@@ -22,6 +22,7 @@ class Task extends Model
         'project_id' => ['required', 'integer', 'exists:projects,id'],
         'author_id' => ['required', 'integer', 'exists:users,id'],
         'user_id' => ['required', 'integer', 'exists:users,id'],
+        'milestone_id' => ['nullable', 'integer', 'exists:milestones,id'],
         'status' => ['required', 'integer', 'in:1,2,3'],
         'name' => ['required', 'string', 'max:255'],
         'start_date' => ['required', 'date'],
@@ -85,6 +86,6 @@ class Task extends Model
 
     public function getMilestoneLabelAttribute(): string
     {
-        return $this->milestone ? $task->milestone->name : 'NaN';
+        return $this->milestone ? $this->milestone->name : 'NaN';
     }
 }

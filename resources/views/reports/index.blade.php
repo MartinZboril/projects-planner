@@ -7,7 +7,6 @@
     <!-- Content Header -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
-        <a href="{{ route('analysis.projects') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-chart-bar mr-1"></i>Analyze</a>
     </div>
     <!-- Main content -->
     <section class="content">
@@ -41,6 +40,15 @@
                                 <div class="info-box-content">
                                     <a href="{{ route('reports.tickets') }}"><span class="info-box-number">Tickets</span></a>
                                     <a href="{{ route('reports.tickets') }}"><span class="info-box-text">View more</span></a>
+                                </div>
+                            </div>                
+                        </div>
+                        <div class="col-md-3">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-primary"><a href="{{ route('reports.milestones') }}"><i class="fas fa-calendar-alt"></i></a></span>                            
+                                <div class="info-box-content">
+                                    <a href="{{ route('reports.milestones') }}"><span class="info-box-number">Milestones</span></a>
+                                    <a href="{{ route('reports.milestones') }}"><span class="info-box-text">View more</span></a>
                                 </div>
                             </div>                
                         </div>

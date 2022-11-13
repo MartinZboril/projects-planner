@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\{Builder, Model};
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 
 class Milestone extends Model
@@ -48,8 +48,13 @@ class Milestone extends Model
         return $this->hasMany(Task::class, 'milestone_id')->status(3);
     }
 
-    public function getProgressAttribute(): int
+    public function scopeOverdue(Builder $query): Builder
     {
-        return (count($this->tasks) > 0) ? count($this->tasksCompleted) / count($this->tasks) : 0;
+        return $query->whereDate('end_date', '<=', date('Y-m-d'));
+    }
+
+    public function getProgressAttribute(): float
+    {
+        return (count($this->tasks) > 0) ? round(count($this->tasksCompleted) / count($this->tasks), 2) : 0;
     }
 }

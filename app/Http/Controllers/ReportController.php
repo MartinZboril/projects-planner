@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\Report\{ProjectReport, TaskReport, TicketReport};
+use App\Services\Report\{ProjectReport, TaskReport, TicketReport, MilestoneReport};
 use Illuminate\View\View;
 
 class ReportController extends Controller
@@ -39,5 +39,13 @@ class ReportController extends Controller
     public function tickets(): View
     {
         return view('reports.tickets', ['data' => (new TicketReport)->getReportPerYear()]);
+    }
+            
+    /**
+     * Display a report for milestones.
+     */
+    public function milestones(): View
+    {
+        return view('reports.milestones', ['data' => (new MilestoneReport)->getReportPerYear()]);
     }
 }
