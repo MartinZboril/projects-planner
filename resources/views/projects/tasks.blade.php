@@ -27,39 +27,7 @@
                     <!-- Message -->
                     @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                     <!-- Content -->
-                    <div class="table-responsive">
-                        <table id="@if(count($project->tasks) > 0){{ 'tasks-table' }}@endif" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>User</th>
-                                    <th>Due Date</th>
-                                    <th>Milestone</th>
-                                    <th>Status</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($project->tasks as $task)
-                                    <tr>
-                                        <td><a href="{{ route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) }}">{{ $task->name }}</a></td>
-                                        <td>@include('site.partials.user', ['user' => $task->user])</td>
-                                        <td>{{ $task->due_date->format('d.m.Y') }}</td>
-                                        <td>{{ $task->milestone_label }}</td>
-                                        <td>@include('tasks.partials.status', ['task' => $task])</td>
-                                        <td>
-                                            <a class="btn btn-sm btn-dark" href="{{ route('projects.task.edit', ['project' => $project->id, 'task' => $task->id]) }}"><i class="fas fa-pencil-alt"></i></a>
-                                            <a class="btn btn-sm btn-info" href="{{ route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) }}"><i class="fas fa-eye"></i></a>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="100%" class="text-center">No tasks were found!</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>  
-                    </div>        
+                    @include('tasks.partials.table', ['tasks' => $project->tasks, 'display' => []])       
                 </div>
             </div>
         </div>

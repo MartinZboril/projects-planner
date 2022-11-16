@@ -7,39 +7,28 @@ use Illuminate\Support\Collection;
 
 class MilestoneReport
 {
+    protected $reportYear;
+    protected $reportMonths;
+
+    public function __construct()
+    {
+        $this->reportYear = (new DateReport)->getReportYear();
+        $this->reportMonths = (new DateReport)->getReportMonths();
+    }
+
     /**
      * Get report for milestones by year.
      */
     public function getReportPerYear(string $year = '2022'): Collection
     {
+        $milestonesByMonths = $this->getMilestonesByMonths($year);
         $data = collect([
             'total_milestones_count' => Milestone::whereYear('created_at', $year)->count(),
             'overdue_milestones_count' => Milestone::whereYear('created_at', $year)->overdue()->get()->where('progress', '<', 1)->count(),
             'unstarted_milestones_count' => Milestone::whereYear('created_at', $year)->get()->where('progress', 0)->count(),
-            'report_months' => sprintf("'%s'", implode("','", $this->getReportMonths())),
-            'total_milestones_by_month' => $this->getMilestonesByMonths($year),
-            'quarterly_created_milestones' => [
-                1 => (
-                    Milestone::whereYear('created_at', $year)->whereMonth('created_at', 1)->count() +
-                    Milestone::whereYear('created_at', $year)->whereMonth('created_at', 2)->count() +
-                    Milestone::whereYear('created_at', $year)->whereMonth('created_at', 3)->count()
-                ),
-                2 => (
-                    Milestone::whereYear('created_at', $year)->whereMonth('created_at', 4)->count() +
-                    Milestone::whereYear('created_at', $year)->whereMonth('created_at', 5)->count() +
-                    Milestone::whereYear('created_at', $year)->whereMonth('created_at', 6)->count()
-                ),
-                3 => (
-                    Milestone::whereYear('created_at', $year)->whereMonth('created_at', 7)->count() +
-                    Milestone::whereYear('created_at', $year)->whereMonth('created_at', 8)->count() +
-                    Milestone::whereYear('created_at', $year)->whereMonth('created_at', 9)->count()
-                ),
-                4 => (
-                    Milestone::whereYear('created_at', $year)->whereMonth('created_at', 10)->count() +
-                    Milestone::whereYear('created_at', $year)->whereMonth('created_at', 11)->count() +
-                    Milestone::whereYear('created_at', $year)->whereMonth('created_at', 12)->count()
-                ),
-            ]
+            'report_months' => $this->reportMonths,
+            'total_milestones_by_month' => $milestonesByMonths,
+            'quarterly_created_milestones' => $this->getMilestonesByQuarters($year, $milestonesByMonths),
         ]);
 
         return $data;
@@ -51,17 +40,48 @@ class MilestoneReport
     protected function getMilestonesByMonths(string $year): array
     {
         $milestones = [];
-        $months = $this->getReportMonths();
 
-        foreach ($months as $key => $month) {
-            $milestones[$month] = Milestone::whereYear('created_at', $year)->whereMonth('created_at', $key)->count();
+        foreach ($this->reportYear as $quarter) {
+            foreach ($quarter as $key => $month) {
+                $milestones[$month['index']] = Milestone::whereYear('created_at', $year)->whereMonth('created_at', $key)->count();
+            }
         }
 
         return $milestones;
     }
 
-    protected function getReportMonths(): array
+    /**
+     * Get milestones count by quarters year
+     */
+    protected function getMilestonesByQuarters(string $year, array $milestonesByMonths): array
     {
-        return [1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun', 7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec'];
+        $milestonesByQuarters = [];
+
+        foreach ($this->reportYear as $quarter => $months) {
+            array_push($milestonesByQuarters, [
+                'title' => __('pages.content.dates.' . $quarter) . ', ' . $year,
+                'values' => $this->getMilestonesByQuartersMonths($milestonesByMonths, $months)
+            ]);
+        }
+
+        return $milestonesByQuarters;
+    }
+
+    /**
+     * Get milestones count by quarters months
+     */
+    protected function getMilestonesByQuartersMonths(array $milestonesByMonths, array $months)
+    {
+        $milestones = [];
+        $totalCount = 0;
+
+        foreach ($months as $key => $month) {
+            $totalCount += $milestonesByMonths[$month['index']];
+            array_push($milestones, ['title' => $month['text'], 'value' => $milestonesByMonths[$month['index']]]);
+        }
+
+        array_push($milestones, ['title' => __('pages.content.labels.total'), 'value' => $totalCount]);
+
+        return $milestones;
     }
 }

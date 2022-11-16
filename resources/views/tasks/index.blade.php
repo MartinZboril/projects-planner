@@ -23,34 +23,7 @@
                     <!-- Message -->
                     @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                     <!-- Content -->
-                    <div class="table-responsive">
-                        <table id="@if(count($tasks) > 0){{ 'tasks-table' }}@endif" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Project</th>
-                                    <th>User</th>
-                                    <th>Due Date</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($tasks as $task)
-                                    <tr>
-                                        <td><a href="{{ route('tasks.detail', $task->id) }}">{{ $task->name }}</a></td>
-                                        <td>{{ $task->project->name }}</td>
-                                        <td>@include('site.partials.user', ['user' => $task->user])</td>
-                                        <td>{{ $task->due_date->format('d.m.Y') }}</td>
-                                        <td>@include('tasks.partials.status', ['task' => $task])</td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="100%" class="text-center">No tasks were found!</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>  
-                    </div>
+                    @include('tasks.partials.table', ['tasks' => $tasks, 'display' => ['project']])
                 </div>
             </div>            
         </div>

@@ -52,5 +52,28 @@ return [
                 'other' => 'Other',
             ],
         ],
+        'dates' => [
+            '1_st_quarter' => '1st Quarter',
+            '2_nd_quarter' => '2nd Quarter',
+            '3_rd_quarter' => '3rd Quarter',
+            '4_th_quarter' => '4th Quarter',
+            'months' => [
+                'january' => 'January',
+                'february' => 'February',
+                'march' => 'March',
+                'april' => 'April',
+                'may' => 'May',
+                'june' => 'June',
+                'july' => 'July',
+                'august' => 'August',
+                'september' => 'September',
+                'october' => 'October',
+                'november' => 'November',
+                'december' => 'December',
+            ]
+        ],
+        'labels' => [
+            'total' => 'Total',
+        ]
     ],
 ];

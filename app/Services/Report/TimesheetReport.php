@@ -7,59 +7,79 @@ use Illuminate\Support\Collection;
 
 class TimesheetReport
 {
+    protected $reportYear;
+    protected $reportMonths;
+
+    public function __construct()
+    {
+        $this->reportYear = (new DateReport)->getReportYear();
+        $this->reportMonths = (new DateReport)->getReportMonths();
+    }
+
     /**
      * Get report for timesheets by year.
      */
     public function getReportPerYear(string $year = '2022'): Collection
     {
+        $timersByMonths = $this->getTimersByMonths($year);
         $data = collect([
-            'total_timesheets_count' => Timer::whereYear('created_at', $year)->get()->sum('total_time'),
-            'report_months' => sprintf("'%s'", implode("','", $this->getReportMonths())),
-            'total_timesheets_by_month' => $this->getTimesheetsByMonths($year),
-            'quarterly_created_timesheets' => [
-                1 => (
-                    Timer::whereYear('created_at', $year)->whereMonth('created_at', 1)->get()->sum('total_time') +
-                    Timer::whereYear('created_at', $year)->whereMonth('created_at', 2)->get()->sum('total_time') +
-                    Timer::whereYear('created_at', $year)->whereMonth('created_at', 3)->get()->sum('total_time')
-                ),
-                2 => (
-                    Timer::whereYear('created_at', $year)->whereMonth('created_at', 4)->get()->sum('total_time') +
-                    Timer::whereYear('created_at', $year)->whereMonth('created_at', 5)->get()->sum('total_time') +
-                    Timer::whereYear('created_at', $year)->whereMonth('created_at', 6)->get()->sum('total_time')
-                ),
-                3 => (
-                    Timer::whereYear('created_at', $year)->whereMonth('created_at', 7)->get()->sum('total_time') +
-                    Timer::whereYear('created_at', $year)->whereMonth('created_at', 8)->get()->sum('total_time') +
-                    Timer::whereYear('created_at', $year)->whereMonth('created_at', 9)->get()->sum('total_time')
-                ),
-                4 => (
-                    Timer::whereYear('created_at', $year)->whereMonth('created_at', 10)->get()->sum('total_time') +
-                    Timer::whereYear('created_at', $year)->whereMonth('created_at', 11)->get()->sum('total_time') +
-                    Timer::whereYear('created_at', $year)->whereMonth('created_at', 12)->get()->sum('total_time')
-                ),
-            ]
+            'total_timers_count' => Timer::whereYear('created_at', $year)->get()->sum('total_time'),
+            'report_months' => $this->reportMonths,
+            'total_timers_by_month' => $timersByMonths,
+            'quarterly_recorded_timers' => $this->getTimersByQuarters($year, $timersByMonths),
         ]);
 
         return $data;
     }
 
     /**
-     * Get timesheets count by year
+     * Get timers count by year
      */
-    protected function getTimesheetsByMonths(string $year): array
+    protected function getTimersByMonths(string $year): array
     {
-        $timesheets = [];
-        $months = $this->getReportMonths();
+        $timers = [];
 
-        foreach ($months as $key => $month) {
-            $timesheets[$month] = Timer::whereYear('created_at', $year)->whereMonth('created_at', $key)->get()->sum('total_time');
+        foreach ($this->reportYear as $quarter) {
+            foreach ($quarter as $key => $month) {
+                $timers[$month['index']] = Timer::whereYear('created_at', $year)->whereMonth('created_at', $key)->get()->sum('total_time');
+            }
         }
 
-        return $timesheets;
+        return $timers;
     }
 
-    protected function getReportMonths(): array
+    /**
+     * Get timers count by quarters year
+     */
+    protected function getTimersByQuarters(string $year, array $timersByMonths): array
     {
-        return [1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr', 5 => 'May', 6 => 'Jun', 7 => 'Jul', 8 => 'Aug', 9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Dec'];
+        $timersByQuarters = [];
+
+        foreach ($this->reportYear as $quarter => $months) {
+            array_push($timersByQuarters, [
+                'title' => __('pages.content.dates.' . $quarter) . ', ' . $year,
+                'values' => $this->getTimersByQuartersMonths($timersByMonths, $months)
+            ]);
+        }
+
+        return $timersByQuarters;
+    }
+
+    /**
+     * Get timers count by quarters months
+     */
+    protected function getTimersByQuartersMonths(array $timersByMonths, array $months)
+    {
+        $timers = [];
+        $totalCount = 0;
+
+        foreach ($months as $key => $month) {
+            $totalCount += $timersByMonths[$month['index']];
+            array_push($timers, ['title' => $month['text'], 'value' => $timersByMonths[$month['index']]]);
+        }
+
+        array_push($timers, ['title' => __('pages.content.labels.total'), 'value' => $totalCount]);
+
+        return $timers;
     }
 }
