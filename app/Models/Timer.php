@@ -48,7 +48,7 @@ class Timer extends Model
         return ($type) ? $query->whereNull('until') : $query->whereNotNull('until');
     }
 
-    public function getTotalTimeAttribute(): int
+    public function getTotalTimeAttribute(): float
     {
         $since = Carbon::parse($this->since);
         $until = Carbon::parse($this->until);
@@ -58,8 +58,8 @@ class Timer extends Model
         return round($diff->s / 3600 + $diff->i / 60 + $diff->h + $diff->days * 24, 2);
     }
 
-    public function getAmountAttribute(): int
+    public function getAmountAttribute(): float
     {
-        return round($this->totalTime * $this->rate->value);
+        return round($this->totalTime * $this->rate->value, 2);
     }
 }

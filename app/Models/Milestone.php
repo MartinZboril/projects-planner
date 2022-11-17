@@ -55,6 +55,6 @@ class Milestone extends Model
 
     public function getProgressAttribute(): float
     {
-        return (count($this->tasks) > 0) ? round(count($this->tasksCompleted) / count($this->tasks), 2) : 0;
+        return ($this->tasks->count() > 0) ? round($this->tasksCompleted->count() / $this->tasks->count(), 2) : 0;
     }
 }

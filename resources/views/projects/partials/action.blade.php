@@ -12,7 +12,7 @@
     <a href="#" class="btn btn-sm btn-danger" onclick="event.preventDefault(); document.getElementById('stop-working-on-project').submit();"><i class="fas fa-stop mr-1"></i>Stop</a>
 @else
     <div class="btn-group">
-        <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+        <button type="button" class="btn btn-sm btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
             Start
         </button>
         <div class="dropdown-menu">

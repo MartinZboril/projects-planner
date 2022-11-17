@@ -22,7 +22,10 @@
                 @include('projects.partials.header', ['active' => 'timesheets'])
             </div>          
             <div class="card card-primary card-outline rounded-0">
-                <div class="card-header"><a href="{{ route('timers.create', ['project' => $project->id]) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
+                <div class="card-header">
+                    <a href="{{ route('timers.create', ['project' => $project->id]) }}" class="btn-sm btn-primary"><i class="fas fa-plus mr-1"></i>Create</a>
+                    <a href="{{ route('reports.timesheets') }}" class="btn-sm btn-primary"><i class="fas fa-chart-line mr-1"></i>Report</a>
+                </div>
                 <div class="card-body">
                     <!-- Message -->
                     @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])

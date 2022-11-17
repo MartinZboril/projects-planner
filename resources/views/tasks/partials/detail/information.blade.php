@@ -29,11 +29,11 @@
                         </div>
                     </div>
                 </div>
-                <span class="d-block">Project: <b>{{ $task->project->name }}</b></span>
-                <span class="d-block">Client: <b>{{ $task->project->client->name }}</b></span>
-                <span class="d-block">Milestone: <b>{{ $task->milestone_label }}</b></span>
-                <span class="d-block">User: <b>{{ $task->user->full_name }}</b></span>
-                <span class="d-block">Author: <b>{{ $task->author->full_name }}</b></span>
+                <span class="d-block">Project: <b><a href="{{ route('projects.detail', $task->project->id) }}">{{ $task->project->name }}</a></b></span>
+                <span class="d-block">Client: <b><a href="{{ route('clients.detail', $task->project->client->id) }}">{{ $task->project->client->name }}</a></b></span>
+                <span class="d-block">Milestone: <b>@if($task->milestone)<a href="{{ route('milestones.detail', ['project' => $task->milestone->project->id, 'milestone' => $task->milestone->id]) }}">{{ $task->milestone_label }}</a>@else{{ $task->milestone_label }}@endif</b></span>
+                <span class="d-block">User: <b><a href="{{ route('users.detail', $task->user->id) }}">{{ $task->user->full_name }}</a></b></span>
+                <span class="d-block">Author: <b><a href="{{ route('users.detail', $task->author->id) }}">{{ $task->author->full_name }}</a></b></span>
                 <span class="d-block">Status: <b>@include('tasks.partials.status', ['task' => $task])</b></span>
                 <hr>
                 {!! $task->description !!}
@@ -49,9 +49,9 @@
             </h3>
             <div class="card-tools">
                 @if($project)
-                    <a href="{{ route('projects.todo.create', ['project' => $project->id, 'task' => $task->id]) }}" class="btn btn-primary btn-sm float-right"><i class="fas fa-plus"></i>Add</a>
+                    <a href="{{ route('projects.todo.create', ['project' => $project->id, 'task' => $task->id]) }}" class="btn btn-sm btn-primary btn-sm float-right"><i class="fas fa-plus"></i>Add</a>
                 @else
-                    <a href="{{ route('todos.create', $task->id) }}" class="btn btn-primary btn-sm float-right"><i class="fas fa-plus"></i>Add</a>
+                    <a href="{{ route('todos.create', $task->id) }}" class="btn btn-sm btn-primary btn-sm float-right"><i class="fas fa-plus"></i>Add</a>
                 @endif
             </div>
         </div>

@@ -35,7 +35,7 @@
                             <table class="table">
                                 <tbody>
                                     <tr>
-                                        <td class="text-muted">Email</td><td class="text-right">{{ $user->email }}</td>
+                                        <td class="text-muted">Email</td><td class="text-right"><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></td>
                                     </tr>
                                     <tr>
                                         <td class="text-muted">Username</td><td class="text-right">{{ $user->username }}</td>
@@ -44,10 +44,10 @@
                                         <td class="text-muted">Job title</td><td class="text-right">{{ $user->job_title ? $user->job_title : '-' }}</td>
                                     </tr>
                                     <tr>
-                                        <td class="text-muted">Mobile</td><td class="text-right">{{ $user->mobile ? $user->mobile : '-' }}</td>
+                                        <td class="text-muted">Mobile</td><td class="text-right">@if($user->mobile)<a href="tel:{{ $user->mobile }}">{{ $user->mobile }}</a>@else{{ '-' }}@endif</td>
                                     </tr>
                                     <tr>
-                                        <td class="text-muted">Phone</td><td class="text-right">{{ $user->phone ? $user->phone : '-' }}</td>
+                                        <td class="text-muted">Phone</td><td class="text-right">@if($user->phone)<a href="tel:{{ $user->phone }}">{{ $user->phone }}</a>@else{{ '-' }}@endif</td>
                                     </tr>
                                     <tr>
                                         <td class="text-muted">Address</td><td class="text-right">{{ $user->street ? $user->street . ' ' . $user->house_number : '-' }}</td>
@@ -88,7 +88,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="@if(count($user->rates) > 0){{ 'rates-table' }}@endif" class="table table-bordered table-striped">
+                                <table id="@if($user->rates->count() > 0){{ 'rates-table' }}@endif" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>Rate</th>
@@ -100,11 +100,11 @@
                                     <tbody>
                                         @forelse ($user->rates as $rate)
                                             <tr>
-                                                <td>{{ $rate->name }}</td>
+                                                <td><a href="{{ route('rates.edit', ['user' => $user->id, 'rate' => $rate->id]) }}">{{ $rate->name }}</a></td>
                                                 <td>{{ $rate->is_active ? 'Yes' : 'No' }}</td>
                                                 <td>{{ $rate->value }}</td>
                                                 <td>                                                    
-                                                    <a href="{{ route('rates.edit', ['user' => $user->id, 'rate' => $rate->id]) }}" class="btn btn-sm btn-dark" href=""><i class="fas fa-pencil-alt"></i></a>
+                                                    <a href="{{ route('rates.edit', ['user' => $user->id, 'rate' => $rate->id]) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
                                                 </td>
                                             </tr>
                                         @empty

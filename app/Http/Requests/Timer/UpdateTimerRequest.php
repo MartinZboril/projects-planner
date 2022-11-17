@@ -21,7 +21,10 @@ class UpdateTimerRequest extends FormRequest
     public function rules(): array
     {
         $rules = Timer::VALIDATION_RULES;
-        unset($rules['user_id']);
+        unset(
+            $rules['user_id'],
+            $rules['project_id']
+        );
 
         return $rules;
     }

@@ -28,8 +28,8 @@
                     <div class="card card-primary card-outline rounded-0">
                         <div class="card-header">{{ $milestone->name }}</div>
                         <div class="card-body">
-                            <span class="d-block">Project: <b>{{ $milestone->project->name }}</b></span>
-                            <span class="d-block">User: <b>{{ $milestone->owner->full_name }}</b></span>
+                            <span class="d-block">Project: <b><a href="{{ route('projects.detail', $milestone->project->id) }}">{{ $milestone->project->name }}</a></b></span>
+                            <span class="d-block">User: <b><a href="{{ route('users.detail', $milestone->owner) }}">{{ $milestone->owner->full_name }}</a></b></span>
                             <span class="d-block">Start date: <b>{{ $milestone->start_date->format('d.m.Y') }}</b></span>
                             <span class="d-block">End date: <b>{{ $milestone->end_date->format('d.m.Y') }}</b></span>
                             <span class="d-block">Tasks: <b>{{ $milestone->progress * 100 }}% Complete ({{ $milestone->tasksCompleted->count() }}/{{ $milestone->tasks->count() }})</b></span>
@@ -47,34 +47,7 @@
                     <div class="card card-primary card-outline rounded-0">
                         <div class="card-header">Tasks</div>
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table id="@if(count($milestone->tasks) > 0){{ 'tasks-table' }}@endif" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Project</th>
-                                            <th>User</th>
-                                            <th>Due Date</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse ($milestone->tasks as $task)
-                                            <tr>
-                                                <td><a href="{{ route('tasks.detail', $task->id) }}">{{ $task->name }}</a></td>
-                                                <td>{{ $task->project->name }}</td>
-                                                <td>@include('site.partials.user', ['user' => $task->user])</td>
-                                                <td>{{ $task->due_date->format('d.m.Y') }}</td>
-                                                <td>@include('tasks.partials.status', ['task' => $task])</td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="100%" class="text-center">No tasks were found!</td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>  
-                            </div>
+                            @include('tasks.partials.table', ['tasks' => $milestone->tasks, 'display' => [], 'redirect' => 'project'])       
                         </div>
                     </div>
                 </div>

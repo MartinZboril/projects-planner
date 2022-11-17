@@ -21,7 +21,7 @@
             <div class="card card-primary card-outline rounded-0">
                 <div class="card-body">
                     <!-- Content -->
-                    @include('tasks.partials.table', ['tasks' => $tasks, 'display' => ['project']])
+                    @include('tasks.partials.table', ['tasks' => $tasks, 'display' => ['project'], 'redirect' => 'task'])
                 </div>
             </div>            
         </div>

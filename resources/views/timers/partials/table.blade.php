@@ -16,9 +16,9 @@
         <tbody>
             @forelse ($timers as $timer)
                 <tr>
-                    @if(in_array('project', $display))<td>{{ $timer->project->name }}</td>@endif
-                    <td>{{ $timer->rate->name }}</td>
-                    <td>{{ $timer->user->full_name }}</td>
+                    @if(in_array('project', $display))<td><a href="{{ route('projects.detail', $timer->project->id) }}">{{ $timer->project->name }}</a></td>@endif
+                    <td><a href="{{ route('rates.edit', ['user' => $timer->user->id, 'rate' => $timer->rate->id]) }}">{{ $timer->rate->name }}</a></td>
+                    <td>@include('site.partials.user', ['user' => $timer->user])</td>
                     <td>{{ $timer->until ? $timer->total_time : 'N/A' }}</td>
                     <td>{{ $timer->until ? $timer->amount : 'N/A' }}</td>
                     <td>{{ $timer->since->format('d.m.Y H:i') }}</td>

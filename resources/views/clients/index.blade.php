@@ -24,13 +24,14 @@
                     @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                     <!-- Table -->
                     <div class="table-responsive">
-                        <table id="@if(count($clients) > 0){{ 'clients-table' }}@endif" class="table table-bordered table-striped">
+                        <table id="@if($clients->count() > 0){{ 'clients-table' }}@endif" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>Name</th>
                                     <th>Contact Person</th>
                                     <th>Email</th>
                                     <th>Date</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -40,6 +41,10 @@
                                         <td>{{ $client->contact_person_label }}</td>
                                         <td>{{ $client->email_label }}</td>
                                         <td>{{ $client->created_at->format('d.m.Y') }}</td>
+                                        <td>
+                                            <a href="{{ route('clients.edit', $client->id) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                                            <a href="{{ route('clients.detail', $client->id) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>

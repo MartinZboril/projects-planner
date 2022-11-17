@@ -95,36 +95,36 @@ class Project extends Model
 
     public function getDeadlineAttribute(): int
     {
-        return $this->due_date->diffInDays(now()->format('Y-m-d'));
+        return round($this->due_date->diffInDays(now()->format('Y-m-d')), 2);
     }
        
-    public function getTotalTimeAttribute(): int
+    public function getTotalTimeAttribute(): float
     {
-        return Timer::where('project_id', $this->id)->get()->sum('total_time');
+        return round(Timer::where('project_id', $this->id)->get()->sum('total_time'), 2);
     }
 
-    public function getRemainingHoursAttribute(): int
+    public function getRemainingHoursAttribute(): float
     {
-        return $this->estimated_hours - $this->total_time;
+        return round($this->estimated_hours - $this->total_time, 2);
     }
     
-    public function getTimePlanAttribute(): int
+    public function getTimePlanAttribute(): float
     {
-        return ($this->estimated_hours) ? ($this->total_time / $this->estimated_hours) * 100 : 0;
+        return ($this->estimated_hours) ? round(($this->total_time / $this->estimated_hours), 2) * 100 : 0;
     }
 
-    public function getRemainingBudgetAttribute(): int
+    public function getRemainingBudgetAttribute(): float
     {
-        return $this->budget - $this->amount;
+        return round($this->budget - $this->amount, 2);
     }
 
-    public function getAmountAttribute(): int
+    public function getAmountAttribute(): float
     {
-        return Timer::where('project_id', $this->id)->get()->sum('amount');
+        return round(Timer::where('project_id', $this->id)->get()->sum('amount'), 2);
     }
      
-    public function getBudgetPlanAttribute(): int
+    public function getBudgetPlanAttribute(): float
     {
-        return ($this->budget) ? ($this->amount / $this->budget) * 100 : 0;
+        return ($this->budget) ? round(($this->amount / $this->budget), 2) * 100 : 0;
     }
 }

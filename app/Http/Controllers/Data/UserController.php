@@ -27,7 +27,7 @@ class UserController extends Controller
     /**
      * Display a listing of the users.
      */
-    public function index(): Response
+    public function index(): View
     {
         return view('users.index', ['users' => User::all()]);
     }
@@ -35,7 +35,7 @@ class UserController extends Controller
     /**
      * Show the form for creating a new user.
      */
-    public function create(): Response
+    public function create(): View
     {
         return view('users.create');
     }
@@ -61,7 +61,7 @@ class UserController extends Controller
     /**
      * Display the user.
      */
-    public function detail(User $user): Response
+    public function detail(User $user): View
     {
         return view('users.detail', ['user' => $user]);
     }
@@ -69,7 +69,7 @@ class UserController extends Controller
     /**
      * Show the form for editing the user.
      */
-    public function edit(User $user): Response
+    public function edit(User $user): View
     {
         return view('users.edit', ['user' => $user]);
     }

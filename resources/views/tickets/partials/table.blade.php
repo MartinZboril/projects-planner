@@ -11,13 +11,14 @@
                 <th>Type</th>
                 <th>Priority</th>
                 <th>Due Date</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @forelse ($tickets as $ticket)
                 <tr>
-                    <td><a href="{{ route('tickets.detail', $ticket->id) }}">{{ $ticket->subject }}</a></td>
-                    @if(in_array('project', $display))<td>{{ $ticket->project->name }}</td>@endif
+                    <td><a href="{{ $redirect == 'project' ? route('projects.ticket.detail', ['project' => $project->id, 'ticket' => $ticket->id]) : route('tickets.detail', $ticket->id) }}">{{ $ticket->subject }}</a></td>
+                    @if(in_array('project', $display))<td><a href="{{ route('projects.detail', $ticket->project->id) }}">{{ $ticket->project->name }}</a></td>@endif
                     <td>@include('site.partials.user', ['user' => $ticket->reporter])</td>
                     <td>
                         @if($ticket->assignee)                                            
@@ -31,6 +32,10 @@
                     <td>@include('tickets.partials.type', ['type' => $ticket->type])</td>
                     <td>@include('tickets.partials.priority', ['priority' => $ticket->priority])</td>
                     <td>{{ $ticket->due_date->format('d.m.Y') }}</td>
+                    <td>
+                        <a href="{{ $redirect == 'project' ? route('projects.ticket.edit', ['project' => $project->id, 'ticket' => $ticket->id]) : route('tickets.edit', $ticket->id) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="{{ $redirect == 'project' ? route('projects.ticket.detail', ['project' => $project->id, 'ticket' => $ticket->id]) : route('tickets.detail', $ticket->id) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                    </td>
                 </tr>
             @empty
                 <tr>

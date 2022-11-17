@@ -14,6 +14,7 @@
     <!-- Content Header -->
     <div class="p-3 rounded-0 mb-3" style="background-color:white;">
         <a href="{{ route('tickets.create') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-plus mr-1"></i>Create</a>
+        <a href="{{ route('reports.tickets') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-chart-line mr-1"></i>Report</a>
     </div>
     <!-- Main content -->
     <section class="content">
@@ -23,7 +24,7 @@
                     <!-- Message -->
                     @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                     <!-- Content -->
-                    @include('tickets.partials.table', ['tickets' => $tickets, 'display' => ['project']])
+                    @include('tickets.partials.table', ['tickets' => $tickets, 'display' => ['project'], 'redirect' => 'ticket'])
                 </div>
             </div>            
         </div>

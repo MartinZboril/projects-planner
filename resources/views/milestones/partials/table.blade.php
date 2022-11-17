@@ -16,7 +16,7 @@
                 <tr>                                        
                     <td><a href="{{ route('milestones.detail', ['project' => $milestone->project->id, 'milestone' => $milestone->id]) }}">{{ $milestone->name }}</a></td>                                        
                     @if(in_array('project', $display))<td>{{ $milestone->project->name }}</td>@endif
-                    <td>{{ $milestone->owner->full_name }}</td>
+                    <td>@include('site.partials.user', ['user' => $milestone->owner])</td>
                     <td>
                         <div class="progress progress-sm">
                             <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="{{ $milestone->progress * 100 }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $milestone->progress * 100 }}%"></div>
@@ -26,8 +26,8 @@
                     <td>{{ $milestone->start_date->format('d.m.Y') }}</td>
                     <td>{{ $milestone->end_date->format('d.m.Y') }}</td>
                     <td>
-                        <a href="{{ route('milestones.edit', ['project' => $milestone->project->id, 'milestone' => $milestone->id]) }}" class="btn btn-sm btn-dark" href=""><i class="fas fa-pencil-alt"></i></a>
-                        <a href="{{ route('milestones.detail', ['project' => $milestone->project->id, 'milestone' => $milestone->id]) }}" class="btn btn-sm btn-info" href=""><i class="fas fa-eye"></i></a>
+                        <a href="{{ route('milestones.edit', ['project' => $milestone->project->id, 'milestone' => $milestone->id]) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="{{ route('milestones.detail', ['project' => $milestone->project->id, 'milestone' => $milestone->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
                     </td>
                 </tr>
             @empty
