@@ -23,9 +23,9 @@ class MilestoneReport
     {
         $milestonesByMonths = $this->getMilestonesByMonths($year);
         $data = collect([
-            'total_milestones_count' => Milestone::whereYear('created_at', $year)->count(),
-            'overdue_milestones_count' => Milestone::whereYear('created_at', $year)->overdue()->get()->where('progress', '<', 1)->count(),
-            'unstarted_milestones_count' => Milestone::whereYear('created_at', $year)->get()->where('progress', 0)->count(),
+            'total_milestones_count' => Milestone::whereYear('created_at', '<=', $year)->count(),
+            'overdue_milestones_count' => Milestone::whereYear('created_at', '<=', $year)->overdue()->get()->where('progress', '<', 1)->count(),
+            'unstarted_milestones_count' => Milestone::whereYear('created_at', '<=', $year)->get()->where('progress', 0)->count(),
             'report_months' => $this->reportMonths,
             'total_milestones_by_month' => $milestonesByMonths,
             'quarterly_created_milestones' => $this->getMilestonesByQuarters($year, $milestonesByMonths),

@@ -6,6 +6,7 @@
                 <th>Client</th>
                 <th>Status</th>
                 <th>Team</th>
+                <th>Due date</th>
                 <th>Plan</th>
                 <th>Total Time</th>
                 <th>Budget</th>
@@ -24,9 +25,10 @@
                             @include('site.partials.user', ['user' => $user])
                         @endforeach
                     </td>
-                    <td>{{ $project->time_plan }} %</td>
+                    <td><span class="text-{{ $project->overdue ? 'danger' : 'body' }}">{{ $project->due_date->format('d.m.Y') }}</span></td>
+                    <td><span class="text-{{ $project->time_plan > 100 ? 'danger' : 'body' }}">{{ $project->time_plan }} %</span></td>
                     <td>{{ $project->total_time }} Hours</td>
-                    <td>{{ $project->budget_plan }} %</td>
+                    <td><span class="text-{{ $project->budget_plan > 100 ? 'danger' : 'body' }}">{{ $project->budget_plan }} %</span></td>
                     <td>{{ number_format($project->amount, 2) }}</td>
                     <td>
                         <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>

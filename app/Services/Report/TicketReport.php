@@ -23,10 +23,10 @@ class TicketReport
     {
         $ticketsByMonths = $this->getTicketsByMonths($year);
         $data = collect([
-            'total_tickets_count' => Ticket::whereYear('created_at', $year)->count(),
-            'active_tickets_count' => Ticket::whereYear('created_at', $year)->active()->count(),
-            'done_tickets_count' => Ticket::whereYear('created_at', $year)->done()->count(),
-            'overdue_tickets_count' => Ticket::whereYear('created_at', $year)->active()->overdue()->count(),
+            'total_tickets_count' => Ticket::whereYear('created_at', '<=', $year)->count(),
+            'active_tickets_count' => Ticket::whereYear('created_at', '<=', $year)->active()->count(),
+            'done_tickets_count' => Ticket::whereYear('created_at', '<=', $year)->done()->count(),
+            'overdue_tickets_count' => Ticket::whereYear('created_at', '<=', $year)->active()->overdue()->count(),
             'report_months' => $this->reportMonths,
             'total_tickets_by_month' => $ticketsByMonths,
             'quarterly_created_tickets' => $this->getTicketsByQuarters($year, $ticketsByMonths),

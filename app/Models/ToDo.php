@@ -16,6 +16,10 @@ class ToDo extends Model
 
     protected $dates = ['deadline'];
 
+    protected $appends = [
+        'overdue',
+    ];
+
     public const VALIDATION_RULES = [
         'task_id' => ['required', 'integer', 'exists:tasks,id'],
         'name' => ['required', 'string', 'max:255'],
@@ -30,5 +34,10 @@ class ToDo extends Model
     public function task(): BelongsTo
     {
         return $this->belongsTo(Task::class, 'task_id');
+    }
+
+    public function getOverdueAttribute(): bool
+    {
+        return $this->deadline <= date('Y-m-d') && !$this->is_finished;
     }
 }

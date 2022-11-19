@@ -33,6 +33,7 @@
                                         <div class="card-header">
                                             <div class="card-title">
                                                 <a href="{{ route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) }}">{{ $task->name }}</a>
+                                                @if($task->overdue)<span class="badge badge-danger ml-2" style="font-size:14px;">Overdue</span>@endif
                                             </div>
                                             <div class="card-tools">
                                                 <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('start-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-play" data-toggle="tooltip" data-placement="bottom" title="Start"></i></a>
@@ -65,6 +66,7 @@
                                                 @elseif($task->is_returned)
                                                     <span class="badge badge-@include('tasks.partials.colour', ['task' => $task]) ml-2" style='font-size:14px;'>@include('tasks.partials.status', ['task' => $task])</span>
                                                 @endif
+                                                @if($task->overdue)<span class="badge badge-danger ml-1" style="font-size:14px;">Overdue</span>@endif
                                             </div>
                                             <div class="card-tools">
                                                 @if ($task->is_stopped)

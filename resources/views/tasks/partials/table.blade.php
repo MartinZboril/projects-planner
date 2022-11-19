@@ -16,7 +16,7 @@
                     <td><a href="{{ $redirect == 'project' ? route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) : route('tasks.detail', $task->id) }}">{{ $task->name }}</a></td>
                     @if(in_array('project', $display))<td><a href="{{ route('projects.detail', $task->project->id) }}">{{ $task->project->name }}</a></td>@endif
                     <td>@include('site.partials.user', ['user' => $task->user])</td>
-                    <td>{{ $task->due_date->format('d.m.Y') }}</td>
+                    <td><span class="text-{{ $task->overdue ? 'danger' : 'body' }}">{{ $task->due_date->format('d.m.Y') }}</span></td>
                     <td>@include('tasks.partials.status', ['task' => $task])</td>
                     <td>
                         <a href="{{ $redirect == 'project' ? route('projects.task.edit', ['project' => $project->id, 'task' => $task->id]) : route('tasks.edit', $task->id) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>

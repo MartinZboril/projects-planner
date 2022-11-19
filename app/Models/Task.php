@@ -15,7 +15,8 @@ class Task extends Model
     protected $dates = ['start_date', 'due_date'];
 
     protected $appends = [
-        'milestone_label'
+        'milestone_label',
+        'overdue'
     ];
 
     public const VALIDATION_RULES = [
@@ -82,6 +83,11 @@ class Task extends Model
     public function scopeOverdue(Builder $query): Builder
     {
         return $query->whereDate('due_date', '<=', date('Y-m-d'));
+    }
+
+    public function getOverdueAttribute(): bool
+    {
+        return $this->due_date <= date('Y-m-d') && $this->status != 3;
     }
 
     public function getMilestoneLabelAttribute(): string

@@ -24,11 +24,12 @@ class ProjectReport
     {
         $projectsByMonths = $this->getProjectsByMonths($year);
         $data = collect([
-            'total_projects_count' => Project::whereYear('created_at', $year)->where('status', '!=', 3)->count(),
-            'active_projects_count' => Project::whereYear('created_at', $year)->status(1)->count(),
-            'done_projects_count' => Project::whereYear('created_at', $year)->status(2)->count(),
-            'amount_avg' => Timer::whereYear('created_at', $year)->get()->avg('amount'),
-            'spent_time_avg' => Timer::whereYear('created_at', $year)->get()->avg('total_time'),
+            'total_projects_count' => Project::whereYear('created_at', '<=', $year)->where('status', '!=', 3)->count(),
+            'active_projects_count' => Project::whereYear('created_at', '<=', $year)->status(1)->count(),
+            'done_projects_count' => Project::whereYear('created_at', '<=', $year)->status(2)->count(),
+            'overdue_projects_count' => Project::whereYear('created_at', '<=', $year)->status(1)->overdue()->count(),
+            'amount_avg' => Timer::whereYear('created_at', '<=', $year)->get()->avg('amount'),
+            'spent_time_avg' => Timer::whereYear('created_at', '<=', $year)->get()->avg('total_time'),
             'report_months' => $this->reportMonths,
             'total_projects_by_month' => $projectsByMonths,
             'quarterly_created_projects' => $this->getProjectsByQuarters($year, $projectsByMonths),

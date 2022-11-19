@@ -22,7 +22,11 @@
             <div class="row">
                 <div class="col-md-5">
                     <div class="card card-primary card-outline rounded-0">
-                        <div class="card-header">Project <span class="badge badge-@include('projects.partials.colour', ['status' => $project->status]) ml-2" style='font-size:14px;'>@include('projects.partials.status', ['status' => $project->status])</span></div>
+                        <div class="card-header">
+                            Project
+                            <span class="badge badge-@include('projects.partials.colour', ['status' => $project->status]) ml-2" style='font-size:14px;'>@include('projects.partials.status', ['status' => $project->status])</span>
+                            @if($project->overdue)<span class="badge badge-danger ml-1" style="font-size:14px;">Overdue</span>@endif
+                        </div>
                         <div class="card-body">
                             <!-- Message -->
                             @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
@@ -39,14 +43,15 @@
                                 <p class="text-sm">Information
                                     <span class="d-block ml-2">Start date: <b>{{ $project->start_date->format('d.m.Y') }}</b></span>
                                     <span class="d-block ml-2">Due date: <b>{{ $project->due_date->format('d.m.Y') }}</b></span>
-                                    <span class="d-block ml-2">Deadline: <b>{{ $project->deadline }} day(s)</b></span>
+                                    <span class="d-block ml-2">Deadline: <span class="badge badge-{{ $project->deadline >= 0 ? 'success' : 'danger' }}">{{ $project->deadline }} day(s)</span>
+                                </span>
                                 </p>
                                 <p class="text-sm">Cost
                                     <span class="d-block ml-2">Est. Hours: <b>{{ $project->estimated_hours }} Hours</b></span>
-                                    <span class="d-block ml-2">Remaining Hours: <b>{{ $project->remaining_hours }} Hours ({{ $project->time_plan }} %)</b></span>
+                                    <span class="d-block ml-2">Remaining Hours: <b><span class="text-{{ $project->remaining_hours >= 0 ? 'sm' : 'danger' }}">{{ $project->remaining_hours }} Hours</span></b><span class="badge badge-{{ $project->time_plan > 100 ? 'danger' : 'success' }} ml-1">{{ $project->time_plan }} %</span></span>
                                     <span class="d-block ml-2">Budget: <b>{{ number_format($project->budget, 2) }}</b></span>
-                                    <span class="d-block ml-2">Remaining Budget: <b>{{ number_format($project->remaining_budget, 2) }} ({{ $project->budget_plan }} %)</b></span>
-                                </p>
+                                    <span class="d-block ml-2">Remaining Budget: <b><span class="text-{{ number_format($project->remaining_budget, 2) >= 0 ? 'sm' : 'danger' }}">{{ number_format($project->remaining_budget, 2) }}</span></b><span class="badge badge-{{ $project->budget_plan > 100 ? 'danger' : 'success' }} ml-1">{{ $project->budget_plan }} %</span></span>
+                                </p>                            
                                 <hr>
                                 <p class="text-sm">Team
                                     <ul class="list-group list-group-flush ml-1">

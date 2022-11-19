@@ -1,14 +1,18 @@
 <div class="row">
     <div class="col-md-5">
         <div class="card card-primary card-outline rounded-0">
-            <div class="card-header">{{ $task->name }} <span class="badge badge-@include('tasks.partials.colour', ['task' => $task]) ml-2" style='font-size:14px;'>@include('tasks.partials.status', ['task' => $task])</span></div>
+            <div class="card-header">
+                {{ $task->name }}
+                <span class="badge badge-@include('tasks.partials.colour', ['task' => $task]) ml-2" style='font-size:14px;'>@include('tasks.partials.status', ['task' => $task])</span>
+                @if($task->overdue)<span class="badge badge-danger ml-1" style="font-size:14px;">Overdue</span>@endif
+            </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-12 col-sm-4">
                         <div class="info-box bg-light">
                             <div class="info-box-content">
                                 <span class="info-box-text text-center text-muted">Due date</span>
-                                <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-danger">{{ $task->due_date->format('d.m.Y') }}</span></span>
+                                <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-{{ $task->overdue ? 'danger' : 'secondary' }}">{{ $task->due_date->format('d.m.Y') }}</span></span>
                             </div>
                         </div>
                     </div>
@@ -64,7 +68,7 @@
                             <label for="todo-check-{{ $todo->id }}"></label>
                         </div>
                         <span class="text">{{ $todo->name }}</span>
-                        <small class="badge badge-danger"><i class="far fa-clock"></i>{{ $todo->deadline->format('d.m.Y') }}</small>
+                        <small class="badge badge-{{ $todo->overdue ? 'danger' : 'secondary' }}"><i class="far fa-clock mr-1"></i>{{ $todo->deadline->format('d.m.Y') }}</small>
                         @if($todo->description)
                             <small class="ml-1">{{ $todo->description }}</small>
                         @endif

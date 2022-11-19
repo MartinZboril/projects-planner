@@ -23,10 +23,10 @@ class TaskReport
     {
         $tasksByMonths = $this->getTasksByMonths($year);
         $data = collect([
-            'total_tasks_count' => Task::whereYear('created_at', $year)->count(),
-            'active_tasks_count' => Task::whereYear('created_at', $year)->active()->count(),
-            'done_tasks_count' => Task::whereYear('created_at', $year)->done()->count(),
-            'overdue_tasks_count' => Task::whereYear('created_at', $year)->active()->overdue()->count(),
+            'total_tasks_count' => Task::whereYear('created_at', '<=', $year)->count(),
+            'active_tasks_count' => Task::whereYear('created_at', '<=', $year)->active()->count(),
+            'done_tasks_count' => Task::whereYear('created_at', '<=', $year)->done()->count(),
+            'overdue_tasks_count' => Task::whereYear('created_at', '<=', $year)->active()->overdue()->count(),
             'report_months' => $this->reportMonths,
             'total_tasks_by_month' => $tasksByMonths,
             'quarterly_created_tasks' => $this->getTasksByQuarters($year, $tasksByMonths),

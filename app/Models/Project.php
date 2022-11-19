@@ -28,6 +28,7 @@ class Project extends Model
     ];
 
     protected $appends = [
+        'overdue',
         'deadline',
         'remaining_hours',
         'total_time',
@@ -93,9 +94,19 @@ class Project extends Model
         return $query->where('status', $type);
     }
 
+    public function scopeOverdue(Builder $query): Builder
+    {
+        return $query->whereDate('due_date', '<=', date('Y-m-d'));
+    }
+
+    public function getOverdueAttribute(): bool
+    {
+        return $this->due_date <= date('Y-m-d') && $this->status == 1;
+    }
+
     public function getDeadlineAttribute(): int
     {
-        return round($this->due_date->diffInDays(now()->format('Y-m-d')), 2);
+        return ($this->overdue ? -1 : 1) * abs($this->due_date->diffInDays(now()->format('Y-m-d')));
     }
        
     public function getTotalTimeAttribute(): float

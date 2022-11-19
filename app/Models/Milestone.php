@@ -25,6 +25,7 @@ class Milestone extends Model
     ];
 
     protected $appends = [
+        'overdue',
         'progress',
     ];
 
@@ -51,6 +52,11 @@ class Milestone extends Model
     public function scopeOverdue(Builder $query): Builder
     {
         return $query->whereDate('end_date', '<=', date('Y-m-d'));
+    }
+
+    public function getOverdueAttribute(): bool
+    {
+        return $this->end_date <= date('Y-m-d') && $this->progress < 1;
     }
 
     public function getProgressAttribute(): float

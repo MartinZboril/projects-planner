@@ -24,7 +24,7 @@
                         <small>{{ $milestone->progress * 100 }} % Complete ({{ $milestone->tasksCompleted->count() }}/{{ $milestone->tasks->count() }})</small>
                     </td>
                     <td>{{ $milestone->start_date->format('d.m.Y') }}</td>
-                    <td>{{ $milestone->end_date->format('d.m.Y') }}</td>
+                    <td><span class="text-{{ $milestone->overdue ? 'danger' : 'body' }}">{{ $milestone->end_date->format('d.m.Y') }}</span></td>
                     <td>
                         <a href="{{ route('milestones.edit', ['project' => $milestone->project->id, 'milestone' => $milestone->id]) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
                         <a href="{{ route('milestones.detail', ['project' => $milestone->project->id, 'milestone' => $milestone->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>

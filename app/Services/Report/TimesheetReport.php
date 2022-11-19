@@ -23,7 +23,7 @@ class TimesheetReport
     {
         $timersByMonths = $this->getTimersByMonths($year);
         $data = collect([
-            'total_timers_count' => Timer::whereYear('created_at', $year)->get()->sum('total_time'),
+            'total_timers_count' => Timer::whereYear('created_at', '<=', $year)->get()->sum('total_time'),
             'report_months' => $this->reportMonths,
             'total_timers_by_month' => $timersByMonths,
             'quarterly_recorded_timers' => $this->getTimersByQuarters($year, $timersByMonths),

@@ -14,6 +14,10 @@ class Ticket extends Model
 
     protected $dates = ['due_date'];
 
+    protected $appends = [
+        'overdue'
+    ];
+
     public const VALIDATION_RULES = [
         'project_id' => ['required', 'integer', 'exists:projects,id'],
         'reporter_id' => ['required', 'integer', 'exists:users,id'],
@@ -60,5 +64,10 @@ class Ticket extends Model
     public function scopeOverdue(Builder $query): Builder
     {
         return $query->whereDate('due_date', '<=', date('Y-m-d'));
+    }
+
+    public function getOverdueAttribute(): bool
+    {
+        return $this->due_date <= date('Y-m-d') && $this->status == 1;
     }
 }
