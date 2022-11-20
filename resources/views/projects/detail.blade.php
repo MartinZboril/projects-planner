@@ -10,7 +10,7 @@
 @section('content')
 <div class="content-wrapper">
     <!-- Content Header -->
-    <div class="p-3 rounded-0 mb-3" style="background-color:white;">
+    <div class="p-3 mb-3" style="background-color:white;">
         @include('projects.partials.action', ['project' => $project])
     </div>
     <!-- Main content -->
@@ -21,7 +21,7 @@
             </div>
             <div class="row">
                 <div class="col-md-5">
-                    <div class="card card-primary card-outline rounded-0">
+                    <div class="card card-primary card-outline">
                         <div class="card-header">
                             Project
                             <span class="badge badge-@include('projects.partials.colour', ['status' => $project->status]) ml-2" style='font-size:14px;'>@include('projects.partials.status', ['status' => $project->status])</span>
@@ -75,7 +75,7 @@
                     </div>
                 </div>
                 <div class="col-md-7">
-                    <div class="card card-primary card-outline rounded-0">
+                    <div class="card card-primary card-outline">
                         <div class="card-header">Activity Feed</div>
                         <div class="card-body">
                         </div>

@@ -13,7 +13,7 @@
 @section('content')
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
-    <div class="p-3 rounded-0 mb-3" style="background-color:white;">
+    <div class="p-3 mb-3" style="background-color:white;">
         <a href="{{ route('users.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
         <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
     </div>
@@ -25,7 +25,7 @@
             <!-- Content -->
             <div class="row">
                 <div class="col-md-4">
-                    <div class="card card-primary card-outline rounded-0">
+                    <div class="card card-primary card-outline">
                         <div class="card-header">Profile</div>
                         <div class="card-body">
                             <div class="text-center">
@@ -79,7 +79,7 @@
                     </div>
                 </div>
                 <div class="col-md-8">
-                    <div class="card card-primary card-outline rounded-0">
+                    <div class="card card-primary card-outline">
                         <div class="card-header">
                             <h5 class="card-title">Rates</h5> 
                             <div class="card-tools">
@@ -117,7 +117,7 @@
                             </div>        
                         </div>
                     </div>
-                    <div class="card card-primary card-outline rounded-0">
+                    <div class="card card-primary card-outline">
                         <div class="card-header">Activity Feed</div>
                         <div class="card-body">
                         </div>

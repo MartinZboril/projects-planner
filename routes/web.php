@@ -15,7 +15,10 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard.index');
+Route::get('/dashboard/projects', [App\Http\Controllers\DashboardController::class, 'projects'])->name('dashboard.projects');
+Route::get('/dashboard/tasks', [App\Http\Controllers\DashboardController::class, 'tasks'])->name('dashboard.tasks');
+Route::get('/dashboard/tickets', [App\Http\Controllers\DashboardController::class, 'tickets'])->name('dashboard.tickets');
 
 // Users
 Route::get('/users', [App\Http\Controllers\Data\UserController::class, 'index'])->name('users.index');
@@ -64,7 +67,6 @@ Route::get('/projects/{project}/ticket/{ticket}/edit', [App\Http\Controllers\Dat
 Route::post('/projects/store', [App\Http\Controllers\Data\ProjectController::class, 'store'])->name('projects.store');
 Route::patch('/projects/{project}/update', [App\Http\Controllers\Data\ProjectController::class, 'update'])->name('projects.update');
 Route::patch('/projects/{project}/change', [App\Http\Controllers\Data\ProjectController::class, 'change'])->name('projects.change');
-
 
 // Tasks
 Route::get('/tasks', [App\Http\Controllers\Data\TaskController::class, 'index'])->name('tasks.index');

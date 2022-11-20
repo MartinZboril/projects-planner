@@ -5,7 +5,8 @@
 @section('content')
 <div class="content-wrapper">
     <!-- Content Header -->
-    <div class="content-header">
+    <div class="p-3 mb-3" style="background-color:white;">
+        @include('dashboard.partials.action', ['active' => 'projects'])
     </div>
     <!-- Main content -->
     <section class="content">

@@ -34,7 +34,7 @@
     @stack('styles')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/custom.css') }}">
   </head>
-  <body class="hold-transition sidebar-mini layout-fixed">
+  <body class="hold-transition sidebar-mini layout-fixed text-sm">
     <div class="wrapper">
       <!-- Header -->
       @include('site.header')

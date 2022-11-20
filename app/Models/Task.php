@@ -70,6 +70,11 @@ class Task extends Model
         return $query->where('status', $type);
     }
     
+    public function scopeStopped(Builder $query, bool $type): Builder
+    {
+        return $query->where('is_stopped', $type);
+    }
+
     public function scopeDone(Builder $query): Builder
     {
         return $query->where('status', 3);

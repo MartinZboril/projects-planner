@@ -5,7 +5,7 @@
 @section('content')
 <div class="content-wrapper">
     <!-- Content Header -->
-    <div class="p-3 rounded-0 mb-3" style="background-color:white;">
+    <div class="p-3 mb-3" style="background-color:white;">
         <a href="{{ route('clients.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
         <a href="{{ route('clients.edit', $client->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
     </div>
@@ -17,7 +17,7 @@
             <!-- Content -->
             <div class="row">
                 <div class="col-md-5">
-                    <div class="card card-primary card-outline rounded-0">
+                    <div class="card card-primary card-outline">
                         <div class="card-header">Profile</div>
                         <div class="card-body">
                             <div class="row mb-3">
@@ -64,7 +64,7 @@
                     </div>
                 </div>
                 <div class="col-md-7">
-                    <div class="card card-primary card-outline rounded-0">
+                    <div class="card card-primary card-outline">
                         <div class="card-header">Activity Feed</div>
                         <div class="card-body">
                         </div>

@@ -12,16 +12,16 @@
 @section('content')
 <div class="content-wrapper">
     <!-- Content Header -->
-    <div class="p-3 rounded-0 mb-3" style="background-color:white;">
+    <div class="p-3 mb-3" style="background-color:white;">
         <a href="{{ route('reports.tasks') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
     </div>
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <div class="card card-primary card-outline rounded-0">
+            <div class="card card-primary card-outline">
                 <div class="card-body">
                     <!-- Content -->
-                    @include('tasks.partials.table', ['tasks' => $tasks, 'display' => ['project'], 'redirect' => 'task'])
+                    @include('tasks.partials.table', ['id' => 'tasks-table', 'tasks' => $tasks, 'display' => ['project'], 'redirect' => 'task'])
                 </div>
             </div>            
         </div>

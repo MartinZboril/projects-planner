@@ -21,7 +21,7 @@ class CheckToDoRequest extends FormRequest
     {
         return [
             'action' => ['boolean'],
-            'redirect' => ['in:tasks,projects'],
+            'redirect' => ['in:tasks,projects,dashboard_task'],
         ];
     }
 }

@@ -87,7 +87,7 @@ class ToDoController extends Controller
             $this->flashService->flash(__('messages.todo.' . ($fields['action'] ? ToDo::FINISH : ToDo::RETURN)), 'info');
 
 
-            $redirectAction = (($fields['redirect'] == 'projects') ? 'project_' : '') . 'task';
+            $redirectAction =  $fields['redirect'] == 'dashboard_task' ? 'dashboard_task' : ((($fields['redirect'] == 'projects') ? 'project_' : '') . 'task');
             return $this->todoService->redirect($redirectAction, $todo);
         } catch (Exception $exception) {
             Log::error($exception);

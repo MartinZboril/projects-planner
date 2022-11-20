@@ -13,7 +13,7 @@
 @section('content')
 <div class="content-wrapper">
     <!-- Content Header -->
-    <div class="p-3 rounded-0 mb-3" style="background-color:white;">
+    <div class="p-3 mb-3" style="background-color:white;">
         <a href="{{ route('projects.milestones', $project->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
         <a href="{{ route('milestones.edit', ['project' => $project->id, 'milestone' => $milestone->id]) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
     </div>
@@ -25,7 +25,7 @@
             <!-- Content -->
             <div class="row">
                 <div class="col-md-5">
-                    <div class="card card-primary card-outline rounded-0">
+                    <div class="card card-primary card-outline">
                         <div class="card-header">
                             {{ $milestone->name }}
                             <span class="badge badge-{{ $milestone->progress == 1 ? 'success' : 'warning' }} ml-1" style="font-size:14px;">{{ $milestone->progress == 1 ? 'Completed' : 'In progress' }}</span>
@@ -41,17 +41,17 @@
                             {!! $milestone->description !!}
                         </div>
                     </div>
-                    <div class="card card-primary card-outline rounded-0">
+                    <div class="card card-primary card-outline">
                         <div class="card-header">Activity Feed</div>
                         <div class="card-body">
                         </div>
                     </div>
                 </div>
                 <div class="col-md-7">
-                    <div class="card card-primary card-outline rounded-0">
+                    <div class="card card-primary card-outline">
                         <div class="card-header">Tasks</div>
                         <div class="card-body">
-                            @include('tasks.partials.table', ['tasks' => $milestone->tasks, 'display' => [], 'redirect' => 'project'])       
+                            @include('tasks.partials.table', ['id' => 'tasks-table', 'tasks' => $milestone->tasks, 'display' => [], 'redirect' => 'project'])       
                         </div>
                     </div>
                 </div>

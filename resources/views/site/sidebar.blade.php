@@ -1,7 +1,7 @@
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="{{ route('home') }}" class="brand-link">
+    <a href="{{ route('dashboard.index') }}" class="brand-link">
         <img src="{{ asset('dist/img/icon.png') }}" alt="Projects planner logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">Projects Planner</span>
     </a>
@@ -12,7 +12,7 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <a href="{{ route('home') }}" class="nav-link @if(request()->is('/')){{ 'active' }}@endif">
+                    <a href="{{ route('dashboard.index') }}" class="nav-link @if(request()->is('/')){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-home"></i>
                         <p>
                             Home
@@ -28,7 +28,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('projects.index') }}" class="nav-link @if(str_contains(url()->current(), 'projects') && (!str_contains(url()->current(), 'report') && !str_contains(url()->current(), 'analyze'))){{ 'active' }}@endif">
+                    <a href="{{ route('projects.index') }}" class="nav-link @if(str_contains(url()->current(), 'projects') && (!str_contains(url()->current(), 'report') && !str_contains(url()->current(), 'analyze') && !str_contains(url()->current(), 'dashboard'))){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-clock"></i>
                         <p>
                             Projects
@@ -36,7 +36,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('tasks.index') }}" class="nav-link @if(str_contains(url()->current(), 'tasks') && !str_contains(url()->current(), 'projects')  && (!str_contains(url()->current(), 'report') && !str_contains(url()->current(), 'analyze'))){{ 'active' }}@endif">
+                    <a href="{{ route('tasks.index') }}" class="nav-link @if(str_contains(url()->current(), 'tasks') && !str_contains(url()->current(), 'projects')  && (!str_contains(url()->current(), 'report') && !str_contains(url()->current(), 'analyze') && !str_contains(url()->current(), 'dashboard'))){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-tasks"></i>
                         <p>
                             Tasks
@@ -44,7 +44,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('tickets.index') }}" class="nav-link @if(str_contains(url()->current(), 'tickets') && !str_contains(url()->current(), 'projects')  && (!str_contains(url()->current(), 'report') && !str_contains(url()->current(), 'analyze'))){{ 'active' }}@endif">
+                    <a href="{{ route('tickets.index') }}" class="nav-link @if(str_contains(url()->current(), 'tickets') && !str_contains(url()->current(), 'projects')  && (!str_contains(url()->current(), 'report') && !str_contains(url()->current(), 'analyze') && !str_contains(url()->current(), 'dashboard'))){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-life-ring"></i>
                         <p>
                             Tickets

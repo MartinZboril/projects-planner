@@ -3,6 +3,7 @@
 namespace App\Services\Data;
 
 use App\Models\ToDo;
+use App\Services\Dashboard\TaskDashboard;
 use Illuminate\Http\RedirectResponse;
 
 class ToDoService
@@ -63,6 +64,9 @@ class ToDoService
             case 'project_task':
                 return redirect()->route('projects.task.detail', ['project' => $todo->task->project, 'task' => $todo->task]);
                 break;
+                case 'dashboard_task':
+                    return redirect()->route('dashboard.tasks', ['data' => (new TaskDashboard)->getDashboard()]);
+                    break;
             default:
                 return redirect()->back();
         }

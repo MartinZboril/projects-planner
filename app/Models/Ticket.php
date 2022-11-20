@@ -51,6 +51,11 @@ class Ticket extends Model
         return $this->belongsTo(User::class, 'assignee_id');
     }
 
+    public function scopeStatus(Builder $query, int $type): Builder
+    {
+        return $query->where('status', $type);
+    }
+
     public function scopeDone(Builder $query): Builder
     {
         return $query->whereIn('status', [2, 3]);
@@ -59,6 +64,11 @@ class Ticket extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', 1);
+    }
+
+    public function scopeUnassigned(Builder $query): Builder
+    {
+        return $query->whereNull('assignee_id');
     }
 
     public function scopeOverdue(Builder $query): Builder

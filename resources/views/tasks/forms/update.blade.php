@@ -3,7 +3,7 @@
     @method('PATCH')
     <div class="row">
         <div class="col-md-7">
-            <div class="card card-primary card-outline rounded-0">
+            <div class="card card-primary card-outline">
                 <div class="card-header">Edit task</div>
                 <div class="card-body">
                     <div class="form-group required">
@@ -94,12 +94,12 @@
             </div>
         </div>
         <div class="col-md-5">
-            <div class="card card-primary card-outline rounded-0">
+            <div class="card card-primary card-outline">
                 <div class="card-header">Settings</div>
                 <div class="card-body">
                 </div>
             </div>
-            <div class="card rounded-0">
+            <div class="card">
                 <div class="card-body">
                     <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $redirect == 'projects' ? route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) : route('tasks.index') }}" class="cancel-btn">Close</a></span>
                 </div>

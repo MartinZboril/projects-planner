@@ -5,7 +5,7 @@
 @section('content')
 <div class="content-wrapper">
     <!-- Content Header -->
-    <div class="p-3 rounded-0 mb-3" style="background-color:white;">
+    <div class="p-3 mb-3" style="background-color:white;">
         <a href="{{ route('projects.detail', $project->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
     </div>
     <!-- Main content -->
@@ -17,7 +17,7 @@
                 @method('PATCH')
                 <div class="row">
                     <div class="col-md-7">
-                        <div class="card card-primary card-outline rounded-0">
+                        <div class="card card-primary card-outline">
                             <div class="card-header">Edit project</div>
                             <div class="card-body">
                                 <div class="form-group required">
@@ -98,12 +98,12 @@
                         </div>
                     </div>
                     <div class="col-md-5">
-                        <div class="card card-primary card-outline rounded-0">
+                        <div class="card card-primary card-outline">
                             <div class="card-header">Settings</div>
                             <div class="card-body">
                             </div>
                         </div>
-                        <div class="card rounded-0">
+                        <div class="card">
                             <div class="card-body">
                                 <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ route('projects.index') }}" class="cancel-btn">Close</a></span>
                             </div>

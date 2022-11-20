@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-5">
-        <div class="card card-primary card-outline rounded-0">
+        <div class="card card-primary card-outline">
             <div class="card-header">
                 {{ $task->name }}
                 <span class="badge badge-@include('tasks.partials.colour', ['task' => $task]) ml-2" style='font-size:14px;'>@include('tasks.partials.status', ['task' => $task])</span>
@@ -45,7 +45,7 @@
         </div>
     </div>
     <div class="col-md-7">
-    <div class="card card-primary card-outline rounded-0">
+    <div class="card card-primary card-outline">
         <div class="card-header ui-sortable-handle" style="cursor: move;">
             <h3 class="card-title">
             <i class="ion ion-clipboard mr-1"></i>
@@ -60,33 +60,10 @@
             </div>
         </div>
         <div class="card-body">
-            <ul class="todo-list ui-sortable" data-widget="todo-list">
-                @foreach ($task->todos as $todo)
-                    <li>
-                        <div class="icheck-primary d-inline ml-2">
-                            <input type="checkbox" value="" name="todo-{{ $todo->id }}" id="todo-check-{{ $todo->id }}" onclick="event.preventDefault(); document.getElementById('check-todo-{{ $todo->id }}-form').submit();"@checked($todo->is_finished)>
-                            <label for="todo-check-{{ $todo->id }}"></label>
-                        </div>
-                        <span class="text">{{ $todo->name }}</span>
-                        <small class="badge badge-{{ $todo->overdue ? 'danger' : 'secondary' }}"><i class="far fa-clock mr-1"></i>{{ $todo->deadline->format('d.m.Y') }}</small>
-                        @if($todo->description)
-                            <small class="ml-1">{{ $todo->description }}</small>
-                        @endif
-                        <div class="tools">
-                            @if($project)
-                                <a href="{{ route('projects.todo.edit', ['project' => $project->id, 'task' => $task->id, 'todo' => $todo->id]) }}"><i class="fas fa-edit"></i></a>
-                            @else
-                                <a href="{{ route('todos.edit', ['task' => $task->id, 'todo' => $todo->id]) }}"><i class="fas fa-edit"></i></a>
-                            @endif
-                        </div>
-
-                        @include('todos.forms.check', ['id' => 'check-todo-' . $todo->id . '-form', 'todo' => $todo, 'redirect' => $project ? 'projects' : 'tasks', 'action' => $todo->is_finished ? 0 : 1])            
-                    </li>
-                @endforeach
-            </ul>
+            @include('todos.partials.list', ['todos' => $task->todos, 'project' => $project ? $project : null, 'redirect' => $project ? 'projects' : 'tasks', 'action' => null])            
         </div>
     </div>
-        <div class="card card-primary card-outline rounded-0">
+        <div class="card card-primary card-outline">
             <div class="card-header">Activity Feed</div>
             <div class="card-body">
             </div>

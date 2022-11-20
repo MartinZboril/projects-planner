@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table id="@if($tickets->count() > 0){{ 'tickets-table' }}@endif" class="table table-bordered table-striped">
+    <table id="@if($tickets->count() > 0){{ $id }}@endif" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>Subject</th>

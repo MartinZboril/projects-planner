@@ -12,7 +12,7 @@
 @section('content')
 <div class="content-wrapper">
     <!-- Content Header -->
-    <div class="p-3 rounded-0 mb-3" style="background-color:white;">
+    <div class="p-3 mb-3" style="background-color:white;">
         @include('projects.partials.action', ['project' => $project])
     </div>
     <!-- Main content -->
@@ -21,7 +21,7 @@
             <div class="card-header p-0 pb-2 mb-2">
                 @include('projects.partials.header', ['active' => 'milestone'])
             </div>
-            <div class="card card-primary card-outline rounded-0">
+            <div class="card card-primary card-outline">
                 <div class="card-header">
                     <a href="{{ route('milestones.create', ['project' => $project->id]) }}" class="btn-sm btn-primary"><i class="fas fa-plus mr-1"></i>Create</a>
                     <a href="{{ route('reports.milestones') }}" class="btn-sm btn-primary text-white"><i class="fas fa-chart-line mr-1"></i>Report</a>
