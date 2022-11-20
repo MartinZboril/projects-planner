@@ -2,6 +2,13 @@
 
 @section('title', __('pages.title.dashboard'))
 
+@push('styles')
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+@endpush
+
 @section('content')
 <div class="content-wrapper">
     <!-- Content Header -->
@@ -10,44 +17,125 @@
     </div>
     <!-- Main content -->
     <section class="content">
+        <!-- Message -->
+        @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
         <div class="row">
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="info-box">
-                    <span class="info-box-icon bg-info"><i class="far fa-envelope"></i></span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">Text</span>
-                        <span class="info-box-number">1,410</span>
+            @include('dashboard.partials.widgets', ['text' => 'Today', 'value' => $data->get('today_timers_total_time_sum') . ' Hours', 'icon' => 'fas fa-calendar-day', 'colour' => 'lightblue color-palette', 'link' => route('projects.index')])
+            @include('dashboard.partials.widgets', ['text' => 'This week', 'value' => $data->get('this_week_timers_total_time_sum') . ' Hours', 'icon' => 'fas fa-calendar-week', 'colour' => 'lightblue color-palette', 'link' => route('projects.index')])
+            @include('dashboard.partials.widgets', ['text' => 'Average', 'value' => $data->get('spent_time_avg') . ' Hours', 'icon' => 'fas fa-balance-scale', 'colour' => 'lightblue color-palette', 'link' => route('projects.index')])
+            @include('dashboard.partials.widgets', ['text' => 'Budget', 'value' => $data->get('budget_avg') . ' %', 'icon' => 'fas fa-percent', 'colour' => $data->get('budget_avg') > 100 ? 'danger' : 'lightblue' . ' color-palette', 'link' => route('projects.index')])
+            @include('dashboard.partials.widgets', ['text' => 'Active', 'value' => $data->get('active_projects_count'), 'icon' => 'fas fa-play', 'colour' => 'info', 'link' => route('reports.projects')])
+            @include('dashboard.partials.widgets', ['text' => 'Done', 'value' => $data->get('done_projects_count'), 'icon' => 'fas fa-stop', 'colour' => 'warning', 'link' => route('reports.projects')])
+            @include('dashboard.partials.widgets', ['text' => 'Overdue', 'value' => $data->get('overdue_projects_count'), 'icon' => 'fas fa-exclamation-circle', 'colour' => 'danger', 'link' => route('reports.projects')])
+            @include('dashboard.partials.widgets', ['text' => 'Total', 'value' => $data->get('total_projects_count'), 'icon' => 'fas fa-clock', 'colour' => 'primary', 'link' => route('reports.projects')])
+        </div>
+        @if($data->get('overdue_projects')->count() > 0)
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    Overdue Projects
+                    <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('overdue_projects')->count() }}</span>
+                </div>
+                <div class="card-body">
+                    <!-- Content -->
+                    @include('projects.partials.table', ['id' => 'overdue-projects-table', 'projects' => $data->get('overdue_projects'), 'display' => ['project'], 'redirect' => 'task'])
+                </div>
+            </div>
+        @endif
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card card-primary card-outline">
+                    <div class="card-header">Project Statuses</div>
+                    <div class="card-body" style="height: 400px">
+                        <canvas id="project-statuses-chart" style="w-100"></canvas>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="info-box">
-                    <span class="info-box-icon bg-success"><i class="far fa-flag"></i></span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">Text</span>
-                        <span class="info-box-number">410</span>
+            <div class="col-md-8">
+                <div class="card card-primary card-outline">
+                    <div class="card-header">{{ now()->format('Y') }} – Yearly Overview</div>
+                    <div class="card-body" style="height: 400px">
+                        <canvas id="yearly-overview-chart" class="w-100"></canvas>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="info-box">
-                    <span class="info-box-icon bg-warning"><i class="far fa-copy"></i></span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">Text</span>
-                        <span class="info-box-number">13,648</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-6 col-12">
-                <div class="info-box">
-                    <span class="info-box-icon bg-danger"><i class="far fa-star"></i></span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">Text</span>
-                        <span class="info-box-number">93,139</span>
-                    </div>
-                </div>
-            </div>
-          </div>
+        </div>               
     </section>
 </div>
 @endsection
+
+@push('scripts')
+    <!-- DataTables -->
+    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    <!-- Toastr -->
+    <script src="{{ asset('js/toastr.js') }}"></script>
+    <!-- Custom -->
+    <script>
+        new Chart("project-statuses-chart", {
+            type: "doughnut",
+            data: {
+                labels: ['Actived', 'Finished', 'Archived'],
+                datasets: [{
+                    backgroundColor: ['#17a2b8', '#28a745', '#007bff'],
+                    data: [{{ $data->get('actived_projects_count') }}, {{ $data->get('finished_projects_count') }}, {{ $data->get('archived_projects_count') }}]
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+
+        new Chart("yearly-overview-chart", {
+            type: "line",
+            data: {
+                labels: @json($data->get('report')->get('report_months')),
+                datasets: [{ 
+                    data: @json($data->get('report')->get('total_projects_by_month')),
+                    borderColor: '#007bff',
+                    fill: false,
+                    label: 'Total'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                    scales: {
+                    y: {
+                        min: 0,
+                        ticks: {
+                            stepSize: 5
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                    }
+                }
+            },
+        });
+
+        $(function () {
+            $('#overdue-projects-table').DataTable({
+                'aLengthMenu': [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, 'All']],
+                'iDisplayLength': 5
+            });
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+@endpush

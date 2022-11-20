@@ -94,6 +94,16 @@ class Project extends Model
         return $query->where('status', $type);
     }
 
+    public function scopeDone(Builder $query): Builder
+    {
+        return $query->whereIn('status', [2, 3]);
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('status', 1);
+    }
+
     public function scopeOverdue(Builder $query): Builder
     {
         return $query->whereDate('due_date', '<=', date('Y-m-d'));
