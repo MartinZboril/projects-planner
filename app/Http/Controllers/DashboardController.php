@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\Dashboard\{ProjectDashboard, TaskDashboard, TicketDashboard};
+use App\Services\Dashboard\{IndexDashboard, ProjectDashboard, TaskDashboard, TicketDashboard};
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -21,7 +21,7 @@ class DashboardController extends Controller
      */
     public function index(): View
     {
-        return view('dashboard.index');
+        return view('dashboard.index', ['data' => (new IndexDashboard)->getDashboard()]);
     }
 
     /**
