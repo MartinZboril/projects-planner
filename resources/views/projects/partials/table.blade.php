@@ -29,7 +29,7 @@
                     <td><span class="text-{{ $project->time_plan > 100 ? 'danger' : 'body' }}">{{ $project->time_plan }} %</span></td>
                     <td>{{ $project->total_time }} Hours</td>
                     <td><span class="text-{{ $project->budget_plan > 100 ? 'danger' : 'body' }}">{{ $project->budget_plan }} %</span></td>
-                    <td>{{ number_format($project->amount, 2) }}</td>
+                    <td>@include('site.partials.amount', ['value' => $project->amount])</td>
                     <td>
                         <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
                         <a href="{{ route('projects.detail', $project->id) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>

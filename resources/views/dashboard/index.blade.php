@@ -11,14 +11,14 @@
     <!-- Main content -->
     <section class="content">
         <div class="row">
-            @include('dashboard.partials.widgets', ['text' => 'Today', 'value' => $data->get('today_timers_total_time_sum') . ' Hours', 'icon' => 'fas fa-business-time', 'colour' => 'lightblue color-palette', 'link' => route('projects.index')])
-            @include('dashboard.partials.widgets', ['text' => 'Today', 'value' => $data->get('today_timers_amount_sum'), 'icon' => 'fas fa-coins', 'colour' => 'lightblue color-palette', 'link' => route('projects.index')])
-            @include('dashboard.partials.widgets', ['text' => 'NaN', 'value' => 'NaN', 'icon' => 'fas fa-times', 'colour' => 'danger color-palette', 'link' => null])
-            @include('dashboard.partials.widgets', ['text' => 'NaN', 'value' => 'NaN', 'icon' => 'fas fa-times', 'colour' => 'danger color-palette', 'link' => null])
-            @include('dashboard.partials.widgets', ['text' => 'Projects', 'value' => $data->get('active_projects_count'), 'icon' => 'fas fa-clock', 'colour' => 'lightblue color-palette', 'link' => route('projects.index')])
-            @include('dashboard.partials.widgets', ['text' => 'Tasks', 'value' => $data->get('active_tasks_count'), 'icon' => 'fas fa-tasks', 'colour' => 'lightblue color-palette', 'link' => route('tasks.index')])
-            @include('dashboard.partials.widgets', ['text' => 'Tickets', 'value' => $data->get('active_tickets_count'), 'icon' => 'fas fa-life-ring', 'colour' => 'lightblue color-palette', 'link' => route('tickets.index')])
-            @include('dashboard.partials.widgets', ['text' => 'NaN', 'value' => 'NaN', 'icon' => 'fas fa-times', 'colour' => 'danger color-palette', 'link' => null])
+            @include('dashboard.partials.widget', ['text' => 'Today', 'value' => $data->get('today_timers_total_time_sum') . ' Hours', 'icon' => 'fas fa-business-time', 'colour' => 'lightblue color-palette', 'link' => route('projects.index')])
+            @include('dashboard.partials.widget', ['text' => 'Today', 'value' => $data->get('today_timers_amount_sum'), 'icon' => 'fas fa-coins', 'colour' => 'lightblue color-palette', 'link' => route('projects.index'), 'amount' => true])
+            @include('dashboard.partials.widget', ['text' => 'NaN', 'value' => 'NaN', 'icon' => 'fas fa-times', 'colour' => 'danger color-palette', 'link' => null])
+            @include('dashboard.partials.widget', ['text' => 'NaN', 'value' => 'NaN', 'icon' => 'fas fa-times', 'colour' => 'danger color-palette', 'link' => null])
+            @include('dashboard.partials.widget', ['text' => 'Projects', 'value' => $data->get('active_projects_count'), 'icon' => 'fas fa-clock', 'colour' => 'lightblue color-palette', 'link' => route('projects.index')])
+            @include('dashboard.partials.widget', ['text' => 'Tasks', 'value' => $data->get('active_tasks_count'), 'icon' => 'fas fa-tasks', 'colour' => 'lightblue color-palette', 'link' => route('tasks.index')])
+            @include('dashboard.partials.widget', ['text' => 'Tickets', 'value' => $data->get('active_tickets_count'), 'icon' => 'fas fa-life-ring', 'colour' => 'lightblue color-palette', 'link' => route('tickets.index')])
+            @include('dashboard.partials.widget', ['text' => 'NaN', 'value' => 'NaN', 'icon' => 'fas fa-times', 'colour' => 'danger color-palette', 'link' => null])
         </div>
 
         <div class="card card-primary card-outline">

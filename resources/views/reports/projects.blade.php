@@ -23,7 +23,7 @@
                             @include('reports.partials.card', ['title' => 'Done', 'value' => $data->get('done_projects_count'), 'colour' => 'text-success'])
                             @include('reports.partials.card', ['title' => 'Overdue', 'value' => $data->get('overdue_projects_count'), 'colour' => 'text-danger'])
                             @include('reports.partials.card', ['title' => 'Avg. Spent Time', 'value' => round($data->get('spent_time_avg')) . ' Hours', 'colour' => 'text-body'])
-                            @include('reports.partials.card', ['title' => 'Avg. Amount', 'value' => number_format(round($data->get('amount_avg')), 2), 'colour' => 'text-body'])
+                            @include('reports.partials.card', ['title' => 'Avg. Amount', 'value' => round($data->get('amount_avg')), 'colour' => 'text-body', 'amount' => true])
                         </div>
                         <div class="col-md-8">
                             <div class="card">

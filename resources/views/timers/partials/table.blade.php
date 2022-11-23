@@ -20,7 +20,13 @@
                     <td><a href="{{ route('rates.edit', ['user' => $timer->user->id, 'rate' => $timer->rate->id]) }}">{{ $timer->rate->name }}</a></td>
                     <td>@include('site.partials.user', ['user' => $timer->user])</td>
                     <td>{{ $timer->until ? $timer->total_time : 'N/A' }}</td>
-                    <td>{{ $timer->until ? $timer->amount : 'N/A' }}</td>
+                    <td>
+                        @if ($timer->until)
+                            @include('site.partials.amount', ['value' => $timer->amount])
+                        @else
+                            N/A
+                        @endif  
+                    </td>
                     <td>{{ $timer->since->format('d.m.Y H:i') }}</td>
                     <td>{{ $timer->until ? $timer->until->format('d.m.Y H:i') : 'N/A' }}</td>
                     <td>{{ $timer->since->format('d.m.Y') }}</td>

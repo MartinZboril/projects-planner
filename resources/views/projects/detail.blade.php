@@ -44,8 +44,8 @@
                                 <p class="text-sm">Cost
                                     <span class="d-block ml-2">Est. Hours: <b>{{ $project->estimated_hours }} Hours</b></span>
                                     <span class="d-block ml-2">Remaining Hours: <b><span class="text-{{ $project->remaining_hours >= 0 ? 'sm' : 'danger' }}">{{ $project->remaining_hours }} Hours</span></b><span class="badge badge-{{ $project->time_plan > 100 ? 'danger' : 'success' }} ml-1">{{ $project->time_plan }} %</span></span>
-                                    <span class="d-block ml-2">Budget: <b>{{ number_format($project->budget, 2) }}</b></span>
-                                    <span class="d-block ml-2">Remaining Budget: <b><span class="text-{{ number_format($project->remaining_budget, 2) >= 0 ? 'sm' : 'danger' }}">{{ number_format($project->remaining_budget, 2) }}</span></b><span class="badge badge-{{ $project->budget_plan > 100 ? 'danger' : 'success' }} ml-1">{{ $project->budget_plan }} %</span></span>
+                                    <span class="d-block ml-2">Budget: <b>@include('site.partials.amount', ['value' => $project->budget])</b></span>
+                                    <span class="d-block ml-2">Remaining Budget: <b><span class="text-{{ $project->remaining_budget >= 0 ? 'sm' : 'danger' }}">@include('site.partials.amount', ['value' => $project->remaining_budget])</span></b><span class="badge badge-{{ $project->budget_plan > 100 ? 'danger' : 'success' }} ml-1">{{ $project->budget_plan }} %</span></span>
                                 </p>                            
                                 <hr>
                                 <p class="text-sm">Team
@@ -76,8 +76,8 @@
                                 <div class="card-header">Budget</div>
                                 <div class="card-body">
                                     <div class="text-center">
-                                        <h6>{{ $project->amount }}</h6>
-                                        <span class="text-muted">Budget: {{ $project->budget }}</span>
+                                        <h6>@include('site.partials.amount', ['value' => $project->amount])</h6>
+                                        <span class="text-muted">Budget: @include('site.partials.amount', ['value' => $project->budget])</span>
                                     </div>
                                     <div id="budget-progress-bar" class="mt-2"></div>
                                 </div>

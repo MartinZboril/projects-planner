@@ -13,14 +13,14 @@
         <!-- Message -->
         @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
         <div class="row">
-            @include('dashboard.partials.widgets', ['text' => 'Today', 'value' => $data->get('today_tasks_count'), 'icon' => 'fas fa-calendar-day', 'colour' => 'lightblue color-palette', 'link' => route('tasks.index')])
-            @include('dashboard.partials.widgets', ['text' => 'This week', 'value' => $data->get('this_week_tasks_count'), 'icon' => 'fas fa-calendar-week', 'colour' => 'lightblue color-palette', 'link' => route('tasks.index')])
-            @include('dashboard.partials.widgets', ['text' => 'This month', 'value' => $data->get('month_tasks_count'), 'icon' => 'fas fa-calendar', 'colour' => 'lightblue color-palette', 'link' => route('tasks.index')])
-            @include('dashboard.partials.widgets', ['text' => 'Last month', 'value' => $data->get('last_month_tasks_count'), 'icon' => 'far fa-calendar', 'colour' => 'lightblue color-palette', 'link' => route('tasks.index')])
-            @include('dashboard.partials.widgets', ['text' => 'Active', 'value' => $data->get('active_tasks_count'), 'icon' => 'fas fa-play', 'colour' => 'info', 'link' => route('reports.tasks')])
-            @include('dashboard.partials.widgets', ['text' => 'Pause', 'value' => $data->get('pause_tasks_count'), 'icon' => 'fas fa-stop', 'colour' => 'warning', 'link' => route('reports.tasks')])
-            @include('dashboard.partials.widgets', ['text' => 'Overdue', 'value' => $data->get('overdue_tasks_count'), 'icon' => 'fas fa-exclamation-circle', 'colour' => 'danger', 'link' => route('reports.tasks')])
-            @include('dashboard.partials.widgets', ['text' => 'Total', 'value' => $data->get('total_tasks_count'), 'icon' => 'fas fa-tasks', 'colour' => 'primary', 'link' => route('reports.tasks')])
+            @include('dashboard.partials.widget', ['text' => 'Today', 'value' => $data->get('today_tasks_count'), 'icon' => 'fas fa-calendar-day', 'colour' => 'lightblue color-palette', 'link' => route('tasks.index')])
+            @include('dashboard.partials.widget', ['text' => 'This week', 'value' => $data->get('this_week_tasks_count'), 'icon' => 'fas fa-calendar-week', 'colour' => 'lightblue color-palette', 'link' => route('tasks.index')])
+            @include('dashboard.partials.widget', ['text' => 'This month', 'value' => $data->get('month_tasks_count'), 'icon' => 'fas fa-calendar', 'colour' => 'lightblue color-palette', 'link' => route('tasks.index')])
+            @include('dashboard.partials.widget', ['text' => 'Last month', 'value' => $data->get('last_month_tasks_count'), 'icon' => 'far fa-calendar', 'colour' => 'lightblue color-palette', 'link' => route('tasks.index')])
+            @include('dashboard.partials.widget', ['text' => 'Active', 'value' => $data->get('active_tasks_count'), 'icon' => 'fas fa-play', 'colour' => 'info', 'link' => route('reports.tasks')])
+            @include('dashboard.partials.widget', ['text' => 'Pause', 'value' => $data->get('pause_tasks_count'), 'icon' => 'fas fa-stop', 'colour' => 'warning', 'link' => route('reports.tasks')])
+            @include('dashboard.partials.widget', ['text' => 'Overdue', 'value' => $data->get('overdue_tasks_count'), 'icon' => 'fas fa-exclamation-circle', 'colour' => 'danger', 'link' => route('reports.tasks')])
+            @include('dashboard.partials.widget', ['text' => 'Total', 'value' => $data->get('total_tasks_count'), 'icon' => 'fas fa-tasks', 'colour' => 'primary', 'link' => route('reports.tasks')])
         </div>
         @if($data->get('overdue_todos')->count() > 0)
             <div class="card card-primary card-outline">

@@ -12,14 +12,14 @@
     <section class="content">
         <div class="container-fluid">  
             <div class="row">
-                @include('dashboard.partials.widgets', ['text' => 'Today', 'value' => $data->get('today_tickets_count'), 'icon' => 'fas fa-calendar-day', 'colour' => 'lightblue color-palette', 'link' => route('tickets.index')])
-                @include('dashboard.partials.widgets', ['text' => 'This week', 'value' => $data->get('this_week_tickets_count'), 'icon' => 'fas fa-calendar-week', 'colour' => 'lightblue color-palette', 'link' => route('tickets.index')])
-                @include('dashboard.partials.widgets', ['text' => 'This month', 'value' => $data->get('month_tickets_count'), 'icon' => 'fas fa-calendar', 'colour' => 'lightblue color-palette', 'link' => route('tickets.index')])
-                @include('dashboard.partials.widgets', ['text' => 'Last month', 'value' => $data->get('last_month_tickets_count'), 'icon' => 'far fa-calendar', 'colour' => 'lightblue color-palette', 'link' => route('tickets.index')])
-                @include('dashboard.partials.widgets', ['text' => 'Open', 'value' => $data->get('active_tickets_count'), 'icon' => 'fas fa-bell', 'colour' => 'info', 'link' => route('reports.tickets')])
-                @include('dashboard.partials.widgets', ['text' => 'Closed', 'value' => $data->get('done_tickets_count'), 'icon' => 'fas fa-check', 'colour' => 'success', 'link' => route('reports.tickets')])
-                @include('dashboard.partials.widgets', ['text' => 'Overdue', 'value' => $data->get('overdue_tickets_count'), 'icon' => 'fas fa-exclamation-circle', 'colour' => 'danger', 'link' => route('reports.tickets')])
-                @include('dashboard.partials.widgets', ['text' => 'Total', 'value' => $data->get('total_tickets_count'), 'icon' => 'fas fa-life-ring', 'colour' => 'primary', 'link' => route('reports.tickets')])
+                @include('dashboard.partials.widget', ['text' => 'Today', 'value' => $data->get('today_tickets_count'), 'icon' => 'fas fa-calendar-day', 'colour' => 'lightblue color-palette', 'link' => route('tickets.index')])
+                @include('dashboard.partials.widget', ['text' => 'This week', 'value' => $data->get('this_week_tickets_count'), 'icon' => 'fas fa-calendar-week', 'colour' => 'lightblue color-palette', 'link' => route('tickets.index')])
+                @include('dashboard.partials.widget', ['text' => 'This month', 'value' => $data->get('month_tickets_count'), 'icon' => 'fas fa-calendar', 'colour' => 'lightblue color-palette', 'link' => route('tickets.index')])
+                @include('dashboard.partials.widget', ['text' => 'Last month', 'value' => $data->get('last_month_tickets_count'), 'icon' => 'far fa-calendar', 'colour' => 'lightblue color-palette', 'link' => route('tickets.index')])
+                @include('dashboard.partials.widget', ['text' => 'Open', 'value' => $data->get('active_tickets_count'), 'icon' => 'fas fa-bell', 'colour' => 'info', 'link' => route('reports.tickets')])
+                @include('dashboard.partials.widget', ['text' => 'Closed', 'value' => $data->get('done_tickets_count'), 'icon' => 'fas fa-check', 'colour' => 'success', 'link' => route('reports.tickets')])
+                @include('dashboard.partials.widget', ['text' => 'Overdue', 'value' => $data->get('overdue_tickets_count'), 'icon' => 'fas fa-exclamation-circle', 'colour' => 'danger', 'link' => route('reports.tickets')])
+                @include('dashboard.partials.widget', ['text' => 'Total', 'value' => $data->get('total_tickets_count'), 'icon' => 'fas fa-life-ring', 'colour' => 'primary', 'link' => route('reports.tickets')])
             </div>
             @if($data->get('unassigned_tickets')->count() > 0)
                 <div class="card card-primary card-outline">

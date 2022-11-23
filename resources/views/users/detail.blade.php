@@ -94,7 +94,7 @@
                                             <tr>
                                                 <td><a href="{{ route('rates.edit', ['user' => $user->id, 'rate' => $rate->id]) }}">{{ $rate->name }}</a></td>
                                                 <td>{{ $rate->is_active ? 'Yes' : 'No' }}</td>
-                                                <td>{{ $rate->value }}</td>
+                                                <td>@include('site.partials.amount', ['value' => $rate->value])</td>
                                                 <td>                                                    
                                                     <a href="{{ route('rates.edit', ['user' => $user->id, 'rate' => $rate->id]) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
                                                 </td>

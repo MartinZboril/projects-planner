@@ -7,7 +7,13 @@
             <span class="info-box-text">
                 <a href="{{ $link }}">{{ $text }}</a>
             </span>
-            <span class="info-box-number">{{ $value }}</span>
+            <span class="info-box-number">
+                @if (!empty($amount))
+                    @include('site.partials.amount', ['value' => $value])
+                @else
+                    {{ $value }}                
+                @endif
+            </span>
         </div>
     </div>
 </div>
