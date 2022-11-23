@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master', ['chartJS' => true])
 
 @section('title', __('pages.title.report'))
 
@@ -47,7 +47,6 @@
 @endsection
 
 @push('scripts')
-    <!-- Yearly Overview -->
     <script>
         new Chart("yearly-overview-chart", {
             type: "line",

@@ -1,11 +1,6 @@
-@extends('layouts.master')
+@extends('layouts.master', ['datatables' => true, 'toaster' => true])
 
 @section('title', __('pages.title.project'))
-
-@push('styles')
-    <!-- Toastr -->
-    <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.css') }}">
-@endpush
 
 @section('content')
 <div class="content-wrapper">
@@ -130,10 +125,6 @@
 @endsection
 
 @push('scripts')
-    <!-- Toastr -->
-    <script src="{{ asset('plugins/toastr/toastr.min.js' ) }}"></script>
-    <script src="{{ asset('js/toastr.js') }}"></script>
-    <!-- Custom -->
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip();

@@ -1,11 +1,6 @@
-@extends('layouts.master')
+@extends('layouts.master', ['toaster' => true, 'icheck' => true])
 
 @section('title', __('pages.title.project'))
-
-@push('styles')
-    <!-- Toastr -->
-    <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.css') }}">
-@endpush
 
 @section('content')
 <div class="content-wrapper">
@@ -35,9 +30,3 @@
 @include('tasks.forms.pause', ['id' => 'resume-working-on-task-form', 'task' => $task, 'action' => 0, 'redirect' => 'projects'])    
 
 @endsection
-
-@push('scripts')
-    <!-- Toastr -->
-    <script src="{{ asset('plugins/toastr/toastr.min.js' ) }}"></script>
-    <script src="{{ asset('js/toastr.js') }}"></script>
-@endpush

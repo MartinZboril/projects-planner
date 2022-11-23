@@ -31,7 +31,7 @@ class TaskDashboard
             'new_tasks' => Task::status(1)->get(),
             'in_progress_tasks_count' => Task::status(2)->count(),
             'complete_tasks_count' => Task::status(3)->count(),
-            'report' => (new TaskReport)->getReportPerYear(),
+            'report' => (new TaskReport)->getReportPerYear($year),
             'overdue_todos' => ToDo::finished(false)->overdue()->get(),
         ]);
 

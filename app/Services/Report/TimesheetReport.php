@@ -19,7 +19,7 @@ class TimesheetReport
     /**
      * Get report for timesheets by year.
      */
-    public function getReportPerYear(string $year = '2022'): Collection
+    public function getReportPerYear(string $year): Collection
     {
         $timersByMonths = $this->getTimersByMonths($year);
         $data = collect([

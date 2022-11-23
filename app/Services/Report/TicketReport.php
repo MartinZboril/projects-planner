@@ -19,7 +19,7 @@ class TicketReport
     /**
      * Get report for tickets by year.
      */
-    public function getReportPerYear(string $year = '2022'): Collection
+    public function getReportPerYear(string $year): Collection
     {
         $ticketsByMonths = $this->getTicketsByMonths($year);
         $data = collect([

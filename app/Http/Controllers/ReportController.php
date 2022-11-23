@@ -7,9 +7,12 @@ use Illuminate\View\View;
 
 class ReportController extends Controller
 {
+    protected $year;
+
     public function __construct()
     {
         $this->middleware('auth');
+        $this->year = now()->format('Y');
     }
 
     public function index(): View
@@ -22,7 +25,7 @@ class ReportController extends Controller
      */
     public function projects(): View
     {
-        return view('reports.projects', ['data' => (new ProjectReport)->getReportPerYear()]);
+        return view('reports.projects', ['data' => (new ProjectReport)->getReportPerYear($this->year)]);
     }
     
     /**
@@ -30,7 +33,7 @@ class ReportController extends Controller
      */
     public function tasks(): View
     {
-        return view('reports.tasks', ['data' => (new TaskReport)->getReportPerYear()]);
+        return view('reports.tasks', ['data' => (new TaskReport)->getReportPerYear($this->year)]);
     }
         
     /**
@@ -38,7 +41,7 @@ class ReportController extends Controller
      */
     public function tickets(): View
     {
-        return view('reports.tickets', ['data' => (new TicketReport)->getReportPerYear()]);
+        return view('reports.tickets', ['data' => (new TicketReport)->getReportPerYear($this->year)]);
     }
             
     /**
@@ -46,7 +49,7 @@ class ReportController extends Controller
      */
     public function milestones(): View
     {
-        return view('reports.milestones', ['data' => (new MilestoneReport)->getReportPerYear()]);
+        return view('reports.milestones', ['data' => (new MilestoneReport)->getReportPerYear($this->year)]);
     }
                 
     /**
@@ -54,6 +57,6 @@ class ReportController extends Controller
      */
     public function timesheets(): View
     {
-        return view('reports.timesheets', ['data' => (new TimesheetReport)->getReportPerYear()]);
+        return view('reports.timesheets', ['data' => (new TimesheetReport)->getReportPerYear($this->year)]);
     }
 }

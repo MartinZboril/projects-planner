@@ -1,11 +1,6 @@
-@extends('layouts.master')
+@extends('layouts.master', ['toaster' => true])
 
 @section('title', __('pages.title.project'))
-
-@push('styles')
-    <!-- Toastr -->
-    <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.css') }}">
-@endpush
 
 @section('content')
 <div class="content-wrapper">
@@ -34,9 +29,3 @@
 @include('tickets.forms.convert', ['id' => 'convert-ticket-to-task-form', 'ticket' => $ticket, 'redirect' => 'projects']) 
 
 @endsection
-
-@push('scripts')
-    <!-- Toastr -->
-    <script src="{{ asset('plugins/toastr/toastr.min.js' ) }}"></script>
-    <script src="{{ asset('js/toastr.js') }}"></script>
-@endpush

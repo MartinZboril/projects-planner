@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master', ['toaster' => true])
 
 @section('title', __('pages.title.client'))
 
@@ -75,8 +75,3 @@
     </section>
 </div>
 @endsection
-
-@push('scripts')
-    <!-- Toastr -->
-    <script src="{{ asset('js/toastr.js') }}"></script>
-@endpush

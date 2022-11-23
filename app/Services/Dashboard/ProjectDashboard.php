@@ -27,7 +27,7 @@ class ProjectDashboard
             'done_projects_count' => Project::done()->count(),
             'overdue_projects_count' => Project::active()->overdue()->count(),
             'overdue_projects' => Project::active()->overdue()->get(),
-            'report' => (new ProjectReport)->getReportPerYear(),
+            'report' => (new ProjectReport)->getReportPerYear($year),
             'actived_projects_count' => Project::status(1)->count(),
             'finished_projects_count' => Project::status(2)->count(),
             'archived_projects_count' => Project::status(3)->count(),

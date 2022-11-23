@@ -1,11 +1,6 @@
-@extends('layouts.master')
+@extends('layouts.master', ['toaster' => true, 'progressbar' => true])
 
 @section('title', __('pages.title.project'))
-
-@push('styles')
-    <!-- Toastr -->    
-    <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.css') }}">
-@endpush
 
 @section('content')
 <div class="content-wrapper">
@@ -129,10 +124,6 @@
 @endsection
 
 @push('scripts')
-    <!-- Toastr -->
-    <script src="{{ asset('plugins/toastr/toastr.min.js' ) }}"></script>
-    <script src="{{ asset('plugins/progress-bar/progressbar.js' ) }}"></script>
-    <script src="{{ asset('js/toastr.js') }}"></script>
     <script>
         createProgressBar('#budget-progress-bar', {{ $project->budget_plan >= 100 ? '1.0' : '0.' . $project->budget_plan }}, '{{ $project->budget_plan }} %', '#{{ $project->budget_plan > 100 ? "dc3545" : "28a745" }}');
         createProgressBar('#plan-progress-bar', {{ $project->time_plan >= 100 ? '1.0' : '0.' . $project->time_plan }}, '{{ $project->time_plan }} %', '#{{ $project->time_plan > 100 ? "dc3545" : "28a745" }}');

@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master', ['select2' => true, 'summernote' => true])
 
 @section('title', __('pages.title.project'))
 
@@ -19,7 +19,6 @@
 @endsection
 
 @push('scripts')
-    <!-- Custom -->
     <script>
         $(document).ready(function() {
             $('#project-id').select2({

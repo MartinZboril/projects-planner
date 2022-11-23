@@ -1,11 +1,6 @@
-@extends('layouts.master')
+@extends('layouts.master', ['tempusdominus' => true, 'select2' => true])
 
 @section('title', __('pages.title.timer'))
-
-@push('styles')
-    <!-- Toastr -->
-    <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
-@endpush
 
 @section('content')
 <div class="content-wrapper">
@@ -84,10 +79,6 @@
 @endsection
 
 @push('scripts')
-    <!-- DatePickers -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/js/tempusdominus-bootstrap-4.js"></script>
-    <!-- Custom -->
     <script type="text/javascript">
         $(document).ready(function(){
             $('#since-datetimepicker').datetimepicker({

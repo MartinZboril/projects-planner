@@ -20,7 +20,7 @@ class ProjectReport
     /**
      * Get report for projects by year.
      */
-    public function getReportPerYear(string $year = '2022'): Collection
+    public function getReportPerYear(string $year): Collection
     {
         $projectsByMonths = $this->getProjectsByMonths($year);
         $data = collect([

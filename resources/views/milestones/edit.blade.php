@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master', ['select2' => true, 'summernote' => true])
 
 @section('title', __('pages.title.milestone'))
 
@@ -90,7 +90,6 @@
 @endsection
 
 @push('scripts')
-    <!-- Custom -->
     <script>
         $(document).ready(function() {
             $('#owner-id').select2({

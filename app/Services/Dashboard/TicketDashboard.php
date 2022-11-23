@@ -31,7 +31,7 @@ class TicketDashboard
             'opened_tickets_count' => Ticket::status(1)->count(),
             'closed_tickets_count' => Ticket::status(2)->count(),
             'archived_tickets_count' => Ticket::status(3)->count(),
-            'report' => (new TicketReport)->getReportPerYear(),
+            'report' => (new TicketReport)->getReportPerYear($year),
         ]);
 
         return $data;

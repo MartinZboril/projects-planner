@@ -19,7 +19,7 @@ class TaskReport
     /**
      * Get report for tasks by year.
      */
-    public function getReportPerYear(string $year = '2022'): Collection
+    public function getReportPerYear(string $year): Collection
     {
         $tasksByMonths = $this->getTasksByMonths($year);
         $data = collect([
