@@ -36,6 +36,9 @@ class Project extends Model
         'amount',
         'remaining_budget',
         'budget_plan',
+        'pending_tasks_count',
+        'done_tasks_count',
+        'tasks_plan',
     ];
 
     public const STATUSES = [
@@ -147,5 +150,20 @@ class Project extends Model
     public function getBudgetPlanAttribute(): float
     {
         return ($this->budget) ? round(($this->amount / $this->budget), 2) * 100 : 0;
+    }
+
+    public function getPendingTasksCountAttribute(): int
+    {
+        return $this->newTasks()->count() + $this->inProgressTasks()->count();
+    }
+
+    public function getDoneTasksCountAttribute(): int
+    {
+        return $this->completedTasks()->count();
+    }
+
+    public function getTasksPlanAttribute(): float
+    {
+        return ($this->tasks()->count()) ? round(($this->done_tasks_count / $this->tasks()->count()), 2) * 100 : 0;
     }
 }
