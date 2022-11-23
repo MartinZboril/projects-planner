@@ -48,7 +48,13 @@
     <!-- Custom -->
     <script>
         $(function () {
-            $("#timesheets-table").DataTable();
+            var table = $("#timesheets-table").DataTable({
+                lengthChange: false,
+                buttons: [ 'copy', 'excel', 'pdf', 'colvis' ]
+            });
+
+            table.buttons().container().appendTo( '#timesheets-table_wrapper .col-md-6:eq(0)' );
+
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>

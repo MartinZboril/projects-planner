@@ -48,7 +48,13 @@
     <!-- Custom -->
     <script>
         $(function () {
-            $("#tickets-table").DataTable();
+            var table = $("#tickets-table").DataTable({
+                lengthChange: false,
+                buttons: [ 'copy', 'excel', 'pdf', 'colvis' ]
+            });
+            
+            table.buttons().container().appendTo( '#tickets-table_wrapper .col-md-6:eq(0)' );
+
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>

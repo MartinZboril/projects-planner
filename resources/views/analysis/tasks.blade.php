@@ -48,7 +48,13 @@
     <!-- Custom -->
     <script>
         $(function () {
-            $("#tasks-table").DataTable();
+            var table = $("#tasks-table").DataTable({
+                lengthChange: false,
+                buttons: [ 'copy', 'excel', 'pdf', 'colvis' ]
+            });
+            
+            table.buttons().container().appendTo( '#tasks-table_wrapper .col-md-6:eq(0)' );
+
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>

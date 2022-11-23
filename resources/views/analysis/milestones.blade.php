@@ -48,7 +48,13 @@
     <!-- Custom -->
     <script>
         $(function () {
-            $("#milestones-table").DataTable();
+            var table = $("#milestones-table").DataTable({
+                lengthChange: false,
+                buttons: [ 'copy', 'excel', 'pdf', 'colvis' ]
+            });
+            
+            table.buttons().container().appendTo( '#milestones-table_wrapper .col-md-6:eq(0)' );
+
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
