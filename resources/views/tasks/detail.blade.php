@@ -20,12 +20,6 @@
             </div>
         </section>
     </div>
-
-    <!-- Task status change forms -->
-    @include('tasks.forms.change', ['id' => 'start-working-on-task-form', 'task' => $task, 'statusId' => 2, 'redirect' => 'tasks'])    
-    @include('tasks.forms.change', ['id' => 'complete-working-on-task-form', 'task' => $task, 'statusId' => 3, 'redirect' => 'tasks'])    
-    @include('tasks.forms.change', ['id' => 'return-working-on-task-form', 'task' => $task, 'statusId' => 1, 'redirect' => 'tasks'])    
-    <!-- Pause work on task form -->
-    @include('tasks.forms.pause', ['id' => 'stop-working-on-task-form', 'task' => $task, 'action' => 1, 'redirect' => 'tasks'])    
-    @include('tasks.forms.pause', ['id' => 'resume-working-on-task-form', 'task' => $task, 'action' => 0, 'redirect' => 'tasks'])    
+    <!-- Tasks forms -->
+    @include('tasks.partials.forms', ['task' => $task])
 @endsection

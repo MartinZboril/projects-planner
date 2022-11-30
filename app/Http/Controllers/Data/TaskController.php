@@ -99,8 +99,7 @@ class TaskController extends Controller
             $task = $this->taskService->change($task, $request->status);
             $this->flashService->flash(__('messages.task.' . Task::STATUSES[$request->status]), 'info');
 
-            $redirectAction =  ($request->redirect == 'kanban') ? 'kanban' : ((($request->redirect == 'projects') ? 'project_' : '') . 'task');
-            return $this->taskService->redirect($redirectAction, $task);
+            return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
@@ -116,8 +115,7 @@ class TaskController extends Controller
             $task = $this->taskService->pause($task, $request->action);
             $this->flashService->flash(__('messages.task.' . (($request->action) ? Task::STOP : Task::RESUME)), 'info');
 
-            $redirectAction =  ($request->redirect == 'kanban') ? 'kanban' : ((($request->redirect == 'projects') ? 'project_' : '') . 'task');
-            return $this->taskService->redirect($redirectAction, $task);
+            return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);

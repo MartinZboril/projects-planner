@@ -76,15 +76,14 @@ class ToDoController extends Controller
 
     /**
      * Check the todo in storage.
-=     */
+=    */
     public function check(CheckToDoRequest $request, ToDo $todo): RedirectResponse
     {
         try {
             $todo = $this->todoService->check($todo, $request->action);
             $this->flashService->flash(__('messages.todo.' . ($request->action ? ToDo::FINISH : ToDo::RETURN)), 'info');
 
-            $redirectAction = $request->redirect == 'dashboard_task' ? 'dashboard_task' : ((($request->redirect == 'projects') ? 'project_' : '') . 'task');
-            return $this->todoService->redirect($redirectAction, $todo);
+            return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);

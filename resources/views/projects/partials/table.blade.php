@@ -33,6 +33,14 @@
                     <td>
                         <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
                         <a href="{{ route('projects.detail', $project->id) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                        @if ($project->status == 1)
+                            <a href="#" class="btn btn-sm btn-success" onclick="event.preventDefault(); document.getElementById('finish-project-{{ $project->id }}-form').submit();"><i class="fas fa-check mr-1"></i>Finish</a>
+                        @elseif ($project->status == 2 || $project->status == 3)
+                            <a href="#" class="btn btn-sm btn-info" onclick="event.preventDefault(); document.getElementById('active-project-{{ $project->id }}-form').submit();"><i class="fas fa-cogs mr-1"></i>Active</a>
+                        @endif
+                        @if ($project->status != 2 && $project->status != 3)
+                            <a href="#" class="btn btn-sm btn-primary" onclick="event.preventDefault(); document.getElementById('archive-project-{{ $project->id }}-form').submit();"><i class="fas fa-archive"></i></a>
+                        @endif
                         @if(Auth::User()->activeTimers->contains('project_id', $project->id))
                             <a href="#" class="btn btn-sm btn-danger" onclick="event.preventDefault(); document.getElementById('stop-working-on-project-{{ $project->id }}').submit();"><i class="fas fa-stop mr-1"></i>Stop</a>
                         @else
@@ -42,17 +50,13 @@
                                 </button>
                                 <div class="dropdown-menu">
                                     @foreach (Auth::User()->rates as $rate)
-                                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('start-working-on-project-with-rate-{{ $rate->id }}-for-project-{{ $project->id }}').submit();">{{ $rate->name }} ({{ $rate->value }})</a>
+                                        <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('start-working-on-project-{{ $project->id }}-with-rate-{{ $rate->id }}').submit();">{{ $rate->name }} ({{ $rate->value }})</a>
                                     @endforeach
                                 </div>
                             </div>
                         @endif
-                        @foreach (Auth::User()->rates as $rate)
-                            @include('timers.forms.start', ['id' => 'start-working-on-project-with-rate-' . $rate->id . '-for-project-' . $project->id, 'projectId' => $project->id, 'rateId' => $rate->id])            
-                        @endforeach
-                        @if(Auth::User()->activeTimers->contains('project_id', $project->id))
-                            @include('timers.forms.stop', ['id' => 'stop-working-on-project-' . $project->id, 'timerId' => Auth::User()->activeTimers->firstWhere('project_id', $project->id)->id])            
-                        @endif
+                        <!-- Projects forms -->
+                        @include('projects.partials.forms', ['project' => $project])
                     </td>
                 </tr>
             @empty

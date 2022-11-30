@@ -118,7 +118,7 @@
             </div>
         </section>
     </div>
-    
+    <!-- Projects forms -->
     @include('projects.partials.forms', ['project' => $project])
 @endsection
 

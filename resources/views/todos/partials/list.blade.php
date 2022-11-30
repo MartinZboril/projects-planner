@@ -17,8 +17,8 @@
                     <a href="{{ route('todos.edit', ['task' => $todo->task->id, 'todo' => $todo->id]) }}"><i class="fas fa-edit"></i></a>
                 @endif
             </div>
-
-            @include('todos.forms.check', ['id' => 'check-todo-' . $todo->id . '-form', 'todo' => $todo, 'redirect' => $redirect, 'action' => $action ? $action : ($todo->is_finished ? 0 : 1)])            
+            <!-- ToDos forms -->
+            @include('todos.forms.check', ['id' => 'check-todo-' . $todo->id . '-form', 'todo' => $todo, 'action' => $action ? $action : ($todo->is_finished ? 0 : 1)])            
         </li>
     @endforeach
 </ul>

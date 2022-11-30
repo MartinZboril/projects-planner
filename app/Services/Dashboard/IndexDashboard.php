@@ -45,6 +45,7 @@ class IndexDashboard
                 'type' => $type,
                 'due_date' => $type == 'todo' ? $item->deadline : $item->due_date,
                 'url' => $this->getItemUrl($type, $type == 'todo' ? $item->task->id : $item->id),
+                'item' => $item
             ]);
 
             $summary->push($summaryItem);

@@ -96,11 +96,10 @@ class TicketController extends Controller
     public function change(ChangeTicketRequest $request, Ticket $ticket): RedirectResponse
     {
         try {
-            $ticket = $this->ticketService->change($ticket, $request->safe());
+            $ticket = $this->ticketService->change($ticket, $request->status);
             $this->flashService->flash(__('messages.ticket.' . Ticket::STATUSES[$request->status]), 'info');
 
-            $redirectAction = (($request->redirect == 'projects') ? 'project_' : '') . 'ticket';
-            return $this->ticketService->redirect($redirectAction, $ticket);
+            return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);

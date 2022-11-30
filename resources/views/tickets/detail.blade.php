@@ -20,11 +20,6 @@
             </div>
         </section>
     </div>
-
-    <!-- ticket status change forms -->
-    @include('tickets.forms.change', ['id' => 'open-ticket-form', 'ticket' => $ticket, 'status' => 1, 'redirect' => 'tickets'])    
-    @include('tickets.forms.change', ['id' => 'close-ticket-form', 'ticket' => $ticket, 'status' => 2, 'redirect' => 'tickets'])    
-    @include('tickets.forms.change', ['id' => 'archive-ticket-form', 'ticket' => $ticket, 'status' => 3, 'redirect' => 'tickets'])    
-    <!-- convert ticket to task form -->
-    @include('tickets.forms.convert', ['id' => 'convert-ticket-to-task-form', 'ticket' => $ticket, 'redirect' => 'tickets']) 
+    <!-- Tickets forms -->
+    @include('tickets.partials.forms', ['ticket' => $ticket])
 @endsection
