@@ -23,14 +23,14 @@ class ProjectDashboard
             'budget_avg' => round(Project::get()->avg('budget_plan'), 2),
             'spent_time_avg' => round(Project::get()->avg('total_time'), 2),
             'total_projects_count' => Project::whereYear('created_at', '<=', $year)->count(),
-            'active_projects_count' => Project::active()->count(),
+            'active_work_projects_count' => Project::active()->count(),
             'done_projects_count' => Project::done()->count(),
             'overdue_projects_count' => Project::active()->overdue()->count(),
             'overdue_projects' => Project::active()->overdue()->get(),
             'report' => (new ProjectReport)->getReportPerYear($year),
-            'actived_projects_count' => Project::status(1)->count(),
-            'finished_projects_count' => Project::status(2)->count(),
-            'archived_projects_count' => Project::status(3)->count(),
+            'active_projects_count' => Project::status(1)->count(),
+            'finish_projects_count' => Project::status(2)->count(),
+            'archive_projects_count' => Project::status(3)->count(),
         ]);
 
         return $data;

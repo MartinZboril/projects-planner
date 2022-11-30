@@ -7,13 +7,11 @@ use Illuminate\Support\Collection;
 
 class TicketReport
 {
-    protected $reportYear;
-    protected $reportMonths;
-
+    protected $builderReport;
+    
     public function __construct()
     {
-        $this->reportYear = (new DateReport)->getReportYear();
-        $this->reportMonths = (new DateReport)->getReportMonths();
+        $this->builderReport = new BuilderReport;
     }
 
     /**
@@ -27,9 +25,9 @@ class TicketReport
             'active_tickets_count' => Ticket::whereYear('created_at', '<=', $year)->active()->count(),
             'done_tickets_count' => Ticket::whereYear('created_at', '<=', $year)->done()->count(),
             'overdue_tickets_count' => Ticket::whereYear('created_at', '<=', $year)->active()->overdue()->count(),
-            'report_months' => $this->reportMonths,
+            'report_months' => $this->builderReport->reportMonthsIndexes,
             'total_tickets_by_month' => $ticketsByMonths,
-            'quarterly_created_tickets' => $this->getTicketsByQuarters($year, $ticketsByMonths),
+            'quarterly_created_tickets' => $this->builderReport->getItemsByQuarters($year, $ticketsByMonths),
         ]);
 
         return $data;
@@ -38,50 +36,13 @@ class TicketReport
     /**
      * Get tickets count by year
      */
-    protected function getTicketsByMonths(string $year): array
+    protected function getTicketsByMonths(string $year): Collection
     {
-        $tickets = [];
+        $tickets = collect();
 
-        foreach ($this->reportYear as $quarter) {
-            foreach ($quarter as $key => $month) {
-                $tickets[$month['index']] = Ticket::whereYear('created_at', $year)->whereMonth('created_at', $key)->count();
-            }
-        }
-
-        return $tickets;
-    }
-
-    /**
-     * Get tickets count by quarters year
-     */
-    protected function getTicketsByQuarters(string $year, array $ticketsByMonths): array
-    {
-        $ticketsByQuarters = [];
-
-        foreach ($this->reportYear as $quarter => $months) {
-            array_push($ticketsByQuarters, [
-                'title' => __('pages.content.dates.' . $quarter) . ', ' . $year,
-                'values' => $this->getTicketsByQuartersMonths($ticketsByMonths, $months)
-            ]);
-        }
-
-        return $ticketsByQuarters;
-    }
-
-    /**
-     * Get tickets count by quarters months
-     */
-    protected function getTicketsByQuartersMonths(array $ticketsByMonths, array $months)
-    {
-        $tickets = [];
-        $totalCount = 0;
-
-        foreach ($months as $key => $month) {
-            $totalCount += $ticketsByMonths[$month['index']];
-            array_push($tickets, ['title' => $month['text'], 'value' => $ticketsByMonths[$month['index']]]);
-        }
-
-        array_push($tickets, ['title' => __('pages.content.labels.total'), 'value' => $totalCount]);
+        $this->builderReport->reportMonthsFull->each(function ($month, $key) use($tickets, $year) {
+            $tickets->put($month['index'], Ticket::whereYear('created_at', $year)->whereMonth('created_at', $key)->count());
+        });
 
         return $tickets;
     }

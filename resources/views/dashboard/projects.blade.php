@@ -17,7 +17,7 @@
                 @include('dashboard.partials.widget', ['text' => 'This week', 'value' => $data->get('this_week_timers_total_time_sum') . ' Hours', 'icon' => 'fas fa-calendar-week', 'colour' => 'lightblue color-palette', 'link' => route('projects.index')])
                 @include('dashboard.partials.widget', ['text' => 'Average', 'value' => $data->get('spent_time_avg') . ' Hours', 'icon' => 'fas fa-balance-scale', 'colour' => 'lightblue color-palette', 'link' => route('projects.index')])
                 @include('dashboard.partials.widget', ['text' => 'Budget', 'value' => $data->get('budget_avg') . ' %', 'icon' => 'fas fa-percent', 'colour' => $data->get('budget_avg') > 100 ? 'danger' : 'lightblue' . ' color-palette', 'link' => route('projects.index')])
-                @include('dashboard.partials.widget', ['text' => 'Active', 'value' => $data->get('active_projects_count'), 'icon' => 'fas fa-play', 'colour' => 'info', 'link' => route('reports.projects')])
+                @include('dashboard.partials.widget', ['text' => 'Active', 'value' => $data->get('active_work_projects_count'), 'icon' => 'fas fa-play', 'colour' => 'info', 'link' => route('reports.projects')])
                 @include('dashboard.partials.widget', ['text' => 'Done', 'value' => $data->get('done_projects_count'), 'icon' => 'fas fa-stop', 'colour' => 'warning', 'link' => route('reports.projects')])
                 @include('dashboard.partials.widget', ['text' => 'Overdue', 'value' => $data->get('overdue_projects_count'), 'icon' => 'fas fa-exclamation-circle', 'colour' => 'danger', 'link' => route('reports.projects')])
                 @include('dashboard.partials.widget', ['text' => 'Total', 'value' => $data->get('total_projects_count'), 'icon' => 'fas fa-clock', 'colour' => 'primary', 'link' => route('reports.projects')])
@@ -64,7 +64,7 @@
                 labels: ['Actived', 'Finished', 'Archived'],
                 datasets: [{
                     backgroundColor: ['#17a2b8', '#28a745', '#007bff'],
-                    data: [{{ $data->get('actived_projects_count') }}, {{ $data->get('finished_projects_count') }}, {{ $data->get('archived_projects_count') }}]
+                    data: [{{ $data->get('active_projects_count') }}, {{ $data->get('finish_projects_count') }}, {{ $data->get('archive_projects_count') }}]
                 }]
             },
             options: {

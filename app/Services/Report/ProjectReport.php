@@ -8,13 +8,11 @@ use Illuminate\Support\Collection;
 
 class ProjectReport
 {
-    protected $reportYear;
-    protected $reportMonths;
-
+    protected $builderReport;
+    
     public function __construct()
     {
-        $this->reportYear = (new DateReport)->getReportYear();
-        $this->reportMonths = (new DateReport)->getReportMonths();
+        $this->builderReport = new BuilderReport;
     }
 
     /**
@@ -30,61 +28,24 @@ class ProjectReport
             'overdue_projects_count' => Project::whereYear('created_at', '<=', $year)->active()->overdue()->count(),
             'amount_avg' => Timer::whereYear('created_at', '<=', $year)->get()->avg('amount'),
             'spent_time_avg' => Timer::whereYear('created_at', '<=', $year)->get()->avg('total_time'),
-            'report_months' => $this->reportMonths,
+            'report_months' => $this->builderReport->reportMonthsIndexes,
             'total_projects_by_month' => $projectsByMonths,
-            'quarterly_created_projects' => $this->getProjectsByQuarters($year, $projectsByMonths),
+            'quarterly_created_projects' => $this->builderReport->getItemsByQuarters($year, $projectsByMonths),
         ]);
 
         return $data;
     }
-
+    
     /**
      * Get projects count by year
      */
-    protected function getProjectsByMonths(string $year): array
+    protected function getProjectsByMonths(string $year): Collection
     {
-        $projects = [];
+        $projects = collect();
 
-        foreach ($this->reportYear as $quarter) {
-            foreach ($quarter as $key => $month) {
-                $projects[$month['index']] = Project::whereYear('created_at', $year)->whereMonth('created_at', $key)->count();
-            }
-        }
-
-        return $projects;
-    }
-
-    /**
-     * Get projects count by quarters year
-     */
-    protected function getProjectsByQuarters(string $year, array $projectsByMonths): array
-    {
-        $projectsByQuarters = [];
-
-        foreach ($this->reportYear as $quarter => $months) {
-            array_push($projectsByQuarters, [
-                'title' => __('pages.content.dates.' . $quarter) . ', ' . $year,
-                'values' => $this->getProjectsByQuartersMonths($projectsByMonths, $months)
-            ]);
-        }
-
-        return $projectsByQuarters;
-    }
-
-    /**
-     * Get projects count by quarters months
-     */
-    protected function getProjectsByQuartersMonths(array $projectsByMonths, array $months)
-    {
-        $projects = [];
-        $totalCount = 0;
-
-        foreach ($months as $key => $month) {
-            $totalCount += $projectsByMonths[$month['index']];
-            array_push($projects, ['title' => $month['text'], 'value' => $projectsByMonths[$month['index']]]);
-        }
-
-        array_push($projects, ['title' => __('pages.content.labels.total'), 'value' => $totalCount]);
+        $this->builderReport->reportMonthsFull->each(function ($month, $key) use($projects, $year) {
+            $projects->put($month['index'], Project::whereYear('created_at', $year)->whereMonth('created_at', $key)->count());
+        });
 
         return $projects;
     }

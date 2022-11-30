@@ -28,9 +28,9 @@ class TicketDashboard
             'overdue_tickets_count' => Ticket::active()->overdue()->count(),
             'overdue_tickets' => Ticket::active()->overdue()->get(),
             'unassigned_tickets' => Ticket::active()->unassigned()->get(),
-            'opened_tickets_count' => Ticket::status(1)->count(),
-            'closed_tickets_count' => Ticket::status(2)->count(),
-            'archived_tickets_count' => Ticket::status(3)->count(),
+            'open_tickets_count' => Ticket::status(1)->count(),
+            'close_tickets_count' => Ticket::status(2)->count(),
+            'archive_tickets_count' => Ticket::status(3)->count(),
             'report' => (new TicketReport)->getReportPerYear($year),
         ]);
 

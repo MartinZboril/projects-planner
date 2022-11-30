@@ -76,7 +76,7 @@
                 labels: ['Opened', 'Closed', 'Archived'],
                 datasets: [{
                     backgroundColor: ['#17a2b8', '#28a745', '#007bff'],
-                    data: [{{ $data->get('opened_tickets_count') }}, {{ $data->get('closed_tickets_count') }}, {{ $data->get('archived_tickets_count') }}]
+                    data: [{{ $data->get('open_tickets_count') }}, {{ $data->get('close_tickets_count') }}, {{ $data->get('archive_tickets_count') }}]
                 }]
             },
             options: {
