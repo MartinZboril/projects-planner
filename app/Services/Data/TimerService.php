@@ -5,20 +5,21 @@ namespace App\Services\Data;
 use App\Models\Timer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\ValidatedInput;
 
 class TimerService
 {
     /**
      * Store new timer.
      */
-    public function store(array $fields): Timer
+    public function store(ValidatedInput $inputs): Timer
     {
         $timer = new Timer;
-        $timer->project_id = $fields['project_id'];
+        $timer->project_id = $inputs->project_id;
         $timer->user_id = Auth::id();
-        $timer->rate_id = $fields['rate_id'];
-        $timer->since = $fields['since'];
-        $timer->until = $fields['until'];
+        $timer->rate_id = $inputs->rate_id;
+        $timer->since = $inputs->since;
+        $timer->until = $inputs->until;
         $timer->save();
 
         return $timer;
@@ -27,13 +28,13 @@ class TimerService
     /**
      * Update timer.
      */
-    public function update(Timer $timer, array $fields): Timer
+    public function update(Timer $timer, ValidatedInput $inputs): Timer
     {
         Timer::where('id', $timer->id)
                     ->update([
-                        'rate_id' => $fields['rate_id'],
-                        'since' => $fields['since'],
-                        'until' => $fields['until'],
+                        'rate_id' => $inputs->rate_id,
+                        'since' => $inputs->since,
+                        'until' => $inputs->until,
                     ]);
 
         return $timer;
@@ -42,11 +43,11 @@ class TimerService
     /**
      * Start measure new timer
      */
-    public function start(array $fields): Timer
+    public function start(ValidatedInput $inputs): Timer
     {
         $timer = new Timer;
-        $timer->project_id = $fields['project_id'];
-        $timer->rate_id = $fields['rate_id'];
+        $timer->project_id = $inputs->project_id;
+        $timer->rate_id = $inputs->rate_id;
         $timer->user_id = Auth::id();
         $timer->since = now();
         $timer->until = null;

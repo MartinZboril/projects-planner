@@ -46,8 +46,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $request): RedirectResponse
     {
         try {
-            $fields = $request->validated();
-            $user = $this->userService->store($fields);
+            $user = $this->userService->store($request->safe());
             $this->flashService->flash(__('messages.user.create'), 'info');
 
             $redirectAction = isset($request->create_and_close) ? 'users' : 'user';
@@ -80,8 +79,7 @@ class UserController extends Controller
     public function update(User $user, UpdateUserRequest $request): RedirectResponse
     {
         try {
-            $fields = $request->validated();
-            $user = $this->userService->update($user, $fields);
+            $user = $this->userService->update($user, $request->safe());
             $this->flashService->flash(__('messages.user.update'), 'info');
 
             $redirectAction = isset($request->save_and_close) ? 'users' : 'user';

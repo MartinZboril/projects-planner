@@ -73,6 +73,10 @@
       <!-- ChartJS -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     @endif
+    @if(!empty($momment))
+      <!-- momment -->
+      <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+    @endif
     @if(!empty($tempusdominus))
       <!-- Tempusdominus Bootstrap 4 -->
       <script src="{{ asset('plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>

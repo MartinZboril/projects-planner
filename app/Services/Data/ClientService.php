@@ -4,33 +4,34 @@ namespace App\Services\Data;
 
 use App\Models\Client;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\ValidatedInput;
 
 class ClientService
 {
     /**
      * Store new client.
      */
-    public function store(array $fields): Client
+    public function store(ValidatedInput $inputs): Client
     {
         $client = new Client;
-        $client->name = $fields['name'];
-        $client->email = $fields['email'];
-        $client->contact_person = $fields['contact_person'];
-        $client->contact_email = $fields['contact_email'];
-        $client->mobile = $fields['mobile'];
-        $client->phone = $fields['phone'];
-        $client->street = $fields['street'];
-        $client->house_number = $fields['house_number'];
-        $client->city = $fields['city'];
-        $client->country = $fields['country'];
-        $client->zip_code = $fields['zip_code'];
-        $client->website = $fields['website'];
-        $client->skype = $fields['skype'];
-        $client->linekedin = $fields['linekedin'];
-        $client->twitter = $fields['twitter'];
-        $client->facebook = $fields['facebook'];
-        $client->instagram = $fields['instagram'];
-        $client->note = $fields['note'];
+        $client->name = $inputs->name;
+        $client->email = $inputs->email;
+        $client->contact_person = $inputs->contact_person;
+        $client->contact_email = $inputs->contact_email;
+        $client->mobile = $inputs->mobile;
+        $client->phone = $inputs->phone;
+        $client->street = $inputs->street;
+        $client->house_number = $inputs->house_number;
+        $client->city = $inputs->city;
+        $client->country = $inputs->country;
+        $client->zip_code = $inputs->zip_code;
+        $client->website = $inputs->website;
+        $client->skype = $inputs->skype;
+        $client->linekedin = $inputs->linekedin;
+        $client->twitter = $inputs->twitter;
+        $client->facebook = $inputs->facebook;
+        $client->instagram = $inputs->instagram;
+        $client->note = $inputs->note;
         $client->save();
 
         return $client;
@@ -39,28 +40,28 @@ class ClientService
     /**
      * Update client.
      */
-    public function update(Client $client, array $fields): Client
+    public function update(Client $client, ValidatedInput $inputs): Client
     {
         Client::where('id', $client->id)
                     ->update([
-                        'name' => $fields['name'],
-                        'email' => $fields['email'],
-                        'contact_person' => $fields['contact_person'],
-                        'contact_email' => $fields['contact_email'],
-                        'mobile' => $fields['mobile'],
-                        'phone' => $fields['phone'],
-                        'street' => $fields['street'],
-                        'house_number' => $fields['house_number'],
-                        'city' => $fields['city'],
-                        'country' => $fields['country'],
-                        'zip_code' => $fields['zip_code'],
-                        'website' => $fields['website'],
-                        'skype' => $fields['skype'],
-                        'linekedin' => $fields['linekedin'],
-                        'twitter' => $fields['twitter'],
-                        'facebook' => $fields['facebook'],
-                        'instagram' => $fields['instagram'],
-                        'note' => $fields['note'],
+                        'name' => $inputs->name,
+                        'email' => $inputs->email,
+                        'contact_person' => $inputs->contact_person,
+                        'contact_email' => $inputs->contact_email,
+                        'mobile' => $inputs->mobile,
+                        'phone' => $inputs->phone,
+                        'street' => $inputs->street,
+                        'house_number' => $inputs->house_number,
+                        'city' => $inputs->city,
+                        'country' => $inputs->country,
+                        'zip_code' => $inputs->zip_code,
+                        'website' => $inputs->website,
+                        'skype' => $inputs->skype,
+                        'linekedin' => $inputs->linekedin,
+                        'twitter' => $inputs->twitter,
+                        'facebook' => $inputs->facebook,
+                        'instagram' => $inputs->instagram,
+                        'note' => $inputs->note,
                     ]);
 
         return $client;

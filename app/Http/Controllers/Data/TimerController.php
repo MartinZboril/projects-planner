@@ -37,8 +37,7 @@ class TimerController extends Controller
     public function store(StoreTimerRequest $request): RedirectResponse
     {
         try {
-            $fields = $request->validated();
-            $timer = $this->timerService->store($fields);
+            $timer = $this->timerService->store($request->safe());
             $this->flashService->flash(__('messages.timer.create'), 'info');
 
             return $this->timerService->redirect('project_timesheets', $timer); 
@@ -62,8 +61,7 @@ class TimerController extends Controller
     public function update(UpdateTimerRequest $request, Timer $timer): RedirectResponse
     {
         try {
-            $fields = $request->validated();
-            $timer = $this->timerService->update($timer, $fields);
+            $timer = $this->timerService->update($timer, $request->safe());
             $this->flashService->flash(__('messages.timer.create'), 'info');
 
             return $this->timerService->redirect('project_timesheets', $timer); 
@@ -79,14 +77,12 @@ class TimerController extends Controller
     public function start(StartTimerRequest $request): RedirectResponse
     {
         try {
-            $fields = $request->validated();
-
-            if($this->timerService->checkIfNotRunningAnoutherTimer($fields['project_id'], Auth::id())) {
+            if($this->timerService->checkIfNotRunningAnoutherTimer($request->project_id, Auth::id())) {
                 $this->flashService->flash(__('messages.timer.collision'), 'info');
                 return $this->timerService->redirect(''); 
             }
 
-            $timer = $this->timerService->start($fields);
+            $timer = $this->timerService->start($request->safe());
             $this->flashService->flash(__('messages.timer.start'), 'info');
 
             return $this->timerService->redirect('', $timer); 

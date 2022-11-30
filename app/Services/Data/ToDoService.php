@@ -5,19 +5,20 @@ namespace App\Services\Data;
 use App\Models\ToDo;
 use App\Services\Dashboard\TaskDashboard;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\ValidatedInput;
 
 class ToDoService
 {
     /**
      * Store new todo.
      */
-    public function store(array $fields): ToDo
+    public function store(ValidatedInput $inputs): ToDo
     {
         $todo = new ToDo;
-        $todo->task_id = $fields['task_id'];
-        $todo->name = $fields['name'];
-        $todo->deadline = $fields['deadline'];
-        $todo->description = $fields['description'];
+        $todo->task_id = $inputs->task_id;
+        $todo->name = $inputs->name;
+        $todo->deadline = $inputs->deadline;
+        $todo->description = $inputs->description;
         $todo->save();
 
         return $todo;
@@ -26,14 +27,14 @@ class ToDoService
     /**
      * Update todo.
      */
-    public function update(ToDo $todo, array $fields): ToDo
+    public function update(ToDo $todo, ValidatedInput $inputs): ToDo
     {
         ToDo::where('id', $todo->id)
                     ->update([
-                        'name' => $fields['name'],
-                        'deadline' => $fields['deadline'],
-                        'is_finished' => isset($fields['is_finished']) ? 1 : 0,
-                        'description' => $fields['description'],
+                        'name' => $inputs->name,
+                        'deadline' => $inputs->deadline,
+                        'is_finished' => $inputs->has('is_finished'),
+                        'description' => $inputs->description,
                     ]);
 
         return $todo;
@@ -42,11 +43,11 @@ class ToDoService
     /**
      * Un/check the todo
      */
-    public function check(ToDo $todo, array $fields): ToDo
+    public function check(ToDo $todo, bool $action): ToDo
     {
         ToDo::where('id', $todo->id)
                 ->update([
-                    'is_finished' => $fields['action'],
+                    'is_finished' => $action,
                 ]);
 
         return $todo;

@@ -46,11 +46,10 @@ class ClientController extends Controller
     public function store(StoreClientRequest $request): RedirectResponse
     {
         try {
-            $fields = $request->validated();
-            $client = $this->clientService->store($fields);
+            $client = $this->clientService->store($request->safe());
             $this->flashService->flash(__('messages.client.create'), 'info');
 
-            $redirectAction = isset($request->create_and_close) ? 'clients' : 'client';
+            $redirectAction = $request->has('create_and_close') ? 'clients' : 'client';
             return $this->clientService->redirect($redirectAction, $client);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -80,11 +79,10 @@ class ClientController extends Controller
     public function update(UpdateClientRequest $request, Client $client): RedirectResponse
     {
         try {
-            $fields = $request->validated();
-            $client = $this->clientService->update($client, $fields);
+            $client = $this->clientService->update($client, $request->safe());
             $this->flashService->flash(__('messages.client.update'), 'info');
     
-            $redirectAction = isset($request->save_and_close) ? 'clients' : 'client';
+            $redirectAction = $request->has('save_and_close') ? 'clients' : 'client';
             return $this->clientService->redirect($redirectAction, $client);         
         } catch (Exception $exception) {
             Log::error($exception);

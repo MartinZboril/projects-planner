@@ -5,6 +5,7 @@ namespace App\Services\Data;
 use App\Models\{Task, Ticket};
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\ValidatedInput;
 
 class TicketService
 {
@@ -18,17 +19,17 @@ class TicketService
     /**
      * Store new ticket.
      */
-    public function store(array $fields): Ticket
+    public function store(ValidatedInput $inputs): Ticket
     {
         $ticket = new Ticket;
-        $ticket->project_id = $fields['project_id'];
+        $ticket->project_id = $inputs->project_id;
         $ticket->reporter_id = Auth::id();
-        $ticket->assignee_id = isset($fields['assignee_id']) ? $fields['assignee_id'] : null;
-        $ticket->subject = $fields['subject'];
-        $ticket->type = $fields['type'];
-        $ticket->priority = $fields['priority'];
-        $ticket->due_date = $fields['due_date'];
-        $ticket->message = $fields['message'];
+        $ticket->assignee_id = $inputs->has('assignee_id') ? $inputs->assignee_id : null;
+        $ticket->subject = $inputs->subject;
+        $ticket->type = $inputs->type;
+        $ticket->priority = $inputs->priority;
+        $ticket->due_date = $inputs->due_date;
+        $ticket->message = $inputs->message;
         $ticket->save();
         
         if(!$this->projectUserService->workingOnProject($ticket->project_id, $ticket->reporter_id)) {
@@ -49,17 +50,17 @@ class TicketService
     /**
      * Update ticket.
      */
-    public function update(Ticket $ticket, array $fields): Ticket
+    public function update(Ticket $ticket, ValidatedInput $inputs): Ticket
     {
         Ticket::where('id', $ticket->id)
                     ->update([
-                        'project_id' => $fields['project_id'],
-                        'assignee_id' => $fields['assignee_id'],
-                        'subject' => $fields['subject'],
-                        'type' => $fields['type'],
-                        'priority' => $fields['priority'],
-                        'due_date' => $fields['due_date'],
-                        'message' => $fields['message'],
+                        'project_id' => $inputs->project_id,
+                        'assignee_id' => $inputs->assignee_id,
+                        'subject' => $inputs->subject,
+                        'type' => $inputs->type,
+                        'priority' => $inputs->priority,
+                        'due_date' => $inputs->due_date,
+                        'message' => $inputs->message,
                     ]);
 
         $ticket = Ticket::find($ticket->id);
@@ -78,11 +79,11 @@ class TicketService
     /**
      * Change working status of the ticket
      */
-    public function change(Ticket $ticket, array $fields): Ticket
+    public function change(Ticket $ticket, int $status): Ticket
     {
         Ticket::where('id', $ticket->id)
                     ->update([
-                        'status' => $fields['status'],
+                        'status' => $status,
                     ]);
 
         return $ticket;

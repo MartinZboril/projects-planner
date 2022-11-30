@@ -4,6 +4,7 @@ namespace App\Services\Data;
 
 use App\Models\Project;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\ValidatedInput;
 
 class ProjectService
 {
@@ -17,19 +18,20 @@ class ProjectService
     /**
      * Store new project.
      */
-    public function store(array $fields): Project
+    public function store(ValidatedInput $inputs): Project
     {
         $project = new Project;
-        $project->client_id = $fields['client_id'];
-        $project->name = $fields['name'];
-        $project->start_date = $fields['start_date'];
-        $project->due_date = $fields['due_date'];
-        $project->estimated_hours = $fields['estimated_hours'];
-        $project->budget = $fields['budget'];
-        $project->description = $fields['description'];
+        $project->client_id = $inputs->client_id;
+        $project->name = $inputs->name;
+        $project->start_date = $inputs->start_date;
+        $project->due_date = $inputs->due_date;
+        $project->estimated_hours = $inputs->estimated_hours;
+        $project->budget = $inputs->budget;
+        $project->description = $inputs->description;
+        $project->status = 1;
         $project->save();
 
-        foreach ($fields['team'] as $userId) {
+        foreach ($inputs->team as $userId) {
             $this->projectUserService->store($project->id, $userId);
         }
 
@@ -39,24 +41,24 @@ class ProjectService
     /**
      * Update project.
      */
-    public function update(Project $project, array $fields): Project
+    public function update(Project $project, ValidatedInput $inputs): Project
     {
         Project::where('id', $project->id)
                     ->update([
-                        'client_id' => $fields['client_id'],
-                        'name' => $fields['name'],
-                        'start_date' => $fields['start_date'],
-                        'due_date' => $fields['due_date'],
-                        'estimated_hours' => $fields['estimated_hours'],
-                        'budget' => $fields['budget'],
-                        'description' => $fields['description'],
+                        'client_id' => $inputs->client_id,
+                        'name' => $inputs->name,
+                        'start_date' => $inputs->start_date,
+                        'due_date' => $inputs->due_date,
+                        'estimated_hours' => $inputs->estimated_hours,
+                        'budget' => $inputs->budget,
+                        'description' => $inputs->description,
                     ]);
 
         $project = Project::find($project->id);
 
         $this->projectUserService->refresh($project->id);
 
-        foreach ($fields['team'] as $userId) {
+        foreach ($inputs->team as $userId) {
             $this->projectUserService->store($project->id, $userId);
         }
 
@@ -66,11 +68,11 @@ class ProjectService
     /**
      * Change working status of the project
      */
-    public function change(Project $project, array $fields): Project
+    public function change(Project $project, int $status): Project
     {
         Project::where('id', $project->id)
                     ->update([
-                        'status' => $fields['status'],
+                        'status' => $status,
                     ]);
 
         return $project;

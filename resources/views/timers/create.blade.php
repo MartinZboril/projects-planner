@@ -1,4 +1,4 @@
-@extends('layouts.master', ['tempusdominus' => true, 'select2' => true])
+@extends('layouts.master', ['momment' => true, 'tempusdominus' => true, 'select2' => true])
 
 @section('title', __('pages.title.timer'))
 

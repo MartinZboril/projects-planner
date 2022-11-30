@@ -4,19 +4,20 @@ namespace App\Services\Data;
 
 use App\Models\Rate;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\ValidatedInput;
 
 class RateService
 {
     /**
      * Store new rate.
      */
-    public function store(array $fields): Rate
+    public function store(ValidatedInput $inputs): Rate
     {
         $rate = new Rate;
-        $rate->user_id = $fields['user_id'];
-        $rate->name = $fields['name'];
-        $rate->is_active = isset($fields['is_active']) ? 1 : 0;
-        $rate->value = $fields['value'];
+        $rate->user_id = $inputs->user_id;
+        $rate->name = $inputs->name;
+        $rate->is_active = $inputs->has('is_active');
+        $rate->value = $inputs->value;
         $rate->save();
 
         return $rate;
@@ -25,13 +26,13 @@ class RateService
     /**
      * Update rate.
      */
-    public function update(Rate $rate, array $fields): Rate
+    public function update(Rate $rate, ValidatedInput $inputs): Rate
     {
         Rate::where('id', $rate->id)
                     ->update([
-                        'name' => $fields['name'],
-                        'is_active' => isset($fields['is_active']) ? 1 : 0,
-                        'value' => $fields['value'],
+                        'name' => $inputs->name,
+                        'is_active' => $inputs->has('is_active'),
+                        'value' => $inputs->value,
                     ]);
 
         return $rate;

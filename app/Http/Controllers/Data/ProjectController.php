@@ -86,11 +86,10 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request): RedirectResponse
     {
         try {
-            $fields = $request->validated();
-            $project = $this->projectService->store($fields);
+            $project = $this->projectService->store($request->safe());
             $this->flashService->flash(__('messages.project.create'), 'info');
 
-            $redirectAction = isset($request->create_and_close) ? 'projects' : 'project';
+            $redirectAction = $request->has('create_and_close') ? 'projects' : 'project';
             return $this->projectService->redirect($redirectAction, $project);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -120,11 +119,10 @@ class ProjectController extends Controller
     public function update(UpdateProjectRequest $request, Project $project): RedirectResponse
     {
         try {
-            $fields = $request->validated();
-            $project = $this->projectService->update($project, $fields);
+            $project = $this->projectService->update($project, $request->safe());
             $this->flashService->flash(__('messages.project.update'), 'info');
 
-            $redirectAction = isset($request->save_and_close) ? 'projects' : 'project';
+            $redirectAction = $request->has('save_and_close') ? 'projects' : 'project';
             return $this->projectService->redirect($redirectAction, $project);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -202,9 +200,8 @@ class ProjectController extends Controller
     public function change(ChangeProjectRequest $request, Project $project): RedirectResponse
     {
         try {
-            $fields = $request->validated();
-            $project = $this->projectService->change($project, $fields);
-            $this->flashService->flash(__('messages.project.' . Project::STATUSES[$fields['status']]), 'info');
+            $project = $this->projectService->change($project, $request->status);
+            $this->flashService->flash(__('messages.project.' . Project::STATUSES[$request->status]), 'info');
 
             return redirect()->back();
         } catch (Exception $exception) {

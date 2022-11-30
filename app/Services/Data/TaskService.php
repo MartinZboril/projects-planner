@@ -5,6 +5,7 @@ namespace App\Services\Data;
 use App\Models\Task;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\ValidatedInput;
 
 class TaskService
 {
@@ -18,18 +19,18 @@ class TaskService
     /**
      * Store new task.
      */
-    public function store(array $fields): Task
+    public function store(ValidatedInput $inputs): Task
     {
         $task = new Task;
-        $task->project_id = $fields['project_id'];
-        $task->milestone_id = isset($fields['milestone_id']) ? $fields['milestone_id'] : null;
+        $task->project_id = $inputs->project_id;
+        $task->milestone_id = $inputs->has('milestone_id') ? $inputs->milestone_id : null;
         $task->status = 1;
         $task->author_id = Auth::id();
-        $task->user_id = $fields['user_id'];
-        $task->name = $fields['name'];
-        $task->start_date = $fields['start_date'];
-        $task->due_date = $fields['due_date'];
-        $task->description = $fields['description'];
+        $task->user_id = $inputs->user_id;
+        $task->name = $inputs->name;
+        $task->start_date = $inputs->start_date;
+        $task->due_date = $inputs->due_date;
+        $task->description = $inputs->description;
         $task->save();
 
         if(!$this->projectUserService->workingOnProject($task->project_id, $task->author_id)) {
@@ -46,17 +47,17 @@ class TaskService
     /**
      * Update task.
      */
-    public function update(Task $task, array $fields): Task
+    public function update(Task $task, ValidatedInput $inputs): Task
     {
         Task::where('id', $task->id)
                     ->update([
-                        'project_id' => $fields['project_id'],
-                        'milestone_id' => isset($fields['milestone_id']) ? $fields['milestone_id'] : null,
-                        'user_id' => $fields['user_id'],
-                        'name' => $fields['name'],
-                        'start_date' => $fields['start_date'],
-                        'due_date' => $fields['due_date'],
-                        'description' => $fields['description'],
+                        'project_id' => $inputs->project_id,
+                        'milestone_id' => $inputs->has('milestone_id') ? $inputs->milestone_id : null,
+                        'user_id' => $inputs->user_id,
+                        'name' => $inputs->name,
+                        'start_date' => $inputs->start_date,
+                        'due_date' => $inputs->due_date,
+                        'description' => $inputs->description,
                     ]);
 
         if(!$this->projectUserService->workingOnProject($task->project_id, $task->author_id)) {
@@ -73,12 +74,12 @@ class TaskService
     /**
      * Change working status of the task
      */
-    public function change(Task $task, array $fields): Task
+    public function change(Task $task, int $status): Task
     {
         Task::where('id', $task->id)
                     ->update([
-                        'status' => $fields['status'],
-                        'is_returned' => false,
+                        'status' => $status,
+                        'is_returned' => ($task->status == 3 && $status == 1) ? true : false,
                     ]);
 
         return $task;
@@ -87,11 +88,11 @@ class TaskService
     /**
      * Pause work on the task
      */
-    public function pause(Task $task, array $fields): Task
+    public function pause(Task $task, bool $pause): Task
     {
         Task::where('id', $task->id)
                 ->update([
-                    'is_stopped' => $fields['action'],
+                    'is_stopped' => $pause,
                 ]);
 
         return $task;
