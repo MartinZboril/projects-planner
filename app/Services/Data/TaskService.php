@@ -2,6 +2,7 @@
 
 namespace App\Services\Data;
 
+use App\Enums\TaskStatusEnum;
 use App\Models\Task;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +25,7 @@ class TaskService
         $task = new Task;
         $task->project_id = $inputs->project_id;
         $task->milestone_id = $inputs->has('milestone_id') ? $inputs->milestone_id : null;
-        $task->status = 1;
+        $task->status = TaskStatusEnum::new;
         $task->author_id = Auth::id();
         $task->user_id = $inputs->user_id;
         $task->name = $inputs->name;
@@ -79,10 +80,10 @@ class TaskService
         Task::where('id', $task->id)
                     ->update([
                         'status' => $status,
-                        'is_returned' => ($task->status == 3 && $status == 1) ? true : false,
+                        'is_returned' => ($task->status->value == TaskStatusEnum::complete && $status == TaskStatusEnum::new) ? true : false,
                     ]);
 
-        return $task;
+        return $task->refresh();
     }
         
     /**
@@ -95,7 +96,7 @@ class TaskService
                     'is_stopped' => $pause,
                 ]);
 
-        return $task;
+        return $task->refresh();
     }
 
     /**

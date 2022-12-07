@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Data;
 
+use App\Enums\TaskStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Task\{ChangeTaskRequest, StoreTaskRequest, PauseTaskRequest, UpdateTaskRequest};
 use App\Models\{Project, Task, User};
@@ -97,7 +98,7 @@ class TaskController extends Controller
     {
         try {
             $task = $this->taskService->change($task, $request->status);
-            $this->flashService->flash(__('messages.task.' . Task::STATUSES[$request->status]), 'info');
+            $this->flashService->flash(__('messages.task.' . $task->status->name), 'info');
 
             return redirect()->back();
         } catch (Exception $exception) {
@@ -113,7 +114,7 @@ class TaskController extends Controller
     {
         try {
             $task = $this->taskService->pause($task, $request->action);
-            $this->flashService->flash(__('messages.task.' . (($request->action) ? Task::STOP : Task::RESUME)), 'info');
+            $this->flashService->flash(__('messages.task.' . ($task->paused ? 'stop' : 'resume')), 'info');
 
             return redirect()->back();
         } catch (Exception $exception) {

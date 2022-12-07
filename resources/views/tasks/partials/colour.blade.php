@@ -1,18 +1,18 @@
-@if($task->is_stopped)
+@if($task->paused)
     {{ 'danger' }}
-@elseif($task->is_returned)
+@elseif($task->returned)
     {{ 'danger' }}
 @else
     @switch($task->status)
-        @case(1)
+        @case(App\Enums\TaskStatusEnum::new)
             {{ 'info' }}
             @break
             
-        @case(2)
+        @case(App\Enums\TaskStatusEnum::in_progress)
             {{ 'warning' }}
             @break
 
-        @case(3)
+        @case(App\Enums\TaskStatusEnum::complete)
             {{ 'success' }}
             @break
 

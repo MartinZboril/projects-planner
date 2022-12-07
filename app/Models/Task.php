@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TaskStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\{Builder, Model};
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
@@ -16,7 +17,13 @@ class Task extends Model
 
     protected $appends = [
         'milestone_label',
-        'overdue'
+        'overdue',
+        'paused',
+        'returned',
+    ];
+
+    protected $casts = [
+        'status' => TaskStatusEnum::class,
     ];
 
     public const VALIDATION_RULES = [
@@ -30,15 +37,6 @@ class Task extends Model
         'due_date' => ['required', 'date'],
         'description' => ['required', 'string', 'max:65553'],
     ];
-
-    public const STATUSES = [
-        1 => 'new',
-        2 => 'in_progress',
-        3 => 'complete',
-    ];
-
-    public const STOP = 'stop';
-    public const RESUME = 'resume';
 
     public function project(): BelongsTo
     {
@@ -98,5 +96,15 @@ class Task extends Model
     public function getMilestoneLabelAttribute(): string
     {
         return $this->milestone ? $this->milestone->name : 'NaN';
+    }
+
+    public function getPausedAttribute(): bool
+    {
+        return $this->is_stopped ? true : false;
+    }
+
+    public function getReturnedAttribute(): bool
+    {
+        return $this->is_returned ? true : false;
     }
 }

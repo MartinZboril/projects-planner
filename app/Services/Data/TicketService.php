@@ -2,6 +2,7 @@
 
 namespace App\Services\Data;
 
+use App\Enums\TaskStatusEnum;
 use App\Models\{Task, Ticket};
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -96,7 +97,7 @@ class TicketService
     {
         $task = new Task();
         $task->project_id = $ticket->project_id;
-        $task->status = 1;
+        $task->status = TaskStatusEnum::new;
         $task->author_id = $ticket->reporter_id;
         $task->user_id = $ticket->assignee_id;
         $task->name = $ticket->subject;
