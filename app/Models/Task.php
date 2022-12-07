@@ -63,7 +63,7 @@ class Task extends Model
         return $this->hasMany(ToDo::class, 'task_id');
     }
 
-    public function scopeStatus(Builder $query, int $type): Builder
+    public function scopeStatus(Builder $query, TaskStatusEnum $type): Builder
     {
         return $query->where('status', $type);
     }
@@ -75,12 +75,12 @@ class Task extends Model
 
     public function scopeDone(Builder $query): Builder
     {
-        return $query->where('status', 3);
+        return $query->where('status', TaskStatusEnum::complete);
     }
 
     public function scopeActive(Builder $query): Builder
     {
-        return $query->whereIn('status', [1, 2]);
+        return $query->whereIn('status', [TaskStatusEnum::new, TaskStatusEnum::in_progress]);
     }
 
     public function scopeOverdue(Builder $query): Builder
@@ -90,7 +90,7 @@ class Task extends Model
 
     public function getOverdueAttribute(): bool
     {
-        return $this->due_date <= date('Y-m-d') && $this->status != 3;
+        return $this->due_date <= date('Y-m-d') && $this->status != TaskStatusEnum::complete;
     }
 
     public function getMilestoneLabelAttribute(): string

@@ -97,7 +97,7 @@ class TicketController extends Controller
     {
         try {
             $ticket = $this->ticketService->change($ticket, $request->status);
-            $this->flashService->flash(__('messages.ticket.' . Ticket::STATUSES[$request->status]), 'info');
+            $this->flashService->flash(__('messages.ticket.' . $ticket->status->name), 'info');
 
             return redirect()->back();
         } catch (Exception $exception) {

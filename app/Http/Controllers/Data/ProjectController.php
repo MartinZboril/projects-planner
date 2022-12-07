@@ -201,7 +201,7 @@ class ProjectController extends Controller
     {
         try {
             $project = $this->projectService->change($project, $request->status);
-            $this->flashService->flash(__('messages.project.' . Project::STATUSES[$request->status]), 'info');
+            $this->flashService->flash(__('messages.project.' . $project->status->name), 'info');
 
             return redirect()->back();
         } catch (Exception $exception) {

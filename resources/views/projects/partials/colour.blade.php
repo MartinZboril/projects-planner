@@ -1,13 +1,13 @@
 @switch($status)
-    @case(1)
+    @case(App\Enums\ProjectStatusEnum::active)
         {{ 'info' }}
         @break
         
-    @case(2)
+    @case(App\Enums\ProjectStatusEnum::finish)
         {{ 'success' }}
         @break
 
-    @case(3)
+    @case(App\Enums\ProjectStatusEnum::archive)
         {{ 'primary' }}
         @break
 

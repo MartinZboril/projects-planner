@@ -21,20 +21,6 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            $('#project-id').change(function() {
-                var url = '{{ url('projects') }}/' + $(this).val() + '/milestones/get/';
-
-                $.get(url, function(data) {
-                    var milestoneSelect = $('#milestone-id');
-                    milestoneSelect.empty();
-                    milestoneSelect.append('<option disabled selected value>select milestone</option>');
-
-                    $.each(data,function(key, value) {
-                        milestoneSelect.append('<option value=' + value.id + '>' + value.name + '</option>');
-                    });
-                });
-            });
-
             $('#project-id').select2({
                 theme: 'bootstrap4',
                 placeholder: 'select project'

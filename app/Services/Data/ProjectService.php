@@ -2,6 +2,7 @@
 
 namespace App\Services\Data;
 
+use App\Enums\ProjectStatusEnum;
 use App\Models\Project;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
@@ -28,7 +29,7 @@ class ProjectService
         $project->estimated_hours = $inputs->estimated_hours;
         $project->budget = $inputs->budget;
         $project->description = $inputs->description;
-        $project->status = 1;
+        $project->status = ProjectStatusEnum::active;
         $project->save();
 
         foreach ($inputs->team as $userId) {
@@ -62,7 +63,7 @@ class ProjectService
             $this->projectUserService->store($project->id, $userId);
         }
 
-        return $project;
+        return $project->fresh();
     }
 
     /**
@@ -75,7 +76,7 @@ class ProjectService
                         'status' => $status,
                     ]);
 
-        return $project;
+        return $project->fresh();
     }
 
     /**

@@ -80,7 +80,7 @@ class TaskService
         Task::where('id', $task->id)
                     ->update([
                         'status' => $status,
-                        'is_returned' => ($task->status->value == TaskStatusEnum::complete && $status == TaskStatusEnum::new) ? true : false,
+                        'is_returned' => ($task->status == TaskStatusEnum::complete && $status == TaskStatusEnum::new->value) ? true : false,
                     ]);
 
         return $task->refresh();

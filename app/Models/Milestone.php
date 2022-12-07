@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TaskStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\{Builder, Model};
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
@@ -46,7 +47,7 @@ class Milestone extends Model
 
     public function tasksCompleted(): HasMany
     {
-        return $this->hasMany(Task::class, 'milestone_id')->status(3);
+        return $this->hasMany(Task::class, 'milestone_id')->status(TaskStatusEnum::complete);
     }
 
     public function scopeOverdue(Builder $query): Builder

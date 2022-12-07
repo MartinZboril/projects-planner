@@ -2,6 +2,7 @@
 
 namespace App\Services\Dashboard;
 
+use App\Enums\TicketStatusEnum;
 use App\Models\Ticket;
 use App\Services\Report\TicketReport;
 use Illuminate\Support\Collection;
@@ -28,9 +29,9 @@ class TicketDashboard
             'overdue_tickets_count' => Ticket::active()->overdue()->count(),
             'overdue_tickets' => Ticket::active()->overdue()->get(),
             'unassigned_tickets' => Ticket::active()->unassigned()->get(),
-            'open_tickets_count' => Ticket::status(1)->count(),
-            'close_tickets_count' => Ticket::status(2)->count(),
-            'archive_tickets_count' => Ticket::status(3)->count(),
+            'open_tickets_count' => Ticket::status(TicketStatusEnum::open)->count(),
+            'close_tickets_count' => Ticket::status(TicketStatusEnum::close)->count(),
+            'archive_tickets_count' => Ticket::status(TicketStatusEnum::archive)->count(),
             'report' => (new TicketReport)->getReportPerYear($year),
         ]);
 

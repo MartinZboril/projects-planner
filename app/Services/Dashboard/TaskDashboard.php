@@ -2,6 +2,7 @@
 
 namespace App\Services\Dashboard;
 
+use App\Enums\TaskStatusEnum;
 use App\Models\{Task, ToDo};
 use App\Services\Report\TaskReport;
 use Illuminate\Support\Collection;
@@ -27,10 +28,10 @@ class TaskDashboard
             'pause_tasks_count' => Task::stopped(true)->count(),
             'overdue_tasks_count' => Task::active()->overdue()->count(),
             'overdue_tasks' => Task::active()->overdue()->get(),
-            'new_tasks_count' => Task::status(1)->count(),
-            'new_tasks' => Task::status(1)->get(),
-            'in_progress_tasks_count' => Task::status(2)->count(),
-            'complete_tasks_count' => Task::status(3)->count(),
+            'new_tasks_count' => Task::status(TaskStatusEnum::new)->count(),
+            'new_tasks' => Task::status(TaskStatusEnum::new)->get(),
+            'in_progress_tasks_count' => Task::status(TaskStatusEnum::in_progress)->count(),
+            'complete_tasks_count' => Task::status(TaskStatusEnum::complete)->count(),
             'report' => (new TaskReport)->getReportPerYear($year),
             'overdue_todos' => ToDo::finished(false)->overdue()->get(),
         ]);

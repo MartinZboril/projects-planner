@@ -1,13 +1,13 @@
 @switch($status)
-    @case(1)
+    @case(App\Enums\TicketStatusEnum::open)
         {{ 'info' }}
         @break
         
-    @case(2)
+    @case(App\Enums\TicketStatusEnum::close)
         {{ 'success' }}
         @break
 
-    @case(3)
+    @case(App\Enums\TicketStatusEnum::archive)
         {{ 'primary' }}
         @break
 

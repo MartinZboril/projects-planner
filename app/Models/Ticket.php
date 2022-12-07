@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TicketStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\{Builder, Model};
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,6 +19,10 @@ class Ticket extends Model
         'overdue'
     ];
 
+    protected $casts = [
+        'status' => TicketStatusEnum::class,
+    ];
+
     public const VALIDATION_RULES = [
         'project_id' => ['required', 'integer', 'exists:projects,id'],
         'reporter_id' => ['required', 'integer', 'exists:users,id'],
@@ -28,12 +33,6 @@ class Ticket extends Model
         'status' => ['required', 'integer', 'in:1,2,3'],
         'due_date' => ['required', 'date'],
         'message' => ['required', 'max:65553'],
-    ];
-
-    public const STATUSES = [
-        1 => 'open',
-        2 => 'close',
-        3 => 'archive',
     ];
 
     public function project(): BelongsTo
@@ -51,19 +50,19 @@ class Ticket extends Model
         return $this->belongsTo(User::class, 'assignee_id');
     }
 
-    public function scopeStatus(Builder $query, int $type): Builder
+    public function scopeStatus(Builder $query, TicketStatusEnum $type): Builder
     {
         return $query->where('status', $type);
     }
 
     public function scopeDone(Builder $query): Builder
     {
-        return $query->whereIn('status', [2, 3]);
+        return $query->whereIn('status', [TicketStatusEnum::close, TicketStatusEnum::archive]);
     }
 
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('status', 1);
+        return $query->where('status', TicketStatusEnum::open);
     }
 
     public function scopeUnassigned(Builder $query): Builder
@@ -78,6 +77,6 @@ class Ticket extends Model
 
     public function getOverdueAttribute(): bool
     {
-        return $this->due_date <= date('Y-m-d') && $this->status == 1;
+        return $this->due_date <= date('Y-m-d') && $this->status == TicketStatusEnum::open;
     }
 }

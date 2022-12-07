@@ -2,6 +2,7 @@
 
 namespace App\Services\Dashboard;
 
+use App\Enums\ProjectStatusEnum;
 use App\Models\{Project, Timer};
 use App\Services\Report\ProjectReport;
 use Illuminate\Support\Collection;
@@ -28,9 +29,9 @@ class ProjectDashboard
             'overdue_projects_count' => Project::active()->overdue()->count(),
             'overdue_projects' => Project::active()->overdue()->get(),
             'report' => (new ProjectReport)->getReportPerYear($year),
-            'active_projects_count' => Project::status(1)->count(),
-            'finish_projects_count' => Project::status(2)->count(),
-            'archive_projects_count' => Project::status(3)->count(),
+            'active_projects_count' => Project::status(ProjectStatusEnum::active)->count(),
+            'finish_projects_count' => Project::status(ProjectStatusEnum::finish)->count(),
+            'archive_projects_count' => Project::status(ProjectStatusEnum::archive)->count(),
         ]);
 
         return $data;

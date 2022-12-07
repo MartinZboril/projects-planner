@@ -1,13 +1,13 @@
 @switch($status)
-    @case(1)
+    @case(App\Enums\TicketStatusEnum::open)
         {{ __('pages.content.tickets.statuses.open') }}
         @break
         
-    @case(2)
+    @case(App\Enums\TicketStatusEnum::close)
         {{ __('pages.content.tickets.statuses.close') }}
         @break
 
-    @case(3)
+    @case(App\Enums\TicketStatusEnum::archive)
         {{ __('pages.content.tickets.statuses.archive') }}
         @break
 

@@ -1,9 +1,9 @@
-@if ($project->status == 1)
+@if ($project->status == App\Enums\ProjectStatusEnum::active)
     <a href="#" class="btn btn-sm btn-success" onclick="event.preventDefault(); document.getElementById('finish-project-{{ $project->id }}-form').submit();"><i class="fas fa-check mr-1"></i>Finish</a>
-@elseif ($project->status == 2 || $project->status == 3)
+@elseif ($project->status == App\Enums\ProjectStatusEnum::finish || $project->status == App\Enums\ProjectStatusEnum::archive)
     <a href="#" class="btn btn-sm btn-info" onclick="event.preventDefault(); document.getElementById('active-project-{{ $project->id }}-form').submit();"><i class="fas fa-cogs mr-1"></i>Active</a>
 @endif
-@if ($project->status != 2 && $project->status != 3)
+@if ($project->status != App\Enums\ProjectStatusEnum::finish && $project->status != App\Enums\ProjectStatusEnum::archive)
     <a href="#" class="btn btn-sm btn-primary" onclick="event.preventDefault(); document.getElementById('archive-project-{{ $project->id }}-form').submit();"><i class="fas fa-archive"></i></a>
 @endif
 @if(Auth::User()->activeTimers->contains('project_id', $project->id))

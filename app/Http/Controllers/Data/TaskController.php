@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Data;
 
-use App\Enums\TaskStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Task\{ChangeTaskRequest, StoreTaskRequest, PauseTaskRequest, UpdateTaskRequest};
 use App\Models\{Project, Task, User};

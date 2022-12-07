@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\{ProjectStatusEnum, TaskStatusEnum};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\{Builder, Model};
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany};
@@ -41,10 +42,8 @@ class Project extends Model
         'tasks_plan',
     ];
 
-    public const STATUSES = [
-        1 => 'active',
-        2 => 'finish',
-        3 => 'archive',
+    protected $casts = [
+        'status' => ProjectStatusEnum::class,
     ];
 
     public function client(): BelongsTo
@@ -64,17 +63,17 @@ class Project extends Model
 
     public function newTasks(): HasMany
     {
-        return $this->hasMany(Task::class, 'project_id')->status(1);
+        return $this->hasMany(Task::class, 'project_id')->status(TaskStatusEnum::new);
     }
 
     public function inProgressTasks(): HasMany
     {
-        return $this->hasMany(Task::class, 'project_id')->status(2);
+        return $this->hasMany(Task::class, 'project_id')->status(TaskStatusEnum::in_progress);
     }
 
     public function completedTasks(): HasMany
     {
-        return $this->hasMany(Task::class, 'project_id')->status(3);
+        return $this->hasMany(Task::class, 'project_id')->status(TaskStatusEnum::complete);
     }
 
     public function milestones(): HasMany
@@ -92,19 +91,19 @@ class Project extends Model
         return $this->hasMany(Ticket::class, 'project_id');
     }
 
-    public function scopeStatus(Builder $query, int $type): Builder
+    public function scopeStatus(Builder $query, ProjectStatusEnum $type): Builder
     {
         return $query->where('status', $type);
     }
 
     public function scopeDone(Builder $query): Builder
     {
-        return $query->whereIn('status', [2, 3]);
+        return $query->whereIn('status', [ProjectStatusEnum::finish, ProjectStatusEnum::archive]);
     }
 
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('status', 1);
+        return $query->where('status', ProjectStatusEnum::active);
     }
 
     public function scopeOverdue(Builder $query): Builder
@@ -114,7 +113,7 @@ class Project extends Model
 
     public function getOverdueAttribute(): bool
     {
-        return $this->due_date <= date('Y-m-d') && $this->status == 1;
+        return $this->due_date <= date('Y-m-d') && $this->status == ProjectStatusEnum::active;
     }
 
     public function getDeadlineAttribute(): int

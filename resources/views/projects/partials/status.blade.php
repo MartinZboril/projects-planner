@@ -1,13 +1,13 @@
 @switch($status)
-    @case(1)
+    @case(App\Enums\ProjectStatusEnum::active)
         {{ __('pages.content.projects.statuses.active') }}
         @break
         
-    @case(2)
+    @case(App\Enums\ProjectStatusEnum::finish)
         {{ __('pages.content.projects.statuses.finish') }}
         @break
 
-    @case(3)
+    @case(App\Enums\ProjectStatusEnum::archive)
         {{ __('pages.content.projects.statuses.archive') }}
         @break
 

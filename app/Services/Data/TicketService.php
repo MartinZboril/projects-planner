@@ -2,7 +2,7 @@
 
 namespace App\Services\Data;
 
-use App\Enums\TaskStatusEnum;
+use App\Enums\{TicketStatusEnum, TaskStatusEnum};
 use App\Models\{Task, Ticket};
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -31,6 +31,7 @@ class TicketService
         $ticket->priority = $inputs->priority;
         $ticket->due_date = $inputs->due_date;
         $ticket->message = $inputs->message;
+        $ticket->status = TicketStatusEnum::open;
         $ticket->save();
         
         if(!$this->projectUserService->workingOnProject($ticket->project_id, $ticket->reporter_id)) {
@@ -87,7 +88,7 @@ class TicketService
                         'status' => $status,
                     ]);
 
-        return $ticket;
+        return $ticket->fresh();
     }
 
     /**
