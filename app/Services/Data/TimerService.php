@@ -37,7 +37,7 @@ class TimerService
                         'until' => $inputs->until,
                     ]);
 
-        return $timer;
+        return $timer->fresh();
     }
 
     /**
@@ -53,7 +53,7 @@ class TimerService
         $timer->until = null;
         $timer->save();
 
-        return $timer;
+        return $timer->fresh();
     }
 
     /**
@@ -66,7 +66,7 @@ class TimerService
                         'until' => now(),
                     ]);
 
-        return $timer;
+        return $timer->fresh();
     }
 
     /**

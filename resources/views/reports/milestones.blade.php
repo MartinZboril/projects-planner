@@ -24,7 +24,7 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="card">
-                                    <div class="card-header bg-primary">2022 – Yearly Overview</div>
+                                    <div class="card-header bg-primary">{{ $data->get('year') }} – Yearly Overview</div>
                                     <div class="card-body">
                                         <canvas id="yearly-overview-chart" class="w-100"></canvas>
                                     </div>

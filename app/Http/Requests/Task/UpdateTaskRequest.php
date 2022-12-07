@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests\Task;
 
+use App\Enums\TaskStatusEnum;
 use App\Models\Task;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class UpdateTaskRequest extends FormRequest
 {
@@ -22,6 +24,7 @@ class UpdateTaskRequest extends FormRequest
     {
         $rules = Task::VALIDATION_RULES;
         $rules['redirect'] = ['in:tasks,projects'];
+        $rules['status'] = [new Enum(TaskStatusEnum::class)];
         unset(
             $rules['author_id'],
             $rules['status']

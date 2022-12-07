@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Enums\TicketStatusEnum;
+use App\Enums\{TicketPriorityEnum, TicketTypeEnum, TicketStatusEnum};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\{Builder, Model};
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -20,6 +20,8 @@ class Ticket extends Model
     ];
 
     protected $casts = [
+        'priority' => TicketPriorityEnum::class,
+        'type' => TicketTypeEnum::class,
         'status' => TicketStatusEnum::class,
     ];
 
@@ -28,9 +30,9 @@ class Ticket extends Model
         'reporter_id' => ['required', 'integer', 'exists:users,id'],
         'assignee_id' => ['nullable', 'integer', 'exists:users,id'],
         'subject' => ['required', 'string', 'max:255'],
-        'type' => ['required', 'integer', 'in:1,2,3,4'],
-        'priority' => ['required', 'integer', 'in:1,2,3,4'],
-        'status' => ['required', 'integer', 'in:1,2,3'],
+        'type' => ['required', 'integer'],
+        'priority' => ['required', 'integer'],
+        'status' => ['required', 'integer'],
         'due_date' => ['required', 'date'],
         'message' => ['required', 'max:65553'],
     ];

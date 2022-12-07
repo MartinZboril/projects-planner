@@ -21,6 +21,7 @@ class TicketReport
     {
         $ticketsByMonths = $this->getTicketsByMonths($year);
         $data = collect([
+            'year' => $year,
             'total_tickets_count' => Ticket::whereYear('created_at', '<=', $year)->count(),
             'active_tickets_count' => Ticket::whereYear('created_at', '<=', $year)->active()->count(),
             'done_tickets_count' => Ticket::whereYear('created_at', '<=', $year)->done()->count(),

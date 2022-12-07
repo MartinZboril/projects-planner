@@ -54,10 +54,9 @@
                     <label for="type" class="control-label">Type</label>
                     <select class="form-control @error('type') is-invalid @enderror" name="type" id="type" style="width: 100%;">
                         <option selected value>select type</option>
-                        <option value="1" @selected(old('type', $ticket->type) == 1)>Error</option>
-                        <option value="2" @selected(old('type', $ticket->type) == 2)>Inovation</option>
-                        <option value="3" @selected(old('type', $ticket->type) == 3)>Help</option>
-                        <option value="4" @selected(old('type', $ticket->type) == 4)>Other</option>
+                        @foreach(App\Enums\TicketTypeEnum::values() as $key => $value)
+                            <option value="{{ $key }}" @selected(old('type', $ticket->type->value) == $key)>{{ __('pages.content.tickets.types.' . $value) }}</option>
+                        @endforeach
                     </select>
                     @error('type')
                         <div class="invalid-feedback">{{ $message }}</div>
@@ -67,10 +66,9 @@
                     <label for="priority" class="control-label">Priority</label>
                     <select class="form-control @error('priority') is-invalid @enderror" name="priority" id="priority" style="width: 100%;">
                         <option selected value>select priority</option>
-                        <option value="1" @selected(old('priority', $ticket->priority) == 1)>Low</option>
-                        <option value="2" @selected(old('priority', $ticket->priority) == 2)>Medium</option>
-                        <option value="3" @selected(old('priority', $ticket->priority) == 3)>High</option>
-                        <option value="4" @selected(old('priority', $ticket->priority) == 4)>Urgent</option>
+                        @foreach(App\Enums\TicketPriorityEnum::values() as $key => $value)
+                            <option value="{{ $key }}" @selected(old('priority', $ticket->priority->value) == $key)>{{ __('pages.content.tickets.priorities.' . $value) }}</option>
+                        @endforeach
                     </select>
                     @error('priority')
                         <div class="invalid-feedback">{{ $message }}</div>

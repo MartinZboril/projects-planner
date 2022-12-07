@@ -2,8 +2,12 @@
 
 namespace App\Http\Requests\Ticket;
 
+use App\Enums\TicketStatusEnum;
+use App\Enums\TicketPriorityEnum;
+use App\Enums\TicketTypeEnum;
 use App\Models\Ticket;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class StoreTicketRequest extends FormRequest
 {
@@ -22,6 +26,9 @@ class StoreTicketRequest extends FormRequest
     {
         $rules = Ticket::VALIDATION_RULES;
         $rules['redirect'] = ['in:tickets,projects'];
+        $rules['status'] = [new Enum(TicketStatusEnum::class)];
+        $rules['priority'] = [new Enum(TicketPriorityEnum::class)];
+        $rules['type'] = [new Enum(TicketTypeEnum::class)];
         unset(
             $rules['reporter_id'],
             $rules['status']

@@ -21,6 +21,7 @@ class TimesheetReport
     {
         $timersByMonths = $this->getTimersByMonths($year);
         $data = collect([
+            'year' => $year,
             'total_timers_count' => Timer::whereYear('created_at', '<=', $year)->get()->sum('total_time'),
             'report_months' => $this->builderReport->reportMonthsIndexes,
             'total_timers_by_month' => $timersByMonths,

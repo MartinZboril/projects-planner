@@ -22,6 +22,7 @@ class ProjectReport
     {
         $projectsByMonths = $this->getProjectsByMonths($year);
         $data = collect([
+            'year' => $year,
             'total_projects_count' => Project::whereYear('created_at', '<=', $year)->count(),
             'active_projects_count' => Project::whereYear('created_at', '<=', $year)->active()->count(),
             'done_projects_count' => Project::whereYear('created_at', '<=', $year)->done()->count(),

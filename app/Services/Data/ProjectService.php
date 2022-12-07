@@ -55,8 +55,6 @@ class ProjectService
                         'description' => $inputs->description,
                     ]);
 
-        $project = Project::find($project->id);
-
         $this->projectUserService->refresh($project->id);
 
         foreach ($inputs->team as $userId) {

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Project;
 
+use App\Enums\ProjectStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class ChangeProjectRequest extends FormRequest
 {
@@ -20,7 +22,7 @@ class ChangeProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => ['required', 'integer', 'in:1,2,3'],
+            'status' => [new Enum(ProjectStatusEnum::class)],
         ];
     }
 }

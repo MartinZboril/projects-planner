@@ -1,17 +1,17 @@
 @switch($priority)
-    @case(1)
+    @case(App\Enums\TicketPriorityEnum::low)
         {{ __('pages.content.tickets.priorities.low') }}
         @break
         
-    @case(2)
+    @case(App\Enums\TicketPriorityEnum::medium)
         {{ __('pages.content.tickets.priorities.medium') }}
         @break
 
-    @case(3)
+    @case(App\Enums\TicketPriorityEnum::high)
         {{ __('pages.content.tickets.priorities.high') }}
         @break
 
-    @case(4)
+    @case(App\Enums\TicketPriorityEnum::urgent)
         {{ __('pages.content.tickets.priorities.urgent') }}
         @break
 

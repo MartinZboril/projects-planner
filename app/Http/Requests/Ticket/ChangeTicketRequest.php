@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Ticket;
 
+use App\Enums\TicketStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class ChangeTicketRequest extends FormRequest
 {
@@ -20,7 +22,7 @@ class ChangeTicketRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => ['required', 'integer', 'in:1,2,3'],
+            'status' => [new Enum(TicketStatusEnum::class)],
         ];
     }
 }

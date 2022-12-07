@@ -31,7 +31,7 @@ class Task extends Model
         'author_id' => ['required', 'integer', 'exists:users,id'],
         'user_id' => ['required', 'integer', 'exists:users,id'],
         'milestone_id' => ['nullable', 'integer', 'exists:milestones,id'],
-        'status' => ['required', 'integer', 'in:1,2,3'],
+        'status' => ['required', 'integer'],
         'name' => ['required', 'string', 'max:255'],
         'start_date' => ['required', 'date'],
         'due_date' => ['required', 'date'],

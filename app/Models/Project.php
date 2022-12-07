@@ -25,7 +25,7 @@ class Project extends Model
         'estimated_hours' => ['required', 'integer', 'min:0'],
         'budget' => ['required', 'integer', 'min:0'],
         'description' => ['required', 'string', 'max:65553'],
-        'status' => ['required', 'integer', 'in:1,2,3'],
+        'status' => ['required', 'integer'],
     ];
 
     protected $appends = [

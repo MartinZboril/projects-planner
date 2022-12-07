@@ -35,7 +35,7 @@ class RateService
                         'value' => $inputs->value,
                     ]);
 
-        return $rate;
+        return $rate->fresh();
     }
 
     /**

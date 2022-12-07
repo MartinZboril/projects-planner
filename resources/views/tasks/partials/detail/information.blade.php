@@ -49,7 +49,7 @@
         <div class="card-header ui-sortable-handle" style="cursor: move;">
             <h3 class="card-title">
             <i class="ion ion-clipboard mr-1"></i>
-            To Do List
+            ToDo List
             </h3>
             <div class="card-tools">
                 @if($project)

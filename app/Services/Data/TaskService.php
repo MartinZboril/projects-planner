@@ -69,7 +69,7 @@ class TaskService
             $this->projectUserService->store($task->project_id, $task->user_id);
         }
 
-        return $task;
+        return $task->fresh();
     }
     
     /**

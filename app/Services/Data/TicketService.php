@@ -65,7 +65,7 @@ class TicketService
                         'message' => $inputs->message,
                     ]);
 
-        $ticket = Ticket::find($ticket->id);
+        $ticket->fresh();
         
         if(!$ticket->assignee_id) {
             return $ticket;
@@ -75,7 +75,7 @@ class TicketService
             $this->projectUserService->store($ticket->project_id, $ticket->assignee_id);
         }
 
-        return $ticket;
+        return $ticket->fresh();
     }
 
     /**

@@ -41,7 +41,7 @@ class MilestoneService
                         'description' => $inputs->description,
                     ]);
 
-        return $milestone;
+        return $milestone->fresh();
     }
 
     /**

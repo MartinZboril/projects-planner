@@ -38,7 +38,7 @@
                 <span class="d-block">Reporter: <b><a href="{{ route('users.detail', $ticket->reporter->id) }}">{{ $ticket->reporter->full_name }}</a></b></span>
                 @if($ticket->assignee_id)<span class="d-block">Author: <b><a href="{{ route('users.detail', $ticket->assignee->id) }}">{{ $ticket->assignee->full_name }}</a></b></span>@endif
                 <span class="d-block">Status: <b>@include('tickets.partials.status', ['status' => $ticket->status])</b></span>
-                <span class="d-block">Priority: <b class="text-{{ $ticket->priority == 4 ? 'danger' : 'body' }}">@include('tickets.partials.priority', ['priority' => $ticket->priority])</b></span>
+                <span class="d-block">Priority: <b class="text-{{ $ticket->priority == App\Enums\TicketPriorityEnum::urgent ? 'danger' : 'body' }}">@include('tickets.partials.priority', ['priority' => $ticket->priority])</b></span>
                 <span class="d-block">Type: <b>@include('tickets.partials.type', ['type' => $ticket->type])</b></span>
                 <hr>
                 {!! $ticket->message !!}

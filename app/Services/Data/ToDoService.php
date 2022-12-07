@@ -37,7 +37,7 @@ class ToDoService
                         'description' => $inputs->description,
                     ]);
 
-        return $todo;
+        return $todo->fresh();
     }
     
     /**
@@ -50,7 +50,7 @@ class ToDoService
                     'is_finished' => $action,
                 ]);
 
-        return $todo;
+        return $todo->fresh();
     }
 
     /**

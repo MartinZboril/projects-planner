@@ -64,7 +64,7 @@ class ClientService
                         'note' => $inputs->note,
                     ]);
 
-        return $client;
+        return $client->fresh();
     }
 
     /**

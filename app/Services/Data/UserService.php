@@ -64,7 +64,7 @@ class UserService
                         'country' => $inputs->country,
                     ]);
 
-        return $user;
+        return $user->fresh();
     }
 
     /**

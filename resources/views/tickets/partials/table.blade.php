@@ -30,7 +30,7 @@
                     <td>{{ $ticket->created_at->format('d.m.Y') }}</td>
                     <td>@include('tickets.partials.status', ['status' => $ticket->status])</td>
                     <td>@include('tickets.partials.type', ['type' => $ticket->type])</td>
-                    <td><span class="text-{{ $ticket->priority == 4 ? 'danger font-weight-bold' : 'body' }}">@include('tickets.partials.priority', ['priority' => $ticket->priority])</span></td>
+                    <td><span class="text-{{ $ticket->priority == App\Enums\TicketPriorityEnum::urgent ? 'danger font-weight-bold' : 'body' }}">@include('tickets.partials.priority', ['priority' => $ticket->priority])</span></td>
                     <td><span class="text-{{ $ticket->overdue ? 'danger' : 'body' }}">{{ $ticket->due_date->format('d.m.Y') }}</span></td>
                     <td>
                         <a href="{{ $redirect == 'project' ? route('projects.ticket.edit', ['project' => $project->id, 'ticket' => $ticket->id]) : route('tickets.edit', $ticket->id) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>

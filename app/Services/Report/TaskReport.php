@@ -21,6 +21,7 @@ class TaskReport
     {
         $tasksByMonths = $this->getTasksByMonths($year);
         $data = collect([
+            'year' => $year,
             'total_tasks_count' => Task::whereYear('created_at', '<=', $year)->count(),
             'active_tasks_count' => Task::whereYear('created_at', '<=', $year)->active()->count(),
             'done_tasks_count' => Task::whereYear('created_at', '<=', $year)->done()->count(),
