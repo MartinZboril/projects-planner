@@ -118,15 +118,13 @@
             </div>
         </section>
     </div>
-    <!-- Projects forms -->
-    @include('projects.partials.forms', ['project' => $project])
 @endsection
 
 @push('scripts')
     <script>
-        createProgressBar('#budget-progress-bar', {{ $project->budget_plan >= 100 ? '1.0' : '0.' . $project->budget_plan }}, '{{ $project->budget_plan }} %', '#{{ $project->budget_plan > 100 ? "dc3545" : "28a745" }}');
-        createProgressBar('#plan-progress-bar', {{ $project->time_plan >= 100 ? '1.0' : '0.' . $project->time_plan }}, '{{ $project->time_plan }} %', '#{{ $project->time_plan > 100 ? "dc3545" : "28a745" }}');
-        createProgressBar('#tasks-progress-bar', {{ $project->tasks_plan >= 100 ? '1.0' : '0.' . $project->tasks_plan }}, '{{ $project->tasks_plan }} %', '#{{ $project->tasks_plan >= 100 ? "28a745" : "dc3545" }}');
+        createProgressBar('#budget-progress-bar', {{ $project->budget_plan >= 100 ? '1.0' : ($project->budget_plan / 100) }}, '{{ $project->budget_plan }} %', '#{{ $project->budget_plan > 100 ? "dc3545" : "28a745" }}');
+        createProgressBar('#plan-progress-bar', {{ $project->time_plan >= 100 ? '1.0' : ($project->time_plan / 100) }}, '{{ $project->time_plan }} %', '#{{ $project->time_plan > 100 ? "dc3545" : "28a745" }}');
+        createProgressBar('#tasks-progress-bar', {{ $project->tasks_plan >= 100 ? '1.0' : ($project->tasks_plan / 100) }}, '{{ $project->tasks_plan }} %', '#{{ $project->tasks_plan >= 100 ? "28a745" : "dc3545" }}');
 
         function createProgressBar(ident, value, text, color) {
             var budgetProgressBar = new ProgressBar.Circle(ident, {

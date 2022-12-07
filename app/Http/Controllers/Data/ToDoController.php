@@ -29,7 +29,7 @@ class ToDoController extends Controller
      */
     public function create(Task $task): View
     {
-        return view('todos.create', ['task' => $task]);
+        return view('todos.create', ['task' => $task, 'todo' => new ToDo]);
     }
 
     /**

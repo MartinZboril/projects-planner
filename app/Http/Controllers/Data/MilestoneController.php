@@ -8,6 +8,7 @@ use App\Models\{Milestone, Project};
 use App\Services\FlashService;
 use App\Services\Data\MilestoneService;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -29,7 +30,7 @@ class MilestoneController extends Controller
      */
     public function create(Project $project): View
     {
-        return view('milestones.create', ['project' => $project]);
+        return view('milestones.create', ['project' => $project, 'milestone' => new Milestone]);
     }
 
     /**
@@ -41,7 +42,7 @@ class MilestoneController extends Controller
             $milestone = $this->milestoneService->store($request->safe());
             $this->flashService->flash(__('messages.milestone.create'), 'info');
 
-            $redirectAction = $request->has('create_and_close') ? 'project_milestones' : 'milestone';
+            $redirectAction = $request->has('save_and_close') ? 'project_milestones' : 'milestone';
             return $this->milestoneService->redirect($redirectAction, $milestone);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -80,13 +81,5 @@ class MilestoneController extends Controller
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         } 
-    }
-
-    /**
-     * Load the milestones by project.
-     */
-    public function load(LoadMilestoneRequest $request): Milestone
-    {
-        return Milestone::where('project_id', $request->project_id)->get(['id', 'name']);
     }
 }

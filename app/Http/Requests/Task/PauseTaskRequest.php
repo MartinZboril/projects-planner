@@ -21,7 +21,6 @@ class PauseTaskRequest extends FormRequest
     {
         return [
             'action' => ['boolean'],
-            'redirect' => ['in:tasks,projects,kanban'],
         ];
     }
 }

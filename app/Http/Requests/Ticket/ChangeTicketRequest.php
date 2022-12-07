@@ -21,7 +21,6 @@ class ChangeTicketRequest extends FormRequest
     {
         return [
             'status' => ['required', 'integer', 'in:1,2,3'],
-            'redirect' => ['in:tickets,projects'],
         ];
     }
 }

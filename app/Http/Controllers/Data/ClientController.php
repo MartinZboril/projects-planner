@@ -37,7 +37,7 @@ class ClientController extends Controller
      */
     public function create(): View
     {
-        return view('clients.create');
+        return view('clients.create', ['client' => new Client]);
     }
 
     /**
@@ -49,7 +49,7 @@ class ClientController extends Controller
             $client = $this->clientService->store($request->safe());
             $this->flashService->flash(__('messages.client.create'), 'info');
 
-            $redirectAction = $request->has('create_and_close') ? 'clients' : 'client';
+            $redirectAction = $request->has('save_and_close') ? 'clients' : 'client';
             return $this->clientService->redirect($redirectAction, $client);
         } catch (Exception $exception) {
             Log::error($exception);

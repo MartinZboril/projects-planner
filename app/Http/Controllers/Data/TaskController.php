@@ -37,7 +37,7 @@ class TaskController extends Controller
      */
     public function create(): View
     {
-        return view('tasks.create', ['projects' => Project::all(), 'users' => User::all()]);
+        return view('tasks.create', ['projects' => Project::all(), 'users' => User::all(), 'task' => new Task, 'project' => null]);
     }
 
     /**
@@ -49,7 +49,7 @@ class TaskController extends Controller
             $task = $this->taskService->store($request->safe());
             $this->flashService->flash(__('messages.task.create'), 'info');
 
-            $redirectAction = (($request->redirect == 'projects') ? 'project_' : '') . (($request->has('create_and_close')) ? 'tasks' : 'task');
+            $redirectAction = (($request->redirect == 'projects') ? 'project_' : '') . (($request->has('save_and_close')) ? 'tasks' : 'task');
             return $this->taskService->redirect($redirectAction, $task);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -70,7 +70,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task): View
     {
-        return view('tasks.edit', ['task' => $task, 'projects' => Project::all(), 'users' => User::all()]);
+        return view('tasks.edit', ['task' => $task, 'projects' => Project::all(), 'users' => User::all(), 'project' => null]);
     }
 
     /**

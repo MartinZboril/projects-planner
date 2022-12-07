@@ -77,7 +77,7 @@ class ProjectController extends Controller
      */
     public function create(): View
     {
-        return view('projects.create', ['clients' => Client::all(), 'users' => User::all()]);
+        return view('projects.create', ['project' => new Project, 'clients' => Client::all(), 'users' => User::all()]);
     }
 
     /**
@@ -89,7 +89,7 @@ class ProjectController extends Controller
             $project = $this->projectService->store($request->safe());
             $this->flashService->flash(__('messages.project.create'), 'info');
 
-            $redirectAction = $request->has('create_and_close') ? 'projects' : 'project';
+            $redirectAction = $request->has('save_and_close') ? 'projects' : 'project';
             return $this->projectService->redirect($redirectAction, $project);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -135,7 +135,7 @@ class ProjectController extends Controller
      */
     public function createTask(Project $project): View
     {
-        return view('projects.task.create', ['project' => $project, 'milestones' => Milestone::where('project_id', $project->id)->get(), 'users' => User::all()]);
+        return view('projects.task.create', ['project' => $project, 'milestones' => Milestone::where('project_id', $project->id)->get(), 'users' => User::all(), 'task' => new Task]);
     }
 
     /**
@@ -159,7 +159,7 @@ class ProjectController extends Controller
      */
     public function createToDo(Project $project, Task $task): View
     {
-        return view('projects.todo.create', ['project' => $project, 'task' => $task]);
+        return view('projects.todo.create', ['project' => $project, 'task' => $task, 'todo' => new ToDo]);
     }
 
     /**
@@ -175,7 +175,7 @@ class ProjectController extends Controller
      */
     public function createTicket(Project $project): View
     {
-        return view('projects.ticket.create', ['project' => $project]);
+        return view('projects.ticket.create', ['project' => $project, 'ticket' => new Ticket]);
     }
 
     /**

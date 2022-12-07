@@ -12,7 +12,7 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Form -->
-                @include('tickets.forms.store', ['type' => 'ticket', 'projects' => $projects, 'redirect' => 'tickets'])
+                @include('tickets.forms.store', ['form' => 'ticket', 'projects' => $projects, 'redirect' => 'tickets'])
             </div>
         </section>
     </div>

@@ -26,8 +26,6 @@
             </div>
         </section>
     </div>
-
-    @include('projects.partials.forms', ['project' => $project])
 @endsection
 
 @push('scripts')

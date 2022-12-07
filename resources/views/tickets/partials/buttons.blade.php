@@ -9,3 +9,5 @@
 @if ($ticket->status != 2 && $ticket->status != 3)
     <a href="#" class="btn btn-sm btn-primary" onclick="event.preventDefault(); document.getElementById('archive-ticket-{{ $ticket->id }}-form').submit();"><i class="fas fa-archive"></i></a>
 @endif
+<!-- Tickets forms -->
+@include('tickets.partials.forms', ['ticket' => $ticket])

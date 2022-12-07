@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'icheck' => true, 'chartJS' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'icheck' => true, 'chartJS' => true])
 
 @section('title', __('pages.title.dashboard'))
 
@@ -47,16 +47,16 @@
                 </div>
             @endif
             @if($data->get('new_tasks')->count() > 0)
-            <div class="card card-primary card-outline">
-                <div class="card-header">
-                    New Tasks
-                    <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('new_tasks')->count() }}</span>
-                </div>
-                <div class="card-body">
-                    <!-- Content -->
-                    @include('tasks.partials.table', ['id' => 'new-tasks-table', 'tasks' => $data->get('new_tasks'), 'display' => ['project'], 'redirect' => 'task'])
-                </div>
-            </div>  
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        New Tasks
+                        <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('new_tasks')->count() }}</span>
+                    </div>
+                    <div class="card-body">
+                        <!-- Content -->
+                        @include('tasks.partials.table', ['id' => 'new-tasks-table', 'tasks' => $data->get('new_tasks'), 'display' => ['project'], 'redirect' => 'task'])
+                    </div>
+                </div>  
             @endif
             <div class="row">
                 <div class="col-md-4">

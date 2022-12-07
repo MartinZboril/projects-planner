@@ -12,7 +12,7 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Form -->
-                @include('tasks.forms.store', ['type' => 'task', 'projects' => $projects, 'redirect' => 'tasks'])     
+                @include('tasks.forms.store', ['form' => 'task', 'projects' => $projects, 'redirect' => 'tasks'])     
             </div>
         </section>
     </div>
@@ -20,21 +20,7 @@
 
 @push('scripts')
     <script>
-        $(document).ready(function() {
-            $('#project-id').change(function() {
-                var url = '{{ url('milestones') }}/load/?project_id=' + $(this).val();
-
-                $.get(url, function(data) {
-                    var milestoneSelect = $('#milestone-id');
-                    milestoneSelect.empty();
-
-                    $.each(data,function(key, value) {
-                        milestoneSelect.append('<option disabled selected value>Choose milestone</option>');
-                        milestoneSelect.append('<option value=' + value.id + '>' + value.name + '</option>');
-                    });
-                });
-            });
-
+        $(document).ready(function () {
             $('#project-id').select2({
                 theme: 'bootstrap4',
                 placeholder: 'select project'

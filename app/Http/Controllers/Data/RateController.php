@@ -29,7 +29,7 @@ class RateController extends Controller
      */
     public function create(User $user): View
     {
-        return view('rates.create', ['user' => $user]);
+        return view('rates.create', ['user' => $user, 'rate' => new Rate]);
     }
 
     /**

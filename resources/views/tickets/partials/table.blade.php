@@ -35,19 +35,7 @@
                     <td>
                         <a href="{{ $redirect == 'project' ? route('projects.ticket.edit', ['project' => $project->id, 'ticket' => $ticket->id]) : route('tickets.edit', $ticket->id) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
                         <a href="{{ $redirect == 'project' ? route('projects.ticket.detail', ['project' => $project->id, 'ticket' => $ticket->id]) : route('tickets.detail', $ticket->id) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
-                        @if (!$ticket->is_convert && $ticket->assignee_id && $ticket->status != 2 && $ticket->status != 3)
-                            <a href="#" class="btn btn-sm btn-primary" onclick="event.preventDefault(); document.getElementById('convert-ticket-{{ $ticket->id }}-to-task-form').submit();"><i class="fas fa-tasks mr-1"></i>Convert to task</a>
-                        @endif
-                        @if ($ticket->status == 1)
-                            <a href="#" class="btn btn-sm btn-success" onclick="event.preventDefault(); document.getElementById('close-ticket-{{ $ticket->id }}-form').submit();"><i class="fas fa-check mr-1"></i>Close</a>
-                        @elseif ($ticket->status == 2 || $ticket->status == 3)
-                            <a href="#" class="btn btn-sm btn-info" onclick="event.preventDefault(); document.getElementById('open-ticket-{{ $ticket->id }}-form').submit();"><i class="fas fa-bell mr-1"></i>Open</a>
-                        @endif
-                        @if ($ticket->status != 2 && $ticket->status != 3)
-                            <a href="#" class="btn btn-sm btn-primary" onclick="event.preventDefault(); document.getElementById('archive-ticket-{{ $ticket->id }}-form').submit();"><i class="fas fa-archive"></i></a>
-                        @endif
-                        <!-- Tickets forms -->
-                        @include('tickets.partials.forms', ['ticket' => $ticket])                
+                        @include('tickets.partials.buttons', ['ticket' => $ticket])               
                     </td>
                 </tr>
             @empty

@@ -21,14 +21,11 @@
                         @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                         <!-- Content -->
                         @include('tickets.partials.table', ['id' => 'tickets-table', 'tickets' => $project->tickets, 'display' => [], 'redirect' => 'project'])
-
                     </div>
                 </div>
             </div>
         </section>
     </div>
-
-    @include('projects.partials.forms', ['project' => $project])
 @endsection
 
 @push('scripts')

@@ -2,5 +2,4 @@
     @csrf
     @method('PATCH')
     <input type="hidden" name="status" value="{{ $statusId }}">
-    <input type="hidden" name="redirect" value="{{ $redirect }}">
 </form>

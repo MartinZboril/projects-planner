@@ -37,7 +37,7 @@ class UserController extends Controller
      */
     public function create(): View
     {
-        return view('users.create');
+        return view('users.create', ['user' => new User]);
     }
 
     /**
@@ -49,7 +49,7 @@ class UserController extends Controller
             $user = $this->userService->store($request->safe());
             $this->flashService->flash(__('messages.user.create'), 'info');
 
-            $redirectAction = isset($request->create_and_close) ? 'users' : 'user';
+            $redirectAction = isset($request->save_and_close) ? 'users' : 'user';
             return $this->userService->redirect($redirectAction, $user); 
         } catch (Exception $exception) {
             Log::error($exception);

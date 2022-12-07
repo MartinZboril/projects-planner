@@ -37,7 +37,7 @@ class TicketController extends Controller
      */
     public function create(): View
     {
-        return view('tickets.create', ['projects' => Project::all(), 'users' => User::all()]);
+        return view('tickets.create', ['projects' => Project::all(), 'users' => User::all(), 'project' => null, 'ticket' => new Ticket]);
     }
 
     /**
@@ -49,7 +49,7 @@ class TicketController extends Controller
             $ticket = $this->ticketService->store($request->safe());
             $this->flashService->flash(__('messages.ticket.create'), 'info');
 
-            $redirectAction = (($request->redirect == 'projects') ? 'project_' : '') . (($request->has('create_and_close')) ? 'tickets' : 'ticket');
+            $redirectAction = (($request->redirect == 'projects') ? 'project_' : '') . (($request->has('save_and_close')) ? 'tickets' : 'ticket');
             return $this->ticketService->redirect($redirectAction, $ticket);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -70,7 +70,7 @@ class TicketController extends Controller
      */
     public function edit(Ticket $ticket): View
     {
-        return view('tickets.edit', ['ticket' => $ticket, 'projects' => Project::all(), 'users' => User::all()]);
+        return view('tickets.edit', ['ticket' => $ticket, 'projects' => Project::all(), 'users' => User::all(), 'project' => null]);
     }
 
     /**

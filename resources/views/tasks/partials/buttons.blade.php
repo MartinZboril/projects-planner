@@ -10,3 +10,5 @@
 @else
     <a href="#" class="btn btn-sm btn-danger" onclick="event.preventDefault(); document.getElementById('return-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-undo mr-1"></i>Return</a>
 @endif
+<!-- Tasks forms -->
+@include('tasks.partials.forms', ['task' => $task])
