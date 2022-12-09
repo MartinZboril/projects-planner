@@ -23,16 +23,10 @@ class TaskService
     public function store(ValidatedInput $inputs): Task
     {
         $task = new Task;
-        $task->project_id = $inputs->project_id;
-        $task->milestone_id = $inputs->has('milestone_id') ? $inputs->milestone_id : null;
         $task->status = TaskStatusEnum::new;
         $task->author_id = Auth::id();
-        $task->user_id = $inputs->user_id;
-        $task->name = $inputs->name;
-        $task->start_date = $inputs->start_date;
-        $task->due_date = $inputs->due_date;
-        $task->description = $inputs->description;
-        $task->save();
+
+        $task = $this->save($task, $inputs);
 
         if(!$this->projectUserService->workingOnProject($task->project_id, $task->author_id)) {
             $this->projectUserService->store($task->project_id, $task->author_id);
@@ -50,16 +44,7 @@ class TaskService
      */
     public function update(Task $task, ValidatedInput $inputs): Task
     {
-        Task::where('id', $task->id)
-                    ->update([
-                        'project_id' => $inputs->project_id,
-                        'milestone_id' => $inputs->has('milestone_id') ? $inputs->milestone_id : null,
-                        'user_id' => $inputs->user_id,
-                        'name' => $inputs->name,
-                        'start_date' => $inputs->start_date,
-                        'due_date' => $inputs->due_date,
-                        'description' => $inputs->description,
-                    ]);
+        $task = $this->save($task, $inputs);
 
         if(!$this->projectUserService->workingOnProject($task->project_id, $task->author_id)) {
             $this->projectUserService->store($task->project_id, $task->author_id);
@@ -69,7 +54,24 @@ class TaskService
             $this->projectUserService->store($task->project_id, $task->user_id);
         }
 
-        return $task->fresh();
+        return $task;
+    }
+
+    /**
+     * Save data for task.
+     */
+    protected function save(Task $task, ValidatedInput $inputs)
+    {
+        $task->project_id = $inputs->project_id;
+        $task->milestone_id = $inputs->has('milestone_id') ? $inputs->milestone_id : null;
+        $task->user_id = $inputs->user_id;
+        $task->name = $inputs->name;
+        $task->start_date = $inputs->start_date;
+        $task->due_date = $inputs->due_date;
+        $task->description = $inputs->description;
+        $task->save();
+
+        return $task;
     }
     
     /**
@@ -77,26 +79,22 @@ class TaskService
      */
     public function change(Task $task, int $status): Task
     {
-        Task::where('id', $task->id)
-                    ->update([
-                        'status' => $status,
-                        'is_returned' => ($task->status == TaskStatusEnum::complete && $status == TaskStatusEnum::new->value) ? true : false,
-                    ]);
+        $task->status = $status;
+        $task->is_returned = ($task->status == TaskStatusEnum::complete && $status == TaskStatusEnum::new->value) ? true : false;
+        $task->save();
 
-        return $task->refresh();
+        return $task;
     }
         
     /**
-     * Pause work on the task
+     * Pause work on the task.
      */
     public function pause(Task $task, bool $pause): Task
     {
-        Task::where('id', $task->id)
-                ->update([
-                    'is_stopped' => $pause,
-                ]);
+        $task->is_stopped = $pause;
+        $task->save();
 
-        return $task->refresh();
+        return $task;
     }
 
     /**

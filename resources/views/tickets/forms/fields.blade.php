@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-7">
         <div class="card card-primary card-outline">
-            <div class="card-header">{{ $ticket->id ? 'Edit' : 'Create ' }} ticket</div>
+            <div class="card-header">{{ $type == 'create' ? 'Edit' : 'Create' }}ticket</div>
             <div class="card-body">
                 <div class="form-group required">
                     <label for="subject" class="control-label">Subject</label>
@@ -55,7 +55,7 @@
                     <select class="form-control @error('type') is-invalid @enderror" name="type" id="type" style="width: 100%;">
                         <option selected value>select type</option>
                         @foreach(App\Enums\TicketTypeEnum::values() as $key => $value)
-                            <option value="{{ $key }}" @selected(old('type', $ticket->type->value) == $key)>{{ __('pages.content.tickets.types.' . $value) }}</option>
+                            <option value="{{ $key }}" @selected(old('type', $type == 'edit' ? $ticket->type->value : null) == $key)>{{ __('pages.content.tickets.types.' . $value) }}</option>
                         @endforeach
                     </select>
                     @error('type')
@@ -67,7 +67,7 @@
                     <select class="form-control @error('priority') is-invalid @enderror" name="priority" id="priority" style="width: 100%;">
                         <option selected value>select priority</option>
                         @foreach(App\Enums\TicketPriorityEnum::values() as $key => $value)
-                            <option value="{{ $key }}" @selected(old('priority', $ticket->priority->value) == $key)>{{ __('pages.content.tickets.priorities.' . $value) }}</option>
+                            <option value="{{ $key }}" @selected(old('priority', $type == 'edit' ? $ticket->priority->value : null) == $key)>{{ __('pages.content.tickets.priorities.' . $value) }}</option>
                         @endforeach
                     </select>
                     @error('priority')

@@ -16,12 +16,8 @@ class ToDoService
     {
         $todo = new ToDo;
         $todo->task_id = $inputs->task_id;
-        $todo->name = $inputs->name;
-        $todo->deadline = $inputs->deadline;
-        $todo->description = $inputs->description;
-        $todo->save();
 
-        return $todo;
+        return $this->save($todo, $inputs);
     }
 
     /**
@@ -29,32 +25,36 @@ class ToDoService
      */
     public function update(ToDo $todo, ValidatedInput $inputs): ToDo
     {
-        ToDo::where('id', $todo->id)
-                    ->update([
-                        'name' => $inputs->name,
-                        'deadline' => $inputs->deadline,
-                        'is_finished' => $inputs->has('is_finished'),
-                        'description' => $inputs->description,
-                    ]);
-
-        return $todo->fresh();
+        return $this->save($todo, $inputs);
     }
     
     /**
-     * Un/check the todo
+     * Save data for todo.
      */
-    public function check(ToDo $todo, bool $action): ToDo
+    protected function save(ToDo $todo, ValidatedInput $inputs)
     {
-        ToDo::where('id', $todo->id)
-                ->update([
-                    'is_finished' => $action,
-                ]);
+        $todo->name = $inputs->name;
+        $todo->deadline = $inputs->deadline;
+        $todo->is_finished = $inputs->has('is_finished');
+        $todo->description = $inputs->description;
+        $todo->save();
 
-        return $todo->fresh();
+        return $todo;
     }
 
     /**
-     * Get route for the action
+     * Un/check the todo.
+     */
+    public function check(ToDo $todo, bool $action): ToDo
+    {
+        $todo->is_finished = $action;
+        $todo->save();
+
+        return $todo;
+    }
+
+    /**
+     * Get route for the action.
      */
     public function redirect(string $action, ToDo $todo): RedirectResponse 
     {   

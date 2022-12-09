@@ -15,6 +15,23 @@ class MilestoneService
     {
         $milestone = new Milestone;
         $milestone->project_id = $inputs->project_id;
+
+        return $this->save($milestone, $inputs);
+    }
+
+    /**
+     * Update milestone.
+     */
+    public function update(Milestone $milestone, ValidatedInput $inputs): Milestone
+    {
+        return $this->save($milestone, $inputs);
+    }
+
+    /**
+     * Save data for milestone.
+     */
+    protected function save(Milestone $milestone, ValidatedInput $inputs)
+    {
         $milestone->owner_id = $inputs->owner_id;
         $milestone->name = $inputs->name;
         $milestone->start_date = $inputs->start_date;
@@ -24,24 +41,6 @@ class MilestoneService
         $milestone->save();
 
         return $milestone;
-    }
-
-    /**
-     * Update milestone.
-     */
-    public function update(Milestone $milestone, ValidatedInput $inputs): Milestone
-    {
-        Milestone::where('id', $milestone->id)
-                    ->update([
-                        'owner_id' => $inputs->owner_id,
-                        'name' => $inputs->name,
-                        'start_date' => $inputs->start_date,
-                        'end_date' => $inputs->end_date,
-                        'colour' => $inputs->colour,
-                        'description' => $inputs->description,
-                    ]);
-
-        return $milestone->fresh();
     }
 
     /**

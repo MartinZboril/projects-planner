@@ -13,7 +13,22 @@ class ClientService
      */
     public function store(ValidatedInput $inputs): Client
     {
-        $client = new Client;
+        return $this->save(new Client, $inputs);
+    }
+
+    /**
+     * Update client.
+     */
+    public function update(Client $client, ValidatedInput $inputs): Client
+    {
+        return $this->save($client, $inputs);
+    }
+
+    /**
+     * Save data for client.
+     */
+    protected function save(Client $client, ValidatedInput $inputs)
+    {
         $client->name = $inputs->name;
         $client->email = $inputs->email;
         $client->contact_person = $inputs->contact_person;
@@ -35,36 +50,6 @@ class ClientService
         $client->save();
 
         return $client;
-    }
-
-    /**
-     * Update client.
-     */
-    public function update(Client $client, ValidatedInput $inputs): Client
-    {
-        Client::where('id', $client->id)
-                    ->update([
-                        'name' => $inputs->name,
-                        'email' => $inputs->email,
-                        'contact_person' => $inputs->contact_person,
-                        'contact_email' => $inputs->contact_email,
-                        'mobile' => $inputs->mobile,
-                        'phone' => $inputs->phone,
-                        'street' => $inputs->street,
-                        'house_number' => $inputs->house_number,
-                        'city' => $inputs->city,
-                        'country' => $inputs->country,
-                        'zip_code' => $inputs->zip_code,
-                        'website' => $inputs->website,
-                        'skype' => $inputs->skype,
-                        'linekedin' => $inputs->linekedin,
-                        'twitter' => $inputs->twitter,
-                        'facebook' => $inputs->facebook,
-                        'instagram' => $inputs->instagram,
-                        'note' => $inputs->note,
-                    ]);
-
-        return $client->fresh();
     }
 
     /**

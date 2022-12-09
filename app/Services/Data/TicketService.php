@@ -23,16 +23,10 @@ class TicketService
     public function store(ValidatedInput $inputs): Ticket
     {
         $ticket = new Ticket;
-        $ticket->project_id = $inputs->project_id;
         $ticket->reporter_id = Auth::id();
-        $ticket->assignee_id = $inputs->has('assignee_id') ? $inputs->assignee_id : null;
-        $ticket->subject = $inputs->subject;
-        $ticket->type = $inputs->type;
-        $ticket->priority = $inputs->priority;
-        $ticket->due_date = $inputs->due_date;
-        $ticket->message = $inputs->message;
         $ticket->status = TicketStatusEnum::open;
-        $ticket->save();
+
+        $ticket = $this->save($ticket, $inputs);
         
         if(!$this->projectUserService->workingOnProject($ticket->project_id, $ticket->reporter_id)) {
             $this->projectUserService->store($ticket->project_id, $ticket->reporter_id);
@@ -54,18 +48,7 @@ class TicketService
      */
     public function update(Ticket $ticket, ValidatedInput $inputs): Ticket
     {
-        Ticket::where('id', $ticket->id)
-                    ->update([
-                        'project_id' => $inputs->project_id,
-                        'assignee_id' => $inputs->assignee_id,
-                        'subject' => $inputs->subject,
-                        'type' => $inputs->type,
-                        'priority' => $inputs->priority,
-                        'due_date' => $inputs->due_date,
-                        'message' => $inputs->message,
-                    ]);
-
-        $ticket->fresh();
+        $ticket = $this->save($ticket, $inputs);
         
         if(!$ticket->assignee_id) {
             return $ticket;
@@ -75,24 +58,39 @@ class TicketService
             $this->projectUserService->store($ticket->project_id, $ticket->assignee_id);
         }
 
-        return $ticket->fresh();
+        return $ticket;
     }
 
     /**
-     * Change working status of the ticket
+     * Save data for ticket.
+     */
+    protected function save(Ticket $ticket, ValidatedInput $inputs)
+    {
+        $ticket->project_id = $inputs->project_id;
+        $ticket->assignee_id = $inputs->has('assignee_id') ? $inputs->assignee_id : null;
+        $ticket->subject = $inputs->subject;
+        $ticket->type = $inputs->type;
+        $ticket->priority = $inputs->priority;
+        $ticket->due_date = $inputs->due_date;
+        $ticket->message = $inputs->message;
+        $ticket->save();
+
+        return $ticket;
+    }
+
+    /**
+     * Change working status of the ticket.
      */
     public function change(Ticket $ticket, int $status): Ticket
     {
-        Ticket::where('id', $ticket->id)
-                    ->update([
-                        'status' => $status,
-                    ]);
+        $ticket->status = $status;
+        $ticket->save();
 
-        return $ticket->fresh();
+        return $ticket;
     }
 
     /**
-     * Convert ticket to new task
+     * Convert ticket to new task.
      */
     public function convert(Ticket $ticket): Task
     {
@@ -111,11 +109,9 @@ class TicketService
             $this->projectUserService->store($ticket->project_id, $ticket->assignee_id);
         }
 
-        Ticket::where('id', $ticket->id)
-                    ->update([
-                        'status' => 3,
-                        'is_convert' => true
-                    ]);  
+        $ticket->status = TicketStatusEnum::archive;
+        $ticket->is_convert = true;
+        $ticket->save();
 
         return $task;
     }

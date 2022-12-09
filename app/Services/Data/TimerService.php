@@ -17,6 +17,23 @@ class TimerService
         $timer = new Timer;
         $timer->project_id = $inputs->project_id;
         $timer->user_id = Auth::id();
+
+        return $this->save($timer, $inputs);
+    }
+
+    /**
+     * Update timer.
+     */
+    public function update(Timer $timer, ValidatedInput $inputs): Timer
+    {
+        return $this->save($timer, $inputs);
+    }
+
+    /**
+     * Save data for rate.
+     */
+    protected function save(Timer $timer, ValidatedInput $inputs)
+    {
         $timer->rate_id = $inputs->rate_id;
         $timer->since = $inputs->since;
         $timer->until = $inputs->until;
@@ -26,22 +43,7 @@ class TimerService
     }
 
     /**
-     * Update timer.
-     */
-    public function update(Timer $timer, ValidatedInput $inputs): Timer
-    {
-        Timer::where('id', $timer->id)
-                    ->update([
-                        'rate_id' => $inputs->rate_id,
-                        'since' => $inputs->since,
-                        'until' => $inputs->until,
-                    ]);
-
-        return $timer->fresh();
-    }
-
-    /**
-     * Start measure new timer
+     * Start measure new timer.
      */
     public function start(ValidatedInput $inputs): Timer
     {
@@ -53,24 +55,22 @@ class TimerService
         $timer->until = null;
         $timer->save();
 
-        return $timer->fresh();
+        return $timer;
     }
 
     /**
-     * Stop measure the timer
+     * Stop measure the timer.
      */
     public function stop(Timer $timer): Timer
     {
-        Timer::where('id', $timer->id)
-                    ->update([
-                        'until' => now(),
-                    ]);
+        $timer->until = now();
+        $timer->save();
 
-        return $timer->fresh();
+        return $timer;
     }
 
     /**
-     * Check if not running another timer of user in project
+     * Check if not running another timer of user in project.
      */
     public function checkIfNotRunningAnoutherTimer(int $projectId, int $userId): bool
     {

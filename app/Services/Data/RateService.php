@@ -15,12 +15,8 @@ class RateService
     {
         $rate = new Rate;
         $rate->user_id = $inputs->user_id;
-        $rate->name = $inputs->name;
-        $rate->is_active = $inputs->has('is_active');
-        $rate->value = $inputs->value;
-        $rate->save();
 
-        return $rate;
+        return $this->save($rate, $inputs);
     }
 
     /**
@@ -28,14 +24,20 @@ class RateService
      */
     public function update(Rate $rate, ValidatedInput $inputs): Rate
     {
-        Rate::where('id', $rate->id)
-                    ->update([
-                        'name' => $inputs->name,
-                        'is_active' => $inputs->has('is_active'),
-                        'value' => $inputs->value,
-                    ]);
+        return $this->save($rate, $inputs);
+    }
 
-        return $rate->fresh();
+    /**
+     * Save data for rate.
+     */
+    protected function save(Rate $rate, ValidatedInput $inputs)
+    {
+        $rate->name = $inputs->name;
+        $rate->is_active = $inputs->has('is_active');
+        $rate->value = $inputs->value;
+        $rate->save();
+
+        return $rate;
     }
 
     /**

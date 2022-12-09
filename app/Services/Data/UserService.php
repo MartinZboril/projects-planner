@@ -16,28 +16,16 @@ class UserService
     public function store(ValidatedInput $inputs): User
     {
         $user = new User;
-        $user->name = $inputs->name;
-        $user->surname = $inputs->surname;
-        $user->email = $inputs->email;
-        $user->username = $inputs->username;
-        $user->job_title = $inputs->job_title;
         $user->password = Hash::make(($inputs->has('password')) ? $inputs->password : Str::random(8));
-        $user->mobile = $inputs->mobile;
-        $user->phone = $inputs->phone;
-        $user->street = $inputs->street;
-        $user->house_number = $inputs->house_number;
-        $user->city = $inputs->city;
-        $user->zip_code = $inputs->zip_code;
-        $user->country = $inputs->country;
-        $user->save();
+
+        $user = $this->save($user, $inputs);
 
         $inputs->user_id = $user->id;
         $inputs->name = $inputs->rate_name;
         $inputs->is_active = true;
         $inputs->value = $inputs->rate_value;
 
-        $rateService = new RateService;
-        $rateService->store($inputs);
+        (new RateService)->store($inputs);
 
         return $user;
     }
@@ -47,24 +35,31 @@ class UserService
      */
     public function update(User $user, ValidatedInput $inputs): User
     {
-        User::where('id', $user->id)
-                    ->update([
-                        'name' => $inputs->name,
-                        'surname' => $inputs->surname,
-                        'email' => $inputs->email,
-                        'username' => $inputs->username,
-                        'job_title' => $inputs->job_title,
-                        'password' => $inputs->has('password') ? Hash::make($inputs->password) : $user->password,
-                        'mobile' => $inputs->mobile,
-                        'phone' => $inputs->phone,
-                        'street' => $inputs->street,
-                        'house_number' => $inputs->house_number,
-                        'city' => $inputs->city,
-                        'zip_code' => $inputs->zip_code,
-                        'country' => $inputs->country,
-                    ]);
+        $user->password = $inputs->has('password') ? Hash::make($inputs->password) : $user->password;
 
-        return $user->fresh();
+        return $this->save($user, $inputs);
+    }
+
+    /**
+     * Save data for user.
+     */
+    protected function save(User $user, ValidatedInput $inputs)
+    {
+        $user->name = $inputs->name;
+        $user->surname = $inputs->surname;
+        $user->email = $inputs->email;
+        $user->username = $inputs->username;
+        $user->job_title = $inputs->job_title;
+        $user->mobile = $inputs->mobile;
+        $user->phone = $inputs->phone;
+        $user->street = $inputs->street;
+        $user->house_number = $inputs->house_number;
+        $user->city = $inputs->city;
+        $user->zip_code = $inputs->zip_code;
+        $user->country = $inputs->country;
+        $user->save();
+
+        return $user;
     }
 
     /**

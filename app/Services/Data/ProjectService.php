@@ -22,15 +22,9 @@ class ProjectService
     public function store(ValidatedInput $inputs): Project
     {
         $project = new Project;
-        $project->client_id = $inputs->client_id;
-        $project->name = $inputs->name;
-        $project->start_date = $inputs->start_date;
-        $project->due_date = $inputs->due_date;
-        $project->estimated_hours = $inputs->estimated_hours;
-        $project->budget = $inputs->budget;
-        $project->description = $inputs->description;
         $project->status = ProjectStatusEnum::active;
-        $project->save();
+
+        $project = $this->save($project, $inputs);
 
         foreach ($inputs->team as $userId) {
             $this->projectUserService->store($project->id, $userId);
@@ -44,24 +38,31 @@ class ProjectService
      */
     public function update(Project $project, ValidatedInput $inputs): Project
     {
-        Project::where('id', $project->id)
-                    ->update([
-                        'client_id' => $inputs->client_id,
-                        'name' => $inputs->name,
-                        'start_date' => $inputs->start_date,
-                        'due_date' => $inputs->due_date,
-                        'estimated_hours' => $inputs->estimated_hours,
-                        'budget' => $inputs->budget,
-                        'description' => $inputs->description,
-                    ]);
-
+        $project = $this->save($project, $inputs);
         $this->projectUserService->refresh($project->id);
 
         foreach ($inputs->team as $userId) {
             $this->projectUserService->store($project->id, $userId);
         }
 
-        return $project->fresh();
+        return $project;
+    }
+
+    /**
+     * Save data for project.
+     */
+    protected function save(Project $project, ValidatedInput $inputs)
+    {
+        $project->client_id = $inputs->client_id;
+        $project->name = $inputs->name;
+        $project->start_date = $inputs->start_date;
+        $project->due_date = $inputs->due_date;
+        $project->estimated_hours = $inputs->estimated_hours;
+        $project->budget = $inputs->budget;
+        $project->description = $inputs->description;
+        $project->save();
+
+        return $project;
     }
 
     /**
@@ -69,12 +70,10 @@ class ProjectService
      */
     public function change(Project $project, int $status): Project
     {
-        Project::where('id', $project->id)
-                    ->update([
-                        'status' => $status,
-                    ]);
+        $project->status = $status;
+        $project->save();
 
-        return $project->fresh();
+        return $project;
     }
 
     /**
