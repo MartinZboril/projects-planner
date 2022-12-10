@@ -17,8 +17,8 @@
                     <td>{{ $client->email_label }}</td>
                     <td>{{ $client->created_at->format('d.m.Y') }}</td>
                     <td>
-                        <a href="{{ route('clients.edit', $client->id) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
-                        <a href="{{ route('clients.detail', $client->id) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                        <a href="{{ route('clients.edit', $client->id) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="{{ route('clients.detail', $client->id) }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
                     </td>
                 </tr>
             @empty

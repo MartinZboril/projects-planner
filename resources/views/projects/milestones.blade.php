@@ -16,7 +16,7 @@
                 </div>
                 <div class="card card-primary card-outline">
                     <div class="card-header">
-                        <a href="{{ route('milestones.create', ['project' => $project->id]) }}" class="btn-sm btn-primary"><i class="fas fa-plus mr-1"></i>Create</a>
+                        <a href="{{ route('projects.milestones.create', ['project' => $project->id]) }}" class="btn-sm btn-primary"><i class="fas fa-plus mr-1"></i>Create</a>
                         <a href="{{ route('reports.milestones') }}" class="btn-sm btn-primary text-white"><i class="fas fa-chart-line mr-1"></i>Report</a>
                     </div>
                     <div class="card-body">

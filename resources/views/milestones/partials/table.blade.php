@@ -14,7 +14,7 @@
         <tbody>
             @forelse ($milestones as $milestone)
                 <tr>                                        
-                    <td><a href="{{ route('milestones.detail', ['project' => $milestone->project->id, 'milestone' => $milestone->id]) }}">{{ $milestone->name }}</a></td>                                        
+                    <td><a href="{{ route('projects.milestones.detail', ['project' => $milestone->project->id, 'milestone' => $milestone->id]) }}">{{ $milestone->name }}</a></td>                                        
                     @if(in_array('project', $display))<td>{{ $milestone->project->name }}</td>@endif
                     <td>@include('site.partials.user', ['user' => $milestone->owner])</td>
                     <td>
@@ -26,8 +26,8 @@
                     <td>{{ $milestone->start_date->format('d.m.Y') }}</td>
                     <td><span class="text-{{ $milestone->overdue ? 'danger' : 'body' }}">{{ $milestone->end_date->format('d.m.Y') }}</span></td>
                     <td>
-                        <a href="{{ route('milestones.edit', ['project' => $milestone->project->id, 'milestone' => $milestone->id]) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
-                        <a href="{{ route('milestones.detail', ['project' => $milestone->project->id, 'milestone' => $milestone->id]) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                        <a href="{{ route('projects.milestones.edit', ['project' => $milestone->project->id, 'milestone' => $milestone->id]) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="{{ route('projects.milestones.detail', ['project' => $milestone->project->id, 'milestone' => $milestone->id]) }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
                     </td>
                 </tr>
             @empty

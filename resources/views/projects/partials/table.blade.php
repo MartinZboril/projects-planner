@@ -31,9 +31,9 @@
                     <td><span class="text-{{ $project->budget_plan > 100 ? 'danger' : 'body' }}">{{ $project->budget_plan }} %</span></td>
                     <td>@include('site.partials.amount', ['value' => $project->amount])</td>
                     <td>
-                        <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
-                        <a href="{{ route('projects.detail', $project->id) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
-                        @include('projects.partials.buttons', ['project' => $project])
+                        <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="{{ route('projects.detail', $project->id) }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
+                        @include('projects.partials.buttons', ['project' => $project, 'buttonSize' => 'xs', 'buttonText' => false])
                     </td>
                 </tr>
             @empty

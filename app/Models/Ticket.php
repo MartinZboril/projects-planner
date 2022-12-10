@@ -16,7 +16,8 @@ class Ticket extends Model
     protected $dates = ['due_date'];
 
     protected $appends = [
-        'overdue'
+        'overdue',
+        'assigned',
     ];
 
     protected $casts = [
@@ -67,6 +68,11 @@ class Ticket extends Model
         return $query->where('status', TicketStatusEnum::open);
     }
 
+    public function scopeAssigned(Builder $query): Builder
+    {
+        return $query->whereNotNull('assignee_id');
+    }
+
     public function scopeUnassigned(Builder $query): Builder
     {
         return $query->whereNull('assignee_id');
@@ -80,5 +86,10 @@ class Ticket extends Model
     public function getOverdueAttribute(): bool
     {
         return $this->due_date <= date('Y-m-d') && $this->status == TicketStatusEnum::open;
+    }
+    
+    public function getAssignedAttribute(): bool
+    {
+        return $this->assignee ? true : false;
     }
 }

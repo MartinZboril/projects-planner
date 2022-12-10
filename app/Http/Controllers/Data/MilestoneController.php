@@ -30,7 +30,7 @@ class MilestoneController extends Controller
      */
     public function create(Project $project): View
     {
-        return view('milestones.create', ['project' => $project, 'milestone' => new Milestone]);
+        return view('projects.milestones.create', ['project' => $project, 'milestone' => new Milestone]);
     }
 
     /**
@@ -55,7 +55,7 @@ class MilestoneController extends Controller
      */
     public function detail(Project $project, Milestone $milestone): View
     {
-        return view('milestones.detail', ['project' => $project, 'milestone' => $milestone]);
+        return view('projects.milestones.detail', ['project' => $project, 'milestone' => $milestone]);
     }
 
     /**
@@ -63,7 +63,7 @@ class MilestoneController extends Controller
      */
     public function edit(Project $project, Milestone $milestone): View
     {
-        return view('milestones.edit', ['project' => $project, 'milestone' => $milestone]);
+        return view('projects.milestones.edit', ['project' => $project, 'milestone' => $milestone]);
     }
 
     /**

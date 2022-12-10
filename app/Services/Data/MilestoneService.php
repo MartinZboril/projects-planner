@@ -50,7 +50,7 @@ class MilestoneService
     {
         switch ($action) {
             case 'milestone':
-                return redirect()->route('milestones.detail', ['project' => $milestone->project, 'milestone' => $milestone]);
+                return redirect()->route('projects.milestones.detail', ['project' => $milestone->project, 'milestone' => $milestone]);
                 break;
             case 'project_milestones':
                 return redirect()->route('projects.milestones', ['project' => $milestone->project]);

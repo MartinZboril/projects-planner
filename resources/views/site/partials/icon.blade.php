@@ -1,0 +1,1 @@
+<i class="{{ $icon }}{{ $text ? ' mr-1' : '' }}"></i>{{ $text }}

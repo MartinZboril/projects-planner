@@ -32,7 +32,7 @@
                     <td>{{ $timer->since->format('d.m.Y') }}</td>
                     <td>
                         @if($timer->until)
-                            <a href="{{ route('timers.edit', ['project' => $timer->project->id, 'timer' => $timer->id]) }}" class="btn btn-sm btn-dark" href=""><i class="fas fa-pencil-alt"></i></a>
+                            <a href="{{ route('projects.timers.edit', ['project' => $timer->project->id, 'timer' => $timer->id]) }}" class="btn btn-xs btn-dark" href=""><i class="fas fa-pencil-alt"></i></a>
                         @else
                             N/A
                         @endif
