@@ -15,10 +15,14 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
+// Dashboard
 Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard.index');
 Route::get('/dashboard/projects', [App\Http\Controllers\DashboardController::class, 'projects'])->name('dashboard.projects');
 Route::get('/dashboard/tasks', [App\Http\Controllers\DashboardController::class, 'tasks'])->name('dashboard.tasks');
 Route::get('/dashboard/tickets', [App\Http\Controllers\DashboardController::class, 'tickets'])->name('dashboard.tickets');
+
+// Releases
+Route::get('/releases', [App\Http\Controllers\ReleaseController::class, 'index'])->name('releases.index');
 
 // Users
 Route::get('/users', [App\Http\Controllers\Data\UserController::class, 'index'])->name('users.index');

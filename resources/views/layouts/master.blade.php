@@ -48,6 +48,8 @@
       @include('site.sidebar')
       <!-- Content -->    
       @yield('content')
+      <!-- Footer -->
+      @include('site.footer')
       <!-- Timer -->
       @include('site.partials.timer')
       <!-- Error -->
