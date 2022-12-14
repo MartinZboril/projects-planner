@@ -49,8 +49,7 @@ class ClientController extends Controller
             $client = $this->clientService->store($request->safe());
             $this->flashService->flash(__('messages.client.create'), 'info');
 
-            $redirectAction = $request->has('save_and_close') ? 'clients' : 'client';
-            return $this->clientService->redirect($redirectAction, $client);
+            return $this->clientService->setUpRedirect($request->has('save_and_close'), $client);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
@@ -81,11 +80,10 @@ class ClientController extends Controller
         try {
             $client = $this->clientService->update($client, $request->safe());
             $this->flashService->flash(__('messages.client.update'), 'info');
-    
-            $redirectAction = $request->has('save_and_close') ? 'clients' : 'client';
-            return $this->clientService->redirect($redirectAction, $client);         
+
+            return $this->clientService->setUpRedirect($request->has('save_and_close'), $client);
         } catch (Exception $exception) {
-            Log::error($exception);
+            Log::error($exception);            
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
     }

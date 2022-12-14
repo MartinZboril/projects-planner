@@ -89,8 +89,7 @@ class ProjectController extends Controller
             $project = $this->projectService->store($request->safe());
             $this->flashService->flash(__('messages.project.create'), 'info');
 
-            $redirectAction = $request->has('save_and_close') ? 'projects' : 'project';
-            return $this->projectService->redirect($redirectAction, $project);
+            return $this->projectService->setUpRedirect($request->has('save_and_close'), $project);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
@@ -122,8 +121,7 @@ class ProjectController extends Controller
             $project = $this->projectService->update($project, $request->safe());
             $this->flashService->flash(__('messages.project.update'), 'info');
 
-            $redirectAction = $request->has('save_and_close') ? 'projects' : 'project';
-            return $this->projectService->redirect($redirectAction, $project);
+            return $this->projectService->setUpRedirect($request->has('save_and_close'), $project);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);

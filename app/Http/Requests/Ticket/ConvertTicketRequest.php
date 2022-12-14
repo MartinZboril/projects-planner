@@ -19,6 +19,8 @@ class ConvertTicketRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [];
+        return [
+            'redirect' => 'in:tasks,projects'
+        ];
     }
 }

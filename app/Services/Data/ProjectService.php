@@ -3,7 +3,9 @@
 namespace App\Services\Data;
 
 use App\Enums\ProjectStatusEnum;
+use App\Enums\Routes\ProjectRouteEnum;
 use App\Models\Project;
+use App\Services\RouteService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
 
@@ -77,19 +79,13 @@ class ProjectService
     }
 
     /**
-     * Get route for the action
+     * Set up redirect for the action
      */
-    public function redirect(string $action, Project $project): RedirectResponse 
+    public function setUpRedirect(string $type, Project $project): RedirectResponse
     {
-        switch ($action) {
-            case 'projects':
-                return redirect()->route('projects.index');
-                break;
-            case 'project':
-                return redirect()->route('projects.detail', ['project' => $project->id]);
-                break;
-            default:
-                return redirect()->back();
-        }
+        $redirectAction = $type ? ProjectRouteEnum::Index : ProjectRouteEnum::Detail;
+        $redirectVars = $type ? [] : ['project' => $project];
+        
+        return (new RouteService)->redirect($redirectAction->value, $redirectVars);
     }
 }

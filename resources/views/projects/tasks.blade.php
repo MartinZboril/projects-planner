@@ -20,7 +20,7 @@
                         <!-- Message -->
                         @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                         <!-- Content -->
-                        @include('tasks.partials.table', ['id' => 'tasks-table', 'tasks' => $project->tasks, 'display' => [], 'redirect' => 'project'])       
+                        @include('tasks.partials.table', ['id' => 'tasks-table', 'tasks' => $project->tasks, 'display' => [], 'redirect' => 'projects'])       
                     </div>
                 </div>
             </div>

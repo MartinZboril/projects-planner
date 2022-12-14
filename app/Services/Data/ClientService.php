@@ -2,7 +2,9 @@
 
 namespace App\Services\Data;
 
+use App\Enums\Routes\ClientRouteEnum;
 use App\Models\Client;
+use App\Services\RouteService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
 
@@ -53,19 +55,13 @@ class ClientService
     }
 
     /**
-     * Get route for the action
+     * Set up redirect for the action
      */
-    public function redirect(string $action, Client $client): RedirectResponse 
+    public function setUpRedirect(string $type, Client $client): RedirectResponse
     {
-        switch ($action) {
-            case 'clients':
-                return redirect()->route('clients.index');
-                break;
-            case 'client':
-                return redirect()->route('clients.detail', ['client' => $client]);
-                break;
-            default:
-                return redirect()->back();
-        }  
+        $redirectAction = $type ? ClientRouteEnum::Index : ClientRouteEnum::Detail;
+        $redirectVars = $type ? [] : ['client' => $client];
+        
+        return (new RouteService)->redirect($redirectAction->value, $redirectVars);
     }
 }

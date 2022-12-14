@@ -10,4 +10,4 @@
     <a href="#" class="btn btn-{{ $buttonSize }} btn-primary" onclick="event.preventDefault(); document.getElementById('archive-ticket-{{ $ticket->id }}-form').submit();">@include('site.partials.icon', ['icon' => 'fas fa-archive', 'text' => ''])</a>
 @endif
 <!-- Tickets forms -->
-@include('tickets.partials.forms', ['ticket' => $ticket])
+@include('tickets.partials.forms', ['ticket' => $ticket, 'redirect' => $redirect])

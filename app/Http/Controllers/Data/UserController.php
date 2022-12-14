@@ -49,8 +49,7 @@ class UserController extends Controller
             $user = $this->userService->store($request->safe());
             $this->flashService->flash(__('messages.user.create'), 'info');
 
-            $redirectAction = isset($request->save_and_close) ? 'users' : 'user';
-            return $this->userService->redirect($redirectAction, $user); 
+            return $this->userService->setUpRedirect($request->has('save_and_close'), $user);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
@@ -82,8 +81,7 @@ class UserController extends Controller
             $user = $this->userService->update($user, $request->safe());
             $this->flashService->flash(__('messages.user.update'), 'info');
 
-            $redirectAction = isset($request->save_and_close) ? 'users' : 'user';
-            return $this->userService->redirect($redirectAction, $user);  
+            return $this->userService->setUpRedirect($request->has('save_and_close'), $user);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);

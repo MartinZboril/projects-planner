@@ -3,7 +3,9 @@
 namespace App\Services\Data;
 
 use App\Enums\{TicketStatusEnum, TaskStatusEnum};
+use App\Enums\Routes\{ProjectRouteEnum, TicketRouteEnum};
 use App\Models\{Task, Ticket};
+use App\Services\RouteService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ValidatedInput;
@@ -117,25 +119,22 @@ class TicketService
     }
 
     /**
-     * Get route for the action
+     * Set up redirect for the action
      */
-    public function redirect(string $action, Ticket $ticket): RedirectResponse 
-    {   
-        switch ($action) {
-            case 'tickets':
-                return redirect()->route('tickets.index');
-                break;
-            case 'ticket':
-                return redirect()->route('tickets.detail', ['ticket' => $ticket]);
-                break;
-            case 'project_tickets':
-                return redirect()->route('projects.tickets', ['project' => $ticket->project]);
-                break;
-            case 'project_ticket':
-                return redirect()->route('projects.ticket.detail', ['project' => $ticket->project, 'ticket' => $ticket]);
-                break;
+    public function setUpRedirect(string $parent, string $type, Ticket $ticket): RedirectResponse
+    {
+        switch ($parent) {
+            case 'projects':
+                $redirectAction = $type ? ProjectRouteEnum::Tickets : ProjectRouteEnum::TicketsDetail;
+                $redirectVars = $type ? ['project' => $ticket->project] : ['project' => $ticket->project, 'ticket' => $ticket];
+                break;                
+
             default:
-                return redirect()->back();
+                $redirectAction = $type ? TicketRouteEnum::Index : TicketRouteEnum::Detail;
+                $redirectVars = $type ? [] : ['ticket' => $ticket];
+                break;
         }
+        
+        return (new RouteService)->redirect($redirectAction->value, $redirectVars);
     }
 }

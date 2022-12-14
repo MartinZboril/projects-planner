@@ -30,7 +30,7 @@
                     </div>
                     <div class="card-body">
                         <!-- Content -->
-                        @include('todos.partials.list', ['todos' => $data->get('overdue_todos'), 'project' => null, 'redirect' => 'dashboard_task', 'action' => 1])            
+                        @include('todos.partials.list', ['todos' => $data->get('overdue_todos'), 'project' => null, 'redirect' => 'dashboard', 'action' => 1])            
                     </div>
                 </div>
             @endif
@@ -42,7 +42,7 @@
                     </div>
                     <div class="card-body">
                         <!-- Content -->
-                        @include('tasks.partials.table', ['id' => 'overdue-tasks-table', 'tasks' => $data->get('overdue_tasks'), 'display' => ['project'], 'redirect' => 'task'])
+                        @include('tasks.partials.table', ['id' => 'overdue-tasks-table', 'tasks' => $data->get('overdue_tasks'), 'display' => ['project'], 'redirect' => 'tasks'])
                     </div>
                 </div>
             @endif
@@ -54,7 +54,7 @@
                     </div>
                     <div class="card-body">
                         <!-- Content -->
-                        @include('tasks.partials.table', ['id' => 'new-tasks-table', 'tasks' => $data->get('new_tasks'), 'display' => ['project'], 'redirect' => 'task'])
+                        @include('tasks.partials.table', ['id' => 'new-tasks-table', 'tasks' => $data->get('new_tasks'), 'display' => ['project'], 'redirect' => 'tasks'])
                     </div>
                 </div>  
             @endif

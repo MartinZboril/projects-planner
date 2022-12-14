@@ -2,7 +2,9 @@
 
 namespace App\Services\Data;
 
+use App\Enums\Routes\UserRouteEnum;
 use App\Models\User;
+use App\Services\RouteService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\{Auth, Hash};
 use Illuminate\Support\Str;
@@ -63,19 +65,13 @@ class UserService
     }
 
     /**
-     * Get route for the action
+     * Set up redirect for the action
      */
-    public function redirect(string $action, User $user): RedirectResponse
+    public function setUpRedirect(string $type, User $user): RedirectResponse
     {
-        switch ($action) {
-            case 'users':
-                return redirect()->route('users.index');
-                break;
-            case 'user':
-                return redirect()->route('users.detail', ['user' => $user]);
-                break;
-            default:
-                return redirect()->back();
-        }
+        $redirectAction = $type ? UserRouteEnum::Index : UserRouteEnum::Detail;
+        $redirectVars = $type ? [] : ['user' => $user];
+        
+        return (new RouteService)->redirect($redirectAction->value, $redirectVars);
     }
 }

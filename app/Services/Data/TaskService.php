@@ -3,7 +3,9 @@
 namespace App\Services\Data;
 
 use App\Enums\TaskStatusEnum;
+use App\Enums\Routes\{ProjectRouteEnum, TaskRouteEnum};
 use App\Models\Task;
+use App\Services\RouteService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ValidatedInput;
@@ -98,28 +100,22 @@ class TaskService
     }
 
     /**
-     * Get route for the action
+     * Set up redirect for the action
      */
-    public function redirect(string $action, Task $task): RedirectResponse 
-    {   
-        switch ($action) {
-            case 'tasks':
-                return redirect()->route('tasks.index');
-                break;
-            case 'task':
-                return redirect()->route('tasks.detail', ['task' => $task->id]);
-                break;
-            case 'project_tasks':
-                return redirect()->route('projects.tasks', ['project' => $task->project]);
-                break;
-            case 'project_task':
-                return redirect()->route('projects.task.detail', ['project' => $task->project, 'task' => $task]);
-                break;
-            case 'kanban':
-                return redirect()->route('projects.kanban', ['project' => $task->project]);
-                break;
+    public function setUpRedirect(string $parent, string $type, Task $task): RedirectResponse
+    {
+        switch ($parent) {
+            case 'projects':
+                $redirectAction = $type ? ProjectRouteEnum::Tasks : ProjectRouteEnum::TasksDetail;
+                $redirectVars = $type ? ['project' => $task->project] : ['project' => $task->project, 'task' => $task];
+                break;                
+
             default:
-                return redirect()->back();
+                $redirectAction = $type ? TaskRouteEnum::Index : TaskRouteEnum::Detail;
+                $redirectVars = $type ? [] : ['task' => $task];
+                break;
         }
+        
+        return (new RouteService)->redirect($redirectAction->value, $redirectVars);
     }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Services\Data;
 
+use App\Enums\Routes\ProjectRouteEnum;
 use App\Models\Milestone;
+use App\Services\RouteService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
 
@@ -44,19 +46,13 @@ class MilestoneService
     }
 
     /**
-     * Get route for the action
-     */    
-    public function redirect(string $action, Milestone $milestone): RedirectResponse 
+     * Set up redirect for the action
+     */
+    public function setUpRedirect(string $type, Milestone $milestone): RedirectResponse
     {
-        switch ($action) {
-            case 'milestone':
-                return redirect()->route('projects.milestones.detail', ['project' => $milestone->project, 'milestone' => $milestone]);
-                break;
-            case 'project_milestones':
-                return redirect()->route('projects.milestones', ['project' => $milestone->project]);
-                break;
-            default:
-                return redirect()->back();
-        } 
+        $redirectAction = $type ? ProjectRouteEnum::Milestones : ProjectRouteEnum::MilestonesDetail;
+        $redirectVars = $type ? ['project' => $milestone->project] : ['project' => $milestone->project, 'milestone' => $milestone];
+        
+        return (new RouteService)->redirect($redirectAction->value, $redirectVars);
     }
 }

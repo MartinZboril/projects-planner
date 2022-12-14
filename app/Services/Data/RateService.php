@@ -2,7 +2,9 @@
 
 namespace App\Services\Data;
 
+use App\Enums\Routes\UserRouteEnum;
 use App\Models\Rate;
+use App\Services\RouteService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
 
@@ -41,16 +43,10 @@ class RateService
     }
 
     /**
-     * Get route for the action
+     * Set up redirect for the action
      */
-    public function redirect(string $action, Rate $rate): RedirectResponse 
-    {   
-        switch ($action) {
-            case 'user':
-                return redirect()->route('users.detail', ['user' => $rate->user]);
-                break;
-            default:
-                return redirect()->back();
-        }
+    public function setUpRedirect(Rate $rate): RedirectResponse
+    {
+        return (new RouteService)->redirect(UserRouteEnum::Detail->value, ['user' => $rate->user]);
     }
 }

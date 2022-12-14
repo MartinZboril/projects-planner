@@ -43,7 +43,7 @@
                         <div class="card card-primary card-outline">
                             <div class="card-header">Tasks</div>
                             <div class="card-body">
-                                @include('tasks.partials.table', ['id' => 'tasks-table', 'tasks' => $milestone->tasks, 'display' => [], 'redirect' => 'project'])       
+                                @include('tasks.partials.table', ['id' => 'tasks-table', 'tasks' => $milestone->tasks, 'display' => [], 'redirect' => 'projects'])       
                             </div>
                         </div>
                     </div>

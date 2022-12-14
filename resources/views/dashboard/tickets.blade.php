@@ -31,7 +31,7 @@
                         </div>
                         <div class="card-body">
                             <!-- Content -->
-                            @include('tickets.partials.table', ['id' => 'unassigned-tickets-table', 'tickets' => $data->get('unassigned_tickets'), 'display' => ['project'], 'redirect' => 'ticket'])
+                            @include('tickets.partials.table', ['id' => 'unassigned-tickets-table', 'tickets' => $data->get('unassigned_tickets'), 'display' => ['project'], 'redirect' => 'tickets'])
                         </div>
                     </div> 
                 @endif
@@ -43,7 +43,7 @@
                         </div>
                         <div class="card-body">
                             <!-- Content -->
-                            @include('tickets.partials.table', ['id' => 'overdue-tickets-table', 'tickets' => $data->get('overdue_tickets'), 'display' => ['project'], 'redirect' => 'ticket'])
+                            @include('tickets.partials.table', ['id' => 'overdue-tickets-table', 'tickets' => $data->get('overdue_tickets'), 'display' => ['project'], 'redirect' => 'tickets'])
                         </div>
                     </div>
                 @endif

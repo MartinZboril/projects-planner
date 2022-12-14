@@ -49,8 +49,7 @@ class TicketController extends Controller
             $ticket = $this->ticketService->store($request->safe());
             $this->flashService->flash(__('messages.ticket.create'), 'info');
 
-            $redirectAction = (($request->redirect == 'projects') ? 'project_' : '') . (($request->has('save_and_close')) ? 'tickets' : 'ticket');
-            return $this->ticketService->redirect($redirectAction, $ticket);
+            return $this->ticketService->setUpRedirect($request->redirect, $request->has('save_and_close'), $ticket);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
@@ -82,8 +81,7 @@ class TicketController extends Controller
             $ticket = $this->ticketService->update($ticket, $request->safe());
             $this->flashService->flash(__('messages.ticket.update'), 'info');
 
-            $redirectAction = (($request->redirect == 'projects') ? 'project_' : '') . (($request->has('save_and_close')) ? 'tickets' : 'ticket');
-            return $this->ticketService->redirect($redirectAction, $ticket);
+            return $this->ticketService->setUpRedirect($request->redirect, $request->has('save_and_close'), $ticket);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
@@ -115,9 +113,8 @@ class TicketController extends Controller
             $task = $this->ticketService->convert($ticket);      
             $this->flashService->flash(__('messages.task.create'), 'info');
 
-            $redirectAction = (($request->redirect == 'projects') ? 'project_' : '') . 'task';
             $taskService = new TaskService(new ProjectUserService, new FlashService);
-            return $taskService->redirect($redirectAction, $task);
+            return $taskService->setUpRedirect($request->redirect, false, $task);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);

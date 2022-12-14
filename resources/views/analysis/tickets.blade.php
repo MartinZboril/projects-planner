@@ -14,7 +14,7 @@
                 <div class="card card-primary card-outline">
                     <div class="card-body">
                         <!-- Content -->
-                        @include('tickets.partials.table', ['id' => 'tickets-table', 'tickets' => $tickets, 'display' => ['project'], 'redirect' => 'ticket'])
+                        @include('tickets.partials.table', ['id' => 'tickets-table', 'tickets' => $tickets, 'display' => ['project'], 'redirect' => 'tickets'])
                     </div>
                 </div>            
             </div>

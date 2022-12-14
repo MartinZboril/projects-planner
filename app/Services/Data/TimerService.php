@@ -2,7 +2,9 @@
 
 namespace App\Services\Data;
 
+use App\Enums\Routes\ProjectRouteEnum;
 use App\Models\Timer;
+use App\Services\RouteService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ValidatedInput;
@@ -82,16 +84,10 @@ class TimerService
     }
 
     /**
-     * Get route for the action
+     * Set up redirect for the action
      */
-    public function redirect(string $action, Timer $timer = null): RedirectResponse 
-    {   
-        switch ($action) {
-            case 'project_timesheets':
-                return redirect()->route('projects.timesheets', ['project' => $timer->project]);
-                break;
-            default:
-                return redirect()->back();
-        }
+    public function setUpRedirect(Timer $timer): RedirectResponse
+    {
+        return (new RouteService)->redirect(ProjectRouteEnum::Timesheets->value, ['project' => $timer->project]);
     }
 }

@@ -8,7 +8,7 @@
         <div class="p-3 mb-3" style="background-color:white;">
             <a href="{{ route('tickets.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
             <a href="{{ route('tickets.edit', $ticket->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
-            @include('tickets.partials.buttons', ['ticket' => $ticket, 'buttonSize' => 'sm', 'buttonText' => true])
+            @include('tickets.partials.buttons', ['ticket' => $ticket, 'buttonSize' => 'sm', 'buttonText' => true, 'redirect' => 'tickets'])
         </div>
         <!-- Main content -->
         <section class="content">

@@ -30,7 +30,7 @@
                     </div>
                     <div class="card-body">
                         <!-- Content -->
-                        @include('projects.partials.table', ['id' => 'overdue-projects-table', 'projects' => $data->get('overdue_projects'), 'display' => ['project'], 'redirect' => 'task'])
+                        @include('projects.partials.table', ['id' => 'overdue-projects-table', 'projects' => $data->get('overdue_projects'), 'display' => ['project'], 'redirect' => 'tasks'])
                     </div>
                 </div>
             @endif

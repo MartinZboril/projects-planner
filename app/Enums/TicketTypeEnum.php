@@ -3,7 +3,6 @@
 namespace App\Enums;
 
 use App\Traits\ManagesEnumValues;
-use Illuminate\Support\Collection;
 
 enum TicketTypeEnum: int
 {

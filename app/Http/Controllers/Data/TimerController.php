@@ -28,7 +28,7 @@ class TimerController extends Controller
      */
     public function create(Project $project): View
     {
-        return view('projects.timers.create', ['project' => $project, 'timer' => new Timer]);
+        return view('timers.create', ['project' => $project, 'timer' => new Timer]);
     }
 
     /**
@@ -40,7 +40,7 @@ class TimerController extends Controller
             $timer = $this->timerService->store($request->safe());
             $this->flashService->flash(__('messages.timer.create'), 'info');
 
-            return $this->timerService->redirect('project_timesheets', $timer); 
+            return $this->timerService->setUpRedirect($timer);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
@@ -52,7 +52,7 @@ class TimerController extends Controller
      */
     public function edit(Project $project, Timer $timer): View
     {
-        return view('projects.timers.edit', ['project' => $project, 'timer' => $timer]);
+        return view('timers.edit', ['project' => $project, 'timer' => $timer]);
     }
 
     /**
@@ -64,7 +64,7 @@ class TimerController extends Controller
             $timer = $this->timerService->update($timer, $request->safe());
             $this->flashService->flash(__('messages.timer.create'), 'info');
 
-            return $this->timerService->redirect('project_timesheets', $timer); 
+            return $this->timerService->setUpRedirect($timer);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
@@ -85,7 +85,7 @@ class TimerController extends Controller
             $timer = $this->timerService->start($request->safe());
             $this->flashService->flash(__('messages.timer.start'), 'info');
 
-            return $this->timerService->redirect('', $timer); 
+            return redirect()->back(); 
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
@@ -101,7 +101,7 @@ class TimerController extends Controller
             $timer = $this->timerService->stop($timer);
             $this->flashService->flash(__('messages.timer.stop'), 'info');
 
-            return $this->timerService->redirect('', $timer);
+            return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);

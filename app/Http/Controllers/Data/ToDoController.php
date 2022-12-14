@@ -41,8 +41,7 @@ class ToDoController extends Controller
             $todo = $this->todoService->store($request->safe());
             $this->flashService->flash(__('messages.todo.create'), 'info');
 
-            $redirectAction = (($request->redirect == 'projects') ? 'project_' : '') . 'task';
-            return $this->todoService->redirect($redirectAction, $todo);
+            return $this->todoService->setUpRedirect($request->redirect, $request->has('save_and_close'), $todo);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
@@ -66,8 +65,7 @@ class ToDoController extends Controller
             $todo = $this->todoService->update($todo, $request->safe());
             $this->flashService->flash(__('messages.todo.update'), 'info');
 
-            $redirectAction = (($request->redirect == 'projects') ? 'project_' : '') . 'task';
-            return $this->todoService->redirect($redirectAction, $todo);
+            return $this->todoService->setUpRedirect($request->redirect, $request->has('save_and_close'), $todo);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);

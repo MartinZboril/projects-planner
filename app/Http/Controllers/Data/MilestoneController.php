@@ -30,7 +30,7 @@ class MilestoneController extends Controller
      */
     public function create(Project $project): View
     {
-        return view('projects.milestones.create', ['project' => $project, 'milestone' => new Milestone]);
+        return view('milestones.create', ['project' => $project, 'milestone' => new Milestone]);
     }
 
     /**
@@ -42,8 +42,7 @@ class MilestoneController extends Controller
             $milestone = $this->milestoneService->store($request->safe());
             $this->flashService->flash(__('messages.milestone.create'), 'info');
 
-            $redirectAction = $request->has('save_and_close') ? 'project_milestones' : 'milestone';
-            return $this->milestoneService->redirect($redirectAction, $milestone);
+            return $this->milestoneService->setUpRedirect($request->has('save_and_close'), $milestone);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
@@ -55,7 +54,7 @@ class MilestoneController extends Controller
      */
     public function detail(Project $project, Milestone $milestone): View
     {
-        return view('projects.milestones.detail', ['project' => $project, 'milestone' => $milestone]);
+        return view('milestones.detail', ['project' => $project, 'milestone' => $milestone]);
     }
 
     /**
@@ -63,7 +62,7 @@ class MilestoneController extends Controller
      */
     public function edit(Project $project, Milestone $milestone): View
     {
-        return view('projects.milestones.edit', ['project' => $project, 'milestone' => $milestone]);
+        return view('milestones.edit', ['project' => $project, 'milestone' => $milestone]);
     }
 
     /**
@@ -75,8 +74,7 @@ class MilestoneController extends Controller
             $milestone = $this->milestoneService->update($milestone, $request->safe());
             $this->flashService->flash(__('messages.milestone.update'), 'info');
 
-            $redirectAction = $request->has('save_and_close') ? 'project_milestones' : 'milestone';
-            return $this->milestoneService->redirect($redirectAction, $milestone); 
+            return $this->milestoneService->setUpRedirect($request->has('save_and_close'), $milestone);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);

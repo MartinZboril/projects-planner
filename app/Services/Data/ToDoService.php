@@ -2,7 +2,9 @@
 
 namespace App\Services\Data;
 
+use App\Enums\Routes\{ProjectRouteEnum, TaskRouteEnum};
 use App\Models\ToDo;
+use App\Services\RouteService;
 use App\Services\Dashboard\TaskDashboard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
@@ -54,22 +56,22 @@ class ToDoService
     }
 
     /**
-     * Get route for the action.
+     * Set up redirect for the action
      */
-    public function redirect(string $action, ToDo $todo): RedirectResponse 
-    {   
-        switch ($action) {
-            case 'task':
-                return redirect()->route('tasks.detail', ['task' => $todo->task]);
-                break;
-            case 'project_task':
-                return redirect()->route('projects.task.detail', ['project' => $todo->task->project, 'task' => $todo->task]);
-                break;
-                case 'dashboard_task':
-                    return redirect()->route('dashboard.tasks', ['data' => (new TaskDashboard)->getDashboard()]);
-                    break;
+    public function setUpRedirect(string $parent, string $type, ToDo $todo): RedirectResponse
+    {
+        switch ($parent) {
+            case 'projects':
+                $redirectAction = $type ? ProjectRouteEnum::Tasks : ProjectRouteEnum::TasksDetail;
+                $redirectVars = $type ? ['project' => $todo->task->project] : ['project' => $todo->task->project, 'task' => $todo->task];
+                break;                
+
             default:
-                return redirect()->back();
+                $redirectAction = $type ? TaskRouteEnum::Index : TaskRouteEnum::Detail;
+                $redirectVars = $type ? [] : ['task' => $todo->task];
+                break;
         }
+        
+        return (new RouteService)->redirect($redirectAction->value, $redirectVars);
     }
 }

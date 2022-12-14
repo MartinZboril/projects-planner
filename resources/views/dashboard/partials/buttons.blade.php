@@ -8,7 +8,7 @@
         @break
         
     @case('ticket')
-        @include('tickets.partials.buttons', ['ticket' => $item, 'buttonSize' => 'xs', 'buttonText' => false])
+        @include('tickets.partials.buttons', ['ticket' => $item, 'buttonSize' => 'xs', 'buttonText' => false, 'redirect' => 'tickets'])
         @break
 
     @case('todo')
