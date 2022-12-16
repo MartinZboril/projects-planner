@@ -99,6 +99,7 @@
     <script>
         $(function () {
             $("#rates-table").DataTable();
+            $('[data-toggle="popover"]').popover();
         });
     </script>
 @endpush

@@ -14,6 +14,9 @@
                 <div class="card-header p-0 pb-2 mb-2">
                     @include('projects.partials.header', ['active' => 'project'])
                 </div>
+                <!-- Message -->
+                @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                <!-- Content -->                
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card card-primary card-outline">
@@ -23,9 +26,6 @@
                                 @if($project->overdue)<span class="badge badge-danger ml-1" style="font-size:14px;">Overdue</span>@endif
                             </div>
                             <div class="card-body">
-                                <!-- Message -->
-                                @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
-                                <!-- Content -->
                                 <div class="text-muted">
                                     <p class="text-sm">Name
                                         <b class="d-block ml-2">{{ $project->name }}</b>

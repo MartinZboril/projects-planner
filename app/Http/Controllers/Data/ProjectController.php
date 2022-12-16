@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Data;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Project\{ChangeProjectRequest, StoreProjectRequest, UpdateProjectRequest};
-use App\Models\{Client, Milestone, Project, Task, Ticket, ToDo, User};
+use App\Models\{Client, Milestone, Note, Project, Task, Ticket, ToDo, User};
 use App\Services\FlashService;
 use App\Services\Data\ProjectService;
 use Exception;
@@ -70,6 +70,14 @@ class ProjectController extends Controller
     public function tickets(Project $project): View
     {
         return view('projects.tickets', ['project' => $project]);
+    }
+
+    /**
+     * Display the notes of project.
+     */
+    public function notes(Project $project): View
+    {
+        return view('projects.notes', ['project' => $project]);
     }
 
     /**
@@ -206,5 +214,21 @@ class ProjectController extends Controller
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+    }
+
+    /**
+     * Show the form for creating a new note of project.
+     */
+    public function createNote(Project $project): View
+    {
+        return view('projects.note.create', ['project' => $project, 'note' => new Note]);
+    }
+
+    /**
+     * Show the form for editing the note of project.
+     */
+    public function editNote(Project $project, Note $note): View
+    {
+        return view('projects.note.edit', ['project' => $project, 'note' => $note]);
     }
 }

@@ -21,6 +21,7 @@ class Timer extends Model
         'rate_id' => ['required', 'integer', 'exists:rates,id'],
         'since' => ['required', 'date_format:Y-m-d H:i'],
         'until' => ['required', 'date_format:Y-m-d H:i', 'after:since'],
+        'note' => ['max:65553']
     ];
 
     protected $appends = [

@@ -40,6 +40,9 @@ Route::get('/clients', [App\Http\Controllers\Data\ClientController::class, 'inde
 Route::get('/clients/create', [App\Http\Controllers\Data\ClientController::class, 'create'])->name('clients.create');
 Route::get('/clients/{client}/detail', [App\Http\Controllers\Data\ClientController::class, 'detail'])->name('clients.detail');
 Route::get('/clients/{client}/edit', [App\Http\Controllers\Data\ClientController::class, 'edit'])->name('clients.edit');
+Route::get('/clients/{client}/notes', [App\Http\Controllers\Data\ClientController::class, 'notes'])->name('clients.notes');
+Route::get('/clients/{client}/note/create', [App\Http\Controllers\Data\ClientController::class, 'createNote'])->name('clients.note.create');
+Route::get('/clients/{client}/note/{note}/edit', [App\Http\Controllers\Data\ClientController::class, 'editNote'])->name('clients.note.edit');
 
 Route::post('/clients/store', [App\Http\Controllers\Data\ClientController::class, 'store'])->name('clients.store');
 Route::patch('/clients/{client}/update', [App\Http\Controllers\Data\ClientController::class, 'update'])->name('clients.update');
@@ -67,6 +70,9 @@ Route::get('/projects/{project}/tickets', [App\Http\Controllers\Data\ProjectCont
 Route::get('/projects/{project}/ticket/create', [App\Http\Controllers\Data\ProjectController::class, 'createTicket'])->name('projects.ticket.create');
 Route::get('/projects/{project}/ticket/{ticket}/detail', [App\Http\Controllers\Data\ProjectController::class, 'detailTicket'])->name('projects.ticket.detail');
 Route::get('/projects/{project}/ticket/{ticket}/edit', [App\Http\Controllers\Data\ProjectController::class, 'editTicket'])->name('projects.ticket.edit');
+Route::get('/projects/{project}/notes', [App\Http\Controllers\Data\ProjectController::class, 'notes'])->name('projects.notes');
+Route::get('/projects/{project}/note/create', [App\Http\Controllers\Data\ProjectController::class, 'createNote'])->name('projects.note.create');
+Route::get('/projects/{project}/note/{note}/edit', [App\Http\Controllers\Data\ProjectController::class, 'editNote'])->name('projects.note.edit');
 
 Route::post('/projects/store', [App\Http\Controllers\Data\ProjectController::class, 'store'])->name('projects.store');
 Route::patch('/projects/{project}/update', [App\Http\Controllers\Data\ProjectController::class, 'update'])->name('projects.update');
@@ -129,3 +135,11 @@ Route::get('/analyze/tasks', [App\Http\Controllers\AnalyticsController::class, '
 Route::get('/analyze/tickets', [App\Http\Controllers\AnalyticsController::class, 'tickets'])->name('analysis.tickets');
 Route::get('/analyze/milestones', [App\Http\Controllers\AnalyticsController::class, 'milestones'])->name('analysis.milestones');
 Route::get('/analyze/timesheets', [App\Http\Controllers\AnalyticsController::class, 'timesheets'])->name('analysis.timesheets');
+
+// Notes
+Route::get('/notes', [App\Http\Controllers\Data\NoteController::class, 'index'])->name('notes.index');
+Route::get('/notes/create', [App\Http\Controllers\Data\NoteController::class, 'create'])->name('notes.create');
+Route::get('/notes/{note}/edit', [App\Http\Controllers\Data\NoteController::class, 'edit'])->name('notes.edit');
+
+Route::post('/notes/store', [App\Http\Controllers\Data\NoteController::class, 'store'])->name('notes.store');
+Route::patch('/notes/{note}/update', [App\Http\Controllers\Data\NoteController::class, 'update'])->name('notes.update');

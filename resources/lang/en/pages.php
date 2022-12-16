@@ -15,6 +15,7 @@ return [
         'user' => 'User',
         'report' => 'Report',
         'analysis' => 'Analysis',
+        'note' => 'Note',
     ],
     'content' => [
         'projects' => [

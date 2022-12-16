@@ -17,4 +17,5 @@ enum ProjectRouteEnum: string
     case TasksDetail = 'projects.task.detail';
     case Tickets = 'projects.tickets';
     case TicketsDetail = 'projects.ticket.detail';
+    case Notes = 'projects.notes';
 }

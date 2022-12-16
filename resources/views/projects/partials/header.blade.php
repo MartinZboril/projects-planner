@@ -5,4 +5,5 @@
     <li class="nav-item"><a class="nav-link @if($active == 'milestone'){{ 'active' }}@endif" href="{{ route('projects.milestones', $project->id) }}">Milestones</a></li>
     <li class="nav-item"><a class="nav-link @if($active == 'timesheets'){{ 'active' }}@endif" href="{{ route('projects.timesheets', $project->id) }}">Timesheets</a></li>
     <li class="nav-item"><a class="nav-link @if($active == 'ticket'){{ 'active' }}@endif" href="{{ route('projects.tickets', $project->id) }}">Tickets</a></li>
+    <li class="nav-item"><a class="nav-link @if($active == 'note'){{ 'active' }}@endif" href="{{ route('projects.notes', $project->id) }}">Notes</a></li>
 </ul>

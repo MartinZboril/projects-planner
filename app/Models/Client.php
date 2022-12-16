@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Client extends Model
 {
@@ -44,6 +45,11 @@ class Client extends Model
         'note' => ['nullable', 'string', 'max:65553'],
     ];
     
+    public function notes(): BelongsToMany
+    {
+        return $this->belongsToMany(Note::class, 'clients_notes', 'client_id', 'note_id')->visible();
+    }
+
     public function getEmailLabelAttribute(): string
     {
         return ($this->email) ? $this->email : 'NaN';

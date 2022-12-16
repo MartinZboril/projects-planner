@@ -2,6 +2,7 @@
     <table id="@if($timers->count() > 0){{ 'timesheets-table' }}@endif" class="table table-bordered table-striped">
         <thead>
             <tr>
+                <th>#</th>
                 @if(in_array('project', $display))<th>Project</th>@endif
                 <th>Type</th>
                 <th>User</th>
@@ -16,6 +17,13 @@
         <tbody>
             @forelse ($timers as $timer)
                 <tr>
+                    <th>
+                        @if ($timer->note)
+                            <i class="fas fa-info-circle" data-toggle="popover" title="Note" data-content="{{ $timer->note }}"></i>
+                        @else
+                            #
+                        @endif
+                    </th>
                     @if(in_array('project', $display))<td><a href="{{ route('projects.detail', $timer->project->id) }}">{{ $timer->project->name }}</a></td>@endif
                     <td><a href="{{ route('rates.edit', ['user' => $timer->user->id, 'rate' => $timer->rate->id]) }}">{{ $timer->rate->name }}</a></td>
                     <td>@include('site.partials.user', ['user' => $timer->user])</td>

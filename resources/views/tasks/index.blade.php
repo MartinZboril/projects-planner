@@ -13,6 +13,9 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        Tasks
+                    </div>
                     <div class="card-body">
                         <!-- Message -->
                         @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])

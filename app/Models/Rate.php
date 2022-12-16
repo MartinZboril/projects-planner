@@ -17,6 +17,7 @@ class Rate extends Model
         'name' => ['required', 'max:255'],
         'value' => ['required', 'integer', 'min:0'],
         'is_active' => ['boolean'],
+        'note' => ['max:65553']
     ];
 
     public function user(): BelongsTo

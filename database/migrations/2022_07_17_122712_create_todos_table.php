@@ -19,7 +19,7 @@ class CreateTodosTable extends Migration
             $table->foreignId('task_id');
             $table->date('deadline');
             $table->text('description')->nullable();
-            $table->boolean('is_finished')->nullable()->default(0);
+            $table->boolean('is_finished')->default(0);
             $table->timestamps();
         });
     }

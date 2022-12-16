@@ -19,6 +19,7 @@ class CreateTimersTable extends Migration
             $table->foreignId('user_id');
             $table->dateTime('since');
             $table->dateTime('until')->nullable();
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

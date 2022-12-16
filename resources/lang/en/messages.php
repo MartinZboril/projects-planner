@@ -53,6 +53,10 @@ return [
     'create' => 'User was created!',
     'update' => 'User was updated!',
   ],
+  'note' => [
+    'create' => 'Note was created!',
+    'update' => 'Note was updated!',
+  ],
   'complete' => 'Action was completed!',
   'error' => 'An error has occurred!',
 ];

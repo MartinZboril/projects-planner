@@ -39,6 +39,7 @@ class TimerService
         $timer->rate_id = $inputs->rate_id;
         $timer->since = $inputs->since;
         $timer->until = $inputs->until;
+        $timer->note = $inputs->note;
         $timer->save();
 
         return $timer;

@@ -17,8 +17,9 @@ class CreateRatesTable extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->string('name');
-            $table->boolean('is_active')->nullable()->default(0);
+            $table->boolean('is_active')->default(0);
             $table->integer('value');
+            $table->text('note')->nullable();
             $table->timestamps();
         });
     }

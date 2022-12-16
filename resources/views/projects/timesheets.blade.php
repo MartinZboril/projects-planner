@@ -36,6 +36,7 @@
         $(function () {
             $("#timesheets-table").DataTable();
             $('[data-toggle="tooltip"]').tooltip();
+            $('[data-toggle="popover"]').popover();
         });
     </script>
 @endpush

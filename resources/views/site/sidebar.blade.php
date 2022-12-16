@@ -67,6 +67,14 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="{{ route('notes.index') }}" class="nav-link @if(str_contains(url()->current(), 'notes') && !str_contains(url()->current(), 'client') && !str_contains(url()->current(), 'project')){{ 'active' }}@endif">
+                        <i class="nav-icon far fa-sticky-note"></i>
+                        <p>
+                            Notes
+                        </p>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>

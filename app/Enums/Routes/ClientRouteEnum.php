@@ -10,4 +10,5 @@ enum ClientRouteEnum: string
 
     case Index = 'clients.index';
     case Detail = 'clients.detail';
+    case Notes = 'clients.notes';
 }

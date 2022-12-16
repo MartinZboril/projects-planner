@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Data;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\{StoreClientRequest, UpdateClientRequest};
-use App\Models\Client;
+use App\Models\{Client, Note};
 use App\Services\FlashService;
 use App\Services\Data\ClientService;
 use Exception;
@@ -30,6 +30,14 @@ class ClientController extends Controller
     public function index(): View
     {
         return view('clients.index', ['clients' => Client::all()]);
+    }
+
+    /**
+     * Display the notes of client.
+     */
+    public function notes(Client $client): View
+    {
+        return view('clients.notes', ['client' => $client]);
     }
 
     /**
@@ -87,4 +95,20 @@ class ClientController extends Controller
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
     }
+
+    /**
+     * Show the form for creating a new note of client.
+     */
+    public function createNote(Client $client): View
+    {
+        return view('clients.note.create', ['client' => $client, 'note' => new Note]);
+    }
+
+    /**
+     * Show the form for editing the note of client.
+     */
+    public function editNote(Client $client, Note $note): View
+    {
+        return view('clients.note.edit', ['client' => $client, 'note' => $note]);
+    }    
 }

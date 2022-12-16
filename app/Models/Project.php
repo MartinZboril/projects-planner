@@ -91,6 +91,11 @@ class Project extends Model
         return $this->hasMany(Ticket::class, 'project_id');
     }
 
+    public function notes(): BelongsToMany
+    {
+        return $this->belongsToMany(Note::class, 'projects_notes', 'project_id', 'note_id')->visible();
+    }
+
     public function scopeStatus(Builder $query, ProjectStatusEnum $type): Builder
     {
         return $query->where('status', $type);

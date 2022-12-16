@@ -37,6 +37,7 @@ class RateService
         $rate->name = $inputs->name;
         $rate->is_active = $inputs->has('is_active');
         $rate->value = $inputs->value;
+        $rate->note = $inputs->note;
         $rate->save();
 
         return $rate;
