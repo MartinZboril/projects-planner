@@ -2,7 +2,7 @@
 
 namespace App\Services\Data;
 
-use App\Enums\Routes\{ClientRouteEnum, ProjectRouteEnum};
+use App\Enums\Routes\{ClientRouteEnum, NoteRouteEnum, ProjectRouteEnum};
 use App\Models\{Client, ClientNote, Note, Project, ProjectNote};
 use App\Services\RouteService;
 use Illuminate\Http\RedirectResponse;
@@ -86,7 +86,7 @@ class NoteService
                 break;  
 
             default:
-                return redirect()->route('notes.index');
+                return redirect()->route(NoteRouteEnum::Index->value);
                 break;
         }
         

@@ -2,6 +2,7 @@
 
 namespace App\Services\Dashboard;
 
+use App\Enums\Routes\{ProjectRouteEnum, TicketRouteEnum, TaskRouteEnum};
 use App\Models\{Project, Timer, Task, ToDo, Ticket};
 use App\Services\Data\{ProjectService, TaskService, TicketService, ToDoService};
 use Illuminate\Support\Collection;
@@ -58,19 +59,19 @@ class IndexDashboard
     {
         switch ($type) {
             case 'project':
-                return route('projects.detail', ['project' => $id]);
+                return route(ProjectStatusEnum::detail->value, ['project' => $id]);
                 break;
             
             case 'task':
-                return route('tasks.detail', ['task' => $id]);
+                return route(TaskStatusEnum::detail->value, ['task' => $id]);
                 break;  
 
             case 'ticket':
-                return route('tickets.detail', ['ticket' => $id]);
+                return route(TicketStatusEnum::detail->value, ['ticket' => $id]);
                 break;
 
             case 'todo':
-                return route('tasks.detail', ['task' => $id]);
+                return route(TaskStatusEnum::detail->value, ['task' => $id]);
                 break;
 
             default:
