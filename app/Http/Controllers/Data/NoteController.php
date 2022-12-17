@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Data;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Note\{StoreNoteRequest, UpdateNoteRequest};
+use App\Http\Requests\Note\{MarkNoteRequest, StoreNoteRequest, UpdateNoteRequest};
 use App\Models\Note;
 use App\Services\FlashService;
 use App\Services\Data\NoteService;
@@ -29,7 +29,7 @@ class NoteController extends Controller
      */
     public function index(): View
     {
-        return view('notes.index', ['notes' => Note::basic()->visible()->get()]);
+        return view('notes.index', ['notes' => Note::basic()->visible()->orderByDesc('is_marked')->get()]);
     }
 
     /**
@@ -70,10 +70,24 @@ class NoteController extends Controller
     public function update(UpdateNoteRequest $request, Note $note): RedirectResponse
     {
         try {
-            Log::error($note . 'ss');
-
             $note = $this->noteService->update($note, $request->safe());
             $this->flashService->flash(__('messages.note.update'), 'info');
+
+            return $this->noteService->setUpRedirect($note, $request->type, $request->parent_id);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
+    }
+    
+    /**
+     * Mark selected note.
+     */
+    public function mark(MarkNoteRequest $request, Note $note): RedirectResponse
+    {
+        try {
+            $note = $this->noteService->mark($note);
+            $this->flashService->flash(__('messages.note.' . ($note->is_marked ? 'mark' : 'unmark')), 'info');
 
             return $this->noteService->setUpRedirect($note, $request->type, $request->parent_id);
         } catch (Exception $exception) {

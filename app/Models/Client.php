@@ -47,7 +47,7 @@ class Client extends Model
     
     public function notes(): BelongsToMany
     {
-        return $this->belongsToMany(Note::class, 'clients_notes', 'client_id', 'note_id')->visible();
+        return $this->belongsToMany(Note::class, 'clients_notes', 'client_id', 'note_id')->visible()->orderByDesc('is_marked');
     }
 
     public function getEmailLabelAttribute(): string

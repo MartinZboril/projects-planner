@@ -43,6 +43,7 @@ class NoteService
     {
         $note->name = $inputs->name;
         $note->is_private = $inputs->has('is_private');
+        $note->is_marked = $inputs->has('is_marked');
         $note->content = $inputs->content;
         $note->save();
 
@@ -64,6 +65,17 @@ class NoteService
         }
 
         $note->is_basic = false;
+        $note->save();
+
+        return $note;
+    }
+
+    /**
+     * Mark selected note.
+     */
+    public function mark(Note $note): Note
+    {
+        $note->is_marked = !$note->is_marked;
         $note->save();
 
         return $note;

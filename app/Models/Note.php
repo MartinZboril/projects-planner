@@ -17,7 +17,8 @@ class Note extends Model
         'name' => ['required', 'max:255'],
         'content' => ['required', 'max:65553'],
         'is_private' => ['boolean'],
-        'is_basic' => ['boolean']
+        'is_basic' => ['boolean'],
+        'is_marked' => ['boolean']
     ];
 
     public function user(): BelongsTo

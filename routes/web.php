@@ -143,3 +143,4 @@ Route::get('/notes/{note}/edit', [App\Http\Controllers\Data\NoteController::clas
 
 Route::post('/notes/store', [App\Http\Controllers\Data\NoteController::class, 'store'])->name('notes.store');
 Route::patch('/notes/{note}/update', [App\Http\Controllers\Data\NoteController::class, 'update'])->name('notes.update');
+Route::patch('/notes/{note}/mark', [App\Http\Controllers\Data\NoteController::class, 'mark'])->name('notes.mark');

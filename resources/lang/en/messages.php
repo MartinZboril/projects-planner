@@ -56,6 +56,8 @@ return [
   'note' => [
     'create' => 'Note was created!',
     'update' => 'Note was updated!',
+    'mark' => 'Note was marked!',
+    'unmark' => 'Note was unmarked!',
   ],
   'complete' => 'Action was completed!',
   'error' => 'An error has occurred!',

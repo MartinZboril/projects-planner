@@ -23,11 +23,13 @@
                         @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                         <!-- Content -->
                         <div class="row">
-                            @foreach ($project->notes as $note)
+                            @forelse ($project->notes as $note)
                                 <div class="col-md-3">
-                                    @include('notes.partials.card', ['note' => $note, 'editRoute' => route('projects.note.edit', ['project' => $project, 'note' => $note])])
+                                    @include('notes.partials.card', ['note' => $note, 'editRoute' => route('projects.note.edit', ['project' => $project, 'note' => $note]), 'parentId' => $project->id, 'parentType' => 'project'])
                                 </div>
-                            @endforeach                            
+                            @empty
+                                No notes were found!
+                            @endforelse
                         </div>
                     </div>
                 </div>

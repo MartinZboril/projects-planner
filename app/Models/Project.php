@@ -93,7 +93,7 @@ class Project extends Model
 
     public function notes(): BelongsToMany
     {
-        return $this->belongsToMany(Note::class, 'projects_notes', 'project_id', 'note_id')->visible();
+        return $this->belongsToMany(Note::class, 'projects_notes', 'project_id', 'note_id')->visible()->orderByDesc('is_marked');
     }
 
     public function scopeStatus(Builder $query, ProjectStatusEnum $type): Builder

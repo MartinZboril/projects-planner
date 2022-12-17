@@ -59,19 +59,19 @@ class IndexDashboard
     {
         switch ($type) {
             case 'project':
-                return route(ProjectStatusEnum::detail->value, ['project' => $id]);
+                return route(ProjectRouteEnum::Detail->value, ['project' => $id]);
                 break;
             
             case 'task':
-                return route(TaskStatusEnum::detail->value, ['task' => $id]);
+                return route(TaskRouteEnum::Detail->value, ['task' => $id]);
                 break;  
 
             case 'ticket':
-                return route(TicketStatusEnum::detail->value, ['ticket' => $id]);
+                return route(TicketRouteEnum::Detail->value, ['ticket' => $id]);
                 break;
 
             case 'todo':
-                return route(TaskStatusEnum::detail->value, ['task' => $id]);
+                return route(TaskRouteEnum::Detail->value, ['task' => $id]);
                 break;
 
             default:

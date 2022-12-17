@@ -19,6 +19,15 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
+                <div class="form-group">
+                    <div class="custom-control custom-switch">
+                        <input type="checkbox" name="is_marked" class="custom-control-input @error('is_marked') is-invalid @enderror" id="is-marked" value="1" @checked(old('is_marked', $note->is_marked))>
+                        <label class="custom-control-label" for="is-marked">Marked</label>
+                    </div>
+                    @error('is_marked')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
                 <div class="form-group required">
                     <label for="content" class="control-label">Content</label>
                     <textarea name="content" id="content" class="form-control @error('content') is-invalid @enderror" rows="5" placeholder="content" autocomplete="off">{{ old('content', $note->content) }}</textarea>
