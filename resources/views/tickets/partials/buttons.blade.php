@@ -9,5 +9,9 @@
 @if ($ticket->status != App\Enums\TicketStatusEnum::close && $ticket->status != App\Enums\TicketStatusEnum::archive)
     <a href="#" class="btn btn-{{ $buttonSize }} btn-primary" onclick="event.preventDefault(); document.getElementById('archive-ticket-{{ $ticket->id }}-form').submit();">@include('site.partials.icon', ['icon' => 'fas fa-archive', 'text' => ''])</a>
 @endif
+<a href="#" class="btn btn-{{ $buttonSize }} btn-primary" onclick="event.preventDefault(); document.getElementById('{{ ($ticket->is_marked ? 'unmark' : 'mark') . '-ticket-' . $ticket->id . '-form'}}').submit();">
+    <i class="{{ ($ticket->is_marked ? 'fas' : 'far') }} fa-bookmark"></i>
+</a>
 <!-- Tickets forms -->
 @include('tickets.partials.forms', ['ticket' => $ticket, 'redirect' => $redirect])
+@include('tickets.forms.mark', ['id' => ($ticket->is_marked ? 'unmark' : 'mark') . '-ticket-' . $ticket->id . '-form', 'ticket' => $ticket])

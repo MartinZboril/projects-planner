@@ -22,16 +22,12 @@
                 @include('dashboard.partials.widget', ['text' => 'Tickets', 'value' => $data->get('active_tickets_count'), 'icon' => 'fas fa-life-ring', 'colour' => 'lightblue color-palette', 'link' => route('tickets.index')])
                 @include('dashboard.partials.widget', ['text' => 'NaN', 'value' => 'NaN', 'icon' => 'fas fa-times', 'colour' => 'danger color-palette', 'link' => null])
             </div>
-            <div class="card card-primary card-outline">
-                <div class="card-header">
-                    Today summary
-                    <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('today_summary')->count() }}</span>
-                </div>
-                <div class="card-body">
-                    <!-- Content -->
-                    @include('dashboard.partials.summary', ['data' => $data])
-                </div>
-            </div>
+            @if ($data->get('marked_items')->count() > 0)
+                @include('dashboard.partials.summary', ['items' => $data->get('marked_items'), 'id' => 'marked-items-table', 'title' => 'Marked items'])                
+            @endif
+            @if ($data->get('today_summary')->count() > 0)
+                @include('dashboard.partials.summary', ['items' => $data->get('today_summary'), 'id' => 'today-summary-table', 'title' => 'Today summary'])
+            @endif
         </section>
     </div>
 @endsection
@@ -39,6 +35,10 @@
 @push('scripts')
     <script>
         $(function () {
+            $('#marked-items-table').DataTable({
+                'aLengthMenu': [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, 'All']],
+                'iDisplayLength': 5
+            });
             $('#today-summary-table').DataTable({
                 'aLengthMenu': [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, 'All']],
                 'iDisplayLength': 5

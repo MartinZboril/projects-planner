@@ -1,4 +1,7 @@
 @switch($type)
+    @case('client')
+        <i class="fas fa-address-book mr-2"></i>
+        @break
     @case('project')
         <i class="fas fa-clock mr-2"></i>
         @break

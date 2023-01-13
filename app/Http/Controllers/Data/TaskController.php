@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Data;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Task\{ChangeTaskRequest, StoreTaskRequest, PauseTaskRequest, UpdateTaskRequest};
+use App\Http\Requests\Task\{ChangeTaskRequest, MarkTaskRequest, StoreTaskRequest, PauseTaskRequest, UpdateTaskRequest};
 use App\Models\{Project, Task, User};
 use App\Services\FlashService;
 use App\Services\Data\TaskService;
@@ -119,4 +119,20 @@ class TaskController extends Controller
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
     }
+
+    /**
+     * Mark selected task.
+     */
+    public function mark(MarkTaskRequest $request, Task $task): RedirectResponse
+    {
+        try {
+            $task = $this->taskService->mark($task);
+            $this->flashService->flash(__('messages.task.' . ($task->is_marked ? 'mark' : 'unmark')), 'info');
+
+            return redirect()->back();
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
+    } 
 }

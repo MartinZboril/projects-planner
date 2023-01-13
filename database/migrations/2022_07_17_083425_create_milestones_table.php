@@ -22,6 +22,7 @@ class CreateMilestonesTable extends Migration
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->longText('description')->nullable();
+            $table->boolean('is_marked')->default(0);
             $table->timestamps();
         });
     }

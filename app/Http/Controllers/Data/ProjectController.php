@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Data;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Project\{ChangeProjectRequest, StoreProjectRequest, UpdateProjectRequest};
+use App\Http\Requests\Project\{ChangeProjectRequest, MarkProjectRequest, StoreProjectRequest, UpdateProjectRequest};
 use App\Models\{Client, Milestone, Note, Project, Task, Ticket, ToDo, User};
 use App\Services\FlashService;
 use App\Services\Data\ProjectService;
@@ -231,4 +231,20 @@ class ProjectController extends Controller
     {
         return view('projects.note.edit', ['project' => $project, 'note' => $note]);
     }
+    
+    /**
+     * Mark selected project.
+     */
+    public function mark(MarkProjectRequest $request, Project $project): RedirectResponse
+    {
+        try {
+            $project = $this->projectService->mark($project);
+            $this->flashService->flash(__('messages.project.' . ($project->is_marked ? 'mark' : 'unmark')), 'info');
+
+            return redirect()->back();
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
+    }    
 }

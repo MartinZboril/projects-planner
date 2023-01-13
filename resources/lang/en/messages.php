@@ -4,6 +4,8 @@ return [
   'client' => [
     'create' => 'Client was created!',
     'update' => 'Client was updated!',
+    'mark' => 'Client was marked!',
+    'unmark' => 'Client was unmarked!',
   ],
   'milestone' => [
     'create' => 'Milestone was created!',
@@ -15,6 +17,8 @@ return [
     'active' => 'Project has been activated!',
     'finish' => 'Project has been finished!',
     'archive' => 'Project has been archived!',
+    'mark' => 'Project was marked!',
+    'unmark' => 'Project was unmarked!',
   ],
   'rate' => [
     'create' => 'Rate was created!',

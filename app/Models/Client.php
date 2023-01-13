@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\{Builder, Model};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Client extends Model
@@ -48,6 +48,11 @@ class Client extends Model
     public function notes(): BelongsToMany
     {
         return $this->belongsToMany(Note::class, 'clients_notes', 'client_id', 'note_id')->visible()->orderByDesc('is_marked');
+    }
+
+    public function scopeMarked(Builder $query): Builder
+    {
+        return $query->where('is_marked', true);
     }
 
     public function getEmailLabelAttribute(): string

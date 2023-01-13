@@ -53,7 +53,18 @@ class ClientService
 
         return $client;
     }
+    
+    /**
+     * Mark selected client.
+     */
+    public function mark(Client $client): Client
+    {
+        $client->is_marked = !$client->is_marked;
+        $client->save();
 
+        return $client;
+    }
+    
     /**
      * Set up redirect for the action
      */

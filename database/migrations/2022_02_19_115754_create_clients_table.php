@@ -33,6 +33,7 @@ class CreateClientsTable extends Migration
             $table->text('twitter')->nullable();
             $table->text('instagram')->nullable();
             $table->text('note')->nullable();
+            $table->boolean('is_marked')->default(0);
             $table->timestamps();
         });
     }

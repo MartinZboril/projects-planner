@@ -46,6 +46,7 @@ Route::get('/clients/{client}/note/{note}/edit', [App\Http\Controllers\Data\Clie
 
 Route::post('/clients/store', [App\Http\Controllers\Data\ClientController::class, 'store'])->name('clients.store');
 Route::patch('/clients/{client}/update', [App\Http\Controllers\Data\ClientController::class, 'update'])->name('clients.update');
+Route::patch('/clients/{client}/mark', [App\Http\Controllers\Data\ClientController::class, 'mark'])->name('clients.mark');
 
 // Projects
 Route::get('/projects', [App\Http\Controllers\Data\ProjectController::class, 'index'])->name('projects.index');
@@ -77,6 +78,7 @@ Route::get('/projects/{project}/note/{note}/edit', [App\Http\Controllers\Data\Pr
 Route::post('/projects/store', [App\Http\Controllers\Data\ProjectController::class, 'store'])->name('projects.store');
 Route::patch('/projects/{project}/update', [App\Http\Controllers\Data\ProjectController::class, 'update'])->name('projects.update');
 Route::patch('/projects/{project}/change', [App\Http\Controllers\Data\ProjectController::class, 'change'])->name('projects.change');
+Route::patch('/projects/{project}/mark', [App\Http\Controllers\Data\ProjectController::class, 'mark'])->name('projects.mark');
 
 // Tasks
 Route::get('/tasks', [App\Http\Controllers\Data\TaskController::class, 'index'])->name('tasks.index');
@@ -90,10 +92,12 @@ Route::post('/tasks/store', [App\Http\Controllers\Data\TaskController::class, 's
 Route::patch('/tasks/{task}/update', [App\Http\Controllers\Data\TaskController::class, 'update'])->name('tasks.update');
 Route::patch('/tasks/{task}/change', [App\Http\Controllers\Data\TaskController::class, 'change'])->name('tasks.change');
 Route::patch('/tasks/{task}/pause', [App\Http\Controllers\Data\TaskController::class, 'pause'])->name('tasks.pause');
+Route::patch('/tasks/{task}/mark', [App\Http\Controllers\Data\TaskController::class, 'mark'])->name('tasks.mark');
 
 // Milestones
 Route::post('/milestones/store', [App\Http\Controllers\Data\MilestoneController::class, 'store'])->name('milestones.store');
 Route::patch('/milestones/{milestone}/update', [App\Http\Controllers\Data\MilestoneController::class, 'update'])->name('milestones.update');
+Route::patch('/milestones/{milestone}/mark', [App\Http\Controllers\Data\MilestoneController::class, 'mark'])->name('milestones.mark');
 
 // ToDos
 Route::post('/todos/store', [App\Http\Controllers\Data\ToDoController::class, 'store'])->name('todos.store');
@@ -120,6 +124,7 @@ Route::post('/tickets/store', [App\Http\Controllers\Data\TicketController::class
 Route::patch('/tickets/{ticket}/update', [App\Http\Controllers\Data\TicketController::class, 'update'])->name('tickets.update');
 Route::patch('/tickets/{ticket}/change', [App\Http\Controllers\Data\TicketController::class, 'change'])->name('tickets.change');
 Route::patch('/tickets/{ticket}/convert', [App\Http\Controllers\Data\TicketController::class, 'convert'])->name('tickets.convert');
+Route::patch('/tickets/{ticket}/mark', [App\Http\Controllers\Data\TicketController::class, 'mark'])->name('tickets.mark');
 
 // Reporting
 Route::get('/report', [App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');

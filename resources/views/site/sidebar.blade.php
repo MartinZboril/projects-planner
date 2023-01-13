@@ -12,7 +12,7 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <a href="{{ route('dashboard.index') }}" class="nav-link @if(request()->is('/')){{ 'active' }}@endif">
+                    <a href="{{ route('dashboard.index') }}" class="nav-link @if(request()->is('/') || str_contains(url()->current(), 'dashboard')){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-home"></i>
                         <p>
                             Home

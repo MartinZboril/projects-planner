@@ -100,6 +100,17 @@ class TaskService
     }
 
     /**
+     * Mark selected task.
+     */
+    public function mark(Task $task): Task
+    {
+        $task->is_marked = !$task->is_marked;
+        $task->save();
+
+        return $task;
+    }
+
+    /**
      * Set up redirect for the action
      */
     public function setUpRedirect(string $parent, string $type, Task $task): RedirectResponse

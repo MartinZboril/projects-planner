@@ -55,6 +55,11 @@ class Milestone extends Model
         return $query->whereDate('end_date', '<=', date('Y-m-d'));
     }
 
+    public function scopeMarked(Builder $query): Builder
+    {
+        return $query->where('is_marked', true);
+    }
+
     public function getOverdueAttribute(): bool
     {
         return $this->end_date <= date('Y-m-d') && $this->progress < 1;

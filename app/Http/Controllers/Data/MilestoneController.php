@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Data;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Milestone\{LoadMilestoneRequest, StoreMilestoneRequest, UpdateMilestoneRequest};
+use App\Http\Requests\Milestone\{LoadMilestoneRequest, MarkMilestoneRequest, StoreMilestoneRequest, UpdateMilestoneRequest};
 use App\Models\{Milestone, Project};
 use App\Services\FlashService;
 use App\Services\Data\MilestoneService;
@@ -80,4 +80,20 @@ class MilestoneController extends Controller
             return redirect()->back()->with(['error' => __('messages.error')]);
         } 
     }
+
+    /**
+     * Mark selected milestone.
+     */
+    public function mark(MarkMilestoneRequest $request, Milestone $milestone): RedirectResponse
+    {
+        try {
+            $milestone = $this->milestoneService->mark($milestone);
+            $this->flashService->flash(__('messages.milestone.' . ($milestone->is_marked ? 'mark' : 'unmark')), 'info');
+
+            return redirect()->back();
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
+    } 
 }

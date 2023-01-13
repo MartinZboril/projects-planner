@@ -25,6 +25,7 @@ class CreateTicketsTable extends Migration
             $table->text('message');
             $table->date('due_date');
             $table->boolean('is_convert')->default(0);
+            $table->boolean('is_marked')->default(0);
             $table->timestamps();
         });
     }

@@ -25,6 +25,7 @@ class CreateTasksTable extends Migration
             $table->longText('description');
             $table->boolean('is_stopped')->default(0);
             $table->boolean('is_returned')->default(0);
+            $table->boolean('is_marked')->default(0);
             $table->timestamps();
         });
     }

@@ -119,6 +119,17 @@ class TicketService
     }
 
     /**
+     * Mark selected ticket.
+     */
+    public function mark(Ticket $ticket): Ticket
+    {
+        $ticket->is_marked = !$ticket->is_marked;
+        $ticket->save();
+
+        return $ticket;
+    }
+
+    /**
      * Set up redirect for the action
      */
     public function setUpRedirect(string $parent, string $type, Ticket $ticket): RedirectResponse

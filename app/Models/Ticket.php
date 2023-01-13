@@ -83,6 +83,11 @@ class Ticket extends Model
         return $query->whereDate('due_date', '<=', date('Y-m-d'));
     }
 
+    public function scopeMarked(Builder $query): Builder
+    {
+        return $query->where('is_marked', true);
+    }
+
     public function getOverdueAttribute(): bool
     {
         return $this->due_date <= date('Y-m-d') && $this->status == TicketStatusEnum::open;

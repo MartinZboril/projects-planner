@@ -20,6 +20,7 @@ class CreateTodosTable extends Migration
             $table->date('deadline');
             $table->text('description')->nullable();
             $table->boolean('is_finished')->default(0);
+            $table->boolean('is_marked')->default(0);
             $table->timestamps();
         });
     }

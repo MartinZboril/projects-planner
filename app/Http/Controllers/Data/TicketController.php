@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Data;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Ticket\{ConvertTicketRequest, ChangeTicketRequest, StoreTicketRequest, UpdateTicketRequest};
+use App\Http\Requests\Ticket\{ConvertTicketRequest, ChangeTicketRequest, MarkTicketRequest, StoreTicketRequest, UpdateTicketRequest};
 use App\Models\{Project, Ticket, User};
 use App\Services\FlashService;
 use App\Services\Data\{TaskService, TicketService, ProjectUserService};
@@ -120,4 +120,20 @@ class TicketController extends Controller
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
     }
+
+    /**
+     * Mark selected ticket.
+     */
+    public function mark(MarkTicketRequest $request, Ticket $ticket): RedirectResponse
+    {
+        try {
+            $ticket = $this->ticketService->mark($ticket);
+            $this->flashService->flash(__('messages.ticket.' . ($ticket->is_marked ? 'mark' : 'unmark')), 'info');
+
+            return redirect()->back();
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
+    } 
 }

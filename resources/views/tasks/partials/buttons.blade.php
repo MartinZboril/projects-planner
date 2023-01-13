@@ -10,5 +10,9 @@
 @else
     <a href="#" class="btn btn-{{ $buttonSize }} btn-danger" onclick="event.preventDefault(); document.getElementById('return-working-on-task-{{ $task->id }}-form').submit();">@include('site.partials.icon', ['icon' => 'fas fa-undo', 'text' => $buttonText ? 'Return' : ''])</a>
 @endif
+<a href="#" class="btn btn-{{ $buttonSize }} btn-primary" onclick="event.preventDefault(); document.getElementById('{{ ($task->is_marked ? 'unmark' : 'mark') . '-task-' . $task->id . '-form'}}').submit();">
+    <i class="{{ ($task->is_marked ? 'fas' : 'far') }} fa-bookmark"></i>
+</a>
 <!-- Tasks forms -->
 @include('tasks.partials.forms', ['task' => $task])
+@include('tasks.forms.mark', ['id' => ($task->is_marked ? 'unmark' : 'mark') . '-task-' . $task->id . '-form', 'task' => $task])

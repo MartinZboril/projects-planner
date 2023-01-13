@@ -77,6 +77,17 @@ class ProjectService
 
         return $project;
     }
+  
+    /**
+     * Mark selected project.
+     */
+    public function mark(Project $project): Project
+    {
+        $project->is_marked = !$project->is_marked;
+        $project->save();
+
+        return $project;
+    }
 
     /**
      * Set up redirect for the action

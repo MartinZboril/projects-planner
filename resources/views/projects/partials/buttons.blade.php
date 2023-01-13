@@ -22,5 +22,9 @@
         </div>
     @endif
 @endif
+<a href="#" class="btn btn-{{ $buttonSize }} btn-primary" onclick="event.preventDefault(); document.getElementById('{{ ($project->is_marked ? 'unmark' : 'mark') . '-project-' . $project->id . '-form'}}').submit();">
+    <i class="{{ ($project->is_marked ? 'fas' : 'far') }} fa-bookmark"></i>
+</a>
 <!-- Projects forms -->
 @include('projects.partials.forms', ['project' => $project])
+@include('projects.forms.mark', ['id' => ($project->is_marked ? 'unmark' : 'mark') . '-project-' . $project->id . '-form', 'project' => $project])

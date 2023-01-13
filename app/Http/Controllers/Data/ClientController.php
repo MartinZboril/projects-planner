@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Data;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Client\{StoreClientRequest, UpdateClientRequest};
+use App\Http\Requests\Client\{StoreClientRequest, MarkClientRequest, UpdateClientRequest};
 use App\Models\{Client, Note};
 use App\Services\FlashService;
 use App\Services\Data\ClientService;
@@ -110,5 +110,21 @@ class ClientController extends Controller
     public function editNote(Client $client, Note $note): View
     {
         return view('clients.note.edit', ['client' => $client, 'note' => $note]);
-    }    
+    }  
+    
+    /**
+     * Mark selected client.
+     */
+    public function mark(MarkClientRequest $request, Client $client): RedirectResponse
+    {
+        try {
+            $client = $this->clientService->mark($client);
+            $this->flashService->flash(__('messages.client.' . ($client->is_marked ? 'mark' : 'unmark')), 'info');
+
+            return redirect()->back();
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
+    }
 }

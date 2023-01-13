@@ -46,6 +46,17 @@ class MilestoneService
     }
 
     /**
+     * Mark selected milestone.
+     */
+    public function mark(Milestone $milestone): Milestone
+    {
+        $milestone->is_marked = !$milestone->is_marked;
+        $milestone->save();
+
+        return $milestone;
+    }
+
+    /**
      * Set up redirect for the action
      */
     public function setUpRedirect(string $type, Milestone $milestone): RedirectResponse

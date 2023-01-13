@@ -23,6 +23,7 @@ class CreateProjectsTable extends Migration
             $table->integer('budget')->nullable();
             $table->longText('description');
             $table->integer('status')->default(1);
+            $table->boolean('is_marked')->default(0);
             $table->timestamps();
         });
     }
