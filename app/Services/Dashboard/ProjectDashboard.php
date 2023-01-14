@@ -2,10 +2,11 @@
 
 namespace App\Services\Dashboard;
 
+use App\Models\Milestone;
 use App\Enums\ProjectStatusEnum;
 use App\Models\{Project, Timer};
-use App\Services\Report\ProjectReport;
 use Illuminate\Support\Collection;
+use App\Services\Report\ProjectReport;
 
 class ProjectDashboard
 {
@@ -28,6 +29,7 @@ class ProjectDashboard
             'done_projects_count' => Project::done()->count(),
             'overdue_projects_count' => Project::active()->overdue()->count(),
             'overdue_projects' => Project::active()->overdue()->get(),
+            'overdue_milestones' => Milestone::overdue()->get()->where('progress', '<', 1),
             'report' => (new ProjectReport)->getReportPerYear($year),
             'active_projects_count' => Project::status(ProjectStatusEnum::active)->count(),
             'finish_projects_count' => Project::status(ProjectStatusEnum::finish)->count(),

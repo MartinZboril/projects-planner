@@ -30,7 +30,19 @@
                     </div>
                     <div class="card-body">
                         <!-- Content -->
-                        @include('projects.partials.table', ['id' => 'overdue-projects-table', 'projects' => $data->get('overdue_projects'), 'display' => ['project'], 'redirect' => 'tasks'])
+                        @include('projects.partials.table', ['id' => 'overdue-projects-table', 'projects' => $data->get('overdue_projects')])
+                    </div>
+                </div>
+            @endif
+            @if($data->get('overdue_milestones')->count() > 0)
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        Overdue Milestones
+                        <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('overdue_milestones')->count() }}</span>
+                    </div>
+                    <div class="card-body">
+                        <!-- Content -->
+                        @include('milestones.partials.table', ['id' => 'overdue-milestones-table', 'milestones' => $data->get('overdue_milestones'), 'display' => []])
                     </div>
                 </div>
             @endif
@@ -109,6 +121,10 @@
 
         $(function () {
             $('#overdue-projects-table').DataTable({
+                'aLengthMenu': [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, 'All']],
+                'iDisplayLength': 5
+            });
+            $('#overdue-milestones-table').DataTable({
                 'aLengthMenu': [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, 'All']],
                 'iDisplayLength': 5
             });

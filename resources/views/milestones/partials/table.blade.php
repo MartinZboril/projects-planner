@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table id="@if($milestones->count() > 0){{ 'milestones-table' }}@endif" class="table table-bordered table-striped">
+    <table id="@if($milestones->count() > 0){{ $id }}@endif" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>Name</th>

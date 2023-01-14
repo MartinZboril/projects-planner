@@ -23,7 +23,7 @@
                         <!-- Message -->
                         @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                         <!-- Content -->
-                        @include('milestones.partials.table', ['milestones' => $project->milestones, 'display' => []])      
+                        @include('milestones.partials.table', ['id' => 'milestones-table', 'milestones' => $project->milestones, 'display' => []])      
                     </div>
                 </div>
             </div>
