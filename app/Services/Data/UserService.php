@@ -64,6 +64,18 @@ class UserService
         return $user;
     }
 
+    public function storeAvatar($user, $avatar)
+    {
+        $user->avatar_path = $avatar->storeAs(
+            'avatars',
+            $user->id . '.' . $avatar->getClientOriginalExtension(),
+            'public',
+        );
+        $user->save();
+
+        return $user;
+    }
+
     /**
      * Set up redirect for the action
      */

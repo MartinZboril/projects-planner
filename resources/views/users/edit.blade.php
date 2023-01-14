@@ -12,7 +12,7 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Form -->
-                <form action="{{ route('users.update', $user->id) }}" method="post">
+                <form action="{{ route('users.update', $user->id) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
                     @include('users.forms.fields', ['user' => $user, 'type' => 'edit'])

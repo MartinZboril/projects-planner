@@ -22,7 +22,7 @@
                             <div class="card-body">
                                 <div class="text-center">
                                     <h5>{{ $user->full_name }}</h5>
-                                    <img src="{{ asset('dist/img/user.png') }}" class="img-circle mb-2" alt="User Image" style="width: 100px;height: 100px;">
+                                    <img src="{{ $user->avatar_path ? asset('storage/' . $user->avatar_path) : asset('dist/img/user.png') }}" class="img-circle mb-2" alt="User Image" style="width: 100px;height: 100px;">
                                 </div>
                                 <table class="table">
                                     <tbody>
@@ -33,28 +33,25 @@
                                             <td class="text-muted">Username</td><td class="text-right">{{ $user->username }}</td>
                                         </tr>
                                         <tr>
-                                            <td class="text-muted">Job title</td><td class="text-right">{{ $user->job_title ? $user->job_title : '-' }}</td>
+                                            <td class="text-muted">Job title</td><td class="text-right">{{ $user->job_title_label }}</td>
                                         </tr>
                                         <tr>
-                                            <td class="text-muted">Mobile</td><td class="text-right">@if($user->mobile)<a href="tel:{{ $user->mobile }}">{{ $user->mobile }}</a>@else{{ '-' }}@endif</td>
+                                            <td class="text-muted">Mobile</td><td class="text-right">@if($user->mobile)<a href="tel:{{ $user->mobile_label }}">{{ $user->mobile_label }}</a>@else{{ $user->mobile_label }}@endif</td>
                                         </tr>
                                         <tr>
-                                            <td class="text-muted">Phone</td><td class="text-right">@if($user->phone)<a href="tel:{{ $user->phone }}">{{ $user->phone }}</a>@else{{ '-' }}@endif</td>
+                                            <td class="text-muted">Phone</td><td class="text-right">@if($user->phone)<a href="tel:{{ $user->phone_label }}">{{ $user->phone_label }}</a>@else{{ $user->phone_label }}@endif</td>
                                         </tr>
                                         <tr>
-                                            <td class="text-muted">Address</td><td class="text-right">{{ $user->street ? $user->street . ' ' . $user->house_number : '-' }}</td>
+                                            <td class="text-muted">Address</td><td class="text-right">{{ $user->street_label }}</td>
                                         </tr>
                                         <tr>
-                                            <td class="text-muted">City</td><td class="text-right">{{ $user->city ? $user->city : '-' }}</td>
+                                            <td class="text-muted">City</td><td class="text-right">{{ $user->city_label }}</td>
                                         </tr>
                                         <tr>
-                                            <td class="text-muted">ZIP code</td><td class="text-right">{{ $user->zip_code ? $user->zip_code : '-' }}</td>
+                                            <td class="text-muted">ZIP code</td><td class="text-right">{{ $user->zip_code_label }}</td>
                                         </tr>
                                         <tr>
-                                            <td class="text-muted">Country</td><td class="text-right">{{ $user->country ? $user->country : '-' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-muted">Phone</td><td class="text-right">{{ $user->phone ? $user->phone : '-' }}</td>
+                                            <td class="text-muted">Country</td><td class="text-right">{{ $user->country_label }}</td>
                                         </tr>
                                         <tr>
                                             <td class="text-muted">Verified At</td><td class="text-right">{{ $user->email_verified_at ? $user->email_verified_at->format('d.m.Y H:i') : 'Not verified' }}</td>

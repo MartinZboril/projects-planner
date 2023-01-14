@@ -20,6 +20,7 @@ class User extends Authenticatable
         'email',
         'username',
         'password',
+        'avatar_path',
         'job_title',
         'mobile',
         'phone',
@@ -40,7 +41,14 @@ class User extends Authenticatable
     ];
 
     protected $appends = [
-        'full_name'
+        'full_name',
+        'job_title_label',
+        'mobile_label',
+        'phone_label',
+        'street_label',
+        'city_label',
+        'zip_code_label',
+        'country_label',
     ];
 
     public const VALIDATION_RULES = [
@@ -49,6 +57,7 @@ class User extends Authenticatable
         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
         'username' => ['required', 'string', 'max:255', 'unique:users'],
         'password' => ['string', 'nullable', 'min:8'],
+        'avatar' => ['nullable', 'mimes:jpg,jpeg,png,gif', 'max:2048'],
         'job_title' => ['string', 'nullable', 'max:255'],
         'mobile' => ['string', 'nullable', 'max:255'],
         'phone' => ['string', 'nullable', 'max:255'],
@@ -77,5 +86,40 @@ class User extends Authenticatable
     public function getFullNameAttribute(): string
     {
         return $this->name . ' ' . $this->surname;
+    }
+    
+    public function getJobTitleLabelAttribute(): string
+    {
+        return ($this->job_title) ? $this->job_title : 'NaN';
+    }
+
+    public function getMobileLabelAttribute(): string
+    {
+        return ($this->mobile) ? $this->mobile : 'NaN';
+    }
+
+    public function getPhoneLabelAttribute(): string
+    {
+        return ($this->phone) ? $this->phone : 'NaN';
+    }
+
+    public function getStreetLabelAttribute(): string
+    {
+        return (($this->street) ? $this->street : 'NaN') . (($this->house_number) ? ' ' . $this->house_number : '');
+    }
+    
+    public function getCityLabelAttribute(): string
+    {
+        return ($this->city) ? $this->city : 'NaN';
+    }
+        
+    public function getZipCodeLabelAttribute(): string
+    {
+        return ($this->zip_code) ? $this->zip_code : 'NaN';
+    }
+
+    public function getCountryLabelAttribute(): string
+    {
+        return ($this->country) ? $this->country : 'NaN';
     }
 }

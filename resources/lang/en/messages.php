@@ -10,6 +10,8 @@ return [
   'milestone' => [
     'create' => 'Milestone was created!',
     'update' => 'Milestone was updated!',
+    'mark' => 'Milestone was marked!',
+    'unmark' => 'Milestone was unmarked!',
   ],
   'project' => [
     'create' => 'Project was created!',
@@ -32,6 +34,8 @@ return [
     'complete' => 'Task was completed!',
     'stop' => 'Task was stopped!',
     'resume' => 'Task was resumed!',
+    'mark' => 'Task was marked!',
+    'unmark' => 'Task was unmarked!',
   ],
   'ticket' => [
     'create' => 'Ticket was created!',
@@ -39,6 +43,8 @@ return [
     'open' => 'Ticket has been opened!',
     'close' => 'Ticket has been closed!',
     'archive' => 'Ticket has been archived!',
+    'mark' => 'Ticket was marked!',
+    'unmark' => 'Ticket was unmarked!',
   ],
   'timer' => [
     'create' => 'Timer was created!',
