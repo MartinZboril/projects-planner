@@ -43,6 +43,7 @@ Route::get('/clients/{client}/edit', [App\Http\Controllers\Data\ClientController
 Route::get('/clients/{client}/notes', [App\Http\Controllers\Data\ClientController::class, 'notes'])->name('clients.notes');
 Route::get('/clients/{client}/note/create', [App\Http\Controllers\Data\ClientController::class, 'createNote'])->name('clients.note.create');
 Route::get('/clients/{client}/note/{note}/edit', [App\Http\Controllers\Data\ClientController::class, 'editNote'])->name('clients.note.edit');
+Route::get('/clients/{client}/comments', [App\Http\Controllers\Data\ClientController::class, 'comments'])->name('clients.comments');
 
 Route::post('/clients/store', [App\Http\Controllers\Data\ClientController::class, 'store'])->name('clients.store');
 Route::patch('/clients/{client}/update', [App\Http\Controllers\Data\ClientController::class, 'update'])->name('clients.update');
@@ -149,3 +150,7 @@ Route::get('/notes/{note}/edit', [App\Http\Controllers\Data\NoteController::clas
 Route::post('/notes/store', [App\Http\Controllers\Data\NoteController::class, 'store'])->name('notes.store');
 Route::patch('/notes/{note}/update', [App\Http\Controllers\Data\NoteController::class, 'update'])->name('notes.update');
 Route::patch('/notes/{note}/mark', [App\Http\Controllers\Data\NoteController::class, 'mark'])->name('notes.mark');
+
+// Comments
+Route::post('/comments/store', [App\Http\Controllers\Data\CommentController::class, 'store'])->name('comments.store');
+Route::patch('/comment/{comment}/update', [App\Http\Controllers\Data\CommentController::class, 'update'])->name('comments.update');
