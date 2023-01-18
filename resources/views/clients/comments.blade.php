@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'toaster' => true])
+@extends('layouts.master', ['summernote' => true, 'toaster' => true])
 
 @section('title', __('pages.title.client'))
 
@@ -15,29 +15,11 @@
                     @include('clients.partials.header', ['active' => 'comment'])
                 </div>          
                 <div class="card card-primary card-outline">
-                    <div class="card-header">
-                        <form action="{{ route('comments.store') }}" method="post">
-                            @csrf
-                            @method('POST')
-                            <input type="text" name="content" value="">  
-                            <input type="hidden" name="parent_id" value="{{ $client->id }}">
-                            <input type="hidden" name="type" value="client">
-                            <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"></span>                
-                        </form>     
-                    </div>
                     <div class="card-body">
                         <!-- Message -->
                         @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                         <!-- Content -->
-                        <div class="row">
-                            @forelse ($client->comments as $comment)
-                                <div class="col-md-3">
-                                    @include('comments.partials.card', ['comment' => $comment])
-                                </div>
-                            @empty
-                                No comments were found!
-                            @endforelse                           
-                        </div>
+                        @include('comments.list', ['comment' => $comment, 'comments' => $client->comments, 'parentId' => $client->id, 'parentType' => 'client'])
                     </div>
                 </div>
             </div>

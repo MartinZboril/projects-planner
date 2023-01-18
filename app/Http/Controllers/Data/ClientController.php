@@ -46,7 +46,7 @@ class ClientController extends Controller
      */
     public function comments(Client $client): View
     {
-        return view('clients.comments', ['client' => $client]);
+        return view('clients.comments', ['client' => $client, 'comment' => new Comment]);
     }
 
     /**

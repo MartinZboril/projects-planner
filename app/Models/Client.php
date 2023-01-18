@@ -52,7 +52,7 @@ class Client extends Model
 
     public function comments(): BelongsToMany
     {
-        return $this->belongsToMany(Comment::class, 'clients_comments', 'client_id', 'comment_id');
+        return $this->belongsToMany(Comment::class, 'clients_comments', 'client_id', 'comment_id')->orderByDesc('created_at');
     }
 
     public function scopeMarked(Builder $query): Builder

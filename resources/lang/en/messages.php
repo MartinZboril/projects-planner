@@ -69,6 +69,10 @@ return [
     'mark' => 'Note was marked!',
     'unmark' => 'Note was unmarked!',
   ],
+  'comment' => [
+    'create' => 'Comment was created!',
+    'update' => 'Comment was updated!',
+  ],
   'complete' => 'Action was completed!',
   'error' => 'An error has occurred!',
 ];
