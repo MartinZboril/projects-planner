@@ -12,7 +12,7 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Form -->
-                <form action="{{ route('clients.store') }}" method="post">
+                <form action="{{ route('clients.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('POST')
                     @include('clients.forms.fields', ['client' => $client, 'type' => 'create'])  

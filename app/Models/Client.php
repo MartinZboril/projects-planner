@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\{Builder, Model};
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -45,6 +47,11 @@ class Client extends Model
         'note' => ['nullable', 'string', 'max:65553'],
     ];
     
+    public function logo(): BelongsTo
+    {
+        return $this->belongsTo(File::class, 'logo_id');
+    }
+
     public function notes(): BelongsToMany
     {
         return $this->belongsToMany(Note::class, 'clients_notes', 'client_id', 'note_id')->visible()->orderByDesc('is_marked');

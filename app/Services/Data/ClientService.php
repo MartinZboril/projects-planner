@@ -2,9 +2,12 @@
 
 namespace App\Services\Data;
 
-use App\Enums\Routes\ClientRouteEnum;
+use App\Models\File;
 use App\Models\Client;
+use App\Services\FileService;
 use App\Services\RouteService;
+use Illuminate\Http\UploadedFile;
+use App\Enums\Routes\ClientRouteEnum;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
 
@@ -13,23 +16,23 @@ class ClientService
     /**
      * Store new client.
      */
-    public function store(ValidatedInput $inputs): Client
+    public function store(ValidatedInput $inputs, ?UploadedFile $uploadedFile): Client
     {
-        return $this->save(new Client, $inputs);
+        return $this->save(new Client, $inputs, $uploadedFile);
     }
 
     /**
      * Update client.
      */
-    public function update(Client $client, ValidatedInput $inputs): Client
+    public function update(Client $client, ValidatedInput $inputs, ?UploadedFile $uploadedFile): Client
     {
-        return $this->save($client, $inputs);
+        return $this->save($client, $inputs, $uploadedFile);
     }
 
     /**
      * Save data for client.
      */
-    protected function save(Client $client, ValidatedInput $inputs)
+    protected function save(Client $client, ValidatedInput $inputs, ?UploadedFile $uploadedFile)
     {
         $client->name = $inputs->name;
         $client->email = $inputs->email;
@@ -51,6 +54,10 @@ class ClientService
         $client->note = $inputs->note;
         $client->save();
 
+        if ($uploadedFile) {
+            $client = ($this->storeLogo($client, $uploadedFile));
+        }
+
         return $client;
     }
     
@@ -65,6 +72,24 @@ class ClientService
         return $client;
     }
     
+    /**
+     * Store client logo.
+     */
+    public function storeLogo(Client $client, UploadedFile $uploadedFile): Client
+    {   
+        $oldLogoId = $client->logo_id;
+
+        $client->logo_id = ((new FileService)->upload($uploadedFile, 'clients/logos'))->id;
+        $client->save();
+
+        if ($oldLogoId) {
+            unlink(public_path('storage/' . File::find($oldLogoId)->path));
+            File::destroy($oldLogoId);    
+        }
+
+        return $client;
+    }
+
     /**
      * Set up redirect for the action
      */

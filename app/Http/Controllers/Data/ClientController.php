@@ -63,7 +63,7 @@ class ClientController extends Controller
     public function store(StoreClientRequest $request): RedirectResponse
     {
         try {
-            $client = $this->clientService->store($request->safe());
+            $client = $this->clientService->store($request->safe(), $request->file('logo'));
             $this->flashService->flash(__('messages.client.create'), 'info');
 
             return $this->clientService->setUpRedirect($request->has('save_and_close'), $client);
@@ -95,7 +95,7 @@ class ClientController extends Controller
     public function update(UpdateClientRequest $request, Client $client): RedirectResponse
     {
         try {
-            $client = $this->clientService->update($client, $request->safe());
+            $client = $this->clientService->update($client, $request->safe(), $request->file('logo'));
             $this->flashService->flash(__('messages.client.update'), 'info');
 
             return $this->clientService->setUpRedirect($request->has('save_and_close'), $client);

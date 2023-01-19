@@ -23,7 +23,7 @@
                             <div class="card-header">Profile</div>
                             <div class="card-body">
                                 <div class="row mb-3">
-                                    <img src="{{ asset('dist/img/user.png') }}" class="img-circle mr-3" alt="Client Image" style="width: 75px;height: 75px;">
+                                    <img src="{{ $client->logo ? asset('storage/' . $client->logo->path) : asset('dist/img/user.png') }}" class="img-circle mr-3" alt="Client Image" style="width: 75px;height: 75px;">
                                     <div class="">
                                         <h5>{{ $client->name }}</h5>
                                         <i class="fas fa-envelope mr-2"></i><a href="mailto:{{ $client->email_label }}">{{ $client->email_label }}</a><br>

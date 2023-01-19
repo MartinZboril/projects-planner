@@ -37,6 +37,20 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="logo">Logo</label>
+                            <input type="file" name="logo" id="logo" class="form-control border text-sm rounded-lg @error('logo') is-invalid @enderror">
+                            @error('logo')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror   
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <img src="{{ $client->logo ? asset('storage/' . $client->logo->path) : asset('dist/img/user.png') }}" class="img-circle" alt="User Image" style="width: 80px;height: 80px;">
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card card-primary card-outline">
