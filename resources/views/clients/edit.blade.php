@@ -12,7 +12,7 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Form -->
-                <form action="{{ route('clients.update', $client->id) }}" method="post">
+                <form action="{{ route('clients.update', $client->id) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
                     @include('clients.forms.fields', ['client' => $client, 'type' => 'edit'])

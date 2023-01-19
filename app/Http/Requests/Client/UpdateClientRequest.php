@@ -3,8 +3,9 @@
 namespace App\Http\Requests\Client;
 
 use App\Models\Client;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateClientRequest extends FormRequest
 {
@@ -24,6 +25,11 @@ class UpdateClientRequest extends FormRequest
         $rules = Client::VALIDATION_RULES;
         $rules['name'] = ['required', 'string', 'max:255',
             Rule::unique('clients')->ignore($this->client),
+        ];
+        $rules['logo'] = [
+            'nullable',
+            File::types(['png', 'jpg'])
+                ->max(5 * 1024),
         ];
 
         return $rules;

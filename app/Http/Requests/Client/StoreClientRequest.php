@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Client;
 
 use App\Models\Client;
+use Illuminate\Validation\Rules\File;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreClientRequest extends FormRequest
@@ -20,6 +21,13 @@ class StoreClientRequest extends FormRequest
      */
     public function rules(): array
     {
-        return Client::VALIDATION_RULES;
+        $rules = Client::VALIDATION_RULES;
+        $rules['logo'] = [
+            'nullable',
+            File::types(['png', 'jpg'])
+                ->max(5 * 1024),
+        ];
+
+        return $rules;
     }
 }
