@@ -47,6 +47,9 @@ class UserController extends Controller
     {
         try {
             $user = $this->userService->store($request->safe());
+            if ($request->hasFile('avatar')) {
+                $user = $this->userService->storeAvatar($user, $request->file('avatar')); 
+            }
             $this->flashService->flash(__('messages.user.create'), 'info');
 
             return $this->userService->setUpRedirect($request->has('save_and_close'), $user);

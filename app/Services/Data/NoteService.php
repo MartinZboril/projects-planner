@@ -18,11 +18,12 @@ class NoteService
     {
         $note = new Note;
         $note->user_id = Auth::id();
+        $note->type = $inputs->type;
 
         $note = $this->save($note, $inputs);
 
         if($parentId = $inputs->parent_id) {
-            $this->saveRelation($note, $inputs->parent_id, $inputs->type);
+            $this->saveRelation($note, $parentId, $inputs->type);
         }
 
         return $note;

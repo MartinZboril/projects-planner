@@ -2,27 +2,33 @@
 
 namespace App\Services\Data;
 
-use App\Enums\Routes\{ClientRouteEnum};
-use App\Models\{Client, ClientComment, Comment};
+use App\Models\CommentFile;
+use App\Services\FileService;
 use App\Services\RouteService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
-use Illuminate\Support\Facades\Auth;
+use App\Enums\Routes\{ClientRouteEnum};
+use App\Models\{Client, ClientComment, Comment};
 
 class CommentService
 {
     /**
      * Store new comment.
      */
-    public function store(ValidatedInput $inputs): Comment
+    public function store(ValidatedInput $inputs, ?Array $uploadedFiles): Comment
     {
         $comment = new Comment;
         $comment->user_id = Auth::id();
 
         $comment = $this->save($comment, $inputs);
 
-        if($parentId = $inputs->parent_id) {
-            $this->saveRelation($comment, $inputs->parent_id, $inputs->type);
+        if ($parentId = $inputs->parent_id) {
+            $this->saveRelation($comment, $parentId, $inputs->type);
+        }
+
+        if ($uploadedFiles) {
+            $this->storeFiles($comment, $uploadedFiles);
         }
 
         return $comment;
@@ -31,9 +37,15 @@ class CommentService
     /**
      * Update comment.
      */
-    public function update(Comment $comment, ValidatedInput $inputs): Comment
+    public function update(Comment $comment, ValidatedInput $inputs, ?Array $uploadedFiles): Comment
     {
-        return $this->save($comment, $inputs);
+        $comment = $this->save($comment, $inputs);
+
+        if ($uploadedFiles) {
+            $this->storeFiles($comment, $uploadedFiles);
+        }
+
+        return $comment;
     }
 
     /**
@@ -54,6 +66,19 @@ class CommentService
             $clientComment->client_id = $parentId;
             $clientComment->comment_id = $comment->id;
             $clientComment->save(); 
+        }
+    }
+
+    /**
+     * Store comments files.
+     */
+    public function storeFiles(Comment $comment, Array $uploadedFiles): void
+    {
+        foreach ($uploadedFiles as $uploadedFile) {
+            CommentFile::create([
+                'comment_id' => $comment->id,
+                'file_id' => ((new FileService)->upload($uploadedFile, 'clients/comments'))->id
+            ]);
         }
     }
 

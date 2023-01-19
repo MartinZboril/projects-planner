@@ -6,6 +6,15 @@
         <div class="timeline-body">
             <div id="content-comment-{{ $comment->id }}">
                 {!! $comment->content !!}
+                @if ($comment->files->count() > 0)
+                    <ul class="list-group">
+                        @foreach ($comment->files as $file)
+                            <a href="{{ asset('storage/' . $file->path) }}" download="{{ $file->file_name }}">
+                                <li class="list-group-item">{{ $file->file_name }}</li>                                                        
+                            </a>
+                        @endforeach
+                    </ul>
+                @endif
             </div>
             @include('comments.forms.update', ['comment' => $comment])
         </div>

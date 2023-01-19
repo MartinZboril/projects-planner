@@ -3,7 +3,7 @@
     <div class="timeline-item">
         <h3 class="timeline-header"><a href="{{ route('users.detail', Auth::user()->id) }}">{{ Auth::user()->fullname }}</a></h3>
         <div class="timeline-body">
-            <form action="{{ route('comments.store') }}" method="post">
+            <form action="{{ route('comments.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
                 @include('comments.forms.fields', ['comment' => $comment, 'parentId' => $parentId, 'parentType' => $parentType, 'type' => 'create'])

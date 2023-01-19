@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Data;
 
+use Exception;
 use App\Models\Comment;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Comment\{StoreCommentRequest, UpdateCommentRequest};
 use App\Services\FlashService;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use App\Services\Data\CommentService;
-use Illuminate\Http\Request;
+use App\Http\Requests\Comment\{StoreCommentRequest, UpdateCommentRequest};
 
 class CommentController extends Controller
 {
@@ -27,7 +28,7 @@ class CommentController extends Controller
     public function store(StoreCommentRequest $request)
     {
         try {
-            $comment = $this->commentService->store($request->safe());
+            $comment = $this->commentService->store($request->safe(), $request->file('files'));
             $this->flashService->flash(__('messages.comment.create'), 'info');
 
             return $this->commentService->setUpRedirect($comment, $request->type, $request->parent_id);
@@ -43,7 +44,7 @@ class CommentController extends Controller
     public function update(UpdateCommentRequest $request, Comment $comment)
     {
         try {
-            $comment = $this->commentService->update($comment, $request->safe());
+            $comment = $this->commentService->update($comment, $request->safe(), $request->file('files'));
             $this->flashService->flash(__('messages.comment.update'), 'info');
 
             return $this->commentService->setUpRedirect($comment, $request->type, $request->parent_id);

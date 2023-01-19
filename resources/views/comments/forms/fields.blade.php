@@ -2,6 +2,8 @@
 @error('content')
     <div class="invalid-feedback">{{ $message }}</div>
 @enderror
+<input type="file" name="files[]" multiple>
+<hr>
 @if ($type === 'create')
 <input type="hidden" name="parent_id" value="{{ $parentId }}">
 <input type="hidden" name="type" value="{{ $parentType }}">
