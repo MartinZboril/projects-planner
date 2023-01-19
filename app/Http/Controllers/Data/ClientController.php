@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Data;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Client\{StoreClientRequest, MarkClientRequest, UpdateClientRequest};
+use Exception;
+use App\Models\Comment;
+use Illuminate\View\View;
 use App\Models\{Client, Note};
 use App\Services\FlashService;
-use App\Services\Data\ClientService;
-use Exception;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Services\Data\ClientService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use App\Http\Requests\Client\{StoreClientRequest, MarkClientRequest, UpdateClientRequest};
 
 class ClientController extends Controller
 {
@@ -38,6 +39,14 @@ class ClientController extends Controller
     public function notes(Client $client): View
     {
         return view('clients.notes', ['client' => $client]);
+    }
+
+    /**
+     * Display the notes of comment.
+     */
+    public function comments(Client $client): View
+    {
+        return view('clients.comments', ['client' => $client, 'comment' => new Comment]);
     }
 
     /**
