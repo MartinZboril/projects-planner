@@ -81,6 +81,14 @@ class ProjectController extends Controller
     }
 
     /**
+     * Display the files of project.
+     */
+    public function files(Project $project): View
+    {
+        return view('projects.files', ['project' => $project]);
+    }
+
+    /**
      * Show the form for creating a new project.
      */
     public function create(): View

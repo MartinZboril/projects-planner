@@ -22,7 +22,7 @@ class UploadFileRequest extends FormRequest
         return [
             'files' => 'required',
             'parent_id' => 'required', 'integer',
-            'type' => 'in:client,ticket,task,milestone'
+            'type' => 'in:client,ticket,task,milestone,project'
         ];
     }
 }
