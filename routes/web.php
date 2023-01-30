@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\{Auth, Route};
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +44,7 @@ Route::get('/clients/{client}/notes', [App\Http\Controllers\Data\ClientControlle
 Route::get('/clients/{client}/note/create', [App\Http\Controllers\Data\ClientController::class, 'createNote'])->name('clients.note.create');
 Route::get('/clients/{client}/note/{note}/edit', [App\Http\Controllers\Data\ClientController::class, 'editNote'])->name('clients.note.edit');
 Route::get('/clients/{client}/comments', [App\Http\Controllers\Data\ClientController::class, 'comments'])->name('clients.comments');
+Route::get('/clients/{client}/files', [App\Http\Controllers\Data\ClientController::class, 'files'])->name('clients.files');
 
 Route::post('/clients/store', [App\Http\Controllers\Data\ClientController::class, 'store'])->name('clients.store');
 Route::patch('/clients/{client}/update', [App\Http\Controllers\Data\ClientController::class, 'update'])->name('clients.update');
@@ -154,3 +155,6 @@ Route::patch('/notes/{note}/mark', [App\Http\Controllers\Data\NoteController::cl
 // Comments
 Route::post('/comments/store', [App\Http\Controllers\Data\CommentController::class, 'store'])->name('comments.store');
 Route::patch('/comment/{comment}/update', [App\Http\Controllers\Data\CommentController::class, 'update'])->name('comments.update');
+
+// Files
+Route::post('/files/upload', [App\Http\Controllers\FileController::class, 'upload'])->name('files.upload');
