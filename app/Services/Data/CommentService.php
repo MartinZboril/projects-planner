@@ -4,12 +4,10 @@ namespace App\Services\Data;
 
 use App\Models\CommentFile;
 use App\Services\FileService;
-use App\Services\RouteService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
-use App\Enums\Routes\{ClientRouteEnum};
-use App\Models\{Client, ClientComment, Comment};
+use App\Models\{ClientComment, Comment, ProjectComment};
 
 class CommentService
 {
@@ -62,10 +60,15 @@ class CommentService
     protected function saveRelation(Comment $comment, int $parentId, string $type): void
     {
         if ($type == 'client') {
-            $clientComment = new ClientComment;
-            $clientComment->client_id = $parentId;
-            $clientComment->comment_id = $comment->id;
-            $clientComment->save(); 
+            ClientComment::create([
+                'client_id' => $parentId,
+                'comment_id' => $comment->id
+            ]);
+        } elseif ($type == 'project') {
+            ProjectComment::create([
+                'project_id' => $parentId,
+                'comment_id' => $comment->id
+            ]);
         }
     }
 
@@ -77,7 +80,7 @@ class CommentService
         foreach ($uploadedFiles as $uploadedFile) {
             CommentFile::create([
                 'comment_id' => $comment->id,
-                'file_id' => ((new FileService)->upload($uploadedFile, 'clients/comments'))->id
+                'file_id' => ((new FileService)->upload($uploadedFile, 'comments'))->id
             ]);
         }
     }
@@ -87,17 +90,6 @@ class CommentService
      */
     public function setUpRedirect(Comment $comment, $type, $parentId): RedirectResponse
     {
-        switch ($type) {                        
-            case 'client':
-                $redirectAction = ClientRouteEnum::Comments;
-                $redirectVars = ['client' => Client::find($parentId)];
-                break;  
-
-            default:
-                return redirect()->back();
-                break;
-        }
-        
-        return (new RouteService)->redirect($redirectAction->value, $redirectVars);
+        return redirect()->back();
     }
 }

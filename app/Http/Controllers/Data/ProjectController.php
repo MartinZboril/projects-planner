@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Data;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Project\{ChangeProjectRequest, MarkProjectRequest, StoreProjectRequest, UpdateProjectRequest};
-use App\Models\{Client, Milestone, Note, Project, Task, Ticket, ToDo, User};
-use App\Services\FlashService;
-use App\Services\Data\ProjectService;
 use Exception;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use App\Services\FlashService;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Services\Data\ProjectService;
+use Illuminate\Http\RedirectResponse;
+use App\Models\{Client, Comment, Milestone, Note, Project, Task, Ticket, ToDo, User};
+use App\Http\Requests\Project\{ChangeProjectRequest, MarkProjectRequest, StoreProjectRequest, UpdateProjectRequest};
 
 class ProjectController extends Controller
 {
@@ -86,6 +86,14 @@ class ProjectController extends Controller
     public function files(Project $project): View
     {
         return view('projects.files', ['project' => $project]);
+    }
+    
+    /**
+     * Display the comments of project.
+     */
+    public function comments(Project $project): View
+    {
+        return view('projects.comments', ['project' => $project, 'comment' => new Comment]);
     }
 
     /**

@@ -77,6 +77,7 @@ Route::get('/projects/{project}/notes', [App\Http\Controllers\Data\ProjectContro
 Route::get('/projects/{project}/note/create', [App\Http\Controllers\Data\ProjectController::class, 'createNote'])->name('projects.note.create');
 Route::get('/projects/{project}/note/{note}/edit', [App\Http\Controllers\Data\ProjectController::class, 'editNote'])->name('projects.note.edit');
 Route::get('/projects/{project}/files', [App\Http\Controllers\Data\ProjectController::class, 'files'])->name('projects.files');
+Route::get('/projects/{project}/comments', [App\Http\Controllers\Data\ProjectController::class, 'comments'])->name('projects.comments');
 
 Route::post('/projects/store', [App\Http\Controllers\Data\ProjectController::class, 'store'])->name('projects.store');
 Route::patch('/projects/{project}/update', [App\Http\Controllers\Data\ProjectController::class, 'update'])->name('projects.update');
