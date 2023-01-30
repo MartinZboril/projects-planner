@@ -43,17 +43,22 @@
                 {!! $task->description !!}
             </div>
         </div>
+        <div class="card card-primary card-outline">
+            <div class="card-header">Activity Feed</div>
+            <div class="card-body">
+            </div>
+        </div>
     </div>
     <div class="col-md-7">
     <div class="card card-primary card-outline">
-        <div class="card-header ui-sortable-handle" style="cursor: move;">
-            <h3 class="card-title">
-            <i class="ion ion-clipboard mr-1"></i>
-            ToDo List
-            </h3>
+        <div class="card-header">
+            <div class="card-title">
+                <i class="fas fa-clipboard-list mr-1"></i>
+                ToDo List
+            </div>
             <div class="card-tools">
                 @if($project)
-                    <a href="{{ route('projects.todo.create', ['project' => $project->id, 'task' => $task->id]) }}" class="btn btn-sm btn-primary btn-sm float-right"><i class="fas fa-plus"></i>Add</a>
+                    <a href="{{ route('projects.todo.create', ['project' => $project->id, 'task' => $task->id]) }}" class="btn btn-sm btn-primary float-right"><i class="fas fa-plus"></i>Add</a>
                 @else
                     <a href="{{ route('todos.create', $task->id) }}" class="btn btn-sm btn-primary btn-sm float-right"><i class="fas fa-plus"></i>Add</a>
                 @endif
@@ -63,10 +68,11 @@
             @include('todos.partials.list', ['todos' => $task->todos, 'project' => $project ? $project : null, 'redirect' => $project ? 'projects' : 'tasks', 'action' => null])            
         </div>
     </div>
-        <div class="card card-primary card-outline">
-            <div class="card-header">Activity Feed</div>
-            <div class="card-body">
-            </div>
+    <div class="card card-primary card-outline">
+        <div class="card-header">Files</div>
+        <div class="card-body">
+            @include('files.list', ['files' => $task->files, 'parentId' => $task->id, 'parentType' => 'task'])
         </div>
+    </div>
     </div>
 </div> 

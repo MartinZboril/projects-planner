@@ -56,6 +56,11 @@ class Project extends Model
         return $this->belongsToMany(User::class, 'projects_users', 'project_id', 'user_id');
     }
 
+    public function files(): BelongsToMany
+    {
+        return $this->belongsToMany(File::class, 'projects_files', 'project_id', 'file_id')->orderByDesc('created_at');
+    }
+
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class, 'project_id');

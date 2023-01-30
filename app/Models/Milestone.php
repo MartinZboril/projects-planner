@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Enums\TaskStatusEnum;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\{Builder, Model};
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany};
 
 class Milestone extends Model
 {
@@ -40,6 +40,11 @@ class Milestone extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 
+    public function files(): BelongsToMany
+    {
+        return $this->belongsToMany(File::class, 'milestones_files', 'milestone_id', 'file_id')->orderByDesc('created_at');
+    }
+    
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class, 'milestone_id');

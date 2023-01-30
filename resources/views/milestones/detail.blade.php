@@ -33,6 +33,12 @@
                             </div>
                         </div>
                         <div class="card card-primary card-outline">
+                            <div class="card-header">Files</div>
+                            <div class="card-body">
+                                @include('files.list', ['files' => $milestone->files, 'parentId' => $milestone->id, 'parentType' => 'milestone'])
+                            </div>
+                        </div>
+                        <div class="card card-primary card-outline">
                             <div class="card-header">Activity Feed</div>
                             <div class="card-body">
                             </div>

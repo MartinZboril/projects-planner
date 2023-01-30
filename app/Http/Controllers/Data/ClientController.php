@@ -54,7 +54,7 @@ class ClientController extends Controller
      */
     public function files(Client $client): View
     {
-        return view('clients.files', ['client' => $client, 'file' => new File]);
+        return view('clients.files', ['client' => $client]);
     }
 
     /**

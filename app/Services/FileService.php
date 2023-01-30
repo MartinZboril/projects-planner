@@ -3,12 +3,14 @@
 namespace App\Services;
 
 use App\Models\File;
+use App\Models\TaskFile;
+use App\Models\ProjectFile;
+use App\Models\MilestoneFile;
 use Illuminate\Http\UploadedFile;
-use App\Models\{Client, ClientFile, TicketFile};
-use App\Enums\Routes\ClientRouteEnum;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
 use Illuminate\Support\Facades\Storage;
+use App\Models\{ClientFile, TicketFile};
 
 class FileService
 {
@@ -53,6 +55,21 @@ class FileService
                     'ticket_id' => $parentId,
                     'file_id' => $this->upload($uploadedFile, 'tickets/files')->id
                 ]);
+            } elseif ($type == 'task') {
+                TaskFile::create([
+                    'task_id' => $parentId,
+                    'file_id' => $this->upload($uploadedFile, 'tasks/files')->id
+                ]);
+            } elseif ($type == 'milestone') {
+                MilestoneFile::create([
+                    'milestone_id' => $parentId,
+                    'file_id' => $this->upload($uploadedFile, 'milestones/files')->id
+                ]);
+            } elseif ($type == 'project') {
+                ProjectFile::create([
+                    'project_id' => $parentId,
+                    'file_id' => $this->upload($uploadedFile, 'projects/files')->id
+                ]);
             }
         }
     }
@@ -62,17 +79,6 @@ class FileService
      */
     public function setUpRedirect($type, $parentId): RedirectResponse
     {
-        switch ($type) {                        
-            case 'client':
-                $redirectAction = ClientRouteEnum::Files;
-                $redirectVars = ['client' => Client::find($parentId)];
-                break;  
-
-            default:
-                return redirect()->back();
-                break;
-        }
-        
-        return (new RouteService)->redirect($redirectAction->value, $redirectVars);
+        return redirect()->back();
     }
 }
