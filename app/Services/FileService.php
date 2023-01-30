@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\File;
 use App\Models\TaskFile;
+use App\Models\MilestoneFile;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
@@ -57,6 +58,11 @@ class FileService
                 TaskFile::create([
                     'task_id' => $parentId,
                     'file_id' => $this->upload($uploadedFile, 'tasks/files')->id
+                ]);
+            } elseif ($type == 'milestone') {
+                MilestoneFile::create([
+                    'milestone_id' => $parentId,
+                    'file_id' => $this->upload($uploadedFile, 'milestones/files')->id
                 ]);
             }
         }
