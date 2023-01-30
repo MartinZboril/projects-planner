@@ -63,7 +63,12 @@ class Task extends Model
     {
         return $this->belongsToMany(File::class, 'tasks_files', 'task_id', 'file_id')->orderByDesc('created_at');
     }
-    
+        
+    public function comments(): BelongsToMany
+    {
+        return $this->belongsToMany(Comment::class, 'tasks_comments', 'task_id', 'comment_id')->orderByDesc('created_at');
+    }
+
     public function todos(): HasMany
     {
         return $this->hasMany(ToDo::class, 'task_id');

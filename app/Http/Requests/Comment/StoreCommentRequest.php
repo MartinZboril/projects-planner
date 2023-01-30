@@ -22,7 +22,7 @@ class StoreCommentRequest extends FormRequest
     {
         $rules = Comment::VALIDATION_RULES;
         $rules['parent_id'] = ['required', 'integer'];
-        $rules['type'] = ['in:client,project,milestone'];
+        $rules['type'] = ['in:client,project,milestone,task'];
         unset($rules['user_id']);
 
         return $rules;

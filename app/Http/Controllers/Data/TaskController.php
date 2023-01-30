@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Data;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Task\{ChangeTaskRequest, MarkTaskRequest, StoreTaskRequest, PauseTaskRequest, UpdateTaskRequest};
-use App\Models\{Project, Task, User};
+use App\Models\{Comment, Project, Task, User};
 use App\Services\FlashService;
 use App\Services\Data\TaskService;
 use Exception;
@@ -61,7 +61,7 @@ class TaskController extends Controller
      */
     public function detail(Task $task): View
     {
-        return view('tasks.detail', ['task' => $task]);
+        return view('tasks.detail', ['task' => $task, 'comment' => new Comment]);
     }
 
     /**

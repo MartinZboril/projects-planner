@@ -3,6 +3,7 @@
 namespace App\Services\Data;
 
 use App\Models\CommentFile;
+use App\Models\TaskComment;
 use App\Services\FileService;
 use App\Models\MilestoneComment;
 use Illuminate\Support\Facades\Auth;
@@ -73,6 +74,11 @@ class CommentService
         } elseif ($type == 'milestone') {
             MilestoneComment::create([
                 'milestone_id' => $parentId,
+                'comment_id' => $comment->id
+            ]);
+        } elseif ($type == 'task') {
+            TaskComment::create([
+                'task_id' => $parentId,
                 'comment_id' => $comment->id
             ]);
         }
