@@ -13,10 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('clients', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('avatar_path');
             $table->foreignIdFor(
                 \App\Models\File::class,
-                'logo_id'
+                'avatar_id'
             )->nullable()->constrained('files', 'id');
         });
     }
@@ -28,8 +29,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('clients', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('logo_id');
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('avatar_path')->nullable();
+            $table->dropConstrainedForeignId('avatar_id');
         });
     }
 };

@@ -2,25 +2,27 @@
 
 namespace App\Services\Data;
 
-use App\Enums\Routes\UserRouteEnum;
 use App\Models\User;
-use App\Services\RouteService;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\{Auth, Hash};
 use Illuminate\Support\Str;
+use App\Services\FileService;
+use App\Services\RouteService;
+use Illuminate\Http\UploadedFile;
+use App\Enums\Routes\UserRouteEnum;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
+use Illuminate\Support\Facades\{Auth, Hash};
 
 class UserService
 {
     /**
      * Store new user.
      */
-    public function store(ValidatedInput $inputs): User
+    public function store(ValidatedInput $inputs, ?UploadedFile $avatar): User
     {
         $user = new User;
         $user->password = Hash::make(($inputs->has('password')) ? $inputs->password : Str::random(8));
 
-        $user = $this->save($user, $inputs);
+        $user = $this->save($user, $inputs, $avatar);
 
         $inputs->user_id = $user->id;
         $inputs->name = $inputs->rate_name;
@@ -35,17 +37,17 @@ class UserService
     /**
      * Update user.
      */
-    public function update(User $user, ValidatedInput $inputs): User
+    public function update(User $user, ValidatedInput $inputs, ?UploadedFile $avatar): User
     {
         $user->password = $inputs->has('password') ? Hash::make($inputs->password) : $user->password;
 
-        return $this->save($user, $inputs);
+        return $this->save($user, $inputs, $avatar);
     }
 
     /**
      * Save data for user.
      */
-    protected function save(User $user, ValidatedInput $inputs)
+    protected function save(User $user, ValidatedInput $inputs, ?UploadedFile $avatar)
     {
         $user->name = $inputs->name;
         $user->surname = $inputs->surname;
@@ -61,16 +63,16 @@ class UserService
         $user->country = $inputs->country;
         $user->save();
 
+        if ($avatar) {
+            $user = $this->uploadAvatar($user, $avatar);
+        }
+
         return $user;
     }
 
-    public function storeAvatar($user, $avatar)
+    public function uploadAvatar(User $user, ?UploadedFile $avatar): User
     {
-        $user->avatar_path = $avatar->storeAs(
-            'avatars',
-            $user->id . '.' . $avatar->getClientOriginalExtension(),
-            'public',
-        );
+        $user->avatar_id = ((new FileService)->upload($avatar, 'users/avatars'))->id;
         $user->save();
 
         return $user;

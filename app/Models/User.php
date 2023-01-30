@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Models\Timer;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -20,7 +21,6 @@ class User extends Authenticatable
         'email',
         'username',
         'password',
-        'avatar_path',
         'job_title',
         'mobile',
         'phone',
@@ -67,6 +67,11 @@ class User extends Authenticatable
         'country' => ['string', 'nullable', 'max:255'],
         'zip_code' => ['string', 'nullable', 'max:255'],
     ];
+
+    public function avatar(): BelongsTo
+    {
+        return $this->belongsTo(File::class, 'avatar_id');
+    }
 
     public function timers(): HasMany
     {

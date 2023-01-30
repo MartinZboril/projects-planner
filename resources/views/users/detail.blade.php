@@ -22,7 +22,7 @@
                             <div class="card-body">
                                 <div class="text-center">
                                     <h5>{{ $user->full_name }}</h5>
-                                    <img src="{{ $user->avatar_path ? asset('storage/' . $user->avatar_path) : asset('dist/img/user.png') }}" class="img-circle mb-2" alt="User Image" style="width: 100px;height: 100px;">
+                                    <img src="{{ $user->avatar ? asset('storage/' . $user->avatar->path) : asset('dist/img/user.png') }}" class="img-circle mb-2" alt="User Image" style="width: 100px;height: 100px;">
                                 </div>
                                 <table class="table">
                                     <tbody>

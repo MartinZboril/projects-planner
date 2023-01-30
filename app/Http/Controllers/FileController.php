@@ -28,7 +28,7 @@ class FileController extends Controller
     {
         try {
             $this->fileService->uploadWithRelations($request->safe(), $request->file('files'));
-            $this->flashService->flash(__('messages.file.create'), 'info');
+            $this->flashService->flash(__('messages.file.upload'), 'info');
 
             return $this->fileService->setUpRedirect($request->type, $request->parent_id);
         } catch (Exception $exception) {
