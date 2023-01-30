@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use App\Enums\{TicketPriorityEnum, TicketTypeEnum, TicketStatusEnum};
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\{Builder, Model};
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany};
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\{TicketPriorityEnum, TicketTypeEnum, TicketStatusEnum};
 
 class Ticket extends Model
 {
@@ -51,6 +51,11 @@ class Ticket extends Model
     public function assignee(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assignee_id');
+    }
+
+    public function files(): BelongsToMany
+    {
+        return $this->belongsToMany(File::class, 'tickets_files', 'ticket_id', 'file_id')->orderByDesc('created_at');
     }
 
     public function scopeStatus(Builder $query, TicketStatusEnum $type): Builder

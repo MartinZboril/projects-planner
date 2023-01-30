@@ -73,6 +73,9 @@ return [
     'create' => 'Comment was created!',
     'update' => 'Comment was updated!',
   ],
+  'file' => [
+    'upload' => 'Upload was completed!',
+  ],
   'complete' => 'Action was completed!',
   'error' => 'An error has occurred!',
 ];

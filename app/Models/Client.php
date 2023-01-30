@@ -62,6 +62,11 @@ class Client extends Model
         return $this->belongsToMany(Comment::class, 'clients_comments', 'client_id', 'comment_id')->orderByDesc('created_at');
     }
 
+    public function files(): BelongsToMany
+    {
+        return $this->belongsToMany(File::class, 'clients_files', 'client_id', 'file_id')->orderByDesc('created_at');
+    }
+
     public function scopeMarked(Builder $query): Builder
     {
         return $query->where('is_marked', true);

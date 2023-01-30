@@ -47,14 +47,14 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="avatar">Avatar</label>
-                            <input type="file" class="form-control border text-sm rounded-lg @error('avatar') is-invalid @enderror">
+                            <input type="file" name="avatar" class="form-control border text-sm rounded-lg @error('avatar') is-invalid @enderror">
                             @error('avatar')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror   
                         </div>
                     </div>
                     <div class="col-md-6 text-center">
-                        <img src="{{ Auth::user()->avatar_path ? asset('storage/' . Auth::user()->avatar_path) : asset('dist/img/user.png') }}" class="img-circle" alt="User Image" style="width: 80px;height: 80px;">
+                        <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar->path) : asset('dist/img/user.png') }}" class="img-circle" alt="User Image" style="width: 80px;height: 80px;">
                     </div>
                 </div>
                 <hr>

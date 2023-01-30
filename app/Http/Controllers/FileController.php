@@ -2,84 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\File;
-use Illuminate\Http\Request;
+use Exception;
+use App\Services\FlashService;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Services\FileService;
+use App\Http\Requests\File\UploadFileRequest;
 
 class FileController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    protected $fileService;
+    protected $flashService;
+
+    public function __construct(FileService $fileService, FlashService $flashService)
     {
-        //
+        $this->middleware('auth');
+        $this->fileService = $fileService;
+        $this->flashService = $flashService;
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Upload a newly created file in storage.
      */
-    public function create()
+    public function upload(UploadFileRequest $request)
     {
-        //
-    }
+        try {
+            $this->fileService->uploadWithRelations($request->safe(), $request->file('files'));
+            $this->flashService->flash(__('messages.file.upload'), 'info');
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\File  $file
-     * @return \Illuminate\Http\Response
-     */
-    public function show(File $file)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\File  $file
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(File $file)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\File  $file
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, File $file)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\File  $file
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(File $file)
-    {
-        //
+            return $this->fileService->setUpRedirect($request->type, $request->parent_id);
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
     }
 }

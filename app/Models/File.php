@@ -9,6 +9,10 @@ class File extends Model
 {
     use HasFactory;
 
+    protected $appends = [
+        'kilobytes_size',
+    ];
+
     protected $fillable = [
         'name',
         'file_path'
@@ -18,4 +22,9 @@ class File extends Model
         'name' => ['required', 'max:255'],
         'file_path' => ['required', 'max:255'],
     ];
+
+    public function getKilobytesSizeAttribute(): string
+    {
+        return round($this->size / 1000, 2);
+    }
 }

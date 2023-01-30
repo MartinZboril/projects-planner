@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Data;
 use Exception;
 use App\Models\Comment;
 use Illuminate\View\View;
-use App\Models\{Client, Note};
+use App\Models\{Client, File, Note};
 use App\Services\FlashService;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -42,11 +42,19 @@ class ClientController extends Controller
     }
 
     /**
-     * Display the notes of comment.
+     * Display the comments of client.
      */
     public function comments(Client $client): View
     {
         return view('clients.comments', ['client' => $client, 'comment' => new Comment]);
+    }
+
+    /**
+     * Display the files of client.
+     */
+    public function files(Client $client): View
+    {
+        return view('clients.files', ['client' => $client, 'file' => new File]);
     }
 
     /**
