@@ -45,6 +45,11 @@ class Milestone extends Model
         return $this->belongsToMany(File::class, 'milestones_files', 'milestone_id', 'file_id')->orderByDesc('created_at');
     }
     
+    public function comments(): BelongsToMany
+    {
+        return $this->belongsToMany(Comment::class, 'milestones_comments', 'milestone_id', 'comment_id')->orderByDesc('created_at');
+    }
+    
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class, 'milestone_id');

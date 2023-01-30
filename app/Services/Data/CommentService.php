@@ -4,6 +4,7 @@ namespace App\Services\Data;
 
 use App\Models\CommentFile;
 use App\Services\FileService;
+use App\Models\MilestoneComment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
@@ -67,6 +68,11 @@ class CommentService
         } elseif ($type == 'project') {
             ProjectComment::create([
                 'project_id' => $parentId,
+                'comment_id' => $comment->id
+            ]);
+        } elseif ($type == 'milestone') {
+            MilestoneComment::create([
+                'milestone_id' => $parentId,
                 'comment_id' => $comment->id
             ]);
         }

@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Data;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Milestone\{LoadMilestoneRequest, MarkMilestoneRequest, StoreMilestoneRequest, UpdateMilestoneRequest};
-use App\Models\{Milestone, Project};
+use App\Http\Requests\Milestone\{MarkMilestoneRequest, StoreMilestoneRequest, UpdateMilestoneRequest};
+use App\Models\{Comment, Milestone, Project};
 use App\Services\FlashService;
 use App\Services\Data\MilestoneService;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -54,7 +53,7 @@ class MilestoneController extends Controller
      */
     public function detail(Project $project, Milestone $milestone): View
     {
-        return view('milestones.detail', ['project' => $project, 'milestone' => $milestone]);
+        return view('milestones.detail', ['project' => $project, 'milestone' => $milestone, 'comment' => new Comment]);
     }
 
     /**

@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'toaster' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'summernote' => true])
 
 @section('title', __('pages.title.milestone'))
 
@@ -49,6 +49,12 @@
                             <div class="card-header">Tasks</div>
                             <div class="card-body">
                                 @include('tasks.partials.table', ['id' => 'tasks-table', 'tasks' => $milestone->tasks, 'display' => [], 'redirect' => 'projects'])       
+                            </div>
+                        </div>
+                        <div class="card card-primary card-outline">
+                            <div class="card-header">Comments</div>
+                            <div class="card-body">
+                                @include('comments.list', ['comment' => $comment, 'comments' => $milestone->comments, 'parentId' => $milestone->id, 'parentType' => 'milestone'])
                             </div>
                         </div>
                     </div>
