@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\File;
 use Illuminate\Http\UploadedFile;
-use App\Models\{Client, ClientFile};
+use App\Models\{Client, ClientFile, TicketFile};
 use App\Enums\Routes\ClientRouteEnum;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
@@ -42,11 +42,16 @@ class FileService
         $parentId = $inputs->parent_id;
         $type = $inputs->type;
 
-        if ($type == 'client') {
-            foreach ($uploadedFiles as $uploadedFile) {
+        foreach ($uploadedFiles as $uploadedFile) {
+            if ($type == 'client') {                
                 ClientFile::create([
                     'client_id' => $parentId,
                     'file_id' => $this->upload($uploadedFile, 'clients/files')->id
+                ]);
+            } elseif ($type == 'ticket') {
+                TicketFile::create([
+                    'ticket_id' => $parentId,
+                    'file_id' => $this->upload($uploadedFile, 'tickets/files')->id
                 ]);
             }
         }
