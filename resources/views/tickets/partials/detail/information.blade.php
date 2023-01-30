@@ -57,5 +57,11 @@
                 @include('files.list', ['files' => $ticket->files, 'parentId' => $ticket->id, 'parentType' => 'ticket'])
             </div>
         </div>
+        <div class="card card-primary card-outline">
+            <div class="card-header">Comments</div>
+            <div class="card-body">
+                @include('comments.list', ['comment' => $comment, 'comments' => $ticket->comments, 'parentId' => $ticket->id, 'parentType' => 'ticket'])
+            </div>
+        </div>
     </div>
 </div> 

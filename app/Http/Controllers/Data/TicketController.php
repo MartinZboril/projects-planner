@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Data;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Ticket\{ConvertTicketRequest, ChangeTicketRequest, MarkTicketRequest, StoreTicketRequest, UpdateTicketRequest};
-use App\Models\{Project, Ticket, User};
+use App\Models\{Comment, Project, Ticket, User};
 use App\Services\FlashService;
 use App\Services\Data\{TaskService, TicketService, ProjectUserService};
 use Exception;
@@ -61,7 +61,7 @@ class TicketController extends Controller
      */
     public function detail(Ticket $ticket): View
     {
-        return view('tickets.detail', ['ticket' => $ticket]);
+        return view('tickets.detail', ['ticket' => $ticket, 'comment' => new Comment]);
     }
 
     /**

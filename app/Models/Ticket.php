@@ -57,7 +57,12 @@ class Ticket extends Model
     {
         return $this->belongsToMany(File::class, 'tickets_files', 'ticket_id', 'file_id')->orderByDesc('created_at');
     }
-
+        
+    public function comments(): BelongsToMany
+    {
+        return $this->belongsToMany(Comment::class, 'tickets_comments', 'ticket_id', 'comment_id')->orderByDesc('created_at');
+    }
+    
     public function scopeStatus(Builder $query, TicketStatusEnum $type): Builder
     {
         return $query->where('status', $type);
