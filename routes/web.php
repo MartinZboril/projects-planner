@@ -2,27 +2,42 @@
 
 use Illuminate\Support\Facades\{Auth, Route};
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 Auth::routes();
 
-// Dashboard
-Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard.index');
-Route::get('/dashboard/projects', [App\Http\Controllers\DashboardController::class, 'projects'])->name('dashboard.projects');
-Route::get('/dashboard/tasks', [App\Http\Controllers\DashboardController::class, 'tasks'])->name('dashboard.tasks');
-Route::get('/dashboard/tickets', [App\Http\Controllers\DashboardController::class, 'tickets'])->name('dashboard.tickets');
-
-// Releases
-Route::get('/releases', [App\Http\Controllers\ReleaseController::class, 'index'])->name('releases.index');
+Route::middleware(['auth'])->group(function () {
+    // Analysis
+    Route::group(['prefix' => 'analysis', 'as' => 'analysis.'], function () {
+        Route::get('/milestones', App\Http\Controllers\Analysis\MilestoneAnalysisController::class)->name('milestones');
+        Route::get('/projects', App\Http\Controllers\Analysis\ProjectAnalysisController::class)->name('projects');
+        Route::get('/tasks', App\Http\Controllers\Analysis\TaskAnalysisController::class)->name('tasks');
+        Route::get('/tickets', App\Http\Controllers\Analysis\TicketAnalysisController::class)->name('tickets');
+        Route::get('/timesheets', App\Http\Controllers\Analysis\TimesheetAnalysisController::class)->name('timesheets');    
+    });
+    // Dashboard
+    Route::group(['as' => 'dashboard.'], function () {
+        Route::get('/', App\Http\Controllers\Dashboard\SummaryDashboardController::class)->name('index');
+        Route::group(['prefix' => 'dashboard'], function () {
+            Route::get('/projects', App\Http\Controllers\Dashboard\ProjectDashboardController::class)->name('projects');
+            Route::get('/tasks', App\Http\Controllers\Dashboard\TaskDashboardController::class)->name('tasks');
+            Route::get('/tickets', App\Http\Controllers\Dashboard\TicketDashboardController::class)->name('tickets');
+        });
+    });
+    // Files
+    Route::post('/files/upload', App\Http\Controllers\UploadFileController::class)->name('files.upload');
+    // Releases
+    Route::get('/releases', App\Http\Controllers\ReleaseController::class)->name('releases');
+    // Reporting
+    Route::group(['as' => 'reports.'], function () {
+        Route::get('/report', App\Http\Controllers\Report\MenuReportController::class)->name('index');
+        Route::group(['prefix' => 'report'], function () {
+            Route::get('/milestones', App\Http\Controllers\Report\MilestoneReportController::class)->name('milestones');
+            Route::get('/projects', App\Http\Controllers\Report\ProjectReportController::class)->name('projects');
+            Route::get('/tasks', App\Http\Controllers\Report\TaskReportController::class)->name('tasks');
+            Route::get('/tickets', App\Http\Controllers\Report\TicketReportController::class)->name('tickets');
+            Route::get('/timesheets', App\Http\Controllers\Report\TimesheetReportController::class)->name('timesheets');    
+        });
+    });
+});
 
 // Users
 Route::get('/users', [App\Http\Controllers\Data\UserController::class, 'index'])->name('users.index');
@@ -130,21 +145,6 @@ Route::patch('/tickets/{ticket}/change', [App\Http\Controllers\Data\TicketContro
 Route::patch('/tickets/{ticket}/convert', [App\Http\Controllers\Data\TicketController::class, 'convert'])->name('tickets.convert');
 Route::patch('/tickets/{ticket}/mark', [App\Http\Controllers\Data\TicketController::class, 'mark'])->name('tickets.mark');
 
-// Reporting
-Route::get('/report', [App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
-Route::get('/report/projects', [App\Http\Controllers\ReportController::class, 'projects'])->name('reports.projects');
-Route::get('/report/tasks', [App\Http\Controllers\ReportController::class, 'tasks'])->name('reports.tasks');
-Route::get('/report/tickets', [App\Http\Controllers\ReportController::class, 'tickets'])->name('reports.tickets');
-Route::get('/report/milestones', [App\Http\Controllers\ReportController::class, 'milestones'])->name('reports.milestones');
-Route::get('/report/timesheets', [App\Http\Controllers\ReportController::class, 'timesheets'])->name('reports.timesheets');
-
-// Analysis
-Route::get('/analyze/projects', [App\Http\Controllers\AnalyticsController::class, 'projects'])->name('analysis.projects');
-Route::get('/analyze/tasks', [App\Http\Controllers\AnalyticsController::class, 'tasks'])->name('analysis.tasks');
-Route::get('/analyze/tickets', [App\Http\Controllers\AnalyticsController::class, 'tickets'])->name('analysis.tickets');
-Route::get('/analyze/milestones', [App\Http\Controllers\AnalyticsController::class, 'milestones'])->name('analysis.milestones');
-Route::get('/analyze/timesheets', [App\Http\Controllers\AnalyticsController::class, 'timesheets'])->name('analysis.timesheets');
-
 // Notes
 Route::get('/notes', [App\Http\Controllers\Data\NoteController::class, 'index'])->name('notes.index');
 Route::get('/notes/create', [App\Http\Controllers\Data\NoteController::class, 'create'])->name('notes.create');
@@ -157,6 +157,3 @@ Route::patch('/notes/{note}/mark', [App\Http\Controllers\Data\NoteController::cl
 // Comments
 Route::post('/comments/store', [App\Http\Controllers\Data\CommentController::class, 'store'])->name('comments.store');
 Route::patch('/comment/{comment}/update', [App\Http\Controllers\Data\CommentController::class, 'update'])->name('comments.update');
-
-// Files
-Route::post('/files/upload', [App\Http\Controllers\FileController::class, 'upload'])->name('files.upload');

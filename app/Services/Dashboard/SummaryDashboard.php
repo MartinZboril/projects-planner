@@ -10,7 +10,7 @@ use App\Models\{Project, Timer, Task, ToDo, Ticket};
 use App\Enums\Routes\{ProjectRouteEnum, TicketRouteEnum, TaskRouteEnum};
 use App\Services\Data\{ProjectService, TaskService, TicketService, ToDoService};
 
-class IndexDashboard
+class SummaryDashboard
 {
     /**
      * Get dashboard for index.
