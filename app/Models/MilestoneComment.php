@@ -12,7 +12,9 @@ class MilestoneComment extends Model
     
     protected $table = 'milestones_comments';
 
-    protected $guarded = ['id']; 
+    protected $fillable = [
+        'milestone_id', 'comment_id',
+    ];
 
     public const VALIDATION_RULES = [
         'milestone_id' => ['required', 'integer', 'exists:milestones,id'],

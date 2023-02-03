@@ -28,10 +28,9 @@ class CommentController extends Controller
     public function store(StoreCommentRequest $request)
     {
         try {
-            $comment = $this->commentService->store($request->safe(), $request->file('files'));
+            $this->commentService->save(new Comment, $request->safe(), $request->file('files'));
             $this->flashService->flash(__('messages.comment.create'), 'info');
-
-            return $this->commentService->setUpRedirect($comment, $request->type, $request->parent_id);
+            return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
@@ -44,10 +43,9 @@ class CommentController extends Controller
     public function update(UpdateCommentRequest $request, Comment $comment)
     {
         try {
-            $comment = $this->commentService->update($comment, $request->safe(), $request->file('files'));
+            $this->commentService->save($comment, $request->safe(), $request->file('files'));
             $this->flashService->flash(__('messages.comment.update'), 'info');
-
-            return $this->commentService->setUpRedirect($comment, $request->type, $request->parent_id);
+            return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);

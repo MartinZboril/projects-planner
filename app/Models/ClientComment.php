@@ -12,7 +12,9 @@ class ClientComment extends Model
 
     protected $table = 'clients_comments';
 
-    protected $guarded = ['id']; 
+    protected $fillable = [
+        'client_id', 'comment_id',
+    ]; 
 
     public const VALIDATION_RULES = [
         'client_id' => ['required', 'integer', 'exists:clients,id'],

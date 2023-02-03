@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Timer;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StartTimerRequest extends FormRequest
@@ -21,7 +22,12 @@ class StartTimerRequest extends FormRequest
     {
         return [
             'project_id' => ['required', 'integer', 'exists:projects,id'],
-            'rate_id' => ['required', 'integer', 'exists:rates,id'],
+            'rate_id' => [
+                'required', 'integer', 'exists:rates,id',
+                Rule::unique('timers')->where(function ($query) {
+                    return $query->where('project_id', $this->project_id)->where('rate_id', $this->rate_id)->whereNull('until');
+                })
+            ],
         ];
     }
 }

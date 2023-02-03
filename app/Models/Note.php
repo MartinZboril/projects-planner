@@ -11,7 +11,9 @@ class Note extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id']; 
+    protected $fillable = [
+        'user_id', 'name', 'content', 'is_private', 'is_basic',
+    ];
 
     public const VALIDATION_RULES = [
         'user_id' => ['required', 'integer', 'exists:users,id'],
@@ -29,8 +31,7 @@ class Note extends Model
 
     public function scopeVisible(Builder $query): Builder
     {
-        return $query->where('is_private', false)
-                        ->orWhere('is_private', true)->where('user_id', Auth::id());
+        return $query->where('is_private', false)->orWhere('is_private', true)->where('user_id', Auth::id());
     }
     
     public function scopeBasic(Builder $query): Builder

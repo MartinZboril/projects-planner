@@ -23,7 +23,6 @@ class StoreTaskRequest extends FormRequest
     public function rules(): array
     {
         $rules = Task::VALIDATION_RULES;
-        $rules['status'] = [new Enum(TaskStatusEnum::class)];
         $rules['redirect'] = ['in:tasks,projects'];
         unset(
             $rules['author_id'],

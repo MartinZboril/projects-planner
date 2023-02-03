@@ -12,7 +12,10 @@ class TaskComment extends Model
         
     protected $table = 'tasks_comments';
 
-    protected $guarded = ['id']; 
+    protected $fillable = [
+        'task_id',
+        'comment_id',
+    ];
 
     public const VALIDATION_RULES = [
         'task_id' => ['required', 'integer', 'exists:tasks,id'],

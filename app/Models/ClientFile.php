@@ -12,7 +12,9 @@ class ClientFile extends Model
 
     protected $table = 'clients_files';
 
-    protected $guarded = ['id']; 
+    protected $fillable = [
+        'client_id', 'file_id',
+    ];
 
     public const VALIDATION_RULES = [
         'client_id' => ['required', 'integer', 'exists:clients,id'],

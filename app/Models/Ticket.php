@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
+use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use Illuminate\Database\Eloquent\{Builder, Model};
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Enums\{TicketPriorityEnum, TicketTypeEnum, TicketStatusEnum};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany};
 
 class Ticket extends Model
 {
-    use HasFactory;
+    use HasFactory, MarkedRecords, OverdueRecords;
 
-    protected $guarded = ['id']; 
+    protected $fillable = [
+        'status', 'reporter_id', 'project_id', 'assignee_id', 'subject', 'type', 'priority', 'due_date', 'message', 'is_convert',
+    ]; 
 
     protected $dates = ['due_date'];
 
@@ -86,16 +89,6 @@ class Ticket extends Model
     public function scopeUnassigned(Builder $query): Builder
     {
         return $query->whereNull('assignee_id');
-    }
-
-    public function scopeOverdue(Builder $query): Builder
-    {
-        return $query->whereDate('due_date', '<=', date('Y-m-d'));
-    }
-
-    public function scopeMarked(Builder $query): Builder
-    {
-        return $query->where('is_marked', true);
     }
 
     public function getOverdueAttribute(): bool

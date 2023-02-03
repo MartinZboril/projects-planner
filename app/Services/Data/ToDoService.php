@@ -5,58 +5,40 @@ namespace App\Services\Data;
 use App\Enums\Routes\{ProjectRouteEnum, TaskRouteEnum};
 use App\Models\ToDo;
 use App\Services\RouteService;
-use App\Services\Dashboard\TaskDashboard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
 
 class ToDoService
 {
     /**
-     * Store new todo.
-     */
-    public function store(ValidatedInput $inputs): ToDo
-    {
-        $todo = new ToDo;
-        $todo->task_id = $inputs->task_id;
-
-        return $this->save($todo, $inputs);
-    }
-
-    /**
-     * Update todo.
-     */
-    public function update(ToDo $todo, ValidatedInput $inputs): ToDo
-    {
-        return $this->save($todo, $inputs);
-    }
-    
-    /**
      * Save data for todo.
      */
-    protected function save(ToDo $todo, ValidatedInput $inputs)
+    public function save(ToDo $todo, ValidatedInput $inputs)
     {
-        $todo->name = $inputs->name;
-        $todo->deadline = $inputs->deadline;
-        $todo->is_finished = $inputs->has('is_finished');
-        $todo->description = $inputs->description;
-        $todo->save();
-
-        return $todo;
+        return ToDo::updateOrCreate(
+            ['id' => $todo->id],
+            [
+                'task_id' => $todo->task_id ?? $inputs->task_id,
+                'name' => $inputs->name,
+                'due_date' => $inputs->due_date,
+                'is_finished' => $inputs->has('is_finished'),
+                'description' => $inputs->description,
+            ]
+        );
     }
 
     /**
      * Un/check the todo.
      */
-    public function check(ToDo $todo, bool $action): ToDo
+    public function check(ToDo $todo): ToDo
     {
-        $todo->is_finished = $action;
+        $todo->is_finished = !$todo->is_finished;
         $todo->save();
-
         return $todo;
     }
 
     /**
-     * Set up redirect for the action
+     * Set up redirect for the action.
      */
     public function setUpRedirect(string $parent, string $type, ToDo $todo): RedirectResponse
     {

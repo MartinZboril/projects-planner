@@ -11,40 +11,24 @@ use Illuminate\Support\ValidatedInput;
 class RateService
 {
     /**
-     * Store new rate.
-     */
-    public function store(ValidatedInput $inputs): Rate
-    {
-        $rate = new Rate;
-        $rate->user_id = $inputs->user_id;
-
-        return $this->save($rate, $inputs);
-    }
-
-    /**
-     * Update rate.
-     */
-    public function update(Rate $rate, ValidatedInput $inputs): Rate
-    {
-        return $this->save($rate, $inputs);
-    }
-
-    /**
      * Save data for rate.
      */
-    protected function save(Rate $rate, ValidatedInput $inputs)
+    public function save(Rate $rate, ValidatedInput $inputs): Rate
     {
-        $rate->name = $inputs->name;
-        $rate->is_active = $inputs->has('is_active');
-        $rate->value = $inputs->value;
-        $rate->note = $inputs->note;
-        $rate->save();
-
-        return $rate;
+        return Rate::updateOrCreate(
+            ['id' => $rate->id],
+            [
+                'user_id' => $rate->user_id ?? $inputs->user_id,
+                'name' => $inputs->name,
+                'is_active' => $inputs->has('is_active'),
+                'value' => $inputs->value,
+                'note' => $inputs->note ?? null,
+            ]
+        );
     }
 
     /**
-     * Set up redirect for the action
+     * Set up redirect for the action.
      */
     public function setUpRedirect(Rate $rate): RedirectResponse
     {

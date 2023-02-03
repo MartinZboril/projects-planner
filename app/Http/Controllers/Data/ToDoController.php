@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Data;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ToDo\{CheckToDoRequest, StoreToDoRequest, UpdateToDoRequest};
+use App\Http\Requests\ToDo\{StoreToDoRequest, UpdateToDoRequest};
 use App\Models\{Task, ToDo};
 use App\Services\FlashService;
 use App\Services\Data\ToDoService;
@@ -38,9 +38,8 @@ class ToDoController extends Controller
     public function store(StoreToDoRequest $request): RedirectResponse
     {
         try {
-            $todo = $this->todoService->store($request->safe());
+            $todo = $this->todoService->save(new ToDo, $request->safe());
             $this->flashService->flash(__('messages.todo.create'), 'info');
-
             return $this->todoService->setUpRedirect($request->redirect, $request->has('save_and_close'), $todo);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -62,9 +61,8 @@ class ToDoController extends Controller
     public function update(UpdateToDoRequest $request, ToDo $todo): RedirectResponse
     {
         try {
-            $todo = $this->todoService->update($todo, $request->safe());
+            $todo = $this->todoService->save($todo, $request->safe());
             $this->flashService->flash(__('messages.todo.update'), 'info');
-
             return $this->todoService->setUpRedirect($request->redirect, $request->has('save_and_close'), $todo);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -75,12 +73,11 @@ class ToDoController extends Controller
     /**
      * Check the todo in storage.
 =    */
-    public function check(CheckToDoRequest $request, ToDo $todo): RedirectResponse
+    public function check(ToDo $todo): RedirectResponse
     {
         try {
-            $todo = $this->todoService->check($todo, $request->action);
-            $this->flashService->flash(__('messages.todo.' . ($request->action ? ToDo::FINISH : ToDo::RETURN)), 'info');
-
+            $todo = $this->todoService->check($todo);
+            $this->flashService->flash(__('messages.todo.' . ($todo->is_finished ? ToDo::FINISH : ToDo::RETURN)), 'info');
             return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);

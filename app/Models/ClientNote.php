@@ -12,7 +12,9 @@ class ClientNote extends Model
 
     protected $table = 'clients_notes';
 
-    protected $guarded = ['id']; 
+    protected $fillable = [
+        'client_id', 'note_id',
+    ];
 
     public const VALIDATION_RULES = [
         'client_id' => ['required', 'integer', 'exists:clients,id'],

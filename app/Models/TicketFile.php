@@ -13,8 +13,7 @@ class TicketFile extends Model
     protected $table = 'tickets_files';
 
     protected $fillable = [
-        'ticket_id',
-        'file_id'
+        'ticket_id', 'file_id',
     ]; 
 
     public const VALIDATION_RULES = [

@@ -19,63 +19,35 @@ class ProjectService
     }
 
     /**
-     * Store new project.
-     */
-    public function store(ValidatedInput $inputs): Project
-    {
-        $project = new Project;
-        $project->status = ProjectStatusEnum::active;
-
-        $project = $this->save($project, $inputs);
-
-        foreach ($inputs->team as $userId) {
-            $this->projectUserService->store($project->id, $userId);
-        }
-
-        return $project;
-    }
-
-    /**
-     * Update project.
-     */
-    public function update(Project $project, ValidatedInput $inputs): Project
-    {
-        $project = $this->save($project, $inputs);
-        $this->projectUserService->refresh($project->id);
-
-        foreach ($inputs->team as $userId) {
-            $this->projectUserService->store($project->id, $userId);
-        }
-
-        return $project;
-    }
-
-    /**
      * Save data for project.
      */
-    protected function save(Project $project, ValidatedInput $inputs)
+    public function save(Project $project, ValidatedInput $inputs)
     {
-        $project->client_id = $inputs->client_id;
-        $project->name = $inputs->name;
-        $project->start_date = $inputs->start_date;
-        $project->due_date = $inputs->due_date;
-        $project->estimated_hours = $inputs->estimated_hours;
-        $project->budget = $inputs->budget;
-        $project->description = $inputs->description;
-        $project->save();
+        $project = Project::updateOrCreate(
+            ['id' => $project->id],
+            [
+                'status' => $project->status_id ?? ProjectStatusEnum::active,
+                'client_id' => $inputs->client_id,
+                'name' => $inputs->name,
+                'start_date' => $inputs->start_date,
+                'due_date' => $inputs->due_date,
+                'estimated_hours' => $inputs->estimated_hours,
+                'budget' => $inputs->budget,
+                'description' => $inputs->description,
+            ]
+        );
+
+        $this->projectUserService->storeUsers($project, $inputs->team);
 
         return $project;
     }
 
     /**
-     * Change working status of the project
+     * Change working status of the project.
      */
-    public function change(Project $project, int $status): Project
+    public function change(Project $project, int $status): void
     {
-        $project->status = $status;
-        $project->save();
-
-        return $project;
+        $project->update(['status' => $status]);
     }
   
     /**
@@ -85,18 +57,16 @@ class ProjectService
     {
         $project->is_marked = !$project->is_marked;
         $project->save();
-
         return $project;
     }
 
     /**
-     * Set up redirect for the action
+     * Set up redirect for the action.
      */
     public function setUpRedirect(string $type, Project $project): RedirectResponse
     {
         $redirectAction = $type ? ProjectRouteEnum::Index : ProjectRouteEnum::Detail;
         $redirectVars = $type ? [] : ['project' => $project];
-        
         return (new RouteService)->redirect($redirectAction->value, $redirectVars);
     }
 }

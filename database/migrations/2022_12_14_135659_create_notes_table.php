@@ -17,7 +17,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->string('name');
-            $table->string('type');
             $table->text('content');
             $table->boolean('is_private')->default(0);
             $table->boolean('is_basic')->default(1);

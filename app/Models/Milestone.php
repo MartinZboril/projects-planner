@@ -3,24 +3,27 @@
 namespace App\Models;
 
 use App\Enums\TaskStatusEnum;
-use Illuminate\Database\Eloquent\{Builder, Model};
+use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany};
 
 class Milestone extends Model
 {
-    use HasFactory;
+    use HasFactory, MarkedRecords, OverdueRecords;
 
-    protected $guarded = ['id']; 
+    protected $fillable = [
+        'project_id', 'owner_id', 'name', 'start_date', 'due_date', 'colour', 'description',
+    ]; 
 
-    protected $dates = ['start_date', 'end_date'];
+    protected $dates = ['start_date', 'due_date'];
 
     public const VALIDATION_RULES = [
         'project_id' => ['required', 'integer', 'exists:projects,id'],
         'owner_id' => ['required', 'integer', 'exists:users,id'],
         'name' => ['required', 'string', 'max:255'],
         'start_date' => ['required', 'date'],
-        'end_date' => ['required', 'date', 'after:start_date'],
+        'due_date' => ['required', 'date', 'after:start_date'],
         'colour' => ['required', 'string', 'max:255'],
         'description' => ['nullable', 'string', 'max:65553'],
     ];
@@ -57,22 +60,12 @@ class Milestone extends Model
 
     public function tasksCompleted(): HasMany
     {
-        return $this->hasMany(Task::class, 'milestone_id')->status(TaskStatusEnum::complete);
-    }
-
-    public function scopeOverdue(Builder $query): Builder
-    {
-        return $query->whereDate('end_date', '<=', date('Y-m-d'));
-    }
-
-    public function scopeMarked(Builder $query): Builder
-    {
-        return $query->where('is_marked', true);
+        return $this->tasks()->status(TaskStatusEnum::complete);
     }
 
     public function getOverdueAttribute(): bool
     {
-        return $this->end_date <= date('Y-m-d') && $this->progress < 1;
+        return $this->due_date <= date('Y-m-d') && $this->progress < 1;
     }
 
     public function getProgressAttribute(): float

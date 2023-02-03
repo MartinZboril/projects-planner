@@ -38,9 +38,8 @@ class RateController extends Controller
     public function store(StoreRateRequest $request): RedirectResponse
     {
         try {
-            $rate = $this->rateService->store($request->safe());
+            $rate = $this->rateService->save(new Rate, $request->safe());
             $this->flashService->flash(__('messages.rate.create'), 'info');
-
             return $this->rateService->setUpRedirect($rate);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -62,9 +61,8 @@ class RateController extends Controller
     public function update(UpdateRateRequest $request, Rate $rate): RedirectResponse
     {
         try {
-            $rate = $this->rateService->update($rate, $request->safe());
+            $rate = $this->rateService->save($rate, $request->safe());
             $this->flashService->flash(__('messages.rate.update'), 'info');
-
             return $this->rateService->setUpRedirect($rate);
         } catch (Exception $exception) {
             Log::error($exception);

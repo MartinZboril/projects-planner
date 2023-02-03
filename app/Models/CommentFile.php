@@ -12,7 +12,9 @@ class CommentFile extends Model
 
     protected $table = 'comments_files';
 
-    protected $guarded = ['id']; 
+    protected $fillable = [
+        'comment_id', 'file_id',
+    ];
 
     public const VALIDATION_RULES = [
         'comment_id' => ['required', 'integer', 'exists:comments,id'],

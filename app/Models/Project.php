@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
+use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use App\Enums\{ProjectStatusEnum, TaskStatusEnum};
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\{Builder, Model};
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany};
 
 class Project extends Model
 {
-    use HasFactory;
+    use HasFactory, MarkedRecords, OverdueRecords;
 
-    protected $guarded = ['id']; 
+    protected $fillable = [
+        'status', 'client_id', 'name', 'start_date', 'due_date', 'estimated_hours', 'budget', 'description',
+    ]; 
 
     protected $dates = ['start_date', 'due_date'];
 
@@ -66,7 +69,6 @@ class Project extends Model
         return $this->belongsToMany(Comment::class, 'projects_comments', 'project_id', 'comment_id')->orderByDesc('created_at');
     }
 
-
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class, 'project_id');
@@ -74,17 +76,17 @@ class Project extends Model
 
     public function newTasks(): HasMany
     {
-        return $this->hasMany(Task::class, 'project_id')->status(TaskStatusEnum::new);
+        return $this->tasks()->status(TaskStatusEnum::new);
     }
 
     public function inProgressTasks(): HasMany
     {
-        return $this->hasMany(Task::class, 'project_id')->status(TaskStatusEnum::in_progress);
+        return $this->tasks()->status(TaskStatusEnum::in_progress);
     }
 
     public function completedTasks(): HasMany
     {
-        return $this->hasMany(Task::class, 'project_id')->status(TaskStatusEnum::complete);
+        return $this->tasks()->status(TaskStatusEnum::complete);
     }
 
     public function milestones(): HasMany
@@ -120,16 +122,6 @@ class Project extends Model
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', ProjectStatusEnum::active);
-    }
-
-    public function scopeOverdue(Builder $query): Builder
-    {
-        return $query->whereDate('due_date', '<=', date('Y-m-d'));
-    }
-
-    public function scopeMarked(Builder $query): Builder
-    {
-        return $query->where('is_marked', true);
     }
 
     public function getOverdueAttribute(): bool

@@ -2,9 +2,9 @@
 
 namespace App\Services\Data;
 
-use App\Enums\{TicketStatusEnum, TaskStatusEnum};
+use App\Enums\TicketStatusEnum;
 use App\Enums\Routes\{ProjectRouteEnum, TicketRouteEnum};
-use App\Models\{Task, Ticket};
+use App\Models\Ticket;
 use App\Services\RouteService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -20,62 +20,30 @@ class TicketService
     }
 
     /**
-     * Store new ticket.
-     */
-    public function store(ValidatedInput $inputs): Ticket
-    {
-        $ticket = new Ticket;
-        $ticket->reporter_id = Auth::id();
-        $ticket->status = TicketStatusEnum::open;
-
-        $ticket = $this->save($ticket, $inputs);
-        
-        if(!$this->projectUserService->workingOnProject($ticket->project_id, $ticket->reporter_id)) {
-            $this->projectUserService->store($ticket->project_id, $ticket->reporter_id);
-        }
-
-        if(!$ticket->assignee_id) {
-            return $ticket;
-        }
-
-        if(!$this->projectUserService->workingOnProject($ticket->project_id, $ticket->assignee_id)) {
-            $this->projectUserService->store($ticket->project_id, $ticket->assignee_id);
-        }
-
-        return $ticket;
-    }
-
-    /**
-     * Update ticket.
-     */
-    public function update(Ticket $ticket, ValidatedInput $inputs): Ticket
-    {
-        $ticket = $this->save($ticket, $inputs);
-        
-        if(!$ticket->assignee_id) {
-            return $ticket;
-        }
-
-        if(!$this->projectUserService->workingOnProject($ticket->project_id, $ticket->assignee_id)) {
-            $this->projectUserService->store($ticket->project_id, $ticket->assignee_id);
-        }
-
-        return $ticket;
-    }
-
-    /**
      * Save data for ticket.
      */
-    protected function save(Ticket $ticket, ValidatedInput $inputs)
+    public function save(Ticket $ticket, ValidatedInput $inputs): Ticket
     {
-        $ticket->project_id = $inputs->project_id;
-        $ticket->assignee_id = $inputs->has('assignee_id') ? $inputs->assignee_id : null;
-        $ticket->subject = $inputs->subject;
-        $ticket->type = $inputs->type;
-        $ticket->priority = $inputs->priority;
-        $ticket->due_date = $inputs->due_date;
-        $ticket->message = $inputs->message;
-        $ticket->save();
+        $ticket = Ticket::updateOrCreate(
+            ['id' => $ticket->id],
+            [
+                'status' => $ticket->status ?? TicketStatusEnum::open,
+                'reporter_id' => $ticket->reporter_id ?? Auth::id(),
+                'project_id' => $inputs->project_id,
+                'assignee_id' => $inputs->assignee_id ?? null,
+                'subject' => $inputs->subject,
+                'type' => $inputs->type,
+                'priority' => $inputs->priority,
+                'due_date' => $inputs->due_date,
+                'message' => $inputs->message,
+            ]
+        );
+
+        $this->projectUserService->storeUser($ticket->project, $ticket->reporter);
+        
+        if($ticket->assignee_id) {
+            $this->projectUserService->storeUser($ticket->project, $ticket->assignee);
+        }
 
         return $ticket;
     }
@@ -87,35 +55,15 @@ class TicketService
     {
         $ticket->status = $status;
         $ticket->save();
-
         return $ticket;
     }
 
     /**
-     * Convert ticket to new task.
+     * Save that ticket was converted to task.
      */
-    public function convert(Ticket $ticket): Task
+    public function convert(Ticket $ticket): void
     {
-        $task = new Task();
-        $task->project_id = $ticket->project_id;
-        $task->status = TaskStatusEnum::new;
-        $task->author_id = $ticket->reporter_id;
-        $task->user_id = $ticket->assignee_id;
-        $task->name = $ticket->subject;
-        $task->start_date = $ticket->created_at;
-        $task->due_date = $ticket->due_date;
-        $task->description = $ticket->message;
-        $task->save();
-
-        if(!$this->projectUserService->workingOnProject($ticket->project_id, $ticket->assignee_id)) {
-            $this->projectUserService->store($ticket->project_id, $ticket->assignee_id);
-        }
-
-        $ticket->status = TicketStatusEnum::archive;
-        $ticket->is_convert = true;
-        $ticket->save();
-
-        return $task;
+        $ticket->update(['status' => TicketStatusEnum::archive, 'is_convert' => true]);
     }
 
     /**
@@ -125,12 +73,11 @@ class TicketService
     {
         $ticket->is_marked = !$ticket->is_marked;
         $ticket->save();
-
         return $ticket;
     }
 
     /**
-     * Set up redirect for the action
+     * Set up redirect for the action.
      */
     public function setUpRedirect(string $parent, string $type, Ticket $ticket): RedirectResponse
     {

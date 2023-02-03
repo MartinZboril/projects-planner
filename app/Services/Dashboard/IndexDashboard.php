@@ -60,7 +60,7 @@ class IndexDashboard
             $summaryItem = collect([
                 'name' => $type == 'ticket' ? $item->subject : $item->name,
                 'type' => $type,
-                'due_date' => (in_array($type, ['client'])) ? null : ($type == 'todo' ? $item->deadline : $item->due_date),
+                'due_date' => (in_array($type, ['client'])) ? null : $item->due_date,
                 'url' => $this->getItemUrl($type, $type == 'todo' ? $item->task->id : $item->id),
                 'item' => $item
             ]);

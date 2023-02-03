@@ -13,7 +13,7 @@ class TicketComment extends Model
     protected $table = 'tickets_comments';
 
     protected $fillable = [
-        'ticket_id', 'comment_id'
+        'ticket_id', 'comment_id',
     ]; 
 
     public const VALIDATION_RULES = [

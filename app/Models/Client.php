@@ -2,17 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Database\Eloquent\{Builder, Model};
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Traits\Scopes\MarkedRecords;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany};
 
 class Client extends Model
 {
-    use HasFactory;
+    use HasFactory, MarkedRecords;
 
-    protected $guarded = ['id']; 
+    protected $guarded = [
+        'id', 'is_marked', 'logo_id', 'created_at', 'updated_at',
+    ];
 
     protected $appends = [
         'email_label',
@@ -67,53 +68,48 @@ class Client extends Model
         return $this->belongsToMany(File::class, 'clients_files', 'client_id', 'file_id')->orderByDesc('created_at');
     }
 
-    public function scopeMarked(Builder $query): Builder
-    {
-        return $query->where('is_marked', true);
-    }
-
     public function getEmailLabelAttribute(): string
     {
-        return ($this->email) ? $this->email : 'NaN';
+        return $this->email ?? 'NaN';
     }
 
     public function getContactPersonLabelAttribute(): string
     {
-        return ($this->contact_person) ? $this->contact_person : 'NaN';
+        return $this->contact_person ?? 'NaN';
     }
 
     public function getContactEmailLabelAttribute(): string
     {
-        return ($this->contact_email) ? $this->contact_email : 'NaN';
+        return $this->contact_email ?? 'NaN';
     }
 
     public function getMobileLabelAttribute(): string
     {
-        return ($this->mobile) ? $this->mobile : 'NaN';
+        return $this->mobile ?? 'NaN';
     }
 
     public function getPhoneLabelAttribute(): string
     {
-        return ($this->phone) ? $this->phone : 'NaN';
+        return $this->phone ?? 'NaN';
     }
 
     public function getStreetLabelAttribute(): string
     {
-        return (($this->street) ? $this->street : 'NaN') . (($this->house_number) ? ' ' . $this->house_number : '');
+        return ($this->street ?? 'NaN') . ($this->house_number ? ' ' . $this->house_number : '');
     }
     
     public function getCityLabelAttribute(): string
     {
-        return ($this->city) ? $this->city : 'NaN';
+        return $this->city ?? 'NaN';
     }
         
     public function getZipCodeLabelAttribute(): string
     {
-        return ($this->zip_code) ? $this->zip_code : 'NaN';
+        return $this->zip_code ?? 'NaN';
     }
 
     public function getCountryLabelAttribute(): string
     {
-        return ($this->country) ? $this->country : 'NaN';
+        return $this->country ?? 'NaN';
     }
 }

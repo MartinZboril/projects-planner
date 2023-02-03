@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 class RouteService
 {
     /**
-     * Get redirect for the route
+     * Get redirect for the route.
      */
     public function redirect(string $route, array $vars = []): RedirectResponse 
     {

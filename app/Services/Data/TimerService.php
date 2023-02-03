@@ -12,80 +12,47 @@ use Illuminate\Support\ValidatedInput;
 class TimerService
 {
     /**
-     * Store new timer.
-     */
-    public function store(ValidatedInput $inputs): Timer
-    {
-        $timer = new Timer;
-        $timer->project_id = $inputs->project_id;
-        $timer->user_id = Auth::id();
-
-        return $this->save($timer, $inputs);
-    }
-
-    /**
-     * Update timer.
-     */
-    public function update(Timer $timer, ValidatedInput $inputs): Timer
-    {
-        return $this->save($timer, $inputs);
-    }
-
-    /**
      * Save data for rate.
      */
-    protected function save(Timer $timer, ValidatedInput $inputs)
+    public function save(Timer $timer, ValidatedInput $inputs)
     {
-        $timer->rate_id = $inputs->rate_id;
-        $timer->since = $inputs->since;
-        $timer->until = $inputs->until;
-        $timer->note = $inputs->note;
-        $timer->save();
-
-        return $timer;
+        return Timer::updateOrCreate(
+            ['id' => $timer->id],
+            [
+                'project_id' => $timer->project_id ?? $inputs->project_id,
+                'user_id' => $timer->user_id ?? Auth::id(),
+                'rate_id' => $inputs->rate_id,
+                'since' => $inputs->since,
+                'until' => $inputs->until,
+                'note' => $inputs->note,
+            ]
+        );
     }
 
     /**
      * Start measure new timer.
      */
-    public function start(ValidatedInput $inputs): Timer
+    public function start(ValidatedInput $inputs): void
     {
-        $timer = new Timer;
-        $timer->project_id = $inputs->project_id;
-        $timer->rate_id = $inputs->rate_id;
-        $timer->user_id = Auth::id();
-        $timer->since = now();
-        $timer->until = null;
-        $timer->save();
-
-        return $timer;
+        Timer::create([
+            'project_id' => $inputs->project_id,
+            'user_id' => Auth::id(),
+            'rate_id' => $inputs->rate_id,
+            'since' => now(),
+            'until' => null,
+        ]);
     }
 
     /**
      * Stop measure the timer.
      */
-    public function stop(Timer $timer): Timer
+    public function stop(Timer $timer): void
     {
-        $timer->until = now();
-        $timer->save();
-
-        return $timer;
+        $timer->update(['until' => now()]);
     }
 
     /**
-     * Check if not running another timer of user in project.
-     */
-    public function checkIfNotRunningAnoutherTimer(int $projectId, int $userId): bool
-    {
-        if(Timer::where('project_id', $projectId)->where('user_id', $userId)->whereNull('until')->count() > 0) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Set up redirect for the action
+     * Set up redirect for the action.
      */
     public function setUpRedirect(Timer $timer): RedirectResponse
     {

@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Data;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Ticket\{ConvertTicketRequest, ChangeTicketRequest, MarkTicketRequest, StoreTicketRequest, UpdateTicketRequest};
-use App\Models\{Comment, Project, Ticket, User};
-use App\Services\FlashService;
-use App\Services\Data\{TaskService, TicketService, ProjectUserService};
 use Exception;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use App\Services\FlashService;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
+use App\Models\{Comment, Project, Ticket, Task, User};
+use App\Services\Data\{TaskService, TicketService, ProjectUserService};
+use App\Http\Requests\Ticket\{ConvertTicketRequest, ChangeTicketRequest, StoreTicketRequest, UpdateTicketRequest};
 
 class TicketController extends Controller
 {  
@@ -46,9 +46,8 @@ class TicketController extends Controller
     public function store(StoreTicketRequest $request): RedirectResponse
     {
         try {
-            $ticket = $this->ticketService->store($request->safe());
+            $ticket = $this->ticketService->save(new Ticket, $request->safe());
             $this->flashService->flash(__('messages.ticket.create'), 'info');
-
             return $this->ticketService->setUpRedirect($request->redirect, $request->has('save_and_close'), $ticket);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -78,9 +77,8 @@ class TicketController extends Controller
     public function update(UpdateTicketRequest $request, Ticket $ticket): RedirectResponse
     {
         try {
-            $ticket = $this->ticketService->update($ticket, $request->safe());
+            $ticket = $this->ticketService->save($ticket, $request->safe());
             $this->flashService->flash(__('messages.ticket.update'), 'info');
-
             return $this->ticketService->setUpRedirect($request->redirect, $request->has('save_and_close'), $ticket);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -96,7 +94,6 @@ class TicketController extends Controller
         try {
             $ticket = $this->ticketService->change($ticket, $request->status);
             $this->flashService->flash(__('messages.ticket.' . $ticket->status->name), 'info');
-
             return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);
@@ -110,10 +107,10 @@ class TicketController extends Controller
     public function convert(ConvertTicketRequest $request, Ticket $ticket): RedirectResponse
     {
         try {
-            $task = $this->ticketService->convert($ticket);      
-            $this->flashService->flash(__('messages.task.create'), 'info');
-
             $taskService = new TaskService(new ProjectUserService, new FlashService);
+            $task = $taskService->save(new Task, $request->safe());
+            $this->ticketService->convert($ticket);      
+            $this->flashService->flash(__('messages.task.create'), 'info');
             return $taskService->setUpRedirect($request->redirect, false, $task);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -124,12 +121,11 @@ class TicketController extends Controller
     /**
      * Mark selected ticket.
      */
-    public function mark(MarkTicketRequest $request, Ticket $ticket): RedirectResponse
+    public function mark(Ticket $ticket): RedirectResponse
     {
         try {
             $ticket = $this->ticketService->mark($ticket);
             $this->flashService->flash(__('messages.ticket.' . ($ticket->is_marked ? 'mark' : 'unmark')), 'info');
-
             return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);

@@ -51,7 +51,6 @@ return [
     'update' => 'Timer was updated!',
     'start' => 'Timer started succesfully!',
     'stop' => 'Timer stopped succesfully!',
-    'collision' => 'Another timer already running!',
   ],
   'todo' => [
     'create' => 'ToDo was created!',

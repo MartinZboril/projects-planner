@@ -20,7 +20,7 @@ class CreateMilestonesTable extends Migration
             $table->foreignId('project_id');
             $table->foreignId('owner_id');
             $table->date('start_date')->nullable();
-            $table->date('end_date')->nullable();
+            $table->date('due_date')->nullable();
             $table->longText('description')->nullable();
             $table->boolean('is_marked')->default(0);
             $table->timestamps();

@@ -30,9 +30,9 @@
                     @enderror
                 </div>
                 <div class="form-group required">
-                    <label for="end_date" class="control-label">End date</label>
-                    <input type="date" name="end_date" id="end_date" class="form-control @error('end_date') is-invalid @enderror" placeholder="due date" value="{{ old('end_date', $milestone->end_date ? $milestone->end_date->format('Y-m-d') : null) }}" autocomplete="off">
-                    @error('end_date')
+                    <label for="due_date" class="control-label">End date</label>
+                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', $milestone->due_date ? $milestone->due_date->format('Y-m-d') : null) }}" autocomplete="off">
+                    @error('due_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>

@@ -14,7 +14,7 @@ class ProjectComment extends Model
 
     protected $fillable = [
         'project_id',
-        'comment_id'
+        'comment_id',
     ]; 
     
     public const VALIDATION_RULES = [

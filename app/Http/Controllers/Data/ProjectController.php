@@ -110,9 +110,8 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request): RedirectResponse
     {
         try {
-            $project = $this->projectService->store($request->safe());
+            $project = $this->projectService->save(new Project, $request->safe());
             $this->flashService->flash(__('messages.project.create'), 'info');
-
             return $this->projectService->setUpRedirect($request->has('save_and_close'), $project);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -142,9 +141,8 @@ class ProjectController extends Controller
     public function update(UpdateProjectRequest $request, Project $project): RedirectResponse
     {
         try {
-            $project = $this->projectService->update($project, $request->safe());
+            $project = $this->projectService->save($project, $request->safe());
             $this->flashService->flash(__('messages.project.update'), 'info');
-
             return $this->projectService->setUpRedirect($request->has('save_and_close'), $project);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -165,7 +163,7 @@ class ProjectController extends Controller
      */
     public function detailTask(Project $project, Task $task): View
     {
-        return view('projects.task.detail', ['project' => $project, 'task' => $task, 'milestones' => Milestone::where('project_id', $project->id)->get(), 'users' => User::all()]);
+        return view('projects.task.detail', ['project' => $project, 'task' => $task, 'milestones' => Milestone::where('project_id', $project->id)->get(), 'users' => User::all(), 'comment' => new Comment]);
     }
 
     /**
@@ -205,7 +203,7 @@ class ProjectController extends Controller
      */
     public function detailTicket(Project $project, Ticket $ticket): View
     {
-        return view('projects.ticket.detail', ['project' => $project, 'ticket' => $ticket]);
+        return view('projects.ticket.detail', ['project' => $project, 'ticket' => $ticket, 'comment' => new Comment]);
     }
 
     /**
@@ -222,9 +220,8 @@ class ProjectController extends Controller
     public function change(ChangeProjectRequest $request, Project $project): RedirectResponse
     {
         try {
-            $project = $this->projectService->change($project, $request->status);
+            $this->projectService->change($project, $request->status);
             $this->flashService->flash(__('messages.project.' . $project->status->name), 'info');
-
             return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);
@@ -251,12 +248,11 @@ class ProjectController extends Controller
     /**
      * Mark selected project.
      */
-    public function mark(MarkProjectRequest $request, Project $project): RedirectResponse
+    public function mark(Project $project): RedirectResponse
     {
         try {
             $project = $this->projectService->mark($project);
             $this->flashService->flash(__('messages.project.' . ($project->is_marked ? 'mark' : 'unmark')), 'info');
-
             return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);

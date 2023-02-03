@@ -12,7 +12,10 @@ class ProjectNote extends Model
 
     protected $table = 'projects_notes';
 
-    protected $guarded = ['id']; 
+    protected $fillable = [
+        'project_id',
+        'note_id',
+    ];
 
     public const VALIDATION_RULES = [
         'project_id' => ['required', 'integer', 'exists:projects,id'],

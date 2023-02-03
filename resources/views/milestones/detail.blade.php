@@ -26,7 +26,7 @@
                                 <span class="d-block">Project: <b><a href="{{ route('projects.detail', $milestone->project->id) }}">{{ $milestone->project->name }}</a></b></span>
                                 <span class="d-block">User: <b><a href="{{ route('users.detail', $milestone->owner) }}">{{ $milestone->owner->full_name }}</a></b></span>
                                 <span class="d-block">Start date: <b>{{ $milestone->start_date->format('d.m.Y') }}</b></span>
-                                <span class="d-block">End date: <b>{{ $milestone->end_date->format('d.m.Y') }}</b></span>
+                                <span class="d-block">End date: <b>{{ $milestone->due_date->format('d.m.Y') }}</b></span>
                                 <span class="d-block">Tasks: <b>{{ $milestone->tasksCompleted->count() }}/{{ $milestone->tasks->count() }}</b><span class="badge badge-{{ $milestone->progress == 1 ? 'success' : 'warning' }} ml-1">{{ $milestone->progress * 100 }} % Complete</span></span>
                                 <hr>
                                 {!! $milestone->description !!}
