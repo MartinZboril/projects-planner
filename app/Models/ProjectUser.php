@@ -12,7 +12,10 @@ class ProjectUser extends Model
 
     protected $table = 'projects_users';
 
-    protected $guarded = ['id']; 
+    protected $fillable = [
+        'project_id',
+        'user_id',
+    ];
 
     public const VALIDATION_RULES = [
         'project_id' => ['required', 'integer', 'exists:projects,id'],

@@ -11,7 +11,9 @@ class Timer extends Model
 {
     use HasFactory;
 
-    protected $guarded = ['id']; 
+    protected $fillable = [
+        'project_id', 'user_id', 'rate_id', 'since', 'until', 'note',
+    ]; 
 
     protected $dates = ['since', 'until'];
 
@@ -53,7 +55,7 @@ class Timer extends Model
     {
         $since = Carbon::parse($this->since);
         $until = Carbon::parse($this->until);
-
+        
         $diff = $since->diff($until);
         
         return round($diff->s / 3600 + $diff->i / 60 + $diff->h + $diff->days * 24, 2);

@@ -7,6 +7,9 @@ use Illuminate\Support\Collection;
 
 class IndexRelease
 {
+    public $releases;
+    public $actualRelease;
+    
     function __construct()
     {
         $releaseHistory = $this->releaseHistory();

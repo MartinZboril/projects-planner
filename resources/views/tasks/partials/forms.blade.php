@@ -12,9 +12,5 @@
 @endif
 <!-- Pause work on task form -->
 @if ($task->status == App\Enums\TaskStatusEnum::in_progress)
-    @if ($task->paused)
-        @include('tasks.forms.pause', ['id' => 'resume-working-on-task-' . $task->id . '-form', 'task' => $task, 'action' => 0])            
-    @else
-        @include('tasks.forms.pause', ['id' => 'stop-working-on-task-' . $task->id . '-form', 'task' => $task, 'action' => 1])    
-    @endif
+    @include('tasks.forms.pause', ['id' => (($task->paused) ? 'resume' : 'stop') . '-working-on-task-' . $task->id . '-form', 'task' => $task, 'action' => 0])            
 @endif

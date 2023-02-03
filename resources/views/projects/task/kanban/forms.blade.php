@@ -4,9 +4,8 @@
         @break
 
     @case(App\Enums\TaskStatusEnum::in_progress)
-        @include('tasks.forms.change', ['id' => 'complete-working-on-task-' . $task->id . '-form', 'task' => $task, 'status' => App\Enums\TaskStatusEnum::new])    
-        @include('tasks.forms.pause', ['id' => 'stop-working-on-task-' . $task->id . '-form', 'task' => $task, 'action' => 1])    
-        @include('tasks.forms.pause', ['id' => 'resume-working-on-task-' . $task->id . '-form', 'task' => $task, 'action' => 0])    
+        @include('tasks.forms.change', ['id' => 'complete-working-on-task-' . $task->id . '-form', 'task' => $task, 'status' => App\Enums\TaskStatusEnum::complete])    
+        @include('tasks.forms.pause', ['id' => (($task->paused) ? 'resume' : 'stop') . '-working-on-task-' . $task->id . '-form', 'task' => $task])    
         @break
     
     @case(App\Enums\TaskStatusEnum::complete)

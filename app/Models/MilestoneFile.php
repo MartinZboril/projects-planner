@@ -13,8 +13,7 @@ class MilestoneFile extends Model
     protected $table = 'milestones_files';
 
     protected $fillable = [
-        'milestone_id',
-        'file_id'
+        'milestone_id', 'file_id',
     ]; 
 
     public const VALIDATION_RULES = [

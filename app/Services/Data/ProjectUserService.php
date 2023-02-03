@@ -2,38 +2,26 @@
 
 namespace App\Services\Data;
 
-use App\Models\ProjectUser;
+use App\Models\{ProjectUser, Project, User};
 
 class ProjectUserService
 {
     /**
      * Store new project user.
      */
-    public function store(int $projectId, int $userId): void
+    public function storeUser(Project $project, User $user): void
     {
-        $projectUser = new ProjectUser;
-        $projectUser->project_id = $projectId;
-        $projectUser->user_id = $userId;
-        $projectUser->save();
+        ProjectUser::firstOrCreate(
+            ['project_id' => $project->id, 'user_id' => $user->id],
+            ['project_id' => $project->id, 'user_id' => $user->id]
+        );
     }
 
     /**
-     * Refresh users from the project
+     * Store new project users.
      */
-    public function refresh(int $projectId): void
+    public function storeUsers(Project $project, array $userIds): void
     {
-        ProjectUser::where('project_id', $projectId)->delete();
-    }
-
-    /**
-     * Check if user is working on the project
-     */
-    public function workingOnProject(int $projectId, int $userId): bool
-    {
-        if(ProjectUser::where('project_id', $projectId)->where('user_id', $userId)->first()) {
-            return true;
-        }
-
-        return false;
+        ($project->team()->count() === 0) ? $project->team()->attach($userIds) : $project->team()->sync($userIds);
     }
 }

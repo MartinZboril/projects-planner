@@ -20,82 +20,49 @@ class TaskService
     }
 
     /**
-     * Store new task.
-     */
-    public function store(ValidatedInput $inputs): Task
-    {
-        $task = new Task;
-        $task->status = TaskStatusEnum::new;
-        $task->author_id = Auth::id();
-
-        $task = $this->save($task, $inputs);
-
-        if(!$this->projectUserService->workingOnProject($task->project_id, $task->author_id)) {
-            $this->projectUserService->store($task->project_id, $task->author_id);
-        }
-
-        if(!$this->projectUserService->workingOnProject($task->project_id, $task->user_id)) {
-            $this->projectUserService->store($task->project_id, $task->user_id);
-        }
-
-        return $task;
-    }
-
-    /**
-     * Update task.
-     */
-    public function update(Task $task, ValidatedInput $inputs): Task
-    {
-        $task = $this->save($task, $inputs);
-
-        if(!$this->projectUserService->workingOnProject($task->project_id, $task->author_id)) {
-            $this->projectUserService->store($task->project_id, $task->author_id);
-        }
-
-        if(!$this->projectUserService->workingOnProject($task->project_id, $task->user_id)) {
-            $this->projectUserService->store($task->project_id, $task->user_id);
-        }
-
-        return $task;
-    }
-
-    /**
      * Save data for task.
      */
-    protected function save(Task $task, ValidatedInput $inputs)
+    public function save(Task $task, ValidatedInput $inputs): Task
     {
-        $task->project_id = $inputs->project_id;
-        $task->milestone_id = $inputs->has('milestone_id') ? $inputs->milestone_id : null;
-        $task->user_id = $inputs->user_id;
-        $task->name = $inputs->name;
-        $task->start_date = $inputs->start_date;
-        $task->due_date = $inputs->due_date;
-        $task->description = $inputs->description;
-        $task->save();
+        $task = Task::updateOrCreate(
+            ['id' => $task->id],
+            [
+                'status' => $task->status ?? TaskStatusEnum::new,
+                'author_id' => $inputs->author_id ?? ($task->author_id ?? Auth::id()),
+                'project_id' => $inputs->project_id,
+                'milestone_id' => $inputs->milestone_id ?? null,
+                'user_id' => $inputs->user_id,
+                'name' => $inputs->name,
+                'start_date' => $inputs->start_date,
+                'due_date' => $inputs->due_date,
+                'description' => $inputs->description,
+            ]
+        );
+
+        $this->projectUserService->storeUser($task->project, $task->author);
+        $this->projectUserService->storeUser($task->project, $task->user);
 
         return $task;
     }
     
     /**
-     * Change working status of the task
+     * Change working status of the task.
      */
     public function change(Task $task, int $status): Task
     {
         $task->status = $status;
-        $task->is_returned = ($task->status == TaskStatusEnum::complete && $status == TaskStatusEnum::new->value) ? true : false;
+        $task->is_returned = $task->isReturned() ? true : false;
         $task->save();
-
         return $task;
     }
         
     /**
      * Pause work on the task.
      */
-    public function pause(Task $task, bool $pause): Task
+    public function pause(Task $task): Task
     {
-        $task->is_stopped = $pause;
+        $task->is_stopped = !$task->is_stopped;
         $task->save();
-
         return $task;
     }
 
@@ -106,12 +73,11 @@ class TaskService
     {
         $task->is_marked = !$task->is_marked;
         $task->save();
-
         return $task;
     }
 
     /**
-     * Set up redirect for the action
+     * Set up redirect for the action.
      */
     public function setUpRedirect(string $parent, string $type, Task $task): RedirectResponse
     {

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Data;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Note\{MarkNoteRequest, StoreNoteRequest, UpdateNoteRequest};
+use App\Http\Requests\Note\{StoreNoteRequest, UpdateNoteRequest};
 use App\Models\Note;
 use App\Services\FlashService;
 use App\Services\Data\NoteService;
@@ -46,10 +46,9 @@ class NoteController extends Controller
     public function store(StoreNoteRequest $request): RedirectResponse
     {
         try {
-            $note = $this->noteService->store($request->safe());
+            $this->noteService->save(new Note, $request->safe());
             $this->flashService->flash(__('messages.note.create'), 'info');
-
-            return $this->noteService->setUpRedirect($note, $request->type, $request->parent_id);
+            return $this->noteService->setUpRedirect($request->type, $request->parent_id);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
@@ -70,10 +69,9 @@ class NoteController extends Controller
     public function update(UpdateNoteRequest $request, Note $note): RedirectResponse
     {
         try {
-            $note = $this->noteService->update($note, $request->safe());
+            $this->noteService->save($note, $request->safe());
             $this->flashService->flash(__('messages.note.update'), 'info');
-
-            return $this->noteService->setUpRedirect($note, $request->type, $request->parent_id);
+            return $this->noteService->setUpRedirect($request->type, $request->parent_id);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
@@ -83,13 +81,12 @@ class NoteController extends Controller
     /**
      * Mark selected note.
      */
-    public function mark(MarkNoteRequest $request, Note $note): RedirectResponse
+    public function mark(Note $note): RedirectResponse
     {
         try {
             $note = $this->noteService->mark($note);
             $this->flashService->flash(__('messages.note.' . ($note->is_marked ? 'mark' : 'unmark')), 'info');
-
-            return $this->noteService->setUpRedirect($note, $request->type, $request->parent_id);
+            return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);

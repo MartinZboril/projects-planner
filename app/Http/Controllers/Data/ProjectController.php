@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Data;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Project\{ChangeProjectRequest, MarkProjectRequest, StoreProjectRequest, UpdateProjectRequest};
-use App\Models\{Client, Milestone, Note, Project, Task, Ticket, ToDo, User};
-use App\Services\FlashService;
-use App\Services\Data\ProjectService;
 use Exception;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use App\Services\FlashService;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Services\Data\ProjectService;
+use Illuminate\Http\RedirectResponse;
+use App\Models\{Client, Comment, Milestone, Note, Project, Task, Ticket, ToDo, User};
+use App\Http\Requests\Project\{ChangeProjectRequest, MarkProjectRequest, StoreProjectRequest, UpdateProjectRequest};
 
 class ProjectController extends Controller
 {
@@ -87,6 +87,14 @@ class ProjectController extends Controller
     {
         return view('projects.files', ['project' => $project]);
     }
+    
+    /**
+     * Display the comments of project.
+     */
+    public function comments(Project $project): View
+    {
+        return view('projects.comments', ['project' => $project, 'comment' => new Comment]);
+    }
 
     /**
      * Show the form for creating a new project.
@@ -102,9 +110,8 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request): RedirectResponse
     {
         try {
-            $project = $this->projectService->store($request->safe());
+            $project = $this->projectService->save(new Project, $request->safe());
             $this->flashService->flash(__('messages.project.create'), 'info');
-
             return $this->projectService->setUpRedirect($request->has('save_and_close'), $project);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -134,9 +141,8 @@ class ProjectController extends Controller
     public function update(UpdateProjectRequest $request, Project $project): RedirectResponse
     {
         try {
-            $project = $this->projectService->update($project, $request->safe());
+            $project = $this->projectService->save($project, $request->safe());
             $this->flashService->flash(__('messages.project.update'), 'info');
-
             return $this->projectService->setUpRedirect($request->has('save_and_close'), $project);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -157,7 +163,7 @@ class ProjectController extends Controller
      */
     public function detailTask(Project $project, Task $task): View
     {
-        return view('projects.task.detail', ['project' => $project, 'task' => $task, 'milestones' => Milestone::where('project_id', $project->id)->get(), 'users' => User::all()]);
+        return view('projects.task.detail', ['project' => $project, 'task' => $task, 'milestones' => Milestone::where('project_id', $project->id)->get(), 'users' => User::all(), 'comment' => new Comment]);
     }
 
     /**
@@ -197,7 +203,7 @@ class ProjectController extends Controller
      */
     public function detailTicket(Project $project, Ticket $ticket): View
     {
-        return view('projects.ticket.detail', ['project' => $project, 'ticket' => $ticket]);
+        return view('projects.ticket.detail', ['project' => $project, 'ticket' => $ticket, 'comment' => new Comment]);
     }
 
     /**
@@ -214,9 +220,8 @@ class ProjectController extends Controller
     public function change(ChangeProjectRequest $request, Project $project): RedirectResponse
     {
         try {
-            $project = $this->projectService->change($project, $request->status);
+            $this->projectService->change($project, $request->status);
             $this->flashService->flash(__('messages.project.' . $project->status->name), 'info');
-
             return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);
@@ -243,12 +248,11 @@ class ProjectController extends Controller
     /**
      * Mark selected project.
      */
-    public function mark(MarkProjectRequest $request, Project $project): RedirectResponse
+    public function mark(Project $project): RedirectResponse
     {
         try {
             $project = $this->projectService->mark($project);
             $this->flashService->flash(__('messages.project.' . ($project->is_marked ? 'mark' : 'unmark')), 'info');
-
             return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);

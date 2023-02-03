@@ -2,6 +2,7 @@
 
 namespace App\Services\Data;
 
+use App\Models\Rate;
 use App\Models\User;
 use Illuminate\Support\Str;
 use App\Services\FileService;
@@ -15,63 +16,54 @@ use Illuminate\Support\Facades\{Auth, Hash};
 class UserService
 {
     /**
-     * Store new user.
-     */
-    public function store(ValidatedInput $inputs, ?UploadedFile $avatar): User
-    {
-        $user = new User;
-        $user->password = Hash::make(($inputs->has('password')) ? $inputs->password : Str::random(8));
-
-        $user = $this->save($user, $inputs, $avatar);
-
-        $inputs->user_id = $user->id;
-        $inputs->name = $inputs->rate_name;
-        $inputs->is_active = true;
-        $inputs->value = $inputs->rate_value;
-
-        (new RateService)->store($inputs);
-
-        return $user;
-    }
-
-    /**
-     * Update user.
-     */
-    public function update(User $user, ValidatedInput $inputs, ?UploadedFile $avatar): User
-    {
-        $user->password = $inputs->has('password') ? Hash::make($inputs->password) : $user->password;
-
-        return $this->save($user, $inputs, $avatar);
-    }
-
-    /**
      * Save data for user.
      */
-    protected function save(User $user, ValidatedInput $inputs, ?UploadedFile $avatar)
+    public function save(User $user, ValidatedInput $inputs, ?UploadedFile $avatar)
     {
-        $user->name = $inputs->name;
-        $user->surname = $inputs->surname;
-        $user->email = $inputs->email;
-        $user->username = $inputs->username;
-        $user->job_title = $inputs->job_title;
-        $user->mobile = $inputs->mobile;
-        $user->phone = $inputs->phone;
-        $user->street = $inputs->street;
-        $user->house_number = $inputs->house_number;
-        $user->city = $inputs->city;
-        $user->zip_code = $inputs->zip_code;
-        $user->country = $inputs->country;
-        $user->save();
+        $user = User::updateOrCreate(
+            ['id' => $user->id],
+            [
+                'name' => $inputs->name,
+                'surname' => $inputs->surname,
+                'email' => $inputs->email,
+                'username' => $inputs->username,
+                'password' => $inputs->password ?? ($user->password ?? Str::random(8)),
+                'job_title' => $inputs->job_title,
+                'mobile' => $inputs->mobile,
+                'phone' => $inputs->phone,
+                'street' => $inputs->street,
+                'house_number' => $inputs->house_number,
+                'city' => $inputs->city,
+                'country' => $inputs->country,
+                'zip_code' => $inputs->zip_code,
+            ]
+        );
 
         if ($avatar) {
             $user = $this->uploadAvatar($user, $avatar);
         }
 
+        if ($user->rates()->count() === 0) {
+            $inputs->user_id = $user->id;
+            $inputs->name = $inputs->rate_name;
+            $inputs->is_active = true;
+            $inputs->value = $inputs->rate_value;
+    
+            (new RateService)->save(new Rate, $inputs);
+        }
+
         return $user;
     }
 
+    /**
+     * Upload users avatar.
+     */
     public function uploadAvatar(User $user, ?UploadedFile $avatar): User
     {
+        if ($oldAvatarId = $user->avatar_id) {
+            (new FileService)->removeFile($oldAvatarId);
+        }
+
         $user->avatar_id = ((new FileService)->upload($avatar, 'users/avatars'))->id;
         $user->save();
 
@@ -79,7 +71,7 @@ class UserService
     }
 
     /**
-     * Set up redirect for the action
+     * Set up redirect for the action.
      */
     public function setUpRedirect(string $type, User $user): RedirectResponse
     {

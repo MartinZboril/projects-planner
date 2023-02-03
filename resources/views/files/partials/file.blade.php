@@ -1,7 +1,7 @@
 <i class="far fa-file fa-3x text-danger float-left mr-2"></i>
 <a href="{{ asset('storage/' . $file->path) }}" download="{{ $file->file_name }}">{{ $file->file_name }}</a>
 <span class="text-muted float-right">
-    <i class="fas fa-calendar-alt"></i>
+    <i class="fas fa-clock"></i>
     {{ $file->created_at->diffForHumans() }}
 </span>
 <div class="text-muted">

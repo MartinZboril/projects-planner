@@ -2,102 +2,71 @@
 
 namespace App\Services\Data;
 
-use App\Models\CommentFile;
 use App\Services\FileService;
-use App\Services\RouteService;
+use App\Models\{CommentFile, ClientComment, Comment, MilestoneComment, ProjectComment, TaskComment, TicketComment};
+use Exception;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
-use App\Enums\Routes\{ClientRouteEnum};
-use App\Models\{Client, ClientComment, Comment};
 
 class CommentService
 {
     /**
-     * Store new comment.
-     */
-    public function store(ValidatedInput $inputs, ?Array $uploadedFiles): Comment
-    {
-        $comment = new Comment;
-        $comment->user_id = Auth::id();
-
-        $comment = $this->save($comment, $inputs);
-
-        if ($parentId = $inputs->parent_id) {
-            $this->saveRelation($comment, $parentId, $inputs->type);
-        }
-
-        if ($uploadedFiles) {
-            $this->storeFiles($comment, $uploadedFiles);
-        }
-
-        return $comment;
-    }
-
-    /**
-     * Update comment.
-     */
-    public function update(Comment $comment, ValidatedInput $inputs, ?Array $uploadedFiles): Comment
-    {
-        $comment = $this->save($comment, $inputs);
-
-        if ($uploadedFiles) {
-            $this->storeFiles($comment, $uploadedFiles);
-        }
-
-        return $comment;
-    }
-
-    /**
      * Save data for comment.
      */
-    protected function save(Comment $comment, ValidatedInput $inputs): Comment
+    public function save(Comment $comment, ValidatedInput $inputs, ?Array $uploadedFiles): void
     {
-        $comment->content = $inputs->content;
-        $comment->save();
+        $comment = Comment::updateOrCreate(
+            ['id' => $comment->id],
+            [
+                'user_id' => $comment->user_id ?? Auth::id(),
+                'content' => $inputs->content,
+            ]
+        );
 
-        return $comment;
+        if (($parentId = $inputs->parent_id ?? false) && ($parentType = $inputs->type ?? false)) {
+            $this->saveRelation($comment, $parentId, $parentType);
+        }
+
+        if ($uploadedFiles) {
+            $this->storeFiles($comment, $uploadedFiles);
+        }
     }
 
-    protected function saveRelation(Comment $comment, int $parentId, string $type): void
+    /**
+     * Save relation for comment.
+     */
+    protected function saveRelation(Comment $comment, int $parentId, string $parentType): void
     {
-        if ($type == 'client') {
-            $clientComment = new ClientComment;
-            $clientComment->client_id = $parentId;
-            $clientComment->comment_id = $comment->id;
-            $clientComment->save(); 
+        switch ($parentType) {
+            case 'client':
+                ClientComment::create(['client_id' => $parentId, 'comment_id' => $comment->id]);
+                break;
+            case 'project':
+                ProjectComment::create(['project_id' => $parentId, 'comment_id' => $comment->id]);
+                break;
+            case 'milestone':
+                MilestoneComment::create(['milestone_id' => $parentId, 'comment_id' => $comment->id]);
+                break;
+            case 'task':
+                TaskComment::create(['task_id' => $parentId, 'comment_id' => $comment->id]);
+                break;
+            case 'ticket':
+                TicketComment::create(['ticket_id' => $parentId, 'comment_id' => $comment->id]);
+                break;
+            default:
+                throw new Exception('For the sent type was not found relationship to save!');
+                break;
         }
     }
 
     /**
      * Store comments files.
      */
-    public function storeFiles(Comment $comment, Array $uploadedFiles): void
+    protected function storeFiles(Comment $comment, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            CommentFile::create([
-                'comment_id' => $comment->id,
-                'file_id' => ((new FileService)->upload($uploadedFile, 'clients/comments'))->id
-            ]);
+            $fileId = ((new FileService)->upload($uploadedFile, 'comments'))->id;
+            CommentFile::create(['comment_id' => $comment->id, 'file_id' => $fileId]);
         }
-    }
-
-    /**
-     * Set up redirect for the action
-     */
-    public function setUpRedirect(Comment $comment, $type, $parentId): RedirectResponse
-    {
-        switch ($type) {                        
-            case 'client':
-                $redirectAction = ClientRouteEnum::Comments;
-                $redirectVars = ['client' => Client::find($parentId)];
-                break;  
-
-            default:
-                return redirect()->back();
-                break;
-        }
-        
-        return (new RouteService)->redirect($redirectAction->value, $redirectVars);
     }
 }

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Data;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Task\{ChangeTaskRequest, MarkTaskRequest, StoreTaskRequest, PauseTaskRequest, UpdateTaskRequest};
-use App\Models\{Project, Task, User};
+use App\Http\Requests\Task\{ChangeTaskRequest, StoreTaskRequest, UpdateTaskRequest};
+use App\Models\{Comment, Project, Task, User};
 use App\Services\FlashService;
 use App\Services\Data\TaskService;
 use Exception;
@@ -46,9 +46,8 @@ class TaskController extends Controller
     public function store(StoreTaskRequest $request): RedirectResponse
     {
         try {
-            $task = $this->taskService->store($request->safe());
+            $task = $this->taskService->save(new Task, $request->safe());
             $this->flashService->flash(__('messages.task.create'), 'info');
-
             return $this->taskService->setUpRedirect($request->redirect, $request->has('save_and_close'), $task);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -61,7 +60,7 @@ class TaskController extends Controller
      */
     public function detail(Task $task): View
     {
-        return view('tasks.detail', ['task' => $task]);
+        return view('tasks.detail', ['task' => $task, 'comment' => new Comment]);
     }
 
     /**
@@ -78,9 +77,8 @@ class TaskController extends Controller
     public function update(UpdateTaskRequest $request, Task $task): RedirectResponse
     {
         try {
-            $task = $this->taskService->update($task, $request->safe());
+            $task = $this->taskService->save($task, $request->safe());
             $this->flashService->flash(__('messages.task.update'), 'info');
-
             return $this->taskService->setUpRedirect($request->redirect, $request->has('save_and_close'), $task);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -96,7 +94,6 @@ class TaskController extends Controller
         try {
             $task = $this->taskService->change($task, $request->status);
             $this->flashService->flash(__('messages.task.' . $task->status->name), 'info');
-
             return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);
@@ -107,12 +104,11 @@ class TaskController extends Controller
     /**
      * Start/stop working on the task.
      */
-    public function pause(PauseTaskRequest $request, Task $task): RedirectResponse
+    public function pause(Task $task): RedirectResponse
     {
         try {
-            $task = $this->taskService->pause($task, $request->action);
+            $task = $this->taskService->pause($task);
             $this->flashService->flash(__('messages.task.' . ($task->paused ? 'stop' : 'resume')), 'info');
-
             return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);
@@ -123,12 +119,11 @@ class TaskController extends Controller
     /**
      * Mark selected task.
      */
-    public function mark(MarkTaskRequest $request, Task $task): RedirectResponse
+    public function mark(Task $task): RedirectResponse
     {
         try {
             $task = $this->taskService->mark($task);
             $this->flashService->flash(__('messages.task.' . ($task->is_marked ? 'mark' : 'unmark')), 'info');
-
             return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);

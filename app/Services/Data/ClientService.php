@@ -2,57 +2,42 @@
 
 namespace App\Services\Data;
 
-use App\Models\File;
 use App\Models\Client;
-use App\Services\FileService;
-use App\Services\RouteService;
-use Illuminate\Http\UploadedFile;
+use App\Services\{FileService, RouteService};
 use App\Enums\Routes\ClientRouteEnum;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\{RedirectResponse, UploadedFile};
 use Illuminate\Support\ValidatedInput;
 
 class ClientService
 {
     /**
-     * Store new client.
-     */
-    public function store(ValidatedInput $inputs, ?UploadedFile $uploadedFile): Client
-    {
-        return $this->save(new Client, $inputs, $uploadedFile);
-    }
-
-    /**
-     * Update client.
-     */
-    public function update(Client $client, ValidatedInput $inputs, ?UploadedFile $uploadedFile): Client
-    {
-        return $this->save($client, $inputs, $uploadedFile);
-    }
-
-    /**
      * Save data for client.
      */
-    protected function save(Client $client, ValidatedInput $inputs, ?UploadedFile $uploadedFile)
+    public function save(Client $client, ValidatedInput $inputs, ?UploadedFile $uploadedFile)
     {
-        $client->name = $inputs->name;
-        $client->email = $inputs->email;
-        $client->contact_person = $inputs->contact_person;
-        $client->contact_email = $inputs->contact_email;
-        $client->mobile = $inputs->mobile;
-        $client->phone = $inputs->phone;
-        $client->street = $inputs->street;
-        $client->house_number = $inputs->house_number;
-        $client->city = $inputs->city;
-        $client->country = $inputs->country;
-        $client->zip_code = $inputs->zip_code;
-        $client->website = $inputs->website;
-        $client->skype = $inputs->skype;
-        $client->linekedin = $inputs->linekedin;
-        $client->twitter = $inputs->twitter;
-        $client->facebook = $inputs->facebook;
-        $client->instagram = $inputs->instagram;
-        $client->note = $inputs->note;
-        $client->save();
+        $client = Client::updateOrCreate(
+            ['id' => $client->id],
+            [
+                'name' => $inputs->name,
+                'email' => $inputs->email,
+                'contact_person' => $inputs->contact_person,
+                'contact_email' => $inputs->contact_email,
+                'mobile' => $inputs->mobile,
+                'phone' => $inputs->phone,
+                'street' => $inputs->street,
+                'house_number' => $inputs->house_number,
+                'city' => $inputs->city,
+                'country' => $inputs->country,
+                'zip_code' => $inputs->zip_code,
+                'website' => $inputs->website,
+                'skype' => $inputs->skype,
+                'linekedin' => $inputs->linekedin,
+                'twitter' => $inputs->twitter,
+                'facebook' => $inputs->facebook,
+                'instagram' => $inputs->instagram,
+                'note' => $inputs->note,
+            ]
+        );
 
         if ($uploadedFile) {
             $client = ($this->storeLogo($client, $uploadedFile));
@@ -68,7 +53,6 @@ class ClientService
     {
         $client->is_marked = !$client->is_marked;
         $client->save();
-
         return $client;
     }
     
@@ -77,27 +61,22 @@ class ClientService
      */
     public function storeLogo(Client $client, UploadedFile $uploadedFile): Client
     {   
-        $oldLogoId = $client->logo_id;
+        if ($oldLogoId = $client->logo_id) {
+            (new FileService)->removeFile($oldLogoId);
+        }
 
         $client->logo_id = ((new FileService)->upload($uploadedFile, 'clients/logos'))->id;
         $client->save();
-
-        if ($oldLogoId) {
-            unlink(public_path('storage/' . File::find($oldLogoId)->path));
-            File::destroy($oldLogoId);    
-        }
-
         return $client;
     }
 
     /**
-     * Set up redirect for the action
+     * Set up redirect for the action.
      */
     public function setUpRedirect(string $type, Client $client): RedirectResponse
     {
         $redirectAction = $type ? ClientRouteEnum::Index : ClientRouteEnum::Detail;
-        $redirectVars = $type ? [] : ['client' => $client];
-        
+        $redirectVars = $type ? [] : ['client' => $client];        
         return (new RouteService)->redirect($redirectAction->value, $redirectVars);
     }
 }

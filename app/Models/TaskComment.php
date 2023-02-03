@@ -2,28 +2,29 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ClientComment extends Model
+class TaskComment extends Model
 {
     use HasFactory;
-
-    protected $table = 'clients_comments';
+        
+    protected $table = 'tasks_comments';
 
     protected $fillable = [
-        'client_id', 'comment_id',
-    ]; 
+        'task_id',
+        'comment_id',
+    ];
 
     public const VALIDATION_RULES = [
-        'client_id' => ['required', 'integer', 'exists:clients,id'],
+        'task_id' => ['required', 'integer', 'exists:tasks,id'],
         'comment_id' => ['required', 'integer', 'exists:comments,id'],
     ];
 
-    public function client(): BelongsTo
+    public function task(): BelongsTo
     {
-        return $this->belongsTo(Client::class, 'client_id');
+        return $this->belongsTo(Task::class, 'task_id');
     }
 
     public function comment(): BelongsTo

@@ -14,8 +14,7 @@ class File extends Model
     ];
 
     protected $fillable = [
-        'name',
-        'file_path'
+        'name', 'file_path',
     ];
 
     public const VALIDATION_RULES = [

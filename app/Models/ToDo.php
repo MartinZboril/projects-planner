@@ -2,19 +2,23 @@
 
 namespace App\Models;
 
+use App\Traits\Scopes\OverdueRecords;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\{Builder, Model};
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ToDo extends Model
 {
-    use HasFactory;
+    
+    use HasFactory, OverdueRecords;
 
     protected $table = 'todos';
     
-    protected $guarded = ['id']; 
+    protected $fillable = [
+        'task_id', 'name', 'due_date', 'is_finished', 'description'
+    ]; 
 
-    protected $dates = ['deadline'];
+    protected $dates = ['due_date'];
 
     protected $appends = [
         'overdue',
@@ -23,7 +27,7 @@ class ToDo extends Model
     public const VALIDATION_RULES = [
         'task_id' => ['required', 'integer', 'exists:tasks,id'],
         'name' => ['required', 'string', 'max:255'],
-        'deadline' => ['required', 'date'],
+        'due_date' => ['required', 'date'],
         'is_finished' => ['boolean'],
         'description' => ['max:65553'],
     ];
@@ -41,13 +45,9 @@ class ToDo extends Model
         return $query->where('is_finished', $type);
     }
 
-    public function scopeOverdue(Builder $query): Builder
-    {
-        return $query->whereDate('deadline', '<=', date('Y-m-d'));
-    }
-
     public function getOverdueAttribute(): bool
     {
-        return $this->deadline <= date('Y-m-d') && !$this->is_finished;
+        return $this->due_date <= date('Y-m-d') && !$this->is_finished;
     }
+
 }

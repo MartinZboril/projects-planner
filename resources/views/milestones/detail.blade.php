@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'toaster' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'summernote' => true])
 
 @section('title', __('pages.title.milestone'))
 
@@ -26,7 +26,7 @@
                                 <span class="d-block">Project: <b><a href="{{ route('projects.detail', $milestone->project->id) }}">{{ $milestone->project->name }}</a></b></span>
                                 <span class="d-block">User: <b><a href="{{ route('users.detail', $milestone->owner) }}">{{ $milestone->owner->full_name }}</a></b></span>
                                 <span class="d-block">Start date: <b>{{ $milestone->start_date->format('d.m.Y') }}</b></span>
-                                <span class="d-block">End date: <b>{{ $milestone->end_date->format('d.m.Y') }}</b></span>
+                                <span class="d-block">End date: <b>{{ $milestone->due_date->format('d.m.Y') }}</b></span>
                                 <span class="d-block">Tasks: <b>{{ $milestone->tasksCompleted->count() }}/{{ $milestone->tasks->count() }}</b><span class="badge badge-{{ $milestone->progress == 1 ? 'success' : 'warning' }} ml-1">{{ $milestone->progress * 100 }} % Complete</span></span>
                                 <hr>
                                 {!! $milestone->description !!}
@@ -49,6 +49,12 @@
                             <div class="card-header">Tasks</div>
                             <div class="card-body">
                                 @include('tasks.partials.table', ['id' => 'tasks-table', 'tasks' => $milestone->tasks, 'display' => [], 'redirect' => 'projects'])       
+                            </div>
+                        </div>
+                        <div class="card card-primary card-outline">
+                            <div class="card-header">Comments</div>
+                            <div class="card-body">
+                                @include('comments.list', ['comment' => $comment, 'comments' => $milestone->comments, 'parentId' => $milestone->id, 'parentType' => 'milestone'])
                             </div>
                         </div>
                     </div>

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Data;
 use Exception;
 use App\Models\Comment;
 use Illuminate\View\View;
-use App\Models\{Client, File, Note};
+use App\Models\{Client, Note};
 use App\Services\FlashService;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -71,9 +71,8 @@ class ClientController extends Controller
     public function store(StoreClientRequest $request): RedirectResponse
     {
         try {
-            $client = $this->clientService->store($request->safe(), $request->file('logo'));
+            $client = $this->clientService->save(new Client, $request->safe(), $request->file('logo'));
             $this->flashService->flash(__('messages.client.create'), 'info');
-
             return $this->clientService->setUpRedirect($request->has('save_and_close'), $client);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -103,9 +102,8 @@ class ClientController extends Controller
     public function update(UpdateClientRequest $request, Client $client): RedirectResponse
     {
         try {
-            $client = $this->clientService->update($client, $request->safe(), $request->file('logo'));
+            $client = $this->clientService->save($client, $request->safe(), $request->file('logo'));
             $this->flashService->flash(__('messages.client.update'), 'info');
-
             return $this->clientService->setUpRedirect($request->has('save_and_close'), $client);
         } catch (Exception $exception) {
             Log::error($exception);            
@@ -132,12 +130,11 @@ class ClientController extends Controller
     /**
      * Mark selected client.
      */
-    public function mark(MarkClientRequest $request, Client $client): RedirectResponse
+    public function mark(Client $client): RedirectResponse
     {
         try {
             $client = $this->clientService->mark($client);
             $this->flashService->flash(__('messages.client.' . ($client->is_marked ? 'mark' : 'unmark')), 'info');
-
             return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);

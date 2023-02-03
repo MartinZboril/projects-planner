@@ -13,14 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('notes', function (Blueprint $table) {
+        Schema::create('tasks_comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->string('name');
-            $table->text('content');
-            $table->boolean('is_private')->default(0);
-            $table->boolean('is_basic')->default(1);
-            $table->boolean('is_marked')->default(0);
+            $table->foreignIdFor(
+                \App\Models\Task::class,
+                'task_id'
+            )->constrained('tasks');
+            $table->foreignIdFor(
+                \App\Models\Comment::class,
+                'comment_id'
+            )->constrained('comments');
             $table->timestamps();
         });
     }
@@ -32,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notes');
+        Schema::dropIfExists('tasks_comments');
     }
 };

@@ -3,16 +3,18 @@
 namespace App\Models;
 
 use App\Enums\TaskStatusEnum;
+use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use Illuminate\Database\Eloquent\{Builder, Model};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany};
 
 class Task extends Model
 {
-    use HasFactory;
+    use HasFactory, MarkedRecords, OverdueRecords;
 
-    protected $guarded = ['id']; 
+    protected $fillable = [
+        'status', 'author_id', 'user_id', 'project_id', 'milestone_id', 'name', 'start_date', 'due_date', 'description',
+    ]; 
 
     protected $dates = ['start_date', 'due_date'];
 
@@ -63,7 +65,12 @@ class Task extends Model
     {
         return $this->belongsToMany(File::class, 'tasks_files', 'task_id', 'file_id')->orderByDesc('created_at');
     }
-    
+        
+    public function comments(): BelongsToMany
+    {
+        return $this->belongsToMany(Comment::class, 'tasks_comments', 'task_id', 'comment_id')->orderByDesc('created_at');
+    }
+
     public function todos(): HasMany
     {
         return $this->hasMany(ToDo::class, 'task_id');
@@ -89,16 +96,6 @@ class Task extends Model
         return $query->whereIn('status', [TaskStatusEnum::new, TaskStatusEnum::in_progress]);
     }
 
-    public function scopeOverdue(Builder $query): Builder
-    {
-        return $query->whereDate('due_date', '<=', date('Y-m-d'));
-    }
-
-    public function scopeMarked(Builder $query): Builder
-    {
-        return $query->where('is_marked', true);
-    }
-
     public function getOverdueAttribute(): bool
     {
         return $this->due_date <= date('Y-m-d') && $this->status != TaskStatusEnum::complete;
@@ -117,5 +114,10 @@ class Task extends Model
     public function getReturnedAttribute(): bool
     {
         return $this->is_returned ? true : false;
+    }
+
+    public function isReturned(): bool
+    {
+        return $this->status === TaskStatusEnum::complete && $this === TaskStatusEnum::new->value;
     }
 }

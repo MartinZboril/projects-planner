@@ -2,73 +2,53 @@
 
 namespace App\Services\Data;
 
-use App\Enums\Routes\{ClientRouteEnum, NoteRouteEnum, ProjectRouteEnum};
-use App\Models\{Client, ClientNote, Note, Project, ProjectNote};
+use Exception;
 use App\Services\RouteService;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
-use Illuminate\Support\Facades\Auth;
+use App\Models\{Client, ClientNote, Note, Project, ProjectNote};
+use App\Enums\Routes\{ClientRouteEnum, NoteRouteEnum, ProjectRouteEnum};
 
 class NoteService
 {
     /**
-     * Store new note.
-     */
-    public function store(ValidatedInput $inputs): Note
-    {
-        $note = new Note;
-        $note->user_id = Auth::id();
-        $note->type = $inputs->type;
-
-        $note = $this->save($note, $inputs);
-
-        if($parentId = $inputs->parent_id) {
-            $this->saveRelation($note, $parentId, $inputs->type);
-        }
-
-        return $note;
-    }
-
-    /**
-     * Update note.
-     */
-    public function update(Note $note, ValidatedInput $inputs): Note
-    {
-        return $this->save($note, $inputs);
-    }
-
-    /**
      * Save data for note.
      */
-    protected function save(Note $note, ValidatedInput $inputs): Note
+    public function save(Note $note, ValidatedInput $inputs): void
     {
-        $note->name = $inputs->name;
-        $note->is_private = $inputs->has('is_private');
-        $note->is_marked = $inputs->has('is_marked');
-        $note->content = $inputs->content;
-        $note->save();
+        $note = Note::updateOrCreate(
+            ['id' => $note->id],
+            [
+                'user_id' => $note->user_id ?? Auth::id(),
+                'name' => $inputs->name,
+                'content' => $inputs->content,
+                'is_private' => $inputs->is_private ?? false,
+                'is_basic' => ($inputs->parent_id ?? false) ? false : true,
+            ]
+        );
 
-        return $note;
+        if (($parentId = $inputs->parent_id ?? false) && ($parentType = $inputs->type ?? false)) {
+            $this->saveRelation($note, $parentId, $parentType);
+        }
     }
 
-    protected function saveRelation(Note $note, int $parentId, string $type): Note
+    /**
+     * Save relation for note.
+     */
+    protected function saveRelation(Note $note, int $parentId, string $parentType): void
     {
-        if($type == 'project') {
-            $projectNote = new ProjectNote;
-            $projectNote->project_id = $parentId;
-            $projectNote->note_id = $note->id;
-            $projectNote->save();    
-        } elseif($type == 'client') {
-            $clientNote = new ClientNote;
-            $clientNote->client_id = $parentId;
-            $clientNote->note_id = $note->id;
-            $clientNote->save(); 
+        switch ($parentType) {
+            case 'client':
+                ClientNote::create(['client_id' => $parentId, 'note_id' => $note->id]);
+                break;
+            case 'project':
+                ProjectNote::create(['project_id' => $parentId, 'note_id' => $note->id]);
+                break;
+            default:
+                throw new Exception('For the sent type was not found relationship to save!');
+                break;
         }
-
-        $note->is_basic = false;
-        $note->save();
-
-        return $note;
     }
 
     /**
@@ -78,14 +58,13 @@ class NoteService
     {
         $note->is_marked = !$note->is_marked;
         $note->save();
-
         return $note;
     }
 
     /**
-     * Set up redirect for the action
+     * Set up redirect for the action.
      */
-    public function setUpRedirect(Note $note, $type, $parentId): RedirectResponse
+    public function setUpRedirect($type, $parentId): RedirectResponse
     {
         switch ($type) {
             case 'project':

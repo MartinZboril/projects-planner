@@ -15,6 +15,7 @@ use Illuminate\View\View;
 class TimerController extends Controller
 {  
     protected $timerService;
+    protected $flashService;
 
     public function __construct(TimerService $timerService, FlashService $flashService)
     {
@@ -37,9 +38,8 @@ class TimerController extends Controller
     public function store(StoreTimerRequest $request): RedirectResponse
     {
         try {
-            $timer = $this->timerService->store($request->safe());
+            $timer = $this->timerService->save(new Timer, $request->safe());
             $this->flashService->flash(__('messages.timer.create'), 'info');
-
             return $this->timerService->setUpRedirect($timer);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -61,9 +61,8 @@ class TimerController extends Controller
     public function update(UpdateTimerRequest $request, Timer $timer): RedirectResponse
     {
         try {
-            $timer = $this->timerService->update($timer, $request->safe());
+            $timer = $this->timerService->save($timer, $request->safe());
             $this->flashService->flash(__('messages.timer.create'), 'info');
-
             return $this->timerService->setUpRedirect($timer);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -77,14 +76,8 @@ class TimerController extends Controller
     public function start(StartTimerRequest $request): RedirectResponse
     {
         try {
-            if($this->timerService->checkIfNotRunningAnoutherTimer($request->project_id, Auth::id())) {
-                $this->flashService->flash(__('messages.timer.collision'), 'info');
-                return $this->timerService->redirect(''); 
-            }
-
-            $timer = $this->timerService->start($request->safe());
+            $this->timerService->start($request->safe());
             $this->flashService->flash(__('messages.timer.start'), 'info');
-
             return redirect()->back(); 
         } catch (Exception $exception) {
             Log::error($exception);
@@ -98,9 +91,8 @@ class TimerController extends Controller
     public function stop(Timer $timer): RedirectResponse
     {
         try {
-            $timer = $this->timerService->stop($timer);
+            $this->timerService->stop($timer);
             $this->flashService->flash(__('messages.timer.stop'), 'info');
-
             return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);

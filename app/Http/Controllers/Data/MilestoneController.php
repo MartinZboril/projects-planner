@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Data;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Milestone\{LoadMilestoneRequest, MarkMilestoneRequest, StoreMilestoneRequest, UpdateMilestoneRequest};
-use App\Models\{Milestone, Project};
+use App\Http\Requests\Milestone\{MarkMilestoneRequest, StoreMilestoneRequest, UpdateMilestoneRequest};
+use App\Models\{Comment, Milestone, Project};
 use App\Services\FlashService;
 use App\Services\Data\MilestoneService;
 use Exception;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -39,9 +38,8 @@ class MilestoneController extends Controller
     public function store(StoreMilestoneRequest $request): RedirectResponse
     {
         try {
-            $milestone = $this->milestoneService->store($request->safe());
+            $milestone = $this->milestoneService->save(new Milestone, $request->safe());
             $this->flashService->flash(__('messages.milestone.create'), 'info');
-
             return $this->milestoneService->setUpRedirect($request->has('save_and_close'), $milestone);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -54,7 +52,7 @@ class MilestoneController extends Controller
      */
     public function detail(Project $project, Milestone $milestone): View
     {
-        return view('milestones.detail', ['project' => $project, 'milestone' => $milestone]);
+        return view('milestones.detail', ['project' => $project, 'milestone' => $milestone, 'comment' => new Comment]);
     }
 
     /**
@@ -71,9 +69,8 @@ class MilestoneController extends Controller
     public function update(UpdateMilestoneRequest $request, Milestone $milestone): RedirectResponse
     {
         try {
-            $milestone = $this->milestoneService->update($milestone, $request->safe());
+            $milestone = $this->milestoneService->save($milestone, $request->safe());
             $this->flashService->flash(__('messages.milestone.update'), 'info');
-
             return $this->milestoneService->setUpRedirect($request->has('save_and_close'), $milestone);
         } catch (Exception $exception) {
             Log::error($exception);
@@ -84,12 +81,11 @@ class MilestoneController extends Controller
     /**
      * Mark selected milestone.
      */
-    public function mark(MarkMilestoneRequest $request, Milestone $milestone): RedirectResponse
+    public function mark(Milestone $milestone): RedirectResponse
     {
         try {
             $milestone = $this->milestoneService->mark($milestone);
             $this->flashService->flash(__('messages.milestone.' . ($milestone->is_marked ? 'mark' : 'unmark')), 'info');
-
             return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);

@@ -2,28 +2,28 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ClientComment extends Model
+class MilestoneComment extends Model
 {
     use HasFactory;
-
-    protected $table = 'clients_comments';
+    
+    protected $table = 'milestones_comments';
 
     protected $fillable = [
-        'client_id', 'comment_id',
-    ]; 
+        'milestone_id', 'comment_id',
+    ];
 
     public const VALIDATION_RULES = [
-        'client_id' => ['required', 'integer', 'exists:clients,id'],
+        'milestone_id' => ['required', 'integer', 'exists:milestones,id'],
         'comment_id' => ['required', 'integer', 'exists:comments,id'],
     ];
 
-    public function client(): BelongsTo
+    public function milestone(): BelongsTo
     {
-        return $this->belongsTo(Client::class, 'client_id');
+        return $this->belongsTo(Milestone::class, 'milestone_id');
     }
 
     public function comment(): BelongsTo

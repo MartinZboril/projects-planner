@@ -14,7 +14,7 @@ class ProjectFile extends Model
 
     protected $fillable = [
         'project_id',
-        'file_id'
+        'file_id',
     ]; 
 
     public const VALIDATION_RULES = [

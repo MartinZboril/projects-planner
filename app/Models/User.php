@@ -2,38 +2,25 @@
 
 namespace App\Models;
 
-use App\Models\Timer;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $fillable = [
-        'name',
-        'surname',
-        'email',
-        'username',
-        'password',
-        'job_title',
-        'mobile',
-        'phone',
-        'street',
-        'house_number',
-        'city',
-        'country',
-        'zip_code',
+    protected $guarded = [
+        'id', 'email_verified_at', 'remember_token', 'created_at', 'updated_at',
     ];
 
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password', 'remember_token',
     ];
 
     protected $casts = [
@@ -88,6 +75,14 @@ class User extends Authenticatable
         return $this->hasMany(Rate::class, 'user_id');
     }
 
+    protected function password(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value,
+            set: fn ($value) => Hash::make($value),
+        );
+    }
+
     public function getFullNameAttribute(): string
     {
         return $this->name . ' ' . $this->surname;
@@ -95,36 +90,36 @@ class User extends Authenticatable
     
     public function getJobTitleLabelAttribute(): string
     {
-        return ($this->job_title) ? $this->job_title : 'NaN';
+        return $this->job_title ?? 'NaN';
     }
 
     public function getMobileLabelAttribute(): string
     {
-        return ($this->mobile) ? $this->mobile : 'NaN';
+        return $this->mobile ?? 'NaN';
     }
 
     public function getPhoneLabelAttribute(): string
     {
-        return ($this->phone) ? $this->phone : 'NaN';
+        return $this->phone ?? 'NaN';
     }
 
     public function getStreetLabelAttribute(): string
     {
-        return (($this->street) ? $this->street : 'NaN') . (($this->house_number) ? ' ' . $this->house_number : '');
+        return ($this->street ?? 'NaN') . ($this->house_number ? ' ' . $this->house_number : '');
     }
     
     public function getCityLabelAttribute(): string
     {
-        return ($this->city) ? $this->city : 'NaN';
+        return $this->city ?? 'NaN';
     }
         
     public function getZipCodeLabelAttribute(): string
     {
-        return ($this->zip_code) ? $this->zip_code : 'NaN';
+        return $this->zip_code ?? 'NaN';
     }
 
     public function getCountryLabelAttribute(): string
     {
-        return ($this->country) ? $this->country : 'NaN';
+        return $this->country ?? 'NaN';
     }
 }
