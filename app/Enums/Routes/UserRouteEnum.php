@@ -9,5 +9,5 @@ enum UserRouteEnum: string
     use ManagesEnumValues;
 
     case Index = 'users.index';
-    case Detail = 'users.detail';
+    case Detail = 'users.show';
 }

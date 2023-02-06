@@ -18,7 +18,7 @@
             @forelse ($projects as $project)
                 <tr>
                     <td><a href="{{ route('projects.detail', $project->id) }}">{{ $project->name }}</a></td>
-                    <td><a href="{{ route('clients.detail', $project->client->id) }}">{{ $project->client->name }}</a></td>
+                    <td><a href="{{ route('clients.show', $project->client->id) }}">{{ $project->client->name }}</a></td>
                     <td>@include('projects.partials.status', ['status' => $project->status])</td>
                     <td>
                         @foreach ($project->team as $user)

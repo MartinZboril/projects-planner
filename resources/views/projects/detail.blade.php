@@ -32,7 +32,7 @@
                                     </p>
                                     <hr>
                                     <p class="text-sm">Client
-                                        <b class="d-block ml-2"><a href="{{ route('clients.detail', $project->client->id) }}">{{ $project->client->name }}</a></b>
+                                        <b class="d-block ml-2"><a href="{{ route('clients.show', $project->client->id) }}">{{ $project->client->name }}</a></b>
                                     </p>
                                     <hr>
                                     <p class="text-sm">Information
@@ -54,7 +54,7 @@
                                                 <li class="list-group-item">
                                                     <div class="user-block">
                                                         @include('site.partials.user', ['user' => $user])
-                                                        <span class="username"><a href="{{ route('users.detail', $user->id) }}">{{ $user->full_name }}</a></span>
+                                                        <span class="username"><a href="{{ route('users.show', $user->id) }}">{{ $user->full_name }}</a></span>
                                                         <span class="description">Member</span>
                                                     </div> 
                                                 </li>

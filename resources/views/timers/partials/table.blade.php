@@ -25,7 +25,7 @@
                         @endif
                     </th>
                     @if(in_array('project', $display))<td><a href="{{ route('projects.detail', $timer->project->id) }}">{{ $timer->project->name }}</a></td>@endif
-                    <td><a href="{{ route('rates.edit', ['user' => $timer->user->id, 'rate' => $timer->rate->id]) }}">{{ $timer->rate->name }}</a></td>
+                    <td><a href="{{ route('users.rates.edit', ['user' => $timer->user->id, 'rate' => $timer->rate->id]) }}">{{ $timer->rate->name }}</a></td>
                     <td>@include('site.partials.user', ['user' => $timer->user])</td>
                     <td>{{ $timer->until ? $timer->total_time : 'N/A' }}</td>
                     <td>

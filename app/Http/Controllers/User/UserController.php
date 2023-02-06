@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Data;
+namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\{StoreUserRequest, UpdateUserRequest};
@@ -19,7 +19,6 @@ class UserController extends Controller
 
     public function __construct(UserService $userService, FlashService $flashService)
     {
-        $this->middleware('auth');
         $this->userService = $userService;
         $this->flashService = $flashService;
     }
@@ -59,7 +58,7 @@ class UserController extends Controller
     /**
      * Display the user.
      */
-    public function detail(User $user): View
+    public function show(User $user): View
     {
         return view('users.detail', ['user' => $user]);
     }

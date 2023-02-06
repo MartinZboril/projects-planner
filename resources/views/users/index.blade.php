@@ -35,7 +35,7 @@
                                 <tbody>
                                     @forelse ($users as $user)
                                         <tr>
-                                            <td><a href="{{ route('users.detail', $user->id) }}">{{ $user->full_name }}</a></td>
+                                            <td><a href="{{ route('users.show', $user->id) }}">{{ $user->full_name }}</a></td>
                                             <td>{{ $user->email }}</td>
                                             <td>{{ $user->job_title }}</td>
                                             <td>{{ $user->mobile }}</td>
@@ -43,7 +43,7 @@
                                             <td>{{ $user->created_at->format('d.m.Y') }}</td>
                                             <td>
                                                 <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
-                                                <a href="{{ route('users.detail', $user->id) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                                                <a href="{{ route('users.show', $user->id) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
                                             </td>
                                         </tr>
                                     @empty

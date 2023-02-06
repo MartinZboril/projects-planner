@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Data;
+namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Rate\{StoreRateRequest, UpdateRateRequest};
@@ -12,14 +12,13 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
-class RateController extends Controller
+class UserRateController extends Controller
 {
     protected $rateService;
     protected $flashService;
 
     public function __construct(RateService $rateService, FlashService $flashService)
     {
-        $this->middleware('auth');
         $this->rateService = $rateService;
         $this->flashService = $flashService;
     }
@@ -35,7 +34,7 @@ class RateController extends Controller
     /**
      * Store a newly created rate in storage.
      */
-    public function store(StoreRateRequest $request): RedirectResponse
+    public function store(StoreRateRequest $request, User $user): RedirectResponse
     {
         try {
             $rate = $this->rateService->save(new Rate, $request->safe());
@@ -58,7 +57,7 @@ class RateController extends Controller
     /**
      * Update the rate in storage.
      */
-    public function update(UpdateRateRequest $request, Rate $rate): RedirectResponse
+    public function update(UpdateRateRequest $request, User $user, Rate $rate): RedirectResponse
     {
         try {
             $rate = $this->rateService->save($rate, $request->safe());

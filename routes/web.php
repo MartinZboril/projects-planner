@@ -37,33 +37,39 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/timesheets', App\Http\Controllers\Report\TimesheetReportController::class)->name('timesheets');    
         });
     });
+    // Users
+    Route::resource('users', App\Http\Controllers\User\UserController::class)
+        ->except(['destroy']);
+    // Users Additions
+    Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
+        // Rates
+        Route::group(['as' => 'rates.'], function () {
+            Route::get('/{user}/rates/create', [App\Http\Controllers\User\UserRateController::class, 'create'])->name('create');
+            Route::post('/{user}/rates/store', [App\Http\Controllers\User\UserRateController::class, 'store'])->name('store');
+            Route::get('/{user}/rates/{rate}/edit', [App\Http\Controllers\User\UserRateController::class, 'edit'])->name('edit');            
+            Route::patch('/{user}/rates/{rate}/update', [App\Http\Controllers\User\UserRateController::class, 'update'])->name('update');            
+        });
+    });
+    // Clients
+    Route::resource('clients', App\Http\Controllers\Client\ClientController::class)
+        ->except(['destroy']);
+    // Clients Additions
+    Route::group(['prefix' => 'clients', 'as' => 'clients.'], function () {
+        // Files
+        Route::get('/{client}/files', [App\Http\Controllers\Client\ClienFileController::class, 'index'])->name('files.index');
+        Route::post('/{client}/files/upload', App\Http\Controllers\Client\ClientFileUploaderController::class)->name('files.upload');
+        // Marking
+        Route::patch('/{client}/mark', App\Http\Controllers\Client\ClientMarkController::class)->name('mark');
+    });
 });
 
-// Users
-Route::get('/users', [App\Http\Controllers\Data\UserController::class, 'index'])->name('users.index');
-Route::get('/users/create', [App\Http\Controllers\Data\UserController::class, 'create'])->name('users.create');
-Route::get('/users/{user}/detail', [App\Http\Controllers\Data\UserController::class, 'detail'])->name('users.detail');
-Route::get('/users/{user}/edit', [App\Http\Controllers\Data\UserController::class, 'edit'])->name('users.edit');
-Route::get('/users/{user}/rates/create', [App\Http\Controllers\Data\RateController::class, 'create'])->name('rates.create');
-Route::get('/users/{user}/rates/{rate}/edit', [App\Http\Controllers\Data\RateController::class, 'edit'])->name('rates.edit');
-
-Route::post('/users/store', [App\Http\Controllers\Data\UserController::class, 'store'])->name('users.store');
-Route::patch('/users/{user}/update', [App\Http\Controllers\Data\UserController::class, 'update'])->name('users.update');
+// ToDO: Clients -> notes, comments, files (upload)
 
 // Clients
-Route::get('/clients', [App\Http\Controllers\Data\ClientController::class, 'index'])->name('clients.index');
-Route::get('/clients/create', [App\Http\Controllers\Data\ClientController::class, 'create'])->name('clients.create');
-Route::get('/clients/{client}/detail', [App\Http\Controllers\Data\ClientController::class, 'detail'])->name('clients.detail');
-Route::get('/clients/{client}/edit', [App\Http\Controllers\Data\ClientController::class, 'edit'])->name('clients.edit');
 Route::get('/clients/{client}/notes', [App\Http\Controllers\Data\ClientController::class, 'notes'])->name('clients.notes');
 Route::get('/clients/{client}/note/create', [App\Http\Controllers\Data\ClientController::class, 'createNote'])->name('clients.note.create');
 Route::get('/clients/{client}/note/{note}/edit', [App\Http\Controllers\Data\ClientController::class, 'editNote'])->name('clients.note.edit');
 Route::get('/clients/{client}/comments', [App\Http\Controllers\Data\ClientController::class, 'comments'])->name('clients.comments');
-Route::get('/clients/{client}/files', [App\Http\Controllers\Data\ClientController::class, 'files'])->name('clients.files');
-
-Route::post('/clients/store', [App\Http\Controllers\Data\ClientController::class, 'store'])->name('clients.store');
-Route::patch('/clients/{client}/update', [App\Http\Controllers\Data\ClientController::class, 'update'])->name('clients.update');
-Route::patch('/clients/{client}/mark', [App\Http\Controllers\Data\ClientController::class, 'mark'])->name('clients.mark');
 
 // Projects
 Route::get('/projects', [App\Http\Controllers\Data\ProjectController::class, 'index'])->name('projects.index');
@@ -128,10 +134,6 @@ Route::post('/timers/store', [App\Http\Controllers\Data\TimerController::class, 
 Route::post('/timers/start', [App\Http\Controllers\Data\TimerController::class, 'start'])->name('timers.start');
 Route::patch('/timers/{timer}/stop', [App\Http\Controllers\Data\TimerController::class, 'stop'])->name('timers.stop');
 Route::patch('/timers/{timer}/update', [App\Http\Controllers\Data\TimerController::class, 'update'])->name('timers.update');
-
-// Rates
-Route::post('/rates/store', [App\Http\Controllers\Data\RateController::class, 'store'])->name('rates.store');
-Route::patch('/rates/{rate}/update', [App\Http\Controllers\Data\RateController::class, 'update'])->name('rates.update');
 
 // Tickets
 Route::get('/tickets', [App\Http\Controllers\Data\TicketController::class, 'index'])->name('tickets.index');

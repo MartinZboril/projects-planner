@@ -181,7 +181,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $type == 'edit' ? route('users.detail', $user->id) : route('users.index') }}" class="cancel-btn">Close</a></span>
+                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $type == 'edit' ? route('users.show', $user->id) : route('users.index') }}" class="cancel-btn">Close</a></span>
             </div>
         </div>
     </div>

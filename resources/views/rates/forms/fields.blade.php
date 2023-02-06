@@ -44,7 +44,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"> or <a href="{{ route('users.detail', $user->id) }}" class="cancel-btn">Close</a></span>
+                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"> or <a href="{{ route('users.show', $user->id) }}" class="cancel-btn">Close</a></span>
             </div>
         </div>
     </div>
