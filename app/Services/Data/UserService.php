@@ -55,10 +55,10 @@ class UserService
     private function uploadAvatar(User $user, ?UploadedFile $avatar): User
     {
         if ($oldAvatarId = $user->avatar_id) {
-            (new FileService)->removeFile($oldAvatarId);
+            (new FileService)->handleRemoveFile($oldAvatarId);
         }
 
-        $user->avatar_id = ((new FileService)->upload($avatar, 'users/avatars'))->id;
+        $user->avatar_id = ((new FileService)->handleUpload($avatar, 'users/avatars'))->id;
         $user->save();
 
         return $user;

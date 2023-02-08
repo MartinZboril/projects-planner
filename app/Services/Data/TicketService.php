@@ -34,10 +34,10 @@ class TicketService
             ]
         );
 
-        $this->projectUserService->storeUser($ticket->project, $ticket->reporter);
+        $this->projectUserService->handleStoreUser($ticket->project, $ticket->reporter);
         
         if($ticket->assignee_id) {
-            $this->projectUserService->storeUser($ticket->project, $ticket->assignee);
+            $this->projectUserService->handleStoreUser($ticket->project, $ticket->assignee);
         }
 
         return $ticket;
@@ -51,7 +51,7 @@ class TicketService
         foreach ($uploadedFiles as $uploadedFile) {
             TicketFile::create([
                 'ticket_id' => $ticket->id,
-                'file_id' => (new FileService)->upload($uploadedFile, 'tasks/files')->id
+                'file_id' => (new FileService)->handleUpload($uploadedFile, 'tasks/files')->id
             ]);
         }
     }

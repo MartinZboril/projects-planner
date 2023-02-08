@@ -34,8 +34,8 @@ class TaskService
             ]
         );
 
-        $this->projectUserService->storeUser($task->project, $task->author);
-        $this->projectUserService->storeUser($task->project, $task->user);
+        $this->projectUserService->handleStoreUser($task->project, $task->author);
+        $this->projectUserService->handleStoreUser($task->project, $task->user);
 
         return $task;
     }
@@ -48,7 +48,7 @@ class TaskService
         foreach ($uploadedFiles as $uploadedFile) {
             TaskFile::create([
                 'task_id' => $task->id,
-                'file_id' => (new FileService)->upload($uploadedFile, 'tasks/files')->id
+                'file_id' => (new FileService)->handleUpload($uploadedFile, 'tasks/files')->id
             ]);
         }
     }

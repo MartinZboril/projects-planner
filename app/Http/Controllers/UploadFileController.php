@@ -16,7 +16,7 @@ class UploadFileController extends Controller
     public function __invoke(UploadFileRequest $request): RedirectResponse
     {
         try {
-            (new FileService)->uploadWithRelations($request->safe(), $request->file('files'));
+            //(new FileService)->handleUploadWithRelations($request->safe(), $request->file('files'));
             (new FlashService)->flash(__('messages.file.upload'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

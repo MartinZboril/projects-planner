@@ -42,9 +42,6 @@ class CommentService
             case 'milestone':
                 MilestoneComment::create(['milestone_id' => $parentId, 'comment_id' => $comment->id]);
                 break;
-            case 'ticket':
-                TicketComment::create(['ticket_id' => $parentId, 'comment_id' => $comment->id]);
-                break;
             default:
                 throw new Exception('For the sent type was not found relationship to save!');
                 break;
@@ -57,7 +54,7 @@ class CommentService
     private function storeFiles(Comment $comment, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            $fileId = ((new FileService)->upload($uploadedFile, 'comments'))->id;
+            $fileId = ((new FileService)->handleUpload($uploadedFile, 'comments'))->id;
             CommentFile::create(['comment_id' => $comment->id, 'file_id' => $fileId]);
         }
     }

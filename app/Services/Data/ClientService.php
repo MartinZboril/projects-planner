@@ -53,7 +53,7 @@ class ClientService
         foreach ($uploadedFiles as $uploadedFile) {
             ClientFile::create([
                 'client_id' => $client->id,
-                'file_id' => (new FileService)->upload($uploadedFile, 'clients/files')->id
+                'file_id' => (new FileService)->handleUpload($uploadedFile, 'clients/files')->id
             ]);
         }
     }
@@ -90,10 +90,10 @@ class ClientService
     private function storeLogo(Client $client, UploadedFile $uploadedFile): Client
     {   
         if ($oldLogoId = $client->logo_id) {
-            (new FileService)->removeFile($oldLogoId);
+            (new FileService)->handleRemoveFile($oldLogoId);
         }
 
-        $client->logo_id = ((new FileService)->upload($uploadedFile, 'clients/logos'))->id;
+        $client->logo_id = ((new FileService)->handleUpload($uploadedFile, 'clients/logos'))->id;
         $client->save();
         return $client;
     }

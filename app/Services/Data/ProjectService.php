@@ -37,7 +37,7 @@ class ProjectService
             ]
         );
 
-        $this->projectUserService->storeUsers($project, $inputs->team);
+        $this->projectUserService->handleStoreUsers($project, $inputs->team);
 
         return $project;
     }
