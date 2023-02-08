@@ -41,7 +41,7 @@ class TaskService
     }
     
     /**
-     * Upload tasks files
+     * Upload tasks files.
      */
     public function handleUploadFiles(Task $task, Array $uploadedFiles): void
     {
@@ -53,6 +53,9 @@ class TaskService
         }
     }
 
+    /**
+     * Save tasks comments.
+     */
     public function handleSaveComment(Task $task, Comment $comment): void
     {
         TaskComment::create([

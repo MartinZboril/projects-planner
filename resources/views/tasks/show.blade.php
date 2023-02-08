@@ -87,7 +87,7 @@
                             <div class="card-body">
                                 @include('tasks.files.upload', $task)
                                 <hr>
-                                @include('files.list', ['files' => $task->files, 'parentId' => $task->id, 'parentType' => 'task'])
+                                @include('files.list', ['files' => $task->files])
                             </div>
                         </div>
                         <div class="card card-primary card-outline">

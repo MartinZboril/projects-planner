@@ -59,15 +59,6 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/timesheets', App\Http\Controllers\Report\TimesheetReportController::class)->name('timesheets');    
         });
     });
-    // Users
-    Route::resource('users', App\Http\Controllers\User\UserController::class)
-        ->except(['destroy']);
-    // Users Additions
-    Route::group(['prefix' => 'users/{user}', 'as' => 'users.'], function () {
-        // Rates
-        Route::resource('rates', App\Http\Controllers\User\UserRateController::class)
-            ->except(['index', 'show', 'destroy']);
-    });
     // Tasks
     Route::resource('tasks', App\Http\Controllers\Task\TaskController::class);
     // Tasks Additions
@@ -84,6 +75,30 @@ Route::middleware(['auth'])->group(function () {
         // ToDos
         Route::patch('/todos/{todo}/check', App\Http\Controllers\Task\TaskToDoCheckController::class)->name('todos.check');
         Route::resource('todos', App\Http\Controllers\Task\TaskToDoController::class)
+            ->except(['index', 'show', 'destroy']);
+    });
+    // Tickets
+    Route::resource('tickets', App\Http\Controllers\Ticket\TicketController::class)
+        ->except(['destroy']);
+    // Tickets Additions
+    Route::group(['prefix' => 'tickets/{ticket}', 'as' => 'tickets.'], function () {
+        // Actions
+        Route::patch('/convert', App\Http\Controllers\Ticket\TicketConvertTicketToTaskController::class)->name('convert_to_task');
+        Route::patch('/change-status', App\Http\Controllers\Ticket\TicketChangeStatusController::class)->name('change_status');
+        Route::patch('/mark', App\Http\Controllers\Ticket\TicketMarkController::class)->name('mark');
+        // Comments
+        Route::resource('comments', App\Http\Controllers\Ticket\TicketCommentController::class)
+            ->only(['store', 'update']);
+        // Files
+        Route::post('/files/upload', App\Http\Controllers\Ticket\TicketFileUploaderController::class)->name('files.upload');
+    });
+    // Users
+    Route::resource('users', App\Http\Controllers\User\UserController::class)
+        ->except(['destroy']);
+    // Users Additions
+    Route::group(['prefix' => 'users/{user}', 'as' => 'users.'], function () {
+        // Rates
+        Route::resource('rates', App\Http\Controllers\User\UserRateController::class)
             ->except(['index', 'show', 'destroy']);
     });
 });
@@ -132,15 +147,3 @@ Route::post('/timers/store', [App\Http\Controllers\Data\TimerController::class, 
 Route::post('/timers/start', [App\Http\Controllers\Data\TimerController::class, 'start'])->name('timers.start');
 Route::patch('/timers/{timer}/stop', [App\Http\Controllers\Data\TimerController::class, 'stop'])->name('timers.stop');
 Route::patch('/timers/{timer}/update', [App\Http\Controllers\Data\TimerController::class, 'update'])->name('timers.update');
-
-// Tickets
-Route::get('/tickets', [App\Http\Controllers\Data\TicketController::class, 'index'])->name('tickets.index');
-Route::get('/tickets/create', [App\Http\Controllers\Data\TicketController::class, 'create'])->name('tickets.create');
-Route::get('/tickets/{ticket}/detail', [App\Http\Controllers\Data\TicketController::class, 'detail'])->name('tickets.detail');
-Route::get('/tickets/{ticket}/edit', [App\Http\Controllers\Data\TicketController::class, 'edit'])->name('tickets.edit');
-
-Route::post('/tickets/store', [App\Http\Controllers\Data\TicketController::class, 'store'])->name('tickets.store');
-Route::patch('/tickets/{ticket}/update', [App\Http\Controllers\Data\TicketController::class, 'update'])->name('tickets.update');
-Route::patch('/tickets/{ticket}/change', [App\Http\Controllers\Data\TicketController::class, 'change'])->name('tickets.change');
-Route::patch('/tickets/{ticket}/convert', [App\Http\Controllers\Data\TicketController::class, 'convert'])->name('tickets.convert');
-Route::patch('/tickets/{ticket}/mark', [App\Http\Controllers\Data\TicketController::class, 'mark'])->name('tickets.mark');

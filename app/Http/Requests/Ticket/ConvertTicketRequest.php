@@ -21,7 +21,6 @@ class ConvertTicketRequest extends FormRequest
     public function rules(): array
     {
         $rules = Task::VALIDATION_RULES;
-        $rules['redirect'] = ['in:tasks,projects'];
         unset($rules['status']);
         
         return $rules;

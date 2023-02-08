@@ -25,7 +25,6 @@ class UpdateTicketRequest extends FormRequest
     public function rules(): array
     {
         $rules = Ticket::VALIDATION_RULES;
-        $rules['redirect'] = ['in:tickets,projects'];
         $rules['status'] = [new Enum(TicketStatusEnum::class)];
         $rules['priority'] = [new Enum(TicketPriorityEnum::class)];
         $rules['type'] = [new Enum(TicketTypeEnum::class)];

@@ -9,47 +9,31 @@
                     @error('subject')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
+                </div>           
+                <div class="form-group required">
+                    <label for="project-id" class="control-label">Project</label>
+                    <select class="form-control @error('project_id') is-invalid @enderror" name="project_id" id="project-id" style="width: 100%;">
+                        <option selected value>select project</option>
+                        @foreach($projects as $project)
+                            <option value="{{ $project->id }}" @selected(old('project_id', $ticket->project_id) == $project->id)>{{ $project->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('project_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
-                @if($form == 'ticket')            
-                    <div class="form-group required">
-                        <label for="project-id" class="control-label">Project</label>
-                        <select class="form-control @error('project_id') is-invalid @enderror" name="project_id" id="project-id" style="width: 100%;">
-                            <option selected value>select project</option>
-                            @foreach($projects as $project)
-                                <option value="{{ $project->id }}" @selected(old('project_id', $ticket->project_id) == $project->id)>{{ $project->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('project_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="assignee-id">Assignee</label>
-                        <select class="form-control @error('assignee_id') is-invalid @enderror" name="assignee_id" id="assignee-id" style="width: 100%;">
-                            <option selected value>select assignee</option>
-                            @foreach($users as $user)
-                                <option value="{{ $user->id }}" @selected(old('assignee_id', $ticket->assignee_id) == $user->id)>{{ $user->full_name }}</option>
-                            @endforeach
-                        </select>
-                        @error('assignee_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div> 
-                @else
-                    <input type="hidden" name="project_id" value="{{ old('project_id', $project->id) }}">
-                    <div class="form-group">
-                        <label for="assignee-id">Assignee</label>
-                        <select class="form-control @error('assignee_id') is-invalid @enderror" name="assignee_id" id="assignee-id" style="width: 100%;">
-                            <option selected value>select assignee</option>
-                            @foreach($project->team as $user)
-                                <option value="{{ $user->id }}" @selected(old('assignee_id', $ticket->assignee_id) == $user->id)>{{ $user->full_name }}</option>
-                            @endforeach
-                        </select>
-                        @error('assignee_id')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div> 
-                @endif
+                <div class="form-group">
+                    <label for="assignee-id">Assignee</label>
+                    <select class="form-control @error('assignee_id') is-invalid @enderror" name="assignee_id" id="assignee-id" style="width: 100%;">
+                        <option selected value>select assignee</option>
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}" @selected(old('assignee_id', $ticket->assignee_id) == $user->id)>{{ $user->full_name }}</option>
+                        @endforeach
+                    </select>
+                    @error('assignee_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div> 
                 <div class="form-group required">
                     <label for="type" class="control-label">Type</label>
                     <select class="form-control @error('type') is-invalid @enderror" name="type" id="type" style="width: 100%;">
@@ -99,7 +83,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $redirect == 'projects' && $ticket->id ? route('projects.ticket.detail', ['project' => $project->id, 'ticket' => $ticket->id]) : ($ticket->id ? route('tickets.detail', $ticket->id) : route('tickets.index')) }}" class="cancel-btn">Close</a></span>
+                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $ticket->id ? route('tickets.show', $ticket->id) : route('tickets.index') }}" class="cancel-btn">Close</a></span>
             </div>
         </div>
     </div>

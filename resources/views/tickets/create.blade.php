@@ -12,7 +12,11 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Form -->
-                @include('tickets.forms.store', ['form' => 'ticket', 'projects' => $projects, 'redirect' => 'tickets'])
+                <form action="{{ route('tickets.store') }}" method="post">
+                    @csrf
+                    @method('POST')
+                    @include('tickets.forms.fields', ['ticket' => $ticket, 'type' => 'create'])
+                </form>         
             </div>
         </section>
     </div>
