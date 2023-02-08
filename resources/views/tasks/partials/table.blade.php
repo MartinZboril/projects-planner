@@ -15,7 +15,7 @@
             @forelse ($tasks as $task)
                 <tr>
                     <td><a href="{{ $redirect == 'projects' ? route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) : route('tasks.show', $task->id) }}">{{ $task->name }}</a></td>
-                    @if(in_array('project', $display))<td><a href="{{ route('projects.detail', $task->project->id) }}">{{ $task->project->name }}</a></td>@endif
+                    @if(in_array('project', $display))<td><a href="{{ route('projects.show', $task->project->id) }}">{{ $task->project->name }}</a></td>@endif
                     <td>
                         @if ($task->milestone)
                             <a href="{{ route('projects.milestones.detail', ['project' => $task->project->id, 'milestone' => $task->milestone->id]) }}">{{ $task->milestone->name }}</a></td>                            

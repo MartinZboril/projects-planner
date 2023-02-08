@@ -1,4 +1,4 @@
-@extends('layouts.master', ['toaster' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true])
 
 @section('title', __('pages.title.project'))
 
@@ -16,7 +16,7 @@
                 </div>          
                 <div class="card card-primary card-outline">
                     <div class="card-header">
-                        <a href="{{ route('projects.note.create', ['project' => $project->id]) }}" class="btn-sm btn-primary"><i class="fas fa-plus mr-1"></i>Create</a>
+                        <a href="{{ route('projects.notes.create', ['project' => $project->id]) }}" class="btn-sm btn-primary"><i class="fas fa-plus mr-1"></i>Create</a>
                     </div>
                     <div class="card-body">
                         <!-- Message -->
@@ -25,11 +25,12 @@
                         <div class="row">
                             @forelse ($project->notes as $note)
                                 <div class="col-md-3">
-                                    @include('notes.partials.card', ['note' => $note, 'editRoute' => route('projects.note.edit', ['project' => $project, 'note' => $note]), 'parentId' => $project->id, 'parentType' => 'project'])
+                                    @include('site.notes.card', ['note' => $note, 'editRoute' => route('projects.notes.edit', ['project' => $project, 'note' => $note])])
+                                    @include('projects.notes.forms.mark', ['project' => $project, 'note' => $note, 'id' => ($note->is_marked ? 'unmark' : 'mark') . '-note-' . $note->id . '-form'])
                                 </div>
                             @empty
                                 No notes were found!
-                            @endforelse
+                            @endforelse                           
                         </div>
                     </div>
                 </div>

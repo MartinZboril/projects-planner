@@ -46,7 +46,7 @@ class ClientService
     }
 
     /**
-     * Upload clients files
+     * Upload clients files.
      */
     public function handleUploadFiles(Client $client, Array $uploadedFiles): void
     {
@@ -58,6 +58,9 @@ class ClientService
         }
     }
     
+    /**
+     * Save clients comments.
+     */        
     public function handleSaveComment(Client $client, Comment $comment): void
     {
         ClientComment::create([
@@ -66,6 +69,9 @@ class ClientService
         ]);
     }
 
+    /**
+     * Save clients notes.
+     */
     public function handleSaveNote(Client $client, Note $note): void
     {
         ClientNote::create([

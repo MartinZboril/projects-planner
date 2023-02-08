@@ -2,32 +2,27 @@
 
 namespace App\Services\Data;
 
-use App\Enums\ProjectStatusEnum;
-use App\Enums\Routes\ProjectRouteEnum;
-use App\Models\Project;
-use App\Services\RouteService;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
+use App\Enums\ProjectStatusEnum;
+use App\Models\{Comment, Note, Project, ProjectComment, ProjectFile, ProjectNote};
+use App\Services\FileService;
 
 class ProjectService
 {
-    protected $projectUserService;
-
-    public function __construct(ProjectUserService $projectUserService)
+    public function __construct(private ProjectUserService $projectUserService)
     {
-        $this->projectUserService = $projectUserService;
     }
 
     /**
      * Save data for project.
      */
-    public function save(Project $project, ValidatedInput $inputs)
+    public function handleSave(Project $project, ValidatedInput $inputs)
     {
         $project = Project::updateOrCreate(
             ['id' => $project->id],
             [
                 'status' => $project->status_id ?? ProjectStatusEnum::active,
-                'client_id' => $inputs->client_id,
+                'project_id' => $inputs->project_id,
                 'name' => $inputs->name,
                 'start_date' => $inputs->start_date,
                 'due_date' => $inputs->due_date,
@@ -43,9 +38,44 @@ class ProjectService
     }
 
     /**
+     * Upload projects files.
+     */
+    public function handleUploadFiles(Project $project, Array $uploadedFiles): void
+    {
+        foreach ($uploadedFiles as $uploadedFile) {
+            ProjectFile::create([
+                'project_id' => $project->id,
+                'file_id' => (new FileService)->handleUpload($uploadedFile, 'projects/files')->id
+            ]);
+        }
+    }
+
+    /**
+     * Save projects comments.
+     */
+    public function handleSaveComment(Project $project, Comment $comment): void
+    {
+        ProjectComment::create([
+            'project_id' => $project->id,
+            'comment_id' => $comment->id
+        ]);
+    }
+
+    /**
+     * Save projects notes.
+     */
+    public function handleSaveNote(Project $project, Note $note): void
+    {
+        ProjectNote::create([
+            'project_id' => $project->id,
+            'note_id' => $note->id
+        ]);
+    }
+
+    /**
      * Change working status of the project.
      */
-    public function change(Project $project, int $status): void
+    public function handleChange(Project $project, int $status): void
     {
         $project->update(['status' => $status]);
     }
@@ -53,20 +83,10 @@ class ProjectService
     /**
      * Mark selected project.
      */
-    public function mark(Project $project): Project
+    public function handleMark(Project $project): Project
     {
         $project->is_marked = !$project->is_marked;
         $project->save();
         return $project;
-    }
-
-    /**
-     * Set up redirect for the action.
-     */
-    public function setUpRedirect(string $type, Project $project): RedirectResponse
-    {
-        $redirectAction = $type ? ProjectRouteEnum::Index : ProjectRouteEnum::Detail;
-        $redirectVars = $type ? [] : ['project' => $project];
-        return (new RouteService)->redirect($redirectAction->value, $redirectVars);
     }
 }

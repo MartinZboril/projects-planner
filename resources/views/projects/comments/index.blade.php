@@ -1,4 +1,4 @@
-@extends('layouts.master', ['toaster' => true])
+@extends('layouts.master', ['summernote' => true, 'toaster' => true])
 
 @section('title', __('pages.title.project'))
 
@@ -12,14 +12,14 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="card-header p-0 pb-2 mb-2">
-                    @include('projects.partials.header', ['active' => 'file'])
-                </div>
+                    @include('projects.partials.header', ['active' => 'comment'])
+                </div>          
                 <div class="card card-primary card-outline">
                     <div class="card-body">
                         <!-- Message -->
                         @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
                         <!-- Content -->
-                        @include('files.list', ['files' => $project->files, 'parentId' => $project->id, 'parentType' => 'project'])    
+                        @include('site.comments.list', ['comments' => $project->comments, 'comment' => $comment, 'createFormPartial' => 'projects.comments.create', 'editFormPartial' => 'projects.comments.edit'])
                     </div>
                 </div>
             </div>

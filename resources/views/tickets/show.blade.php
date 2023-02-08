@@ -51,7 +51,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <span class="d-block">Project: <b><a href="{{ route('projects.detail', $ticket->project->id) }}">{{ $ticket->project->name }}</a></b></span>
+                                <span class="d-block">Project: <b><a href="{{ route('projects.show', $ticket->project->id) }}">{{ $ticket->project->name }}</a></b></span>
                                 <span class="d-block">Client: <b><a href="{{ route('clients.show', $ticket->project->client->id) }}">{{ $ticket->project->client->name }}</a></b></span>
                                 <span class="d-block">Reporter: <b><a href="{{ route('users.show', $ticket->reporter->id) }}">{{ $ticket->reporter->full_name }}</a></b></span>
                                 @if($ticket->assignee_id)<span class="d-block">Assigned: <b><a href="{{ route('users.show', $ticket->assignee->id) }}">{{ $ticket->assignee->full_name }}</a></b></span>@endif

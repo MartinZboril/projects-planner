@@ -77,7 +77,7 @@ class ProjectController extends Controller
      */
     public function notes(Project $project): View
     {
-        return view('projects.notes', ['project' => $project]);
+        return view('projects.notes.index', ['project' => $project]);
     }
 
     /**
@@ -93,7 +93,7 @@ class ProjectController extends Controller
      */
     public function comments(Project $project): View
     {
-        return view('projects.comments', ['project' => $project, 'comment' => new Comment]);
+        return view('projects.comments.index', ['project' => $project, 'comment' => new Comment]);
     }
 
     /**
@@ -124,7 +124,7 @@ class ProjectController extends Controller
      */
     public function detail(Project $project): View
     {
-        return view('projects.detail', ['project' => $project]);
+        return view('projects.show', ['project' => $project]);
     }
 
     /**

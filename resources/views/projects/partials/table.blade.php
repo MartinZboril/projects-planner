@@ -17,7 +17,7 @@
         <tbody>
             @forelse ($projects as $project)
                 <tr>
-                    <td><a href="{{ route('projects.detail', $project->id) }}">{{ $project->name }}</a></td>
+                    <td><a href="{{ route('projects.show', $project->id) }}">{{ $project->name }}</a></td>
                     <td><a href="{{ route('clients.show', $project->client->id) }}">{{ $project->client->name }}</a></td>
                     <td>@include('projects.partials.status', ['status' => $project->status])</td>
                     <td>
@@ -32,7 +32,7 @@
                     <td>@include('site.partials.amount', ['value' => $project->amount])</td>
                     <td>
                         <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
-                        <a href="{{ route('projects.detail', $project->id) }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
+                        <a href="{{ route('projects.show', $project->id) }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
                         @include('projects.partials.buttons', ['project' => $project, 'buttonSize' => 'xs', 'buttonText' => false])
                     </td>
                 </tr>

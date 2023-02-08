@@ -101,49 +101,57 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('rates', App\Http\Controllers\User\UserRateController::class)
             ->except(['index', 'show', 'destroy']);
     });
+    Route::resource('projects', App\Http\Controllers\Project\ProjectController::class)
+        ->except(['destroy']);
+    Route::group(['prefix' => 'projects/{project}', 'as' => 'projects.'], function () {
+        // Actions
+        Route::patch('/change-status', App\Http\Controllers\Project\ProjectChangeStatusController::class)->name('change_status');
+        Route::patch('/mark', App\Http\Controllers\Project\ProjectMarkController::class)->name('mark');
+        // Comments
+        Route::resource('comments', App\Http\Controllers\Project\ProjectCommentController::class)
+            ->except(['create', 'show', 'edit', 'destroy']);
+        // Files
+        Route::get('/files', [App\Http\Controllers\Project\ProjectFileController::class, 'index'])->name('files.index');
+        Route::post('/files/upload', App\Http\Controllers\Project\ProjectFileUploaderController::class)->name('files.upload');
+        // Notes
+        Route::patch('/notes/{note}/mark', App\Http\Controllers\Project\ProjectNoteMarkController::class)->name('notes.mark');
+        Route::resource('notes', App\Http\Controllers\Project\ProjectNoteController::class)
+            ->except(['show', 'destroy']);
+
+    });
 });
 
 // Projects
-Route::get('/projects', [App\Http\Controllers\Data\ProjectController::class, 'index'])->name('projects.index');
-Route::get('/projects/create', [App\Http\Controllers\Data\ProjectController::class, 'create'])->name('projects.create');
-Route::get('/projects/{project}/detail', [App\Http\Controllers\Data\ProjectController::class, 'detail'])->name('projects.detail');
-Route::get('/projects/{project}/edit', [App\Http\Controllers\Data\ProjectController::class, 'edit'])->name('projects.edit');
-Route::get('/projects/{project}/tasks', [App\Http\Controllers\Data\ProjectController::class, 'tasks'])->name('projects.tasks');
-Route::get('/projects/{project}/task/create', [App\Http\Controllers\Data\ProjectController::class, 'createTask'])->name('projects.task.create');
-Route::get('/projects/{project}/task/{task}/detail', [App\Http\Controllers\Data\ProjectController::class, 'detailTask'])->name('projects.task.detail');
-Route::get('/projects/{project}/task/{task}/edit', [App\Http\Controllers\Data\ProjectController::class, 'editTask'])->name('projects.task.edit');
-Route::get('/projects/{project}/kanban', [App\Http\Controllers\Data\ProjectController::class, 'kanban'])->name('projects.kanban');
+
+// Milestones
 Route::get('/projects/{project}/milestones', [App\Http\Controllers\Data\ProjectController::class, 'milestones'])->name('projects.milestones');
-Route::get('/projects/{project}/task/{task}/todo/create', [App\Http\Controllers\Data\ProjectController::class, 'createToDo'])->name('projects.todo.create');
-Route::get('/projects/{project}/task/{task}/todo/{todo}/edit', [App\Http\Controllers\Data\ProjectController::class, 'editToDo'])->name('projects.todo.edit');
 Route::get('/projects/{project}/milestones/create', [App\Http\Controllers\Data\MilestoneController::class, 'create'])->name('projects.milestones.create');
 Route::get('/projects/{project}/milestones/{milestone}/detail', [App\Http\Controllers\Data\MilestoneController::class, 'detail'])->name('projects.milestones.detail');
 Route::get('/projects/{project}/milestones/{milestone}/edit', [App\Http\Controllers\Data\MilestoneController::class, 'edit'])->name('projects.milestones.edit');
-Route::get('/projects/{project}/timesheets', [App\Http\Controllers\Data\ProjectController::class, 'timesheets'])->name('projects.timesheets');
-Route::get('/projects/{project}/timers/create', [App\Http\Controllers\Data\TimerController::class, 'create'])->name('projects.timers.create');
-Route::get('/projects/{project}/timers/{timer}/edit', [App\Http\Controllers\Data\TimerController::class, 'edit'])->name('projects.timers.edit');
-Route::get('/projects/{project}/tickets', [App\Http\Controllers\Data\ProjectController::class, 'tickets'])->name('projects.tickets');
-Route::get('/projects/{project}/ticket/create', [App\Http\Controllers\Data\ProjectController::class, 'createTicket'])->name('projects.ticket.create');
-Route::get('/projects/{project}/ticket/{ticket}/detail', [App\Http\Controllers\Data\ProjectController::class, 'detailTicket'])->name('projects.ticket.detail');
-Route::get('/projects/{project}/ticket/{ticket}/edit', [App\Http\Controllers\Data\ProjectController::class, 'editTicket'])->name('projects.ticket.edit');
-Route::get('/projects/{project}/notes', [App\Http\Controllers\Data\ProjectController::class, 'notes'])->name('projects.notes');
-Route::get('/projects/{project}/note/create', [App\Http\Controllers\Data\ProjectController::class, 'createNote'])->name('projects.note.create');
-Route::get('/projects/{project}/note/{note}/edit', [App\Http\Controllers\Data\ProjectController::class, 'editNote'])->name('projects.note.edit');
-Route::get('/projects/{project}/files', [App\Http\Controllers\Data\ProjectController::class, 'files'])->name('projects.files');
-Route::get('/projects/{project}/comments', [App\Http\Controllers\Data\ProjectController::class, 'comments'])->name('projects.comments');
-
-Route::post('/projects/store', [App\Http\Controllers\Data\ProjectController::class, 'store'])->name('projects.store');
-Route::patch('/projects/{project}/update', [App\Http\Controllers\Data\ProjectController::class, 'update'])->name('projects.update');
-Route::patch('/projects/{project}/change', [App\Http\Controllers\Data\ProjectController::class, 'change'])->name('projects.change');
-Route::patch('/projects/{project}/mark', [App\Http\Controllers\Data\ProjectController::class, 'mark'])->name('projects.mark');
-
-// Milestones
 Route::post('/milestones/store', [App\Http\Controllers\Data\MilestoneController::class, 'store'])->name('milestones.store');
 Route::patch('/milestones/{milestone}/update', [App\Http\Controllers\Data\MilestoneController::class, 'update'])->name('milestones.update');
 Route::patch('/milestones/{milestone}/mark', [App\Http\Controllers\Data\MilestoneController::class, 'mark'])->name('milestones.mark');
 
 // Timers
+Route::get('/projects/{project}/timesheets', [App\Http\Controllers\Data\ProjectController::class, 'timesheets'])->name('projects.timesheets');
+Route::get('/projects/{project}/timers/create', [App\Http\Controllers\Data\TimerController::class, 'create'])->name('projects.timers.create');
+Route::get('/projects/{project}/timers/{timer}/edit', [App\Http\Controllers\Data\TimerController::class, 'edit'])->name('projects.timers.edit');
 Route::post('/timers/store', [App\Http\Controllers\Data\TimerController::class, 'store'])->name('timers.store');
 Route::post('/timers/start', [App\Http\Controllers\Data\TimerController::class, 'start'])->name('timers.start');
 Route::patch('/timers/{timer}/stop', [App\Http\Controllers\Data\TimerController::class, 'stop'])->name('timers.stop');
 Route::patch('/timers/{timer}/update', [App\Http\Controllers\Data\TimerController::class, 'update'])->name('timers.update');
+
+// Tasks
+Route::get('/projects/{project}/kanban', [App\Http\Controllers\Data\ProjectController::class, 'kanban'])->name('projects.kanban');
+Route::get('/projects/{project}/tasks', [App\Http\Controllers\Data\ProjectController::class, 'tasks'])->name('projects.tasks');
+Route::get('/projects/{project}/task/create', [App\Http\Controllers\Data\ProjectController::class, 'createTask'])->name('projects.task.create');
+Route::get('/projects/{project}/task/{task}/detail', [App\Http\Controllers\Data\ProjectController::class, 'detailTask'])->name('projects.task.detail');
+Route::get('/projects/{project}/task/{task}/edit', [App\Http\Controllers\Data\ProjectController::class, 'editTask'])->name('projects.task.edit');
+Route::get('/projects/{project}/task/{task}/todo/create', [App\Http\Controllers\Data\ProjectController::class, 'createToDo'])->name('projects.todo.create');
+Route::get('/projects/{project}/task/{task}/todo/{todo}/edit', [App\Http\Controllers\Data\ProjectController::class, 'editToDo'])->name('projects.todo.edit');
+
+// Tickets
+Route::get('/projects/{project}/tickets', [App\Http\Controllers\Data\ProjectController::class, 'tickets'])->name('projects.tickets');
+Route::get('/projects/{project}/ticket/create', [App\Http\Controllers\Data\ProjectController::class, 'createTicket'])->name('projects.ticket.create');
+Route::get('/projects/{project}/ticket/{ticket}/detail', [App\Http\Controllers\Data\ProjectController::class, 'detailTicket'])->name('projects.ticket.detail');
+Route::get('/projects/{project}/ticket/{ticket}/edit', [App\Http\Controllers\Data\ProjectController::class, 'editTicket'])->name('projects.ticket.edit');

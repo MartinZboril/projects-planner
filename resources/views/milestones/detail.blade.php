@@ -23,7 +23,7 @@
                                 @if($milestone->overdue)<span class="badge badge-danger ml-1" style="font-size:14px;">Overdue</span>@endif
                             </div>
                             <div class="card-body">
-                                <span class="d-block">Project: <b><a href="{{ route('projects.detail', $milestone->project->id) }}">{{ $milestone->project->name }}</a></b></span>
+                                <span class="d-block">Project: <b><a href="{{ route('projects.show', $milestone->project->id) }}">{{ $milestone->project->name }}</a></b></span>
                                 <span class="d-block">User: <b><a href="{{ route('users.show', $milestone->owner) }}">{{ $milestone->owner->full_name }}</a></b></span>
                                 <span class="d-block">Start date: <b>{{ $milestone->start_date->format('d.m.Y') }}</b></span>
                                 <span class="d-block">End date: <b>{{ $milestone->due_date->format('d.m.Y') }}</b></span>

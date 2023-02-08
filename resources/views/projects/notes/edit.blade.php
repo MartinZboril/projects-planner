@@ -12,7 +12,11 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Form -->
-                @include('notes.forms.update', ['form' => 'project', 'note' => $note, 'parentId' => $project->id, 'parentType' => 'project'])      
+                <form action="{{ route('projects.notes.update', ['project' => $project, 'note' => $note]) }}" method="post">
+                    @csrf
+                    @method('PATCH')
+                    @include('projects.notes.forms.fields', ['project' => $project, 'note' => $note, 'type' => 'edit'])
+                </form>        
             </div>
         </section>
     </div>
