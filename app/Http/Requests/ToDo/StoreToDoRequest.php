@@ -21,7 +21,7 @@ class StoreToDoRequest extends FormRequest
     public function rules(): array
     {
         $rules = ToDo::VALIDATION_RULES;
-        $rules['redirect'] = ['in:tasks,projects'];
+        unset($rules['task_id']);
         unset($rules['is_finished']);
 
         return $rules;

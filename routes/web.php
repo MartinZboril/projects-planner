@@ -68,6 +68,24 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('rates', App\Http\Controllers\User\UserRateController::class)
             ->except(['index', 'show', 'destroy']);
     });
+    // Tasks
+    Route::resource('tasks', App\Http\Controllers\Task\TaskController::class);
+    // Tasks Additions
+    Route::group(['prefix' => 'tasks/{task}', 'as' => 'tasks.'], function () {
+        // Actions
+        Route::patch('/change-status', App\Http\Controllers\Task\TaskChangeStatusController::class)->name('change_status');
+        Route::patch('/mark', App\Http\Controllers\Task\TaskMarkController::class)->name('mark');
+        Route::patch('/pause', App\Http\Controllers\Task\TaskPauseController::class)->name('pause');
+        // Comments
+        Route::resource('comments', App\Http\Controllers\Task\TaskCommentController::class)
+            ->only(['store', 'update']);
+        // Files
+        Route::post('/files/upload', App\Http\Controllers\Task\TaskFileUploaderController::class)->name('files.upload');
+        // ToDos
+        Route::patch('/todos/{todo}/check', App\Http\Controllers\Task\TaskToDoCheckController::class)->name('todos.check');
+        Route::resource('todos', App\Http\Controllers\Task\TaskToDoController::class)
+            ->except(['index', 'show', 'destroy']);
+    });
 });
 
 // Projects
@@ -104,29 +122,10 @@ Route::patch('/projects/{project}/update', [App\Http\Controllers\Data\ProjectCon
 Route::patch('/projects/{project}/change', [App\Http\Controllers\Data\ProjectController::class, 'change'])->name('projects.change');
 Route::patch('/projects/{project}/mark', [App\Http\Controllers\Data\ProjectController::class, 'mark'])->name('projects.mark');
 
-// Tasks
-Route::get('/tasks', [App\Http\Controllers\Data\TaskController::class, 'index'])->name('tasks.index');
-Route::get('/tasks/create', [App\Http\Controllers\Data\TaskController::class, 'create'])->name('tasks.create');
-Route::get('/tasks/{task}/detail', [App\Http\Controllers\Data\TaskController::class, 'detail'])->name('tasks.detail');
-Route::get('/tasks/{task}/edit', [App\Http\Controllers\Data\TaskController::class, 'edit'])->name('tasks.edit');
-Route::get('/tasks/{task}/todos/create', [App\Http\Controllers\Data\ToDoController::class, 'create'])->name('todos.create');
-Route::get('/tasks/{task}/todos/{todo}/edit', [App\Http\Controllers\Data\ToDoController::class, 'edit'])->name('todos.edit');
-
-Route::post('/tasks/store', [App\Http\Controllers\Data\TaskController::class, 'store'])->name('tasks.store');
-Route::patch('/tasks/{task}/update', [App\Http\Controllers\Data\TaskController::class, 'update'])->name('tasks.update');
-Route::patch('/tasks/{task}/change', [App\Http\Controllers\Data\TaskController::class, 'change'])->name('tasks.change');
-Route::patch('/tasks/{task}/pause', [App\Http\Controllers\Data\TaskController::class, 'pause'])->name('tasks.pause');
-Route::patch('/tasks/{task}/mark', [App\Http\Controllers\Data\TaskController::class, 'mark'])->name('tasks.mark');
-
 // Milestones
 Route::post('/milestones/store', [App\Http\Controllers\Data\MilestoneController::class, 'store'])->name('milestones.store');
 Route::patch('/milestones/{milestone}/update', [App\Http\Controllers\Data\MilestoneController::class, 'update'])->name('milestones.update');
 Route::patch('/milestones/{milestone}/mark', [App\Http\Controllers\Data\MilestoneController::class, 'mark'])->name('milestones.mark');
-
-// ToDos
-Route::post('/todos/store', [App\Http\Controllers\Data\ToDoController::class, 'store'])->name('todos.store');
-Route::patch('/todos/{todo}/update', [App\Http\Controllers\Data\ToDoController::class, 'update'])->name('todos.update');
-Route::patch('/todos/{todo}/check', [App\Http\Controllers\Data\ToDoController::class, 'check'])->name('todos.check');
 
 // Timers
 Route::post('/timers/store', [App\Http\Controllers\Data\TimerController::class, 'store'])->name('timers.store');
@@ -145,7 +144,3 @@ Route::patch('/tickets/{ticket}/update', [App\Http\Controllers\Data\TicketContro
 Route::patch('/tickets/{ticket}/change', [App\Http\Controllers\Data\TicketController::class, 'change'])->name('tickets.change');
 Route::patch('/tickets/{ticket}/convert', [App\Http\Controllers\Data\TicketController::class, 'convert'])->name('tickets.convert');
 Route::patch('/tickets/{ticket}/mark', [App\Http\Controllers\Data\TicketController::class, 'mark'])->name('tickets.mark');
-
-// Comments
-Route::post('/comments/store', [App\Http\Controllers\Data\CommentController::class, 'store'])->name('comments.store');
-Route::patch('/comment/{comment}/update', [App\Http\Controllers\Data\CommentController::class, 'update'])->name('comments.update');

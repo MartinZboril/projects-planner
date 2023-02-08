@@ -34,14 +34,14 @@ class ClientCommentController extends Controller
         try {
             $this->clientService->handleSaveComment(
                 $client,
-                $this->commentService->save(new Comment, $request->safe(), $request->file('files'))
+                $this->commentService->handleSave(new Comment, $request->safe(), $request->file('files'))
             );
             $this->flash(__('messages.comment.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
-        return redirect()->route('clients.comments.index', [$client]);
+        return redirect()->route('clients.comments.index', $client);
     }
 
     /**
@@ -50,12 +50,12 @@ class ClientCommentController extends Controller
     public function update(UpdateCommentRequest $request, Client $client, Comment $comment)
     {
         try {
-            $this->commentService->save($comment, $request->safe(), $request->file('files'));
+            $this->commentService->handleSave($comment, $request->safe(), $request->file('files'));
             $this->flash(__('messages.comment.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
-        return redirect()->route('clients.comments.index', [$client]);
+        return redirect()->route('clients.comments.index', $client);
     }
 }

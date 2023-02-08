@@ -13,7 +13,7 @@ class CommentService
     /**
      * Save data for comment.
      */
-    public function save(Comment $comment, ValidatedInput $inputs, ?Array $uploadedFiles): Comment
+    public function handleSave(Comment $comment, ValidatedInput $inputs, ?Array $uploadedFiles): Comment
     {
         $comment = Comment::updateOrCreate(
             ['id' => $comment->id],
@@ -42,9 +42,6 @@ class CommentService
             case 'milestone':
                 MilestoneComment::create(['milestone_id' => $parentId, 'comment_id' => $comment->id]);
                 break;
-            case 'task':
-                TaskComment::create(['task_id' => $parentId, 'comment_id' => $comment->id]);
-                break;
             case 'ticket':
                 TicketComment::create(['ticket_id' => $parentId, 'comment_id' => $comment->id]);
                 break;
@@ -57,7 +54,7 @@ class CommentService
     /**
      * Store comments files.
      */
-    protected function storeFiles(Comment $comment, Array $uploadedFiles): void
+    private function storeFiles(Comment $comment, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
             $fileId = ((new FileService)->upload($uploadedFile, 'comments'))->id;

@@ -1,36 +1,36 @@
 <?php
 
-namespace App\Http\Controllers\Client;
+namespace App\Http\Controllers\Task;
 
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
-use App\Models\Client;
-use App\Http\Requests\File\UploadFileRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\File\UploadFileRequest;
+use App\Models\Task;
 use App\Traits\FlashTrait;
-use App\Services\Data\ClientService;
+use App\Services\Data\TaskService;
 
-class ClientFileUploaderController extends Controller
+class TaskFileUploaderController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private ClientService $clientService)
+    public function __construct(private TaskService $taskService)
     {
     }
 
     /**
      * Upload a newly created file in storage.
      */
-    public function __invoke(UploadFileRequest $request, Client $client): RedirectResponse
+    public function __invoke(UploadFileRequest $request, Task $task): RedirectResponse
     {
         try {
-            $this->clientService->handleUploadFiles($client, $request->file('files'));
+            $this->taskService->handleUploadFiles($task, $request->file('files'));
             $this->flash(__('messages.file.upload'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
-        return redirect()->route('clients.files.index', $client);
+        return redirect()->route('tasks.show', $task);
     }
 }

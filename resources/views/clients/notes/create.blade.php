@@ -12,7 +12,7 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Form -->
-                <form action="{{ route('clients.notes.store', [$client]) }}" method="post">
+                <form action="{{ route('clients.notes.store', $client) }}" method="post">
                     @csrf
                     @method('POST')
                     @include('clients.notes.forms.fields', ['client' => $client, 'note' => new \App\Models\Note, 'type' => 'create'])

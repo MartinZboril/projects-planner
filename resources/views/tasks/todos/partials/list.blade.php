@@ -11,14 +11,10 @@
                 <small class="ml-1">{{ $todo->description }}</small>
             @endif
             <div class="tools">
-                @if($project)
-                    <a href="{{ route('projects.todo.edit', ['project' => $project->id, 'task' => $task->id, 'todo' => $todo->id]) }}"><i class="fas fa-edit"></i></a>
-                @else
-                    <a href="{{ route('todos.edit', ['task' => $todo->task->id, 'todo' => $todo->id]) }}"><i class="fas fa-edit"></i></a>
-                @endif
+                <a href="{{ route('tasks.todos.edit', ['task' => $todo->task->id, 'todo' => $todo->id]) }}"><i class="fas fa-edit"></i></a>
             </div>
             <!-- ToDos forms -->
-            @include('todos.forms.check', ['id' => 'check-todo-' . $todo->id . '-form', 'todo' => $todo, 'action' => $action ? $action : ($todo->is_finished ? 0 : 1)])            
+            @include('tasks.todos.forms.check', ['id' => 'check-todo-' . $todo->id . '-form', 'todo' => $todo, 'action' => $todo->is_finished ? 0 : 1])            
         </li>
     @endforeach
 </ul>

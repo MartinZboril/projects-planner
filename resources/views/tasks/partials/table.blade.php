@@ -14,7 +14,7 @@
         <tbody>
             @forelse ($tasks as $task)
                 <tr>
-                    <td><a href="{{ $redirect == 'projects' ? route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) : route('tasks.detail', $task->id) }}">{{ $task->name }}</a></td>
+                    <td><a href="{{ $redirect == 'projects' ? route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) : route('tasks.show', $task->id) }}">{{ $task->name }}</a></td>
                     @if(in_array('project', $display))<td><a href="{{ route('projects.detail', $task->project->id) }}">{{ $task->project->name }}</a></td>@endif
                     <td>
                         @if ($task->milestone)
@@ -27,7 +27,7 @@
                     <td>@include('tasks.partials.status', ['task' => $task])</td>
                     <td>
                         <a href="{{ $redirect == 'projects' ? route('projects.task.edit', ['project' => $project->id, 'task' => $task->id]) : route('tasks.edit', $task->id) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
-                        <a href="{{ $redirect == 'projects' ? route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) : route('tasks.detail', $task->id) }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
+                        <a href="{{ $redirect == 'projects' ? route('projects.task.detail', ['project' => $project->id, 'task' => $task->id]) : route('tasks.show', $task->id) }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
                         @include('tasks.partials.buttons', ['task' => $task, 'buttonSize' => 'xs', 'buttonText' => false])
                     </td>
                 </tr>
