@@ -9,18 +9,15 @@ use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Rate\{StoreRateRequest, UpdateRateRequest};
 use App\Models\{Rate, User};
-use App\Services\FlashService;
+use App\Traits\FlashTrait;
 use App\Services\Data\RateService;
 
 class UserRateController extends Controller
 {
-    protected $rateService;
-    protected $flashService;
+    use FlashTrait;
 
-    public function __construct(RateService $rateService, FlashService $flashService)
+    public function __construct(private RateService $rateService)
     {
-        $this->rateService = $rateService;
-        $this->flashService = $flashService;
     }
 
     /**
@@ -38,7 +35,7 @@ class UserRateController extends Controller
     {
         try {
             $this->rateService->handleSave(new Rate, $request->safe());
-            $this->flashService->flash(__('messages.rate.create'), 'info');
+            $this->flash(__('messages.rate.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
@@ -63,7 +60,7 @@ class UserRateController extends Controller
     {
         try {
             $this->rateService->handleSave($rate, $request->safe());
-            $this->flashService->flash(__('messages.rate.update'), 'info');
+            $this->flash(__('messages.rate.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);

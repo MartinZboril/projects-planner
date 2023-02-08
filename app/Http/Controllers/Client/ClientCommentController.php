@@ -7,11 +7,17 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Comment\{StoreCommentRequest, UpdateCommentRequest};
 use App\Models\{Comment, Client};
-use App\Services\FlashService;
+use App\Traits\FlashTrait;
 use App\Services\Data\{ClientService, CommentService};
 
 class ClientCommentController extends Controller
 {
+    use FlashTrait;
+
+    public function __construct(private ClientService $clientService, private CommentService $commentService)
+    {
+    }
+    
     /**
      * Display the comments of client.
      */
@@ -26,11 +32,11 @@ class ClientCommentController extends Controller
     public function store(StoreCommentRequest $request, Client $client)
     {
         try {
-            (new ClientService)->handleSaveComment(
+            $this->clientService->handleSaveComment(
                 $client,
-                (new CommentService)->save(new Comment, $request->safe(), $request->file('files'))
+                $this->commentService->save(new Comment, $request->safe(), $request->file('files'))
             );
-            (new FlashService)->flash(__('messages.comment.create'), 'info');
+            $this->flash(__('messages.comment.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
@@ -44,8 +50,8 @@ class ClientCommentController extends Controller
     public function update(UpdateCommentRequest $request, Client $client, Comment $comment)
     {
         try {
-            (new CommentService)->save($comment, $request->safe(), $request->file('files'));
-            (new FlashService)->flash(__('messages.comment.update'), 'info');
+            $this->commentService->save($comment, $request->safe(), $request->file('files'));
+            $this->flash(__('messages.comment.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);

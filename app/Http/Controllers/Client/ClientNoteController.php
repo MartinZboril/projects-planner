@@ -9,11 +9,17 @@ use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Note\{StoreNoteRequest, UpdateNoteRequest};
 use App\Models\{Client, Note};
-use App\Services\FlashService;
+use App\Traits\FlashTrait;
 use App\Services\Data\{ClientService, NoteService};
 
 class ClientNoteController extends Controller
 {
+    use FlashTrait;
+
+    public function __construct(private ClientService $clientService, private NoteService $noteService)
+    {        
+    }
+
     /**
      * Display the notes of client.
      */
@@ -36,11 +42,11 @@ class ClientNoteController extends Controller
     public function store(StoreNoteRequest $request, Client $client): RedirectResponse
     {
         try {
-            (new ClientService)->handleSaveNote(
+            $this->clientService->handleSaveNote(
                 $client,
-                (new NoteService)->save(new Note, $request->safe())
+                $this->noteService->save(new Note, $request->safe())
             );
-            (new FlashService)->flash(__('messages.note.create'), 'info');
+            $this->flash(__('messages.note.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
@@ -62,8 +68,8 @@ class ClientNoteController extends Controller
     public function update(UpdateNoteRequest $request, Client $client, Note $note): RedirectResponse
     {
         try {
-            (new NoteService)->save($note, $request->safe());
-            (new FlashService)->flash(__('messages.note.update'), 'info');
+            $this->noteService->save($note, $request->safe());
+            $this->flash(__('messages.note.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);

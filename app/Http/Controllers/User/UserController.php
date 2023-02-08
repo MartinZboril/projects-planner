@@ -9,18 +9,15 @@ use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\{StoreUserRequest, UpdateUserRequest};
 use App\Models\User;
-use App\Services\FlashService;
+use App\Traits\FlashTrait;
 use App\Services\Data\UserService;
 
 class UserController extends Controller
 {
-    protected $userService;
-    protected $flashService;
+    use FlashTrait;
 
-    public function __construct(UserService $userService, FlashService $flashService)
+    public function __construct(private UserService $userService)
     {
-        $this->userService = $userService;
-        $this->flashService = $flashService;
     }
     
     /**
@@ -46,7 +43,7 @@ class UserController extends Controller
     {
         try {
             $user = $this->userService->handleSave(new User, $request->safe(), $request->file('avatar'));
-            $this->flashService->flash(__('messages.user.create'), 'info');
+            $this->flash(__('messages.user.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
@@ -79,7 +76,7 @@ class UserController extends Controller
     {
         try {
             $user = $this->userService->handleSave($user, $request->safe(), $request->file('avatar'));
-            $this->flashService->flash(__('messages.user.update'), 'info');
+            $this->flash(__('messages.user.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);

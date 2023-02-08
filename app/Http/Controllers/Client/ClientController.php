@@ -9,18 +9,15 @@ use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\{StoreClientRequest, UpdateClientRequest};
 use App\Models\Client;
-use App\Services\FlashService;
+use App\Traits\FlashTrait;
 use App\Services\Data\ClientService;
 
 class ClientController extends Controller
 {
-    protected $clientService;
-    protected $flashService;
+    use FlashTrait;
 
-    public function __construct(ClientService $clientService, FlashService $flashService)
+    public function __construct(private ClientService $clientService)
     {
-        $this->clientService = $clientService;
-        $this->flashService = $flashService;
     }
 
     /**
@@ -46,7 +43,7 @@ class ClientController extends Controller
     {
         try {
             $client = $this->clientService->handleSave(new Client, $request->safe(), $request->file('logo'));
-            $this->flashService->flash(__('messages.client.create'), 'info');
+            $this->flash(__('messages.client.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
@@ -79,7 +76,7 @@ class ClientController extends Controller
     {
         try {
             $client = $this->clientService->handleSave($client, $request->safe(), $request->file('logo'));
-            $this->flashService->flash(__('messages.client.update'), 'info');
+            $this->flash(__('messages.client.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);            
             return redirect()->back()->with(['error' => __('messages.error')]);
