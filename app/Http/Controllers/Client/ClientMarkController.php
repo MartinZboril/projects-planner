@@ -30,6 +30,6 @@ class ClientMarkController extends Controller
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
-        return redirect()->back();
+        return redirect()->route('clients.route.index', [$client]);
     }
 }

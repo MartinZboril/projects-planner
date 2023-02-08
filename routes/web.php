@@ -5,10 +5,6 @@ use Illuminate\Support\Facades\{Auth, Route};
 Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
-    // Notes
-    Route::patch('notes/{note}/mark', App\Http\Controllers\Note\NoteMarkController::class)->name('notes.mark');
-    Route::resource('notes', App\Http\Controllers\Note\NoteController::class)
-        ->except(['show', 'destroy']);
     // Analysis
     Route::group(['prefix' => 'analysis', 'as' => 'analysis.'], function () {
         Route::get('/milestones', App\Http\Controllers\Analysis\MilestoneAnalysisController::class)->name('milestones');
@@ -29,6 +25,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/files', [App\Http\Controllers\Client\ClienFileController::class, 'index'])->name('files.index');
         Route::post('/files/upload', App\Http\Controllers\Client\ClientFileUploaderController::class)->name('files.upload');
         // Notes
+        Route::patch('/notes/{note}/mark', App\Http\Controllers\Client\ClientNoteMarkController::class)->name('notes.mark');
         Route::resource('notes', App\Http\Controllers\Client\ClientNoteController::class)
             ->except(['show', 'destroy']);
         // Marking
@@ -45,6 +42,10 @@ Route::middleware(['auth'])->group(function () {
     });
     // Files
     Route::post('/files/upload', App\Http\Controllers\UploadFileController::class)->name('files.upload');
+    // Notes
+    Route::patch('notes/{note}/mark', App\Http\Controllers\Note\NoteMarkController::class)->name('notes.mark');
+    Route::resource('notes', App\Http\Controllers\Note\NoteController::class)
+        ->except(['show', 'destroy']);
     // Releases
     Route::get('/releases', App\Http\Controllers\ReleaseController::class)->name('releases');
     // Reporting

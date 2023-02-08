@@ -44,7 +44,7 @@ class ClientNoteController extends Controller
         try {
             $this->clientService->handleSaveNote(
                 $client,
-                $this->noteService->save(new Note, $request->safe())
+                $this->noteService->handleSave(new Note, $request->safe())
             );
             $this->flash(__('messages.note.create'), 'info');
         } catch (Exception $exception) {
@@ -68,7 +68,7 @@ class ClientNoteController extends Controller
     public function update(UpdateNoteRequest $request, Client $client, Note $note): RedirectResponse
     {
         try {
-            $this->noteService->save($note, $request->safe());
+            $this->noteService->handleSave($note, $request->safe());
             $this->flash(__('messages.note.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

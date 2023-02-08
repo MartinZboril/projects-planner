@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\Note;
+namespace App\Http\Controllers\Client;
 
 use Exception;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\Controller;
-use App\Models\Note;
 use App\Traits\FlashTrait;
+use App\Models\{Client, Note};
 use App\Services\Data\NoteService;
 
-class NoteMarkController extends Controller
+class ClientNoteMarkController extends Controller
 {
     use FlashTrait;
 
@@ -21,7 +21,7 @@ class NoteMarkController extends Controller
     /**
      * Mark selected note.
      */
-    public function __invoke(Note $note): RedirectResponse
+    public function __invoke(Client $client, Note $note): RedirectResponse
     {
         try {
             $note = $this->noteService->handleMark($note);
@@ -30,6 +30,6 @@ class NoteMarkController extends Controller
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
-        return redirect()->route('notes.index');
+        return redirect()->route('clients.notes.index', [$client]);
     }
 }

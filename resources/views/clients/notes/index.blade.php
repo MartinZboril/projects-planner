@@ -26,6 +26,7 @@
                             @forelse ($client->notes as $note)
                                 <div class="col-md-3">
                                     @include('site.notes.card', ['note' => $note, 'editRoute' => route('clients.notes.edit', ['client' => $client, 'note' => $note])])
+                                    @include('clients.notes.forms.mark', ['client' => $client, 'note' => $note, 'id' => ($note->is_marked ? 'unmark' : 'mark') . '-note-' . $note->id . '-form'])
                                 </div>
                             @empty
                                 No notes were found!
