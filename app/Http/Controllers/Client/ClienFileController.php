@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Models\Client;
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
+use App\Models\Client;
 
 class ClienFileController extends Controller
 {
@@ -13,6 +13,6 @@ class ClienFileController extends Controller
      */
     public function index(Client $client): View
     {
-        return view('clients.files', ['client' => $client]);
+        return view('clients.files.index', ['client' => $client]);
     }
 }

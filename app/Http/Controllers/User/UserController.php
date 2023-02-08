@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\User;
 
+use Exception;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\{StoreUserRequest, UpdateUserRequest};
 use App\Models\User;
 use App\Services\FlashService;
 use App\Services\Data\UserService;
-use Exception;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 
 class UserController extends Controller
 {
@@ -45,14 +45,15 @@ class UserController extends Controller
     public function store(StoreUserRequest $request): RedirectResponse
     {
         try {
-            $user = $this->userService->save(new User, $request->safe(), $request->file('avatar'));
+            $user = $this->userService->handleSave(new User, $request->safe(), $request->file('avatar'));
             $this->flashService->flash(__('messages.user.create'), 'info');
-
-            return $this->userService->setUpRedirect($request->has('save_and_close'), $user);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+        return $request->has('save_and_close')
+            ? redirect()->route('users.index')
+            : redirect()->route('users.show', $user);
     }
 
     /**
@@ -60,7 +61,7 @@ class UserController extends Controller
      */
     public function show(User $user): View
     {
-        return view('users.detail', ['user' => $user]);
+        return view('users.show', ['user' => $user]);
     }
 
     /**
@@ -77,13 +78,14 @@ class UserController extends Controller
     public function update(User $user, UpdateUserRequest $request): RedirectResponse
     {
         try {
-            $user = $this->userService->save($user, $request->safe(), $request->file('avatar'));
+            $user = $this->userService->handleSave($user, $request->safe(), $request->file('avatar'));
             $this->flashService->flash(__('messages.user.update'), 'info');
-
-            return $this->userService->setUpRedirect($request->has('save_and_close'), $user);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+        return $request->has('save_and_close')
+            ? redirect()->route('users.index')
+            : redirect()->route('users.show', $user);
     }
 }

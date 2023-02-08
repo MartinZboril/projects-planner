@@ -21,8 +21,6 @@ class StoreNoteRequest extends FormRequest
     public function rules(): array
     {
         $rules = Note::VALIDATION_RULES;
-        $rules['parent_id'] = ['nullable', 'required_unless:type,note', 'integer'];
-        $rules['type'] = ['in:client,project,note'];
         unset(
             $rules['user_id'],
             $rules['is_basic']

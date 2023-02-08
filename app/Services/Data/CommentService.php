@@ -13,7 +13,7 @@ class CommentService
     /**
      * Save data for comment.
      */
-    public function save(Comment $comment, ValidatedInput $inputs, ?Array $uploadedFiles): void
+    public function save(Comment $comment, ValidatedInput $inputs, ?Array $uploadedFiles): Comment
     {
         $comment = Comment::updateOrCreate(
             ['id' => $comment->id],
@@ -23,13 +23,11 @@ class CommentService
             ]
         );
 
-        if (($parentId = $inputs->parent_id ?? false) && ($parentType = $inputs->type ?? false)) {
-            $this->saveRelation($comment, $parentId, $parentType);
-        }
-
         if ($uploadedFiles) {
             $this->storeFiles($comment, $uploadedFiles);
         }
+
+        return $comment;
     }
 
     /**
@@ -38,9 +36,6 @@ class CommentService
     protected function saveRelation(Comment $comment, int $parentId, string $parentType): void
     {
         switch ($parentType) {
-            case 'client':
-                ClientComment::create(['client_id' => $parentId, 'comment_id' => $comment->id]);
-                break;
             case 'project':
                 ProjectComment::create(['project_id' => $parentId, 'comment_id' => $comment->id]);
                 break;

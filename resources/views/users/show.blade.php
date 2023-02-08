@@ -76,7 +76,7 @@
                                 </div>   
                             </div>
                             <div class="card-body">
-                                @include('rates.partials.table', ['user' => $user])
+                                @include('users.rates.partials.table', ['user' => $user])
                             </div>
                         </div>
                         <div class="card card-primary card-outline">

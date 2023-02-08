@@ -15,7 +15,7 @@
                 <form action="{{ route('users.rates.store', ['user' => $user->id]) }}" method="post">
                     @csrf
                     @method('POST')
-                    @include('rates.forms.fields', ['rate' => $rate, 'type' => 'create'])
+                    @include('users.rates.forms.fields', ['rate' => $rate, 'type' => 'create'])
                     <input type="hidden" name="user_id" value="{{ $user->id }}">
                 </form>     
             </div>

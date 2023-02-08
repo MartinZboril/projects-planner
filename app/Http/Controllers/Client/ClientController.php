@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\Client;
 
 use Exception;
-use App\Models\Comment;
-use Illuminate\View\View;
-use App\Models\{Client, Note};
-use App\Services\FlashService;
-use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
-use App\Services\Data\ClientService;
 use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\Client\{StoreClientRequest, MarkClientRequest, UpdateClientRequest};
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Client\{StoreClientRequest, UpdateClientRequest};
+use App\Models\Client;
+use App\Services\FlashService;
+use App\Services\Data\ClientService;
 
 class ClientController extends Controller
 {
@@ -46,13 +45,15 @@ class ClientController extends Controller
     public function store(StoreClientRequest $request): RedirectResponse
     {
         try {
-            $client = $this->clientService->save(new Client, $request->safe(), $request->file('logo'));
+            $client = $this->clientService->handleSave(new Client, $request->safe(), $request->file('logo'));
             $this->flashService->flash(__('messages.client.create'), 'info');
-            return $this->clientService->setUpRedirect($request->has('save_and_close'), $client);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         } 
+        return $request->has('save_and_close')
+                ? redirect()->route('clients.index')
+                : redirect()->route('clients.show', $client);
     }
 
     /**
@@ -77,12 +78,14 @@ class ClientController extends Controller
     public function update(UpdateClientRequest $request, Client $client): RedirectResponse
     {
         try {
-            $client = $this->clientService->save($client, $request->safe(), $request->file('logo'));
+            $client = $this->clientService->handleSave($client, $request->safe(), $request->file('logo'));
             $this->flashService->flash(__('messages.client.update'), 'info');
-            return $this->clientService->setUpRedirect($request->has('save_and_close'), $client);
         } catch (Exception $exception) {
             Log::error($exception);            
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+        return $request->has('save_and_close')
+            ? redirect()->route('clients.index')
+            : redirect()->route('clients.show', $client);
     }
 }

@@ -13,6 +13,23 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/tickets', App\Http\Controllers\Analysis\TicketAnalysisController::class)->name('tickets');
         Route::get('/timesheets', App\Http\Controllers\Analysis\TimesheetAnalysisController::class)->name('timesheets');    
     });
+    // Clients
+    Route::resource('clients', App\Http\Controllers\Client\ClientController::class)
+        ->except(['destroy']);
+    // Clients Additions
+    Route::group(['prefix' => 'clients/{client}', 'as' => 'clients.'], function () {
+        // Comments
+        Route::resource('comments', App\Http\Controllers\Client\ClientCommentController::class)
+            ->except(['create', 'show', 'edit', 'destroy']);
+        // Files
+        Route::get('/files', [App\Http\Controllers\Client\ClienFileController::class, 'index'])->name('files.index');
+        Route::post('/files/upload', App\Http\Controllers\Client\ClientFileUploaderController::class)->name('files.upload');
+        // Notes
+        Route::resource('notes', App\Http\Controllers\Client\ClientNoteController::class)
+            ->except(['show', 'destroy']);
+        // Marking
+        Route::patch('/mark', App\Http\Controllers\Client\ClientMarkController::class)->name('mark');
+    });
     // Dashboard
     Route::group(['as' => 'dashboard.'], function () {
         Route::get('/', App\Http\Controllers\Dashboard\SummaryDashboardController::class)->name('index');
@@ -41,35 +58,12 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('users', App\Http\Controllers\User\UserController::class)
         ->except(['destroy']);
     // Users Additions
-    Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
+    Route::group(['prefix' => 'users/{user}', 'as' => 'users.'], function () {
         // Rates
-        Route::group(['as' => 'rates.'], function () {
-            Route::get('/{user}/rates/create', [App\Http\Controllers\User\UserRateController::class, 'create'])->name('create');
-            Route::post('/{user}/rates/store', [App\Http\Controllers\User\UserRateController::class, 'store'])->name('store');
-            Route::get('/{user}/rates/{rate}/edit', [App\Http\Controllers\User\UserRateController::class, 'edit'])->name('edit');            
-            Route::patch('/{user}/rates/{rate}/update', [App\Http\Controllers\User\UserRateController::class, 'update'])->name('update');            
-        });
-    });
-    // Clients
-    Route::resource('clients', App\Http\Controllers\Client\ClientController::class)
-        ->except(['destroy']);
-    // Clients Additions
-    Route::group(['prefix' => 'clients', 'as' => 'clients.'], function () {
-        // Files
-        Route::get('/{client}/files', [App\Http\Controllers\Client\ClienFileController::class, 'index'])->name('files.index');
-        Route::post('/{client}/files/upload', App\Http\Controllers\Client\ClientFileUploaderController::class)->name('files.upload');
-        // Marking
-        Route::patch('/{client}/mark', App\Http\Controllers\Client\ClientMarkController::class)->name('mark');
+        Route::resource('rates', App\Http\Controllers\User\UserRateController::class)
+            ->except(['index', 'show', 'destroy']);
     });
 });
-
-// ToDO: Clients -> notes, comments, files (upload)
-
-// Clients
-Route::get('/clients/{client}/notes', [App\Http\Controllers\Data\ClientController::class, 'notes'])->name('clients.notes');
-Route::get('/clients/{client}/note/create', [App\Http\Controllers\Data\ClientController::class, 'createNote'])->name('clients.note.create');
-Route::get('/clients/{client}/note/{note}/edit', [App\Http\Controllers\Data\ClientController::class, 'editNote'])->name('clients.note.edit');
-Route::get('/clients/{client}/comments', [App\Http\Controllers\Data\ClientController::class, 'comments'])->name('clients.comments');
 
 // Projects
 Route::get('/projects', [App\Http\Controllers\Data\ProjectController::class, 'index'])->name('projects.index');

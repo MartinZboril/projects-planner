@@ -16,7 +16,7 @@
                 </div>          
                 <div class="card card-primary card-outline">
                     <div class="card-header">
-                        <a href="{{ route('clients.note.create', ['client' => $client->id]) }}" class="btn-sm btn-primary"><i class="fas fa-plus mr-1"></i>Create</a>
+                        <a href="{{ route('clients.notes.create', ['client' => $client->id]) }}" class="btn-sm btn-primary"><i class="fas fa-plus mr-1"></i>Create</a>
                     </div>
                     <div class="card-body">
                         <!-- Message -->
@@ -25,7 +25,7 @@
                         <div class="row">
                             @forelse ($client->notes as $note)
                                 <div class="col-md-3">
-                                    @include('notes.partials.card', ['note' => $note, 'editRoute' => route('clients.note.edit', ['client' => $client, 'note' => $note]), 'parentId' => $client->id, 'parentType' => 'client'])
+                                    @include('site.notes.card', ['note' => $note, 'editRoute' => route('clients.notes.edit', ['client' => $client, 'note' => $note])])
                                 </div>
                             @empty
                                 No notes were found!

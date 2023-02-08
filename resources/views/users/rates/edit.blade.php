@@ -15,7 +15,7 @@
                 <form action="{{ route('users.rates.update', ['user' => $user->id, 'rate' => $rate->id]) }}" method="post">
                     @csrf
                     @method('PATCH')
-                    @include('rates.forms.fields', ['rate' => $rate, 'type' => 'edit'])
+                    @include('users.rates.forms.fields', ['rate' => $rate, 'type' => 'edit'])
                 </form>     
             </div>
         </section>

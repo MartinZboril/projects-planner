@@ -15,22 +15,18 @@ class NoteService
     /**
      * Save data for note.
      */
-    public function save(Note $note, ValidatedInput $inputs): void
+    public function save(Note $note, ValidatedInput $inputs, bool $basic = false): Note
     {
-        $note = Note::updateOrCreate(
+        return Note::updateOrCreate(
             ['id' => $note->id],
             [
                 'user_id' => $note->user_id ?? Auth::id(),
                 'name' => $inputs->name,
                 'content' => $inputs->content,
                 'is_private' => $inputs->is_private ?? false,
-                'is_basic' => ($inputs->parent_id ?? false) ? false : true,
+                'is_basic' => $basic,
             ]
-        );
-
-        if (($parentId = $inputs->parent_id ?? false) && ($parentType = $inputs->type ?? false)) {
-            $this->saveRelation($note, $parentId, $parentType);
-        }
+        ); 
     }
 
     /**
@@ -39,9 +35,6 @@ class NoteService
     protected function saveRelation(Note $note, int $parentId, string $parentType): void
     {
         switch ($parentType) {
-            case 'client':
-                ClientNote::create(['client_id' => $parentId, 'note_id' => $note->id]);
-                break;
             case 'project':
                 ProjectNote::create(['project_id' => $parentId, 'note_id' => $note->id]);
                 break;
@@ -70,12 +63,7 @@ class NoteService
             case 'project':
                 $redirectAction = ProjectRouteEnum::Notes;
                 $redirectVars = ['project' => Project::find($parentId)];
-                break;                
-                
-            case 'client':
-                $redirectAction = ClientRouteEnum::Notes;
-                $redirectVars = ['client' => Client::find($parentId)];
-                break;  
+                break;                 
 
             default:
                 return redirect()->route(NoteRouteEnum::Index->value);

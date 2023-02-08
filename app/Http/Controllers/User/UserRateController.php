@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\User;
 
+use Exception;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Rate\{StoreRateRequest, UpdateRateRequest};
 use App\Models\{Rate, User};
 use App\Services\FlashService;
 use App\Services\Data\RateService;
-use Exception;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 
 class UserRateController extends Controller
 {
@@ -28,7 +28,7 @@ class UserRateController extends Controller
      */
     public function create(User $user): View
     {
-        return view('rates.create', ['user' => $user, 'rate' => new Rate]);
+        return view('users.rates.create', ['user' => $user, 'rate' => new Rate]);
     }
 
     /**
@@ -37,13 +37,15 @@ class UserRateController extends Controller
     public function store(StoreRateRequest $request, User $user): RedirectResponse
     {
         try {
-            $rate = $this->rateService->save(new Rate, $request->safe());
+            $this->rateService->handleSave(new Rate, $request->safe());
             $this->flashService->flash(__('messages.rate.create'), 'info');
-            return $this->rateService->setUpRedirect($rate);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+        return $request->has('save_and_close')
+            ? redirect()->route('users.index')
+            : redirect()->route('users.show', $user);
     }
 
     /**
@@ -51,7 +53,7 @@ class UserRateController extends Controller
      */
     public function edit(User $user, Rate $rate): View
     {
-        return view('rates.edit', ['user' => $user, 'rate' => $rate]);
+        return view('users.rates.edit', ['user' => $user, 'rate' => $rate]);
     }
 
     /**
@@ -60,12 +62,14 @@ class UserRateController extends Controller
     public function update(UpdateRateRequest $request, User $user, Rate $rate): RedirectResponse
     {
         try {
-            $rate = $this->rateService->save($rate, $request->safe());
+            $this->rateService->handleSave($rate, $request->safe());
             $this->flashService->flash(__('messages.rate.update'), 'info');
-            return $this->rateService->setUpRedirect($rate);
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+        return $request->has('save_and_close')
+            ? redirect()->route('users.index')
+            : redirect()->route('users.show', $user);
     }
 }
