@@ -22,7 +22,8 @@
                         <div class="row">
                             @forelse ($notes as $note)
                                 <div class="col-md-3">
-                                    @include('notes.partials.card', ['note' => $note, 'editRoute' => route('notes.edit', ['note' => $note]), 'parentId' => null, 'parentType' => 'note'])
+                                    @include('site.notes.card', ['note' => $note, 'editRoute' => route('notes.edit', ['note' => $note])])
+                                    @include('notes.forms.mark', ['note' => $note, 'id' => ($note->is_marked ? 'unmark' : 'mark') . '-note-' . $note->id . '-form'])
                                 </div>
                             @empty
                                 No notes were found!

@@ -5,6 +5,10 @@ use Illuminate\Support\Facades\{Auth, Route};
 Auth::routes();
 
 Route::middleware(['auth'])->group(function () {
+    // Notes
+    Route::patch('notes/{note}/mark', App\Http\Controllers\Note\NoteMarkController::class)->name('notes.mark');
+    Route::resource('notes', App\Http\Controllers\Note\NoteController::class)
+        ->except(['show', 'destroy']);
     // Analysis
     Route::group(['prefix' => 'analysis', 'as' => 'analysis.'], function () {
         Route::get('/milestones', App\Http\Controllers\Analysis\MilestoneAnalysisController::class)->name('milestones');
@@ -140,15 +144,6 @@ Route::patch('/tickets/{ticket}/update', [App\Http\Controllers\Data\TicketContro
 Route::patch('/tickets/{ticket}/change', [App\Http\Controllers\Data\TicketController::class, 'change'])->name('tickets.change');
 Route::patch('/tickets/{ticket}/convert', [App\Http\Controllers\Data\TicketController::class, 'convert'])->name('tickets.convert');
 Route::patch('/tickets/{ticket}/mark', [App\Http\Controllers\Data\TicketController::class, 'mark'])->name('tickets.mark');
-
-// Notes
-Route::get('/notes', [App\Http\Controllers\Data\NoteController::class, 'index'])->name('notes.index');
-Route::get('/notes/create', [App\Http\Controllers\Data\NoteController::class, 'create'])->name('notes.create');
-Route::get('/notes/{note}/edit', [App\Http\Controllers\Data\NoteController::class, 'edit'])->name('notes.edit');
-
-Route::post('/notes/store', [App\Http\Controllers\Data\NoteController::class, 'store'])->name('notes.store');
-Route::patch('/notes/{note}/update', [App\Http\Controllers\Data\NoteController::class, 'update'])->name('notes.update');
-Route::patch('/notes/{note}/mark', [App\Http\Controllers\Data\NoteController::class, 'mark'])->name('notes.mark');
 
 // Comments
 Route::post('/comments/store', [App\Http\Controllers\Data\CommentController::class, 'store'])->name('comments.store');

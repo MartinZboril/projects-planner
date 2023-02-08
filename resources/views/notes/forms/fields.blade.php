@@ -46,17 +46,8 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"> or <a href="
-                @if ($parentType == 'project')
-                    {{ route('projects.notes', $parentId) }}
-                @elseif ($parentType == 'client')
-                    {{ route('clients.notes', $parentId) }}
-                @else
-                    {{ route('notes.index') }}
-                @endif" class="cancel-btn">Close</a></span>
+                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"> or <a href="{{ route('notes.index') }}" class="cancel-btn">Close</a></span>
             </div>
         </div>
     </div>
 </div>
-<input type="hidden" name="parent_id" value="{{ $parentId }}">
-<input type="hidden" name="type" value="{{ $parentType }}">

@@ -12,7 +12,11 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Form -->
-                @include('notes.forms.store', ['form' => 'note', 'note' => $note, 'parentId' => null, 'parentType' => 'note'])    
+                <form action="{{ route('notes.store') }}" method="post">
+                    @csrf
+                    @method('POST')
+                    @include('notes.forms.fields', ['note' => $note, 'type' => 'create'])
+                </form>       
             </div>
         </section>
     </div>
