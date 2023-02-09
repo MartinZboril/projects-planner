@@ -3,8 +3,7 @@
 namespace App\Services\Data;
 
 use App\Services\FileService;
-use App\Models\{CommentFile, ClientComment, Comment, MilestoneComment, ProjectComment, TaskComment, TicketComment};
-use Exception;
+use App\Models\{CommentFile, Comment};
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ValidatedInput;
 
@@ -28,24 +27,6 @@ class CommentService
         }
 
         return $comment;
-    }
-
-    /**
-     * Save relation for comment.
-     */
-    protected function saveRelation(Comment $comment, int $parentId, string $parentType): void
-    {
-        switch ($parentType) {
-            case 'project':
-                ProjectComment::create(['project_id' => $parentId, 'comment_id' => $comment->id]);
-                break;
-            case 'milestone':
-                MilestoneComment::create(['milestone_id' => $parentId, 'comment_id' => $comment->id]);
-                break;
-            default:
-                throw new Exception('For the sent type was not found relationship to save!');
-                break;
-        }
     }
 
     /**

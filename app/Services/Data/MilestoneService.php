@@ -2,18 +2,15 @@
 
 namespace App\Services\Data;
 
-use App\Enums\Routes\ProjectRouteEnum;
-use App\Models\Milestone;
-use App\Services\RouteService;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
+use App\Models\{Comment, Milestone, MilestoneComment};
 
 class MilestoneService
 {
     /**
      * Save data for milestone.
      */
-    public function save(Milestone $milestone, ValidatedInput $inputs): Milestone
+    public function handleSave(Milestone $milestone, ValidatedInput $inputs): Milestone
     {
         return Milestone::updateOrCreate(
             ['id' => $milestone->id],
@@ -30,22 +27,23 @@ class MilestoneService
     }
 
     /**
+     * Save milestones comments.
+     */
+    public function handleSaveComment(Milestone $milestone, Comment $comment): void
+    {
+        MilestoneComment::create([
+            'milestone_id' => $milestone->id,
+            'comment_id' => $comment->id
+        ]);
+    }
+
+    /**
      * Mark selected milestone.
      */
-    public function mark(Milestone $milestone): Milestone
+    public function handleMark(Milestone $milestone): Milestone
     {
         $milestone->is_marked = !$milestone->is_marked;
         $milestone->save();
         return $milestone;
-    }
-
-    /**
-     * Set up redirect for the action.
-     */
-    public function setUpRedirect(string $type, Milestone $milestone): RedirectResponse
-    {
-        $redirectAction = $type ? ProjectRouteEnum::Milestones : ProjectRouteEnum::MilestonesDetail;
-        $redirectVars = $type ? ['project' => $milestone->project] : ['project' => $milestone->project, 'milestone' => $milestone];
-        return (new RouteService)->redirect($redirectAction->value, $redirectVars);
     }
 }

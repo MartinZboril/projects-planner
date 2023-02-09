@@ -17,7 +17,7 @@
         <tbody>
             @forelse ($tickets as $ticket)
                 <tr>
-                    <td><a href="{{ $redirect == 'projects' ? route('projects.ticket.detail', ['project' => $project->id, 'ticket' => $ticket->id]) : route('tickets.show', $ticket->id) }}">{{ $ticket->subject }}</a></td>
+                    <td><a href="{{ $redirect == 'projects' ? route('projects.tickets.show', ['project' => $project->id, 'ticket' => $ticket->id]) : route('tickets.show', $ticket->id) }}">{{ $ticket->subject }}</a></td>
                     @if(in_array('project', $display))<td><a href="{{ route('projects.show', $ticket->project->id) }}">{{ $ticket->project->name }}</a></td>@endif
                     <td>@include('site.partials.user', ['user' => $ticket->reporter])</td>
                     <td>
@@ -33,8 +33,8 @@
                     <td><span class="text-{{ $ticket->priority == App\Enums\TicketPriorityEnum::urgent ? 'danger font-weight-bold' : 'body' }}">@include('tickets.partials.priority', ['priority' => $ticket->priority])</span></td>
                     <td><span class="text-{{ $ticket->overdue ? 'danger' : 'body' }}">{{ $ticket->due_date->format('d.m.Y') }}</span></td>
                     <td>
-                        <a href="{{ $redirect == 'projects' ? route('projects.ticket.edit', ['project' => $project->id, 'ticket' => $ticket->id]) : route('tickets.edit', $ticket->id) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
-                        <a href="{{ $redirect == 'projects' ? route('projects.ticket.detail', ['project' => $project->id, 'ticket' => $ticket->id]) : route('tickets.show', $ticket->id) }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
+                        <a href="{{ $redirect == 'projects' ? route('projects.tickets.edit', ['project' => $project->id, 'ticket' => $ticket->id]) : route('tickets.edit', $ticket->id) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="{{ $redirect == 'projects' ? route('projects.tickets.show', ['project' => $project->id, 'ticket' => $ticket->id]) : route('tickets.show', $ticket->id) }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
                         @include('tickets.partials.buttons', ['ticket' => $ticket, 'buttonSize' => 'xs', 'buttonText' => false, 'redirect' => 'tickets'])               
                     </td>
                 </tr>

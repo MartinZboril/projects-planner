@@ -4,7 +4,7 @@
         @break
 
     @case('milestone')
-        @include('milestones.partials.buttons', ['milestone' => $item, 'buttonSize' => 'xs', 'buttonText' => true])
+        @include('projects.milestones.partials.buttons', ['milestone' => $item, 'buttonSize' => 'xs', 'buttonText' => true])
         @break
 
     @case('project')

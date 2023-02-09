@@ -11,11 +11,11 @@ enum ProjectRouteEnum: string
     case Index = 'projects.index';
     case Detail = 'projects.show';
     case Milestones = 'projects.milestones';
-    case MilestonesDetail = 'projects.milestones.detail';
-    case Timesheets = 'projects.timesheets';
-    case Tasks = 'projects.tasks';
-    case TasksDetail = 'projects.task.detail';
-    case Tickets = 'projects.tickets';
-    case TicketsDetail = 'projects.ticket.detail';
+    case MilestonesDetail = 'projects.milestones.show';
+    case Timesheets = 'projects.timers.index';
+    case Tasks = 'projects.tasks.index';
+    case TasksDetail = 'projects.tasks.show';
+    case Tickets = 'projects.tickets.index';
+    case TicketsDetail = 'projects.tickets.detail';
     case Notes = 'projects.notes.index';
 }

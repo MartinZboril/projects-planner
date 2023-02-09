@@ -26,7 +26,7 @@
                                     <td><span id="timer-{{ $timer->id }}-display" class="timer-record" data-since="{{ $timer->since }}"></span></td>
                                     <td><a href="#" class="btn btn-sm btn-danger" onclick="event.preventDefault(); document.getElementById('stop-working-on-timer-{{ $timer->id }}').submit();"><i class="fas fa-stop"></i></a></td>
                                 </tr>
-                                @include('timers.forms.stop', ['id' => 'stop-working-on-timer-' . $timer->id, 'timerId' => $timer->id])            
+                                @include('projects.timers.forms.stop', ['id' => 'stop-working-on-timer-' . $timer->id, 'project' => $timer->project, 'timer' => $timer])            
                             @endforeach
                         </tbody>
                     </table>

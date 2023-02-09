@@ -3,17 +3,13 @@
 namespace App\Http\Controllers\Ticket;
 
 use Exception;
-use App\Models\Task;
-use App\Models\Ticket;
-use App\Traits\FlashTrait;
-use Illuminate\Http\Request;
-use App\Services\Data\TaskService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Services\Data\TicketService;
-use Illuminate\Http\RedirectResponse;
-use App\Services\Data\ProjectUserService;
 use App\Http\Requests\Ticket\ConvertTicketRequest;
+use App\Models\{Task, Ticket};
+use App\Traits\FlashTrait;
+use App\Services\Data\{ProjectUserService, TaskService, TicketService};
 
 class TicketConvertTicketToTaskController extends Controller
 {

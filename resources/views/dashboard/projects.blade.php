@@ -42,7 +42,7 @@
                     </div>
                     <div class="card-body">
                         <!-- Content -->
-                        @include('milestones.partials.table', ['id' => 'overdue-milestones-table', 'milestones' => $data->get('overdue_milestones'), 'display' => []])
+                        @include('projects.milestones.partials.table', ['id' => 'overdue-milestones-table', 'milestones' => $data->get('overdue_milestones'), 'display' => []])
                     </div>
                 </div>
             @endif
