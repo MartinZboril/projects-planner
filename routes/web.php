@@ -19,11 +19,13 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('comments', App\Http\Controllers\Client\ClientCommentController::class)
             ->except(['create', 'show', 'edit', 'destroy']);
         // Files
-        Route::get('/files', [App\Http\Controllers\Client\ClienFileController::class, 'index'])->name('files.index');
-        Route::post('/files/upload', App\Http\Controllers\Client\ClientFileUploaderController::class)->name('files.upload');
+        Route::group(['prefix' => '/files', 'as' => 'files.'], function () {
+            Route::get('/', [App\Http\Controllers\Client\File\ClienFileController::class, 'index'])->name('index');
+            Route::post('/upload', App\Http\Controllers\Client\File\ClientFileUploaderController::class)->name('upload');    
+        });
         // Notes
-        Route::patch('/notes/{note}/mark', App\Http\Controllers\Client\ClientNoteMarkController::class)->name('notes.mark');
-        Route::resource('notes', App\Http\Controllers\Client\ClientNoteController::class)
+        Route::patch('/notes/{note}/mark', App\Http\Controllers\Client\Note\ClientNoteMarkController::class)->name('notes.mark');
+        Route::resource('notes', App\Http\Controllers\Client\Note\ClientNoteController::class)
             ->except(['show', 'destroy']);
         // Marking
         Route::patch('/mark', App\Http\Controllers\Client\ClientMarkController::class)->name('mark');
@@ -70,8 +72,8 @@ Route::middleware(['auth'])->group(function () {
         // Files
         Route::post('/files/upload', App\Http\Controllers\Task\TaskFileUploaderController::class)->name('files.upload');
         // ToDos
-        Route::patch('/todos/{todo}/check', App\Http\Controllers\Task\TaskToDoCheckController::class)->name('todos.check');
-        Route::resource('todos', App\Http\Controllers\Task\TaskToDoController::class)
+        Route::patch('/todos/{todo}/check', App\Http\Controllers\Task\ToDo\TaskToDoCheckController::class)->name('todos.check');
+        Route::resource('todos', App\Http\Controllers\Task\ToDo\TaskToDoController::class)
             ->except(['index', 'show', 'destroy']);
     });
     Route::resource('tasks', App\Http\Controllers\Task\TaskController::class)
@@ -109,69 +111,64 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('comments', App\Http\Controllers\Project\ProjectCommentController::class)
             ->except(['create', 'show', 'edit', 'destroy']);
         // Files
-        Route::get('/files', [App\Http\Controllers\Project\ProjectFileController::class, 'index'])->name('files.index');
-        Route::post('/files/upload', App\Http\Controllers\Project\ProjectFileUploaderController::class)->name('files.upload');
+        Route::get('/files', [App\Http\Controllers\Project\File\ProjectFileController::class, 'index'])->name('files.index');
+        Route::post('/files/upload', App\Http\Controllers\Project\File\ProjectFileUploaderController::class)->name('files.upload');
         // Milestones
         Route::group(['prefix' => '/milestone/{milestone}', 'as' => 'milestones.'], function () {
             // Actions
-            Route::patch('/mark', App\Http\Controllers\Project\ProjectMilestoneMarkController::class)->name('mark');
+            Route::patch('/mark', App\Http\Controllers\Project\Milestone\ProjectMilestoneMarkController::class)->name('mark');
             // Comments
-            Route::resource('comments', App\Http\Controllers\Project\ProjectMilestoneCommentController::class)
+            Route::resource('comments', App\Http\Controllers\Project\Milestone\ProjectMilestoneCommentController::class)
                 ->only(['store', 'update']);
         });
-        Route::resource('milestones', App\Http\Controllers\Project\ProjectMilestoneController::class)
+        Route::resource('milestones', App\Http\Controllers\Project\Milestone\ProjectMilestoneController::class)
             ->except(['destroy']);     
         // Notes
-        Route::patch('/notes/{note}/mark', App\Http\Controllers\Project\ProjectNoteMarkController::class)->name('notes.mark');
-        Route::resource('notes', App\Http\Controllers\Project\ProjectNoteController::class)
+        Route::patch('/notes/{note}/mark', App\Http\Controllers\Project\Note\ProjectNoteMarkController::class)->name('notes.mark');
+        Route::resource('notes', App\Http\Controllers\Project\Note\ProjectNoteController::class)
             ->except(['show', 'destroy']);
         // Tasks
-        Route::group(['prefix' => 'tasks/{task}', 'as' => 'tasks.'], function () {
-            // Actions
-            Route::patch('/change-status', App\Http\Controllers\Project\ProjectTaskChangeStatusController::class)->name('change_status');
-            Route::patch('/mark', App\Http\Controllers\Project\ProjectTaskMarkController::class)->name('mark');
-            Route::patch('/pause', App\Http\Controllers\Project\ProjectTaskPauseController::class)->name('pause');
-            // Comments
-            Route::resource('comments', App\Http\Controllers\Project\ProjectTaskCommentController::class)
-                ->only(['store', 'update']);
-            // Files
-            Route::post('/files/upload', App\Http\Controllers\Project\ProjectTaskFileUploaderController::class)->name('files.upload');
+        Route::group(['prefix' => 'tasks', 'as' => 'tasks.'], function () {
             // Kanban
-
-            // ToDos
-            Route::patch('/todos/{todo}/check', App\Http\Controllers\Project\ProjectTaskToDoCheckController::class)->name('todos.check');
-            Route::resource('todos', App\Http\Controllers\Project\ProjectTaskToDoController::class)
-                ->except(['index', 'show', 'destroy']);
+            Route::get('/kanban', App\Http\Controllers\Project\Task\ProjectTaskKanbanController::class)->name('kanban');
+            Route::group(['prefix' => '{task}'], function () {
+                // Actions
+                Route::patch('/change-status', App\Http\Controllers\Project\Task\ProjectTaskChangeStatusController::class)->name('change_status');
+                Route::patch('/mark', App\Http\Controllers\Project\Task\ProjectTaskMarkController::class)->name('mark');
+                Route::patch('/pause', App\Http\Controllers\Project\Task\ProjectTaskPauseController::class)->name('pause');
+                // Comments
+                Route::resource('comments', App\Http\Controllers\Project\Task\ProjectTaskCommentController::class)
+                    ->only(['store', 'update']);
+                // Files
+                Route::post('/files/upload', App\Http\Controllers\Project\Task\ProjectTaskFileUploaderController::class)->name('files.upload');
+                // ToDos
+                Route::patch('/todos/{todo}/check', App\Http\Controllers\Project\Task\ToDo\ProjectTaskToDoCheckController::class)->name('todos.check');
+                Route::resource('todos', App\Http\Controllers\Project\Task\ToDo\ProjectTaskToDoController::class)
+                    ->except(['index', 'show', 'destroy']);
+            });
         });
-        Route::resource('tasks', App\Http\Controllers\Project\ProjectTaskController::class)
+        Route::resource('tasks', App\Http\Controllers\Project\Task\ProjectTaskController::class)
             ->except(['destroy']);
         // Tickets
         Route::group(['prefix' => 'tickets/{ticket}', 'as' => 'tickets.'], function () {
             // Actions
-            Route::patch('/convert', App\Http\Controllers\Project\ProjectTicketConvertTicketToTaskController::class)->name('convert_to_task');
-            Route::patch('/change-status', App\Http\Controllers\Project\ProjectTicketChangeStatusController::class)->name('change_status');
-            Route::patch('/mark', App\Http\Controllers\Project\ProjectTicketMarkController::class)->name('mark');
+            Route::patch('/convert', App\Http\Controllers\Project\Ticket\ProjectTicketConvertTicketToTaskController::class)->name('convert_to_task');
+            Route::patch('/change-status', App\Http\Controllers\Project\Ticket\ProjectTicketChangeStatusController::class)->name('change_status');
+            Route::patch('/mark', App\Http\Controllers\Project\Ticket\ProjectTicketMarkController::class)->name('mark');
             // Comments
-            Route::resource('comments', App\Http\Controllers\Project\ProjectTicketCommentController::class)
+            Route::resource('comments', App\Http\Controllers\Project\Ticket\ProjectTicketCommentController::class)
                 ->only(['store', 'update']);
             // Files
-            Route::post('/files/upload', App\Http\Controllers\Project\ProjectTicketFileUploaderController::class)->name('files.upload');
+            Route::post('/files/upload', App\Http\Controllers\Project\Ticket\ProjectTicketFileUploaderController::class)->name('files.upload');
         });
-        Route::resource('tickets', App\Http\Controllers\Project\ProjectTicketController::class)
+        Route::resource('tickets', App\Http\Controllers\Project\Ticket\ProjectTicketController::class)
             ->except(['destroy']);        
         // Timers
         Route::group(['prefix' => '/timers', 'as' => 'timers.'], function () {
-            Route::post('/start', App\Http\Controllers\Project\ProjectTimerStartController::class)->name('start');
-            Route::patch('/{timer}/stop', App\Http\Controllers\Project\ProjectTimerStopController::class)->name('stop');
+            Route::post('/start', App\Http\Controllers\Project\Timer\ProjectTimerStartController::class)->name('start');
+            Route::patch('/{timer}/stop', App\Http\Controllers\Project\Timer\ProjectTimerStopController::class)->name('stop');
         });
-        Route::resource('timers', App\Http\Controllers\Project\ProjectTimerController::class)
+        Route::resource('timers', App\Http\Controllers\Project\Timer\ProjectTimerController::class)
             ->except(['show', 'destroy']);
     });
 });
-
-// Projects
-
-// Tasks
-Route::get('/projects/{project}/kanban', [App\Http\Controllers\Data\ProjectController::class, 'kanban'])->name('projects.kanban');
-Route::get('/projects/{project}/task/{task}/todo/create', [App\Http\Controllers\Data\ProjectController::class, 'createToDo'])->name('projects.todo.create');
-Route::get('/projects/{project}/task/{task}/todo/{todo}/edit', [App\Http\Controllers\Data\ProjectController::class, 'editToDo'])->name('projects.todo.edit');

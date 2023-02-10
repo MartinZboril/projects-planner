@@ -75,23 +75,23 @@ class SummaryDashboard
     {
         switch ($type) {
             case 'client':
-                return route(ClientRouteEnum::Detail->value, ['client' => $id]);
+                return route('clients.show', ['client' => $id]);
                 break;
 
             case 'project':
-                return route(ProjectRouteEnum::Detail->value, ['project' => $id]);
+                return route('projects.show', ['project' => $id]);
                 break;
             
             case 'task':
-                return route(TaskRouteEnum::Detail->value, ['task' => $id]);
+                return route('tasks.show', ['task' => $id]);
                 break;  
 
             case 'ticket':
-                return route(TicketRouteEnum::Detail->value, ['ticket' => $id]);
+                return route('tickets.show', ['ticket' => $id]);
                 break;
 
             case 'todo':
-                return route(TaskRouteEnum::Detail->value, ['task' => $id]);
+                return route('tasks.show', ['task' => $id]);
                 break;
 
             default:

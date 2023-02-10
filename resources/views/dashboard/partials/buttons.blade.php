@@ -20,7 +20,7 @@
         @break
 
     @case('todo')
-        @include('todos.partials.buttons', ['todo' => $item, 'buttonSize' => 'xs', 'buttonText' => false])
+        @include('tasks.todos.partials.buttons', ['todo' => $item, 'buttonSize' => 'xs', 'buttonText' => false])
         @break
 
 @endswitch
