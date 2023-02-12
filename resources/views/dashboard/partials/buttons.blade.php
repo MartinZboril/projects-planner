@@ -12,15 +12,15 @@
         @break
         
     @case('task')
-        @include('tasks.partials.buttons', ['task' => $item, 'buttonSize' => 'xs', 'buttonText' => false])
+        @include('tasks.partials.buttons', ['task' => $item, 'buttonSize' => 'xs', 'hideButtonText' => ''])
         @break
         
     @case('ticket')
-        @include('tickets.partials.buttons', ['ticket' => $item, 'buttonSize' => 'xs', 'buttonText' => false, 'redirect' => 'tickets'])
+        @include('tickets.partials.buttons', ['ticket' => $item, 'buttonSize' => 'xs', 'hideButtonText' => ''])
         @break
 
     @case('todo')
-        @include('tasks.todos.partials.buttons', ['todo' => $item, 'buttonSize' => 'xs', 'buttonText' => false])
+        @include('tasks.todos.partials.buttons', ['todo' => $item, 'buttonSize' => 'xs', 'hideButtonText' => ''])
         @break
 
 @endswitch

@@ -5,7 +5,7 @@ namespace App\Services\Data;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ValidatedInput;
 use App\Enums\TaskStatusEnum;
-use App\Models\{Comment, TaskComment, TaskFile, Task};
+use App\Models\{Comment, Task};
 use App\Services\FileService;
 
 class TaskService
@@ -46,10 +46,7 @@ class TaskService
     public function handleUploadFiles(Task $task, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            TaskFile::create([
-                'task_id' => $task->id,
-                'file_id' => (new FileService)->handleUpload($uploadedFile, 'tasks/files')->id
-            ]);
+            $task->files()->save((new FileService)->handleUpload($uploadedFile, 'tasks/files'));
         }
     }
 
@@ -58,10 +55,7 @@ class TaskService
      */
     public function handleSaveComment(Task $task, Comment $comment): void
     {
-        TaskComment::create([
-            'task_id' => $task->id,
-            'comment_id' => $comment->id
-        ]);
+        $task->comments()->save($comment);
     }
 
     /**

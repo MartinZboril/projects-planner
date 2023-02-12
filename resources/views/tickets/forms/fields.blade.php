@@ -1,11 +1,11 @@
 <div class="row">
     <div class="col-md-7">
         <div class="card card-primary card-outline">
-            <div class="card-header">{{ $type == 'create' ? 'Edit' : 'Create' }}ticket</div>
+            <div class="card-header">{{ $type === 'create' ? 'Edit' : 'Create' }}ticket</div>
             <div class="card-body">
                 <div class="form-group required">
                     <label for="subject" class="control-label">Subject</label>
-                    <input type="text" name="subject" id="subject" class="form-control @error('subject') is-invalid @enderror" placeholder="subject" value="{{ old('subject', $ticket->subject) }}" autocomplete="off">
+                    <input type="text" name="subject" id="subject" class="form-control @error('subject') is-invalid @enderror" placeholder="subject" value="{{ old('subject', $ticket->subject ?? null) }}" autocomplete="off">
                     @error('subject')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -15,7 +15,7 @@
                     <select class="form-control @error('project_id') is-invalid @enderror" name="project_id" id="project-id" style="width: 100%;">
                         <option selected value>select project</option>
                         @foreach($projects as $project)
-                            <option value="{{ $project->id }}" @selected(old('project_id', $ticket->project_id) == $project->id)>{{ $project->name }}</option>
+                            <option value="{{ $project->id }}" @selected(old('project_id', $ticket->project->id ?? null) === $project->id)>{{ $project->name }}</option>
                         @endforeach
                     </select>
                     @error('project_id')
@@ -27,7 +27,7 @@
                     <select class="form-control @error('assignee_id') is-invalid @enderror" name="assignee_id" id="assignee-id" style="width: 100%;">
                         <option selected value>select assignee</option>
                         @foreach($users as $user)
-                            <option value="{{ $user->id }}" @selected(old('assignee_id', $ticket->assignee_id) == $user->id)>{{ $user->full_name }}</option>
+                            <option value="{{ $user->id }}" @selected(old('assignee_id', $ticket->assignee->id ?? null) === $user->id)>{{ $user->full_name }}</option>
                         @endforeach
                     </select>
                     @error('assignee_id')
@@ -39,7 +39,7 @@
                     <select class="form-control @error('type') is-invalid @enderror" name="type" id="type" style="width: 100%;">
                         <option selected value>select type</option>
                         @foreach(App\Enums\TicketTypeEnum::values() as $key => $value)
-                            <option value="{{ $key }}" @selected(old('type', $type == 'edit' ? $ticket->type->value : null) == $key)>{{ __('pages.content.tickets.types.' . $value) }}</option>
+                            <option value="{{ $key }}" @selected(old('type', $ticket->type->value ?? null) === $key)>{{ __('pages.content.tickets.types.' . $value) }}</option>
                         @endforeach
                     </select>
                     @error('type')
@@ -51,7 +51,7 @@
                     <select class="form-control @error('priority') is-invalid @enderror" name="priority" id="priority" style="width: 100%;">
                         <option selected value>select priority</option>
                         @foreach(App\Enums\TicketPriorityEnum::values() as $key => $value)
-                            <option value="{{ $key }}" @selected(old('priority', $type == 'edit' ? $ticket->priority->value : null) == $key)>{{ __('pages.content.tickets.priorities.' . $value) }}</option>
+                            <option value="{{ $key }}" @selected(old('priority', $ticket->priority->value ?? null) === $key)>{{ __('pages.content.tickets.priorities.' . $value) }}</option>
                         @endforeach
                     </select>
                     @error('priority')
@@ -60,14 +60,14 @@
                 </div> 
                 <div class="form-group required">
                     <label for="due_date" class="control-label">Due date</label>
-                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', $ticket->due_date ? $ticket->due_date->format('Y-m-d') : null) }}" autocomplete="off">
+                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', isset($ticket->due_date) ? $ticket->due_date->format('Y-m-d') : null) }}" autocomplete="off">
                     @error('due_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group required">
                     <label for="message" class="control-label">Message</label>
-                    <textarea name="message" class="form-control summernote" id="message" cols="30" rows="10" placeholder="message">{{ old('message', $ticket->message) }}</textarea>
+                    <textarea name="message" class="form-control summernote" id="message" cols="30" rows="10" placeholder="message">{{ old('message', $ticket->message ?? null) }}</textarea>
                     @error('message')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -83,7 +83,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $ticket->id ? route('tickets.show', $ticket->id) : route('tickets.index') }}" class="cancel-btn">Close</a></span>
+                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $type === 'edit' ? route('tickets.show', $ticket) : route('tickets.index') }}" class="cancel-btn">Close</a></span>
             </div>
         </div>
     </div>

@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Ticket;
 
-use App\Models\Task;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ConvertTicketRequest extends FormRequest
@@ -20,9 +19,6 @@ class ConvertTicketRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules = Task::VALIDATION_RULES;
-        unset($rules['status']);
-        
-        return $rules;
+        return [];
     }
 }

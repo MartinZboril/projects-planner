@@ -22,7 +22,6 @@ class StoreToDoRequest extends FormRequest
     {
         $rules = ToDo::VALIDATION_RULES;
         unset($rules['task_id']);
-        unset($rules['is_finished']);
 
         return $rules;
     }

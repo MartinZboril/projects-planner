@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\{handleStoreUserRequest, UpdateUserRequest};
+use App\Http\Requests\User\{StoreUserRequest, UpdateUserRequest};
 use App\Models\User;
 use App\Traits\FlashTrait;
 use App\Services\Data\UserService;
@@ -33,13 +33,13 @@ class UserController extends Controller
      */
     public function create(): View
     {
-        return view('users.create', ['user' => new User]);
+        return view('users.create');
     }
 
     /**
      * Store a newly created user in storage.
      */
-    public function store(handleStoreUserRequest $request): RedirectResponse
+    public function store(StoreUserRequest $request): RedirectResponse
     {
         try {
             $user = $this->userService->handleSave(new User, $request->safe(), $request->file('avatar'));

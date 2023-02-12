@@ -11,7 +11,7 @@
         <!-- Main content -->
         <section class="content">
             <!-- Message -->
-            @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+            <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
             <div class="row">
                 @include('dashboard.partials.widget', ['text' => 'Today', 'value' => $data->get('today_timers_total_time_sum') . ' Hours', 'icon' => 'fas fa-business-time', 'colour' => 'lightblue color-palette', 'link' => route('projects.index')])
                 @include('dashboard.partials.widget', ['text' => 'Today', 'value' => $data->get('today_timers_amount_sum'), 'icon' => 'fas fa-coins', 'colour' => 'lightblue color-palette', 'link' => route('projects.index'), 'amount' => true])

@@ -17,7 +17,7 @@
                 <div class="card card-primary card-outline">
                     <div class="card-body">
                         <!-- Message -->
-                        @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                        <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
                         <!-- Content -->
                         @include('projects.files.upload', ['project' => $project])
                         <hr>

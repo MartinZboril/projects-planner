@@ -108,12 +108,12 @@ class Task extends Model
 
     public function getPausedAttribute(): bool
     {
-        return $this->is_stopped ? true : false;
+        return $this->is_stopped;
     }
 
     public function getReturnedAttribute(): bool
     {
-        return $this->is_returned ? true : false;
+        return $this->is_returned;
     }
 
     public function isReturned(): bool

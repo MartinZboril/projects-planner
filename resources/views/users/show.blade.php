@@ -7,13 +7,13 @@
         <!-- Content Header (Page header) -->
         <div class="p-3 mb-3" style="background-color:white;">
             <a href="{{ route('users.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
-            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
+            <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
         </div>
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
                 <!-- Message -->
-                @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
                 <!-- Content -->
                 <div class="row">
                     <div class="col-md-4">
@@ -36,10 +36,10 @@
                                             <td class="text-muted">Job title</td><td class="text-right">{{ $user->job_title_label }}</td>
                                         </tr>
                                         <tr>
-                                            <td class="text-muted">Mobile</td><td class="text-right">@if($user->mobile)<a href="tel:{{ $user->mobile_label }}">{{ $user->mobile_label }}</a>@else{{ $user->mobile_label }}@endif</td>
+                                            <td class="text-muted">Mobile</td><td class="text-right"><a href="tel:{{ $user->mobile_label }}">{{ $user->mobile_label }}</a></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-muted">Phone</td><td class="text-right">@if($user->phone)<a href="tel:{{ $user->phone_label }}">{{ $user->phone_label }}</a>@else{{ $user->phone_label }}@endif</td>
+                                            <td class="text-muted">Phone</td><td class="text-right"><a href="tel:{{ $user->phone_label }}">{{ $user->phone_label }}</a></td>
                                         </tr>
                                         <tr>
                                             <td class="text-muted">Address</td><td class="text-right">{{ $user->street_label }}</td>
@@ -72,7 +72,7 @@
                             <div class="card-header">
                                 <h5 class="card-title">Rates</h5> 
                                 <div class="card-tools">
-                                    <a href="{{ route('users.rates.create', ['user' => $user->id]) }}" class="bn btn-primary btn-sm ml-1"><i class="fas fa-plus mr-1"></i>Create</a>
+                                    <a href="{{ route('users.rates.create', $user) }}" class="bn btn-primary btn-sm ml-1"><i class="fas fa-plus mr-1"></i>Create</a>
                                 </div>   
                             </div>
                             <div class="card-body">

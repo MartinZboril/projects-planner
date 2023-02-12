@@ -11,7 +11,7 @@
         <!-- Main content -->
         <section class="content">
             <!-- Message -->
-            @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+            <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
             <div class="row">
                 @include('dashboard.partials.widget', ['text' => 'Today', 'value' => $data->get('today_tasks_count'), 'icon' => 'fas fa-calendar-day', 'colour' => 'lightblue color-palette', 'link' => route('tasks.index')])
                 @include('dashboard.partials.widget', ['text' => 'This week', 'value' => $data->get('this_week_tasks_count'), 'icon' => 'fas fa-calendar-week', 'colour' => 'lightblue color-palette', 'link' => route('tasks.index')])

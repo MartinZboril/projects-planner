@@ -33,7 +33,7 @@ class TicketController extends Controller
      */
     public function create(): View
     {
-        return view('tickets.create', ['projects' => Project::all(), 'users' => User::all(), 'ticket' => new Ticket]);
+        return view('tickets.create', ['projects' => Project::all(), 'users' => User::all()]);
     }
 
     /**
@@ -58,7 +58,7 @@ class TicketController extends Controller
      */
     public function show(Ticket $ticket): View
     {
-        return view('tickets.show', ['ticket' => $ticket, 'comment' => new Comment]);
+        return view('tickets.show', ['ticket' => $ticket]);
     }
 
     /**

@@ -1,6 +1,6 @@
 @forelse ($files as $file)
     <li class="list-group-item small">
-        @include('files.partials.file', ['file' => $file])
+        <x-file.item :$file />
     </li>
 @empty
     <li class="list-group-item">No files were uploaded!</li>

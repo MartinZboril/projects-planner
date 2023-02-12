@@ -17,9 +17,9 @@
                 <div class="card card-primary card-outline">
                     <div class="card-body">
                         <!-- Message -->
-                        @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                        <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
                         <!-- Content -->
-                        @include('site.comments.list', ['comments' => $project->comments, 'comment' => $comment, 'createFormPartial' => 'projects.comments.create', 'editFormPartial' => 'projects.comments.edit'])
+                        @include('site.comments.list', ['comments' => $project->comments, 'comment' => null, 'createFormPartial' => 'projects.comments.create', 'editFormPartial' => 'projects.comments.edit'])
                     </div>
                 </div>
             </div>

@@ -18,7 +18,7 @@
                     <div class="card-header"><a href="{{ route('projects.tickets.create', $project) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
                     <div class="card-body">
                         <!-- Message -->
-                        @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                        <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
                         <!-- Content -->
                         @include('tickets.partials.table', ['id' => 'tickets-table', 'tickets' => $project->tickets, 'display' => [], 'redirect' => 'projects'])
                     </div>

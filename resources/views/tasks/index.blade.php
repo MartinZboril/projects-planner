@@ -18,21 +18,12 @@
                     </div>
                     <div class="card-body">
                         <!-- Message -->
-                        @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                        <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
                         <!-- Content -->
-                        @include('tasks.partials.table', ['id' => 'tasks-table', 'tasks' => $tasks, 'display' => ['project'], 'redirect' => 'tasks'])
+                        <x-task.table table-id="tasks-table" :$tasks />
                     </div>
                 </div>            
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(function () {
-            $("#tasks-table").DataTable();
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
-@endpush

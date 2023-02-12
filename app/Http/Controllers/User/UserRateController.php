@@ -25,7 +25,7 @@ class UserRateController extends Controller
      */
     public function create(User $user): View
     {
-        return view('users.rates.create', ['user' => $user, 'rate' => new Rate]);
+        return view('users.rates.create', ['user' => $user]);
     }
 
     /**
@@ -34,7 +34,9 @@ class UserRateController extends Controller
     public function store(StoreRateRequest $request, User $user): RedirectResponse
     {
         try {
-            $this->rateService->handleSave(new Rate, $request->safe());
+            $this->rateService->handleSave(new Rate, $request->safe()->merge([
+                'user_id' => $user->id
+            ]));
             $this->flash(__('messages.rate.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

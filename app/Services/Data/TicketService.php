@@ -5,7 +5,7 @@ namespace App\Services\Data;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ValidatedInput;
 use App\Enums\TicketStatusEnum;
-use App\Models\{Comment, Ticket, TicketComment, TicketFile};
+use App\Models\{Comment, Ticket};
 use App\Services\FileService;
 
 class TicketService
@@ -49,10 +49,7 @@ class TicketService
     public function handleUploadFiles(Ticket $ticket, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            TicketFile::create([
-                'ticket_id' => $ticket->id,
-                'file_id' => (new FileService)->handleUpload($uploadedFile, 'tasks/files')->id
-            ]);
+            $ticket->files()->save((new FileService)->handleUpload($uploadedFile, 'tasks/files'));
         }
     }
 
@@ -61,10 +58,7 @@ class TicketService
      */
     public function handleSaveComment(Ticket $ticket, Comment $comment): void
     {
-        TicketComment::create([
-            'ticket_id' => $ticket->id,
-            'comment_id' => $comment->id
-        ]);
+        $ticket->comments()->save($comment);
     }
 
     /**

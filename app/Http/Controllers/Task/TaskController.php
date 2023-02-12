@@ -33,7 +33,7 @@ class TaskController extends Controller
      */
     public function create(): View
     {
-        return view('tasks.create', ['projects' => Project::all(), 'users' => User::all(), 'task' => new Task]);
+        return view('tasks.create');
     }
 
     /**
@@ -58,7 +58,7 @@ class TaskController extends Controller
      */
     public function show(Task $task): View
     {
-        return view('tasks.show', ['task' => $task, 'comment' => new Comment]);
+        return view('tasks.show', ['task' => $task]);
     }
 
     /**
@@ -66,7 +66,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task): View
     {
-        return view('tasks.edit', ['task' => $task, 'projects' => Project::all(), 'users' => User::all()]);
+        return view('tasks.edit', ['task' => $task]);
     }
 
     /**

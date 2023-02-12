@@ -7,14 +7,14 @@
         <!-- Content Header -->
         <div class="p-3 mb-3" style="background-color:white;">
             <a href="{{ route('tickets.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
-            <a href="{{ route('tickets.edit', $ticket->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
-            @include('tickets.partials.buttons', ['ticket' => $ticket, 'buttonSize' => 'sm', 'buttonText' => true, 'redirect' => 'tickets'])
+            <a href="{{ route('tickets.edit', $ticket) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
+            @include('tickets.partials.buttons', ['ticket' => $ticket, 'buttonSize' => 'sm'])
         </div>
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
                 <!-- Message -->
-                @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
                 <!-- Content -->
                 <div class="row">
                     <div class="col-md-5">
@@ -51,10 +51,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <span class="d-block">Project: <b><a href="{{ route('projects.show', $ticket->project->id) }}">{{ $ticket->project->name }}</a></b></span>
-                                <span class="d-block">Client: <b><a href="{{ route('clients.show', $ticket->project->client->id) }}">{{ $ticket->project->client->name }}</a></b></span>
-                                <span class="d-block">Reporter: <b><a href="{{ route('users.show', $ticket->reporter->id) }}">{{ $ticket->reporter->full_name }}</a></b></span>
-                                @if($ticket->assignee_id)<span class="d-block">Assigned: <b><a href="{{ route('users.show', $ticket->assignee->id) }}">{{ $ticket->assignee->full_name }}</a></b></span>@endif
+                                <span class="d-block">Project: <b><a href="{{ route('projects.show', $ticket->project) }}">{{ $ticket->project->name }}</a></b></span>
+                                <span class="d-block">Client: <b><a href="{{ route('clients.show', $ticket->project->client) }}">{{ $ticket->project->client->name }}</a></b></span>
+                                <span class="d-block">Reporter: <b><a href="{{ route('users.show', $ticket->reporter) }}">{{ $ticket->reporter->full_name }}</a></b></span>
+                                @if($ticket->assignee_id)<span class="d-block">Assigned: <b><a href="{{ route('users.show', $ticket->assignee) }}">{{ $ticket->assignee->full_name }}</a></b></span>@endif
                                 <span class="d-block">Status: <b>@include('tickets.partials.status', ['status' => $ticket->status])</b></span>
                                 <span class="d-block">Priority: <b class="text-{{ $ticket->priority == App\Enums\TicketPriorityEnum::urgent ? 'danger' : 'body' }}">@include('tickets.partials.priority', ['priority' => $ticket->priority])</b></span>
                                 <span class="d-block">Type: <b>@include('tickets.partials.type', ['type' => $ticket->type])</b></span>
@@ -72,15 +72,15 @@
                         <div class="card card-primary card-outline">
                             <div class="card-header">Files</div>
                             <div class="card-body">
-                                @include('tickets.files.upload', $ticket)
+                                @include('tickets.files.upload')
                                 <hr>
-                                @include('files.list', ['files' => $ticket->files])
+                                @include('site.files.list', ['files' => $ticket->files])
                             </div>
                         </div>
                         <div class="card card-primary card-outline">
                             <div class="card-header">Comments</div>
                             <div class="card-body">
-                                @include('site.comments.list', ['comments' => $ticket->comments, 'comment' => $comment, 'createFormPartial' => 'tickets.comments.create', 'editFormPartial' => 'tickets.comments.edit'])
+                                @include('site.comments.list', ['comments' => $ticket->comments, 'comment' => null, 'createFormPartial' => 'tickets.comments.create', 'editFormPartial' => 'tickets.comments.edit'])
                             </div>
                         </div>
                     </div>

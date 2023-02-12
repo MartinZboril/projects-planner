@@ -1,9 +1,9 @@
 <div class="table-responsive">
-    <table id="@if($tickets->count() > 0){{ $id }}@endif" class="table table-bordered table-striped">
+    <table id="{{ $tickets->count() > 0 ?? $id }}" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>Subject</th>
-                @if(in_array('project', $display))<th>Project</th>@endif
+                <th>Project</th>
                 <th>Reporter</th>
                 <th>Assignee</th>
                 <th>Date</th>
@@ -17,25 +17,19 @@
         <tbody>
             @forelse ($tickets as $ticket)
                 <tr>
-                    <td><a href="{{ $redirect == 'projects' ? route('projects.tickets.show', ['project' => $project->id, 'ticket' => $ticket->id]) : route('tickets.show', $ticket->id) }}">{{ $ticket->subject }}</a></td>
-                    @if(in_array('project', $display))<td><a href="{{ route('projects.show', $ticket->project->id) }}">{{ $ticket->project->name }}</a></td>@endif
+                    <td><a href="{{ route('tickets.show', $ticket) }}">{{ $ticket->subject }}</a></td>
+                    <td><a href="{{ route('projects.show', $ticket->project) }}">{{ $ticket->project->name }}</a></td>
                     <td>@include('site.partials.user', ['user' => $ticket->reporter])</td>
-                    <td>
-                        @if($ticket->assignee)                                            
-                            @include('site.partials.user', ['user' => $ticket->assignee])
-                        @else
-                            NaN
-                        @endif
-                    </td>
+                    <td>@include('site.partials.user', ['user' => $ticket->assignee ?? null])</td>
                     <td>{{ $ticket->created_at->format('d.m.Y') }}</td>
                     <td>@include('tickets.partials.status', ['status' => $ticket->status])</td>
                     <td>@include('tickets.partials.type', ['type' => $ticket->type])</td>
                     <td><span class="text-{{ $ticket->priority == App\Enums\TicketPriorityEnum::urgent ? 'danger font-weight-bold' : 'body' }}">@include('tickets.partials.priority', ['priority' => $ticket->priority])</span></td>
                     <td><span class="text-{{ $ticket->overdue ? 'danger' : 'body' }}">{{ $ticket->due_date->format('d.m.Y') }}</span></td>
                     <td>
-                        <a href="{{ $redirect == 'projects' ? route('projects.tickets.edit', ['project' => $project->id, 'ticket' => $ticket->id]) : route('tickets.edit', $ticket->id) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
-                        <a href="{{ $redirect == 'projects' ? route('projects.tickets.show', ['project' => $project->id, 'ticket' => $ticket->id]) : route('tickets.show', $ticket->id) }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
-                        @include('tickets.partials.buttons', ['ticket' => $ticket, 'buttonSize' => 'xs', 'buttonText' => false, 'redirect' => 'tickets'])               
+                        <a href="{{ route('tickets.edit', $ticket) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="{{ route('tickets.show', $ticket) }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
+                        @include('tickets.partials.buttons', ['buttonSize' => 'xs', 'hideButtonText' => ''])               
                     </td>
                 </tr>
             @empty

@@ -15,7 +15,7 @@
                 <form action="{{ route('users.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('POST')
-                    @include('users.forms.fields', ['user' => $user, 'type' => 'create'])  
+                    @include('users.forms.fields', ['user' => null, 'type' => 'create'])  
                 </form>     
             </div>
         </section>

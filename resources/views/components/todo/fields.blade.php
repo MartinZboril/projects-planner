@@ -1,25 +1,25 @@
 <div class="row">
     <div class="col-md-7">
         <div class="card card-primary card-outline">
-            <div class="card-header">{{ $type == 'create' ? 'Create' : 'Edit'}} ToDo</div>
+            <div class="card-header">{{ $type === 'create' ? 'Create' : 'Edit'}} ToDo</div>
             <div class="card-body">
                 <div class="form-group required">
                     <label for="name" class="control-label">Name</label>
-                    <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" placeholder="name" value="{{ old('name', $todo->name) }}" autocomplete="off">
+                    <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" placeholder="name" value="{{ old('name', $todo->name ?? null) }}" autocomplete="off">
                     @error('name')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group required">
                     <label for="due_date" class="control-label">Deadline</label>
-                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', $todo->due_date ? $todo->due_date->format('Y-m-d') : null) }}" autocomplete="off">
+                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', isset($todo->due_date) ? $todo->due_date->format('Y-m-d') : null) }}" autocomplete="off">
                     @error('due_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group">
                     <div class="custom-control custom-switch">
-                        <input type="checkbox" name="is_finished" class="custom-control-input @error('is_finished') is-invalid @enderror" id="is-finished" value="1" @checked(old('is_finished', $todo->is_finished))>
+                        <input type="checkbox" name="is_finished" class="custom-control-input @error('is_finished') is-invalid @enderror" id="is-finished" value="1" @checked(old('is_finished', $todo->is_finished ?? null))>
                         <label class="custom-control-label" for="is-finished">Finished</label>
                     </div>
                     @error('is_finished')
@@ -28,7 +28,7 @@
                 </div>                                   
                 <div class="form-group">
                     <label for="description">Description</label>
-                    <textarea name="description" class="form-control summernote @error('description') is-invalid @enderror" id="description" cols="30" rows="10" placeholder="description">{{ old('description', $todo->description) }}</textarea>
+                    <textarea name="description" class="form-control summernote @error('description') is-invalid @enderror" id="description" cols="30" rows="10" placeholder="description">{{ old('description', $todo->description ?? null) }}</textarea>
                     @error('description')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -44,7 +44,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <input type="submit" class="btn btn-sm btn-primary mr-1" value="Save"> or <a href="{{ route('tasks.show', $task->id) }}" class="cancel-btn">Close</a></span>
+                <input type="submit" class="btn btn-sm btn-primary mr-1" value="Save"> or <a href="{{ route('tasks.show', $type === 'create' ? $task : $todo->task) }}" class="cancel-btn">Close</a></span>
             </div>
         </div>
     </div>

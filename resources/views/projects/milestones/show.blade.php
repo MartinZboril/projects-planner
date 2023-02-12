@@ -12,7 +12,7 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Message -->
-                @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
                 <!-- Content -->
                 <div class="row">
                     <div class="col-md-5">
@@ -35,7 +35,7 @@
                         <div class="card card-primary card-outline">
                             <div class="card-header">Files</div>
                             <div class="card-body">
-                                @include('files.list', ['files' => $milestone->files, 'parentId' => $milestone->id, 'parentType' => 'milestone'])
+                                @include('site.files.list', ['files' => $milestone->files, 'parentId' => $milestone->id, 'parentType' => 'milestone'])
                             </div>
                         </div>
                         <div class="card card-primary card-outline">
@@ -54,7 +54,7 @@
                         <div class="card card-primary card-outline">
                             <div class="card-header">Comments</div>
                             <div class="card-body">
-                                @include('site.comments.list', ['comments' => $milestone->comments, 'comment' => $comment, 'createFormPartial' => 'projects.milestones.comments.create', 'editFormPartial' => 'projects.milestones.comments.edit'])
+                                @include('site.comments.list', ['comments' => $milestone->comments, 'comment' => null, 'createFormPartial' => 'projects.milestones.comments.create', 'editFormPartial' => 'projects.milestones.comments.edit'])
                             </div>
                         </div>
                     </div>

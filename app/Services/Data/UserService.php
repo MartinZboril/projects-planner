@@ -4,7 +4,7 @@ namespace App\Services\Data;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\{Str, ValidatedInput};
-use App\Models\{Rate, User};
+use App\Models\User;
 use App\Services\FileService;
 
 class UserService
@@ -38,12 +38,11 @@ class UserService
         }
 
         if ($user->rates()->count() === 0) {
-            $inputs->user_id = $user->id;
-            $inputs->name = $inputs->rate_name;
-            $inputs->is_active = true;
-            $inputs->value = $inputs->rate_value;
-    
-            (new RateService)->handleSave(new Rate, $inputs);
+            $user->rates()->create([
+                'name' => $inputs->rate_name,
+                'is_active' => true,
+                'value' => $inputs->rate_value,
+            ]);
         }
 
         return $user;

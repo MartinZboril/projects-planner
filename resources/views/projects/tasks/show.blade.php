@@ -14,7 +14,7 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Message -->
-                @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
                 <!-- Content -->
                 <div class="row">
                     <div class="col-md-5">
@@ -87,13 +87,13 @@
                             <div class="card-body">
                                 @include('projects.tasks.files.upload', ['project' => $project, 'task' => $task])
                                 <hr>
-                                @include('files.list', ['files' => $task->files])
+                                @include('site.files.list', ['files' => $task->files])
                             </div>
                         </div>
                         <div class="card card-primary card-outline">
                             <div class="card-header">Comments</div>
                             <div class="card-body">
-                                @include('site.comments.list', ['comments' => $task->comments, 'comment' => $comment, 'createFormPartial' => 'projects.tasks.comments.create', 'editFormPartial' => 'projects.tasks.comments.edit'])
+                                @include('site.comments.list', ['comments' => $task->comments, 'comment' => null, 'createFormPartial' => 'projects.tasks.comments.create', 'editFormPartial' => 'projects.tasks.comments.edit'])
                             </div>
                         </div>
                     </div>

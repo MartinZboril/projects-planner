@@ -41,8 +41,6 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/tickets', App\Http\Controllers\Dashboard\TicketDashboardController::class)->name('tickets');
         });
     });
-    // Files
-    Route::post('/files/upload', App\Http\Controllers\UploadFileController::class)->name('files.upload');
     // Notes
     Route::patch('notes/{note}/mark', App\Http\Controllers\Note\NoteMarkController::class)->name('notes.mark');
     Route::resource('notes', App\Http\Controllers\Note\NoteController::class)

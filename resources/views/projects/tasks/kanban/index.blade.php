@@ -11,7 +11,7 @@
         <!-- Main content -->
         <section class="content">
             <!-- Message -->
-            @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+            <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
             <div class="container-fluid">
                 <div class="card-header p-0 pb-2">
                     @include('projects.partials.header', ['active' => 'kanban'])

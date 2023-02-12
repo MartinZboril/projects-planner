@@ -15,7 +15,7 @@
                     @include('projects.partials.header', ['active' => 'project'])
                 </div>
                 <!-- Message -->
-                @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
                 <!-- Content -->                
                 <div class="row">
                     <div class="col-md-4">
