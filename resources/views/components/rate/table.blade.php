@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table id="@if($user->rates->count() > 0){{ 'rates-table' }}@endif" class="table table-bordered table-striped">
+    <table id="{{ $rates->count() == 0 ?: $tableId }}" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>#</th>
@@ -10,7 +10,7 @@
             </tr>
         </thead>
         <tbody>
-            @forelse ($user->rates as $rate)
+            @forelse ($rates as $rate)
                 <tr>
                     <th>
                         @if ($rate->note)
@@ -19,11 +19,11 @@
                             #
                         @endif
                     </th>
-                    <td><a href="{{ route('users.rates.edit', ['user' => $user->id, 'rate' => $rate->id]) }}">{{ $rate->name }}</a></td>
+                    <td><a href="{{ route($editFormRouteName, ['user' => $rate->user, 'rate' => $rate]) }}">{{ $rate->name }}</a></td>
                     <td>{{ $rate->is_active ? 'Yes' : 'No' }}</td>
                     <td>@include('site.partials.amount', ['value' => $rate->value])</td>
                     <td>                                                    
-                        <a href="{{ route('users.rates.edit', ['user' => $user->id, 'rate' => $rate->id]) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="{{ route($editFormRouteName, ['user' => $rate->user, 'rate' => $rate]) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
                     </td>
                 </tr>
             @empty
@@ -34,3 +34,12 @@
         </tbody>
     </table>  
 </div>
+
+@push('scripts')
+    <script>
+        $(function () {
+            $("#{{ $tableId }}").DataTable();
+            $('[data-toggle="popover"]').popover();
+        });
+    </script>
+@endpush

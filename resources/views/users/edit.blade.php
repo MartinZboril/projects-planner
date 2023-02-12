@@ -15,7 +15,7 @@
                 <form action="{{ route('users.update', $user) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
-                    @include('users.forms.fields', ['user' => $user, 'type' => 'edit'])
+                    <x-user.fields :$user type="edit" />
                 </form>     
             </div>
         </section>
