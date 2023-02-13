@@ -21,6 +21,7 @@ class Ticket extends Model
     protected $appends = [
         'overdue',
         'assigned',
+        'urgent',
     ];
 
     protected $casts = [
@@ -99,5 +100,10 @@ class Ticket extends Model
     public function getAssignedAttribute(): bool
     {
         return $this->assignee ? true : false;
+    }
+
+    public function getUrgentAttribute(): bool
+    {
+        return $this->priority === TicketPriorityEnum::urgent;
     }
 }

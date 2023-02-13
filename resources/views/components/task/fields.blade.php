@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-7">
         <div class="card card-primary card-outline">
-            <div class="card-header">{{ $type === 'create' ? 'Edit' : 'Create' }} task</div>
+            <div class="card-header">{{ $type === 'edit' ? 'Edit' : 'Create' }} Task</div>
             <div class="card-body">
                 <div class="form-group required">
                     <label for="name" class="control-label">Name</label>

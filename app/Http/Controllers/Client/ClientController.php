@@ -58,7 +58,7 @@ class ClientController extends Controller
      */
     public function show(Client $client): View
     {
-        return view('clients.detail', ['client' => $client]);
+        return view('clients.show', ['client' => $client]);
     }
 
     /**

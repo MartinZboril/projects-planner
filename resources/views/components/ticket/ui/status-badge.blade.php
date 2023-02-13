@@ -1,3 +1,7 @@
-<div>
-    <!-- Breathing in, I calm body and mind. Breathing out, I smile. - Thich Nhat Hanh -->
-</div>
+@if ($text)
+    {{ $title }}
+@else
+    <span class="badge badge-{{ $background }} ml-2" style='font-size:14px;'>
+        {{ $title }}
+    </span>    
+@endif

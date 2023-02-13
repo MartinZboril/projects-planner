@@ -28,9 +28,9 @@
                         @endif
                     </td>
                     <td>{{ $ticket->created_at->format('d.m.Y') }}</td>
-                    <td>@include('tickets.partials.status', ['status' => $ticket->status])</td>
-                    <td>@include('tickets.partials.type', ['type' => $ticket->type])</td>
-                    <td><span class="text-{{ $ticket->priority == App\Enums\TicketPriorityEnum::urgent ? 'danger font-weight-bold' : 'body' }}">@include('tickets.partials.priority', ['priority' => $ticket->priority])</span></td>
+                    <td><x-ticket.ui.status-badge :text="true" :status="$ticket->status" /></td>
+                    <td><x-ticket.ui.type :type="$ticket->type" /></td>
+                    <td><span class="text-{{ $ticket->urgent ? 'danger font-weight-bold' : 'body' }}"><x-ticket.ui.priority :priority="$ticket->priority" /></span></td>
                     <td><span class="text-{{ $ticket->overdue ? 'danger' : 'body' }}">{{ $ticket->due_date->format('d.m.Y') }}</span></td>
                     <td>
                         <a href="{{ route('projects.tickets.edit', ['project' => $project, 'ticket' => $ticket]) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>

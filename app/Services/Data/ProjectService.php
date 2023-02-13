@@ -22,7 +22,7 @@ class ProjectService
             ['id' => $project->id],
             [
                 'status' => $project->status_id ?? ProjectStatusEnum::active,
-                'project_id' => $inputs->project_id,
+                'client_id' => $inputs->client_id,
                 'name' => $inputs->name,
                 'start_date' => $inputs->start_date,
                 'due_date' => $inputs->due_date,
