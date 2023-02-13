@@ -15,17 +15,9 @@
                 <form action="{{ route('notes.store') }}" method="post">
                     @csrf
                     @method('POST')
-                    @include('notes.forms.fields', ['note' => $note, 'type' => 'create'])
+                    <x-note.fields :note="null" type="create" />
                 </form>       
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#content').summernote();
-        });
-    </script>
-@endpush
