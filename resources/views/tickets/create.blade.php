@@ -15,7 +15,7 @@
                 <form action="{{ route('tickets.store') }}" method="post">
                     @csrf
                     @method('POST')
-                    @include('tickets.forms.fields', ['ticket' => null, 'type' => 'create'])
+                    <x-ticket.fields :ticket="null" type="create" />
                 </form>         
             </div>
         </section>

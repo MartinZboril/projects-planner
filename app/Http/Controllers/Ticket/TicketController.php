@@ -33,7 +33,7 @@ class TicketController extends Controller
      */
     public function create(): View
     {
-        return view('tickets.create', ['projects' => Project::all(), 'users' => User::all()]);
+        return view('tickets.create');
     }
 
     /**

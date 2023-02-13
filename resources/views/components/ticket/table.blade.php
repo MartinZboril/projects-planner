@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table id="{{ $tickets->count() > 0 ?? $id }}" class="table table-bordered table-striped">
+    <table id="{{ $tickets->count() == 0 ?: $tableId }}" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>Subject</th>
@@ -19,8 +19,8 @@
                 <tr>
                     <td><a href="{{ route('tickets.show', $ticket) }}">{{ $ticket->subject }}</a></td>
                     <td><a href="{{ route('projects.show', $ticket->project) }}">{{ $ticket->project->name }}</a></td>
-                    <td>@include('site.partials.user', ['user' => $ticket->reporter])</td>
-                    <td>@include('site.partials.user', ['user' => $ticket->assignee ?? null])</td>
+                    <td><x-site.ui.user-icon :user="$ticket->reporter" /></td>
+                    <td><x-site.ui.user-icon :user="$ticket->assignee ?? null" /></td>
                     <td>{{ $ticket->created_at->format('d.m.Y') }}</td>
                     <td>@include('tickets.partials.status', ['status' => $ticket->status])</td>
                     <td>@include('tickets.partials.type', ['type' => $ticket->type])</td>
@@ -40,3 +40,12 @@
         </tbody>
     </table>  
 </div>
+
+@push('scripts')
+    <script>
+        $(function () {
+            $("#{{ $tableId }}").DataTable();
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+@endpush

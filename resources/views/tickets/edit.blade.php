@@ -15,47 +15,9 @@
                 <form action="{{ route('tickets.update', $ticket) }}" method="post">
                     @csrf
                     @method('PATCH')
-                    @include('tickets.forms.fields', ['ticket' => $ticket, 'type' => 'edit'])
+                    <x-ticket.fields :$ticket type="edit" />
                 </form>  
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#project-id').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select project'
-            });
-
-            $('#milestone-id').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select milestone'
-            });
-
-            $('#assignee-id').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select assignee',
-            });
-
-            $('#status').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select status'
-            });
-
-            $('#type').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select type'
-            });
-
-            $('#priority').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select priority'
-            });
-
-            $('#message').summernote();
-        });
-    </script>
-@endpush
