@@ -1,5 +1,7 @@
 <div class="card card-primary card-outline">
-    <div class="card-header">Comments</div>
+    @if($displayHeader)
+        <div class="card-header">Comments</div>
+    @endif
     <div class="card-body">
         <div class="timeline">
             <x-comment.create :$storeFormRoute />

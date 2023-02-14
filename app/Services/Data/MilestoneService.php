@@ -3,7 +3,7 @@
 namespace App\Services\Data;
 
 use Illuminate\Support\ValidatedInput;
-use App\Models\{Comment, Milestone, MilestoneComment};
+use App\Models\{Comment, Milestone};
 
 class MilestoneService
 {
@@ -31,10 +31,7 @@ class MilestoneService
      */
     public function handleSaveComment(Milestone $milestone, Comment $comment): void
     {
-        MilestoneComment::create([
-            'milestone_id' => $milestone->id,
-            'comment_id' => $comment->id
-        ]);
+        $milestone->comments()->save($comment);
     }
 
     /**

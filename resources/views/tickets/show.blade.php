@@ -22,8 +22,8 @@
                         <x-activity-feed.card />
                     </div>
                     <div class="col-md-7">
-                        <x-file.card :upload-form-route="route('tickets.files.upload', $ticket)" :files="$ticket->files" />
-                        <x-comment.card :comments="$ticket->comments" :parent="$ticket" :store-form-route="route('tickets.comments.store', $ticket)" update-form-route-name="tickets.comments.update" /> 
+                        <x-file.card :upload-form-route="route('tickets.files.upload', $ticket)" :files="$ticket->files" :display-header="true" />
+                        <x-comment.card :comments="$ticket->comments" :parent="$ticket" :store-form-route="route('tickets.comments.store', $ticket)" update-form-route-name="tickets.comments.update" :display-header="true" /> 
                     </div>
                 </div> 
             </div>

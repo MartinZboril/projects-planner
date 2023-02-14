@@ -2,10 +2,10 @@
 
 namespace App\Services\Data;
 
-use App\Services\FileService;
-use App\Models\{CommentFile, Comment};
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ValidatedInput;
+use App\Models\Comment;
+use App\Services\FileService;
 
 class CommentService
 {
@@ -35,8 +35,7 @@ class CommentService
     private function storeFiles(Comment $comment, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            $fileId = ((new FileService)->handleUpload($uploadedFile, 'comments'))->id;
-            CommentFile::create(['comment_id' => $comment->id, 'file_id' => $fileId]);
+            $comment->files()->save((new FileService)->handleUpload($uploadedFile, 'comments'));
         }
     }
 }

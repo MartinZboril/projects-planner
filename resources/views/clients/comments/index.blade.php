@@ -14,14 +14,10 @@
                 <div class="card-header p-0 pb-2 mb-2">
                     <x-client.ui.header :$client active="comment" />
                 </div>          
-                <div class="card card-primary card-outline">
-                    <div class="card-body">
-                        <!-- Message -->
-                        <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                        <!-- Content -->
-                        @include('site.comments.list', ['comments' => $client->comments, 'comment' => null, 'createFormPartial' => 'clients.comments.create', 'editFormPartial' => 'clients.comments.edit'])
-                    </div>
-                </div>
+                <!-- Message -->
+                <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
+                <!-- Content -->
+                <x-comment.card :comments="$client->comments" :parent="$client" :store-form-route="route('clients.comments.store', $client)" update-form-route-name="clients.comments.update" :display-header="false" /> 
             </div>
         </section>
     </div>

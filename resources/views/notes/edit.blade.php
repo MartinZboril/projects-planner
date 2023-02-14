@@ -15,7 +15,7 @@
                 <form action="{{ route('notes.update', $note) }}" method="post">
                     @csrf
                     @method('PATCH')
-                    <x-note.fields :$note type="edit" />
+                    <x-note.fields :$note :close-route="route('notes.index')" type="edit" />
                 </form>      
             </div>
         </section>

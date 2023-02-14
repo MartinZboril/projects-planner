@@ -4,7 +4,7 @@ namespace App\Services\Data;
 
 use Illuminate\Support\ValidatedInput;
 use App\Enums\ProjectStatusEnum;
-use App\Models\{Comment, Note, Project, ProjectComment, ProjectFile, ProjectNote};
+use App\Models\{Comment, Note, Project};
 use App\Services\FileService;
 
 class ProjectService
@@ -43,10 +43,7 @@ class ProjectService
     public function handleUploadFiles(Project $project, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            ProjectFile::create([
-                'project_id' => $project->id,
-                'file_id' => (new FileService)->handleUpload($uploadedFile, 'projects/files')->id
-            ]);
+            $project->files()->save((new FileService)->handleUpload($uploadedFile, 'projects/files'));
         }
     }
 
@@ -55,10 +52,7 @@ class ProjectService
      */
     public function handleSaveComment(Project $project, Comment $comment): void
     {
-        ProjectComment::create([
-            'project_id' => $project->id,
-            'comment_id' => $comment->id
-        ]);
+        $project->comments()->save($comment);
     }
 
     /**
@@ -66,10 +60,7 @@ class ProjectService
      */
     public function handleSaveNote(Project $project, Note $note): void
     {
-        ProjectNote::create([
-            'project_id' => $project->id,
-            'note_id' => $note->id
-        ]);
+        $project->notes()->save($note);
     }
 
     /**

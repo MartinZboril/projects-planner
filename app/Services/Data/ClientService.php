@@ -4,7 +4,7 @@ namespace App\Services\Data;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\ValidatedInput;
-use App\Models\{Client, ClientComment, ClientFile, ClientNote, Comment, Note};
+use App\Models\{Client, Comment, Note};
 use App\Services\FileService;
 
 class ClientService
@@ -51,10 +51,7 @@ class ClientService
     public function handleUploadFiles(Client $client, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            ClientFile::create([
-                'client_id' => $client->id,
-                'file_id' => (new FileService)->handleUpload($uploadedFile, 'clients/files')->id
-            ]);
+            $client->files()->save((new FileService)->handleUpload($uploadedFile, 'clients/files'));
         }
     }
     
@@ -63,10 +60,7 @@ class ClientService
      */        
     public function handleSaveComment(Client $client, Comment $comment): void
     {
-        ClientComment::create([
-            'client_id' => $client->id,
-            'comment_id' => $comment->id
-        ]);
+        $client->comments()->save($comment);
     }
 
     /**
@@ -74,10 +68,7 @@ class ClientService
      */
     public function handleSaveNote(Client $client, Note $note): void
     {
-        ClientNote::create([
-            'client_id' => $client->id,
-            'note_id' => $note->id
-        ]);
+        $client->comments()->save($note);
     }
 
     /**

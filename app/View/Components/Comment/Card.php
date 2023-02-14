@@ -10,13 +10,15 @@ class Card extends Component
     public $parent;
     public $storeFormRoute;
     public $updateFormRouteName;
+    public $displayHeader;
 
-    public function __construct($comments, $parent, $storeFormRoute, $updateFormRouteName)
+    public function __construct($comments, $parent, $storeFormRoute, $updateFormRouteName, $displayHeader)
     {
         $this->comments = $comments;
         $this->parent = $parent;
         $this->storeFormRoute = $storeFormRoute;
         $this->updateFormRouteName = $updateFormRouteName;
+        $this->displayHeader = $displayHeader;
     }
 
     public function render()
