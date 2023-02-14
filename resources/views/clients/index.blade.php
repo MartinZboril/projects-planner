@@ -19,18 +19,10 @@
                         <!-- Message -->
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
                         <!-- Table -->
-                        @include('clients.partials.table', ['clients' => $clients])
+                        <x-client.table :$clients table-id="clients-table" />
                     </div>
                 </div>            
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(function () {
-            $("#clients-table").DataTable();
-        });
-    </script>
-@endpush

@@ -1,5 +1,7 @@
 <div class="card card-primary card-outline">
-    <div class="card-header">Files</div>
+    @if($displayHeader)
+        <div class="card-header">Files</div>
+    @endif
     <div class="card-body">
         <x-file.uploader :$uploadFormRoute />
         <hr>

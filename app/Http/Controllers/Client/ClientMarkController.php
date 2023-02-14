@@ -24,12 +24,12 @@ class ClientMarkController extends Controller
     public function __invoke(Client $client): RedirectResponse
     {
         try {
-            $client = $this->handleMark($client);
+            $client = $this->clientService->handleMark($client);
             $this->flash(__('messages.client.' . ($client->is_marked ? 'mark' : 'unmark')), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
-        return redirect()->route('clients.route.index', $client);
+        return redirect()->route('clients.index', $client);
     }
 }

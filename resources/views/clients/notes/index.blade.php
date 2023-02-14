@@ -6,13 +6,13 @@
     <div class="content-wrapper">
         <!-- Content Header -->
         <div class="p-3 mb-3" style="background-color:white;">
-            @include('clients.partials.action', ['client' => $client])
+            <x-client.ui.actions :$client />
         </div>
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
                 <div class="card-header p-0 pb-2 mb-2">
-                    @include('clients.partials.header', ['active' => 'note'])
+                    <x-client.ui.header :$client active="note" />
                 </div>          
                 <div class="card card-primary card-outline">
                     <div class="card-header">
