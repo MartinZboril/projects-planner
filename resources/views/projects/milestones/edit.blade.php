@@ -15,22 +15,9 @@
                 <form action="{{ route('projects.milestones.update', ['project' => $project, 'milestone' => $milestone]) }}" method="post">
                     @csrf
                     @method('PATCH')
-                    @include('projects.milestones.forms.fields', ['project' => $project, 'milestone' => $milestone, 'type' => 'edit'])
+                    <x-milestone.fields :$project :$milestone type="edit" />  
                 </form>     
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#owner-id').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select owner'
-            });
-
-            $('#description').summernote();
-        });
-    </script>
-@endpush

@@ -17,7 +17,7 @@
                 <!-- Message -->
                 <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
                 <!-- Content -->
-                <x-comment.card :comments="$client->comments" :parent="$client" :store-form-route="route('clients.comments.store', $client)" update-form-route-name="clients.comments.update" :display-header="false" /> 
+                <x-comment.card :comments="$client->comments" :parent="[$client]" :store-form-route="route('clients.comments.store', $client)" update-form-route-name="clients.comments.update" :display-header="false" /> 
             </div>
         </section>
     </div>

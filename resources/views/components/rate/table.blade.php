@@ -21,7 +21,7 @@
                     </th>
                     <td><a href="{{ route($editFormRouteName, ['user' => $rate->user, 'rate' => $rate]) }}">{{ $rate->name }}</a></td>
                     <td>{{ $rate->is_active ? 'Yes' : 'No' }}</td>
-                    <td>@include('site.partials.amount', ['value' => $rate->value])</td>
+                    <td><x-site.amount :value="$rate->amount" /></td>
                     <td>                                                    
                         <a href="{{ route($editFormRouteName, ['user' => $rate->user, 'rate' => $rate]) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
                     </td>

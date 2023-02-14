@@ -1,9 +1,9 @@
 <div class="table-responsive">
-    <table id="@if($timers->count() > 0){{ 'timesheets-table' }}@endif" class="table table-bordered table-striped">
+    <table id="{{ $timers->count() == 0 ?: $tableId }}" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>#</th>
-                @if(in_array('project', $display))<th>Project</th>@endif
+                <th>Project</th>
                 <th>Type</th>
                 <th>User</th>
                 <th>Total time (Hours)</th>
@@ -24,13 +24,13 @@
                             #
                         @endif
                     </th>
-                    @if(in_array('project', $display))<td><a href="{{ route('projects.show', $timer->project->id) }}">{{ $timer->project->name }}</a></td>@endif
-                    <td><a href="{{ route('users.rates.edit', ['user' => $timer->user->id, 'rate' => $timer->rate->id]) }}">{{ $timer->rate->name }}</a></td>
-                    <td>@include('site.partials.user', ['user' => $timer->user])</td>
+                    <td><a href="{{ route('projects.show', $timer->project) }}">{{ $timer->project->name }}</a></td>
+                    <td><a href="{{ route('users.rates.edit', ['user' => $timer->user, 'rate' => $timer->rate]) }}">{{ $timer->rate->name }}</a></td>
+                    <td><x-site.ui.user-icon :user="$timer->user" /></td>
                     <td>{{ $timer->until ? $timer->total_time : 'N/A' }}</td>
                     <td>
                         @if ($timer->until)
-                            @include('site.partials.amount', ['value' => $timer->amount])
+                            <x-site.amount :value="$timer->amount" />
                         @else
                             N/A
                         @endif  
@@ -40,7 +40,7 @@
                     <td>{{ $timer->since->format('d.m.Y') }}</td>
                     <td>
                         @if($timer->until)
-                            <a href="{{ route('projects.timers.edit', ['project' => $timer->project->id, 'timer' => $timer->id]) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                            <a href="{{ route('projects.timers.edit', ['project' => $timer->project, 'timer' => $timer]) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
                         @else
                             N/A
                         @endif
@@ -54,3 +54,13 @@
         </tbody>
     </table>  
 </div>
+
+@push('scripts')
+    <script>
+        $(function () {
+            $("#{{ $tableId }}").DataTable();
+            $('[data-toggle="tooltip"]').tooltip();
+            $('[data-toggle="popover"]').popover();
+        });
+    </script>
+@endpush

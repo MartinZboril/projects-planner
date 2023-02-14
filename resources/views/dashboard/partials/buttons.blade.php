@@ -8,7 +8,7 @@
         @break
 
     @case('project')
-        @include('projects.partials.buttons', ['project' => $item, 'buttonSize' => 'xs', 'buttonText' => false])
+        @include('projects.partials.buttons', ['project' => $item, 'buttonSize' => 'xs', 'hideButtonText' => ''])
         @break
         
     @case('task')

@@ -32,17 +32,8 @@
                                 {!! $milestone->description !!}
                             </div>
                         </div>
-                        <div class="card card-primary card-outline">
-                            <div class="card-header">Files</div>
-                            <div class="card-body">
-                                @include('site.files.list', ['files' => $milestone->files, 'parentId' => $milestone->id, 'parentType' => 'milestone'])
-                            </div>
-                        </div>
-                        <div class="card card-primary card-outline">
-                            <div class="card-header">Activity Feed</div>
-                            <div class="card-body">
-                            </div>
-                        </div>
+                        <x-file.card :upload-form-route="route('projects.milestones.files.upload', $milestone)" :files="$milestone->files" :display-header="true" />
+                        <x-activity-feed.card />
                     </div>
                     <div class="col-md-7">
                         <div class="card card-primary card-outline">
@@ -51,12 +42,7 @@
                                 @include('tasks.partials.table', ['id' => 'tasks-table', 'tasks' => $milestone->tasks, 'display' => [], 'redirect' => 'projects'])       
                             </div>
                         </div>
-                        <div class="card card-primary card-outline">
-                            <div class="card-header">Comments</div>
-                            <div class="card-body">
-                                @include('site.comments.list', ['comments' => $milestone->comments, 'comment' => null, 'createFormPartial' => 'projects.milestones.comments.create', 'editFormPartial' => 'projects.milestones.comments.edit'])
-                            </div>
-                        </div>
+                        <x-comment.card :comments="$milestone->comments" :parent="['project' => $milestone->project, 'milestone' => $milestone]" :store-form-route="route('projects.milestones.comments.store', ['project' => $milestone->project, 'milestone' => $milestone])" update-form-route-name="projects.milestones.comments.update" :display-header="true" /> 
                     </div>
                 </div>         
             </div>

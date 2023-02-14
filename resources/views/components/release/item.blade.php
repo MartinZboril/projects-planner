@@ -1,4 +1,4 @@
-<div class="time-label">
+<div class="time-label ml-2">
     <span class="bg-{{ $release['background'] ? $release['background'] : 'info' }}">{{ $key }}</span>
 </div>
 <div>

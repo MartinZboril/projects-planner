@@ -2,7 +2,7 @@
     <div class="card-body">
         <b>{{ $title }}</b> <a class="float-right {{ $colour }}">
             @if (!empty($amount))
-                @include('site.partials.amount', ['value' => $value])
+                <x-site.amount :$value />
             @else
                 {{ $value }}                
             @endif

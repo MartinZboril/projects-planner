@@ -9,7 +9,7 @@
             </span>
             <span class="info-box-number">
                 @if (!empty($amount))
-                    @include('site.partials.amount', ['value' => $value])
+                    <x-site.amount :$value />
                 @else
                     {{ $value }}                
                 @endif

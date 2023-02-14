@@ -6,13 +6,13 @@
     <div class="content-wrapper">
         <!-- Content Header -->
         <div class="p-3 mb-3" style="background-color:white;">
-            @include('projects.partials.action', ['project' => $project])
+            <x-project.ui.actions :$project />
         </div>
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
                 <div class="card-header p-0 pb-2 mb-2">
-                    @include('projects.partials.header', ['active' => 'ticket'])
+                    <x-project.ui.header :$project active="ticket" />
                 </div>
                 <div class="card card-primary card-outline">
                     <div class="card-header"><a href="{{ route('projects.tickets.create', $project) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>

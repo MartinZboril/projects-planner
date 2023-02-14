@@ -6,7 +6,7 @@
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <div class="p-3 mb-3" style="background-color:white;">
-            <a href="{{ route('projects.timers.index', $project->id) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
+            <a href="{{ route('projects.timers.index', $project) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
         </div>
         <!-- Main content -->
         <section class="content">
@@ -15,52 +15,10 @@
                 <form action="{{ route('projects.timers.store', $project) }}" method="post">
                     @csrf
                     @method('POST')
-                    @include('projects.timers.forms.fields', ['timer' => $timer, 'project' => $project, 'type' => 'create'])                                                                              
-                    <input type="hidden" name="project_id" value="{{ $project->id }}">              
+                    <x-timer.fields :timer="null" :close-route="route('projects.timers.index', $project)" type="create" />              
+                    <input type="hidden" name="project_id" value="{{ $project->id }}">
                 </form>     
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('#since-datetimepicker').datetimepicker({
-                locale: 'cs',
-                format: 'YYYY-MM-DD HH:mm',
-                icons: {
-                    time: "fas fa-clock",
-                    date: "fa fa-calendar",
-                    up: "fa fa-arrow-up",
-                    down: "fa fa-arrow-down"
-                }
-            });
-
-            $('#until-datetimepicker').datetimepicker({
-                locale: 'cs',
-                format: 'YYYY-MM-DD HH:mm',
-                useCurrent: false,
-                icons: {
-                    time: "fas fa-clock",
-                    date: "fa fa-calendar",
-                    up: "fa fa-arrow-up",
-                    down: "fa fa-arrow-down"
-                }
-            });
-
-            $("#since-datetimepicker").on("change.datetimepicker", function (e) {
-                $('#until-datetimepicker').datetimepicker('minDate', e.date);
-            });
-
-            $("#until-datetimepicker").on("change.datetimepicker", function (e) {
-                $('#since-datetimepicker').datetimepicker('maxDate', e.date);
-            });
-
-            $('#rate-id').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select rate'
-            });
-        });
-    </script>
-@endpush
