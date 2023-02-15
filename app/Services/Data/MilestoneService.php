@@ -4,6 +4,7 @@ namespace App\Services\Data;
 
 use Illuminate\Support\ValidatedInput;
 use App\Models\{Comment, Milestone};
+use App\Services\FileService;
 
 class MilestoneService
 {
@@ -32,6 +33,16 @@ class MilestoneService
     public function handleSaveComment(Milestone $milestone, Comment $comment): void
     {
         $milestone->comments()->save($comment);
+    }
+    
+    /**
+     * Upload milestones files.
+     */
+    public function handleUploadFiles(Milestone $milestone, Array $uploadedFiles): void
+    {
+        foreach ($uploadedFiles as $uploadedFile) {
+            $milestone->files()->save((new FileService)->handleUpload($uploadedFile, 'milestones/files'));
+        }
     }
 
     /**

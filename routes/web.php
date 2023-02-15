@@ -99,8 +99,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('users', App\Http\Controllers\User\UserController::class)
         ->except(['destroy']);
     // Projects
-    Route::resource('projects', App\Http\Controllers\Project\ProjectController::class)
-        ->except(['destroy']);
     Route::group(['prefix' => 'projects/{project}', 'as' => 'projects.'], function () {
         // Actions
         Route::patch('/change-status', App\Http\Controllers\Project\ProjectChangeStatusController::class)->name('change_status');
@@ -118,6 +116,8 @@ Route::middleware(['auth'])->group(function () {
             // Comments
             Route::resource('comments', App\Http\Controllers\Project\Milestone\ProjectMilestoneCommentController::class)
                 ->only(['store', 'update']);
+            // Files
+            Route::post('/files/upload', App\Http\Controllers\Project\Milestone\ProjectMilestoneFileUploaderController::class)->name('files.upload');
         });
         Route::resource('milestones', App\Http\Controllers\Project\Milestone\ProjectMilestoneController::class)
             ->except(['destroy']);     
@@ -169,4 +169,6 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('timers', App\Http\Controllers\Project\Timer\ProjectTimerController::class)
             ->except(['show', 'destroy']);
     });
+    Route::resource('projects', App\Http\Controllers\Project\ProjectController::class)
+        ->except(['destroy']);
 });
