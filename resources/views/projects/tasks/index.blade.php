@@ -15,24 +15,15 @@
                     <x-project.ui.header :$project active="task" />
                 </div>
                 <div class="card card-primary card-outline">
-                    <div class="card-header"><a href="{{ route('projects.tasks.create', ['project' => $project->id]) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
+                    <div class="card-header"><a href="{{ route('projects.tasks.create', $project) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
                     <div class="card-body">
                         <!-- Message -->
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
                         <!-- Content -->
-                        @include('projects.tasks.partials.table', ['id' => 'tasks-table', 'tasks' => $project->tasks, 'display' => [], 'redirect' => 'projects'])       
+                        <x-task.table :tasks="$project->tasks" table-id="tasks-table" />
                     </div>
                 </div>
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(function () {
-            $("#tasks-table").DataTable();
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
-@endpush
