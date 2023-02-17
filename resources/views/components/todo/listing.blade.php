@@ -11,7 +11,7 @@
                 <small class="ml-1">{{ $todo->description }}</small>
             @endif
             <div class="tools">
-                <a href="{{ route($editFormRouteName, ['task' => $todo->task, 'todo' => $todo]) }}"><i class="fas fa-edit"></i></a>
+                <a href="{{ route($editFormRouteName, $parent + ['task' => $todo->task, 'todo' => $todo]) }}"><i class="fas fa-edit"></i></a>
             </div>
             <!-- ToDos forms -->
             @include($checkerFormPartial, ['id' => 'check-todo-' . $todo->id . '-form', 'todo' => $todo, 'action' => $todo->is_finished ? 0 : 1])            

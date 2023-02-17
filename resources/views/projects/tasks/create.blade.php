@@ -15,32 +15,9 @@
                 <form action="{{ route('projects.tasks.store', $project) }}" method="post">
                     @csrf
                     @method('POST')
-                    @include('projects.tasks.forms.fields', ['project' => $project, 'task' => $task, 'type' => 'create'])
+                    <x-task.fields type="create" :task="null" :project="$project" />
                 </form> 
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#project-id').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select project'
-            });
-
-            $('#milestone-id').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select milestone'
-            });
-
-            $('#user-id').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select user'
-            });
-
-            $('#description').summernote();
-        });
-    </script>
-@endpush

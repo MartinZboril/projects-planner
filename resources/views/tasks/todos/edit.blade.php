@@ -14,7 +14,7 @@
                 <form action="{{ route('tasks.todos.update', ['todo' => $todo, 'task' => $todo->task]) }}" method="post">
                     @csrf
                     @method('PATCH')
-                    <x-todo.fields type="edit" :task="null" :$todo />
+                    <x-todo.fields type="edit" :is-project="false" :task="$todo->task" :$todo />
                 </form>   
             </div>
         </section>

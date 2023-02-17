@@ -15,7 +15,7 @@
                 <form action="{{ route('tasks.update', $task) }}" method="post">
                     @csrf
                     @method('PATCH')
-                    <x-task.fields type="edit" :$task />
+                    <x-task.fields type="edit" :$task :project="null" />
                 </form> 
             </div>
         </section>

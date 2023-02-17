@@ -9,19 +9,26 @@
                     @error('name')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                </div>        
-                <div class="form-group required">
-                    <label for="project-id" class="control-label">Project</label>
-                    <select class="form-control @error('project_id') is-invalid @enderror" name="project_id" id="project-id" style="width: 100%;">
-                        <option disabled selected value>select project</option>
-                        @foreach($projects as $project)
-                            <option value="{{ $project->id }}" @selected(old('project_id', $task->project->id ?? null) === $project->id)>{{ $project->name }}</option>
-                        @endforeach
-                    </select>
+                </div>  
+                @if ($project)
+                    <input type="hidden" name="project_id" value="{{ $project->id }}">
                     @error('project_id')
                         <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
+                    @enderror                
+                @else      
+                    <div class="form-group required">
+                        <label for="project-id" class="control-label">Project</label>
+                        <select class="form-control @error('project_id') is-invalid @enderror" name="project_id" id="project-id" style="width: 100%;">
+                            <option disabled selected value>select project</option>
+                            @foreach($projects as $project)
+                                <option value="{{ $project->id }}" @selected(old('project_id', $task->project->id ?? null) === $project->id)>{{ $project->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('project_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                @endif
                 <div class="form-group">
                     <label for="milestone-id">Milestone</label>
                     <select class="form-control @error('milestone_id') is-invalid @enderror" name="milestone_id" id="milestone-id" style="width: 100%;">
@@ -80,7 +87,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $type === 'edit' ? route('tasks.show', $task) : route('tasks.index') }}" class="cancel-btn">Close</a></span>
+                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $closeRoute }}" class="cancel-btn">Close</a></span>
             </div>
         </div>
     </div>

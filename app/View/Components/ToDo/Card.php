@@ -6,13 +6,15 @@ use Illuminate\View\Component;
 
 class Card extends Component
 {
+    public $parent;
     public $todos;
     public $createFormRoute;
     public $editFormRouteName;
     public $checkerFormPartial;
 
-    public function __construct($todos, $createFormRoute, $editFormRouteName, $checkerFormPartial)
+    public function __construct($parent, $todos, $createFormRoute, $editFormRouteName, $checkerFormPartial)
     {
+        $this->parent = $parent;
         $this->todos = $todos;
         $this->createFormRoute = $createFormRoute;
         $this->editFormRouteName = $editFormRouteName;

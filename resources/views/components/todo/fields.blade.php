@@ -44,7 +44,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <input type="submit" class="btn btn-sm btn-primary mr-1" value="Save"> or <a href="{{ route('tasks.show', $type === 'create' ? $task : $todo->task) }}" class="cancel-btn">Close</a></span>
+                <input type="submit" class="btn btn-sm btn-primary mr-1" value="Save"> or <a href="{{ $closeRoute }}" class="cancel-btn">Close</a></span>
             </div>
         </div>
     </div>
