@@ -1,0 +1,1 @@
+<i class="{{ $icon }} mr-2"></i> {{ $type }}

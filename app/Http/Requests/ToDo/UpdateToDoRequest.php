@@ -21,7 +21,6 @@ class UpdateToDoRequest extends FormRequest
     public function rules(): array
     {
         $rules = ToDo::VALIDATION_RULES;
-        $rules['redirect'] = ['in:tasks,projects'];
         unset($rules['task_id']);
         
         return $rules;

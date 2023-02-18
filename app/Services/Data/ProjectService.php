@@ -2,26 +2,21 @@
 
 namespace App\Services\Data;
 
-use App\Enums\ProjectStatusEnum;
-use App\Enums\Routes\ProjectRouteEnum;
-use App\Models\Project;
-use App\Services\RouteService;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\ValidatedInput;
+use App\Enums\ProjectStatusEnum;
+use App\Models\{Comment, Note, Project};
+use App\Services\FileService;
 
 class ProjectService
 {
-    protected $projectUserService;
-
-    public function __construct(ProjectUserService $projectUserService)
+    public function __construct(private ProjectUserService $projectUserService)
     {
-        $this->projectUserService = $projectUserService;
     }
 
     /**
      * Save data for project.
      */
-    public function save(Project $project, ValidatedInput $inputs)
+    public function handleSave(Project $project, ValidatedInput $inputs)
     {
         $project = Project::updateOrCreate(
             ['id' => $project->id],
@@ -37,15 +32,41 @@ class ProjectService
             ]
         );
 
-        $this->projectUserService->storeUsers($project, $inputs->team);
+        $this->projectUserService->handleStoreUsers($project, $inputs->team);
 
         return $project;
     }
 
     /**
+     * Upload projects files.
+     */
+    public function handleUploadFiles(Project $project, Array $uploadedFiles): void
+    {
+        foreach ($uploadedFiles as $uploadedFile) {
+            $project->files()->save((new FileService)->handleUpload($uploadedFile, 'projects/files'));
+        }
+    }
+
+    /**
+     * Save projects comments.
+     */
+    public function handleSaveComment(Project $project, Comment $comment): void
+    {
+        $project->comments()->save($comment);
+    }
+
+    /**
+     * Save projects notes.
+     */
+    public function handleSaveNote(Project $project, Note $note): void
+    {
+        $project->notes()->save($note);
+    }
+
+    /**
      * Change working status of the project.
      */
-    public function change(Project $project, int $status): void
+    public function handleChange(Project $project, int $status): void
     {
         $project->update(['status' => $status]);
     }
@@ -53,20 +74,10 @@ class ProjectService
     /**
      * Mark selected project.
      */
-    public function mark(Project $project): Project
+    public function handleMark(Project $project): Project
     {
         $project->is_marked = !$project->is_marked;
         $project->save();
         return $project;
-    }
-
-    /**
-     * Set up redirect for the action.
-     */
-    public function setUpRedirect(string $type, Project $project): RedirectResponse
-    {
-        $redirectAction = $type ? ProjectRouteEnum::Index : ProjectRouteEnum::Detail;
-        $redirectVars = $type ? [] : ['project' => $project];
-        return (new RouteService)->redirect($redirectAction->value, $redirectVars);
     }
 }

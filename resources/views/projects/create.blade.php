@@ -15,27 +15,9 @@
                 <form action="{{ route('projects.store') }}" method="post">
                     @csrf
                     @method('POST')
-                    @include('projects.forms.fields', ['project' => $project, 'type' => 'create'])  
+                    <x-project.fields :project="null" type="create" />
                 </form>     
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#client-id').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select client'
-            });
-
-            $('#team').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select member'
-            });
-
-            $('#description').summernote();
-        });
-    </script>
-@endpush

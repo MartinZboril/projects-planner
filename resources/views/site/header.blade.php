@@ -42,7 +42,7 @@
                 {{ Auth::User()->name }}
             </a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="{{ route('users.detail', ['user' => Auth::User()->id]) }}">Profile</a>
+                <a class="dropdown-item" href="{{ route('users.show', ['user' => Auth::User()->id]) }}">Profile</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{{ route('logout') }}"
                     onclick="event.preventDefault();

@@ -23,8 +23,6 @@ class UpdateTaskRequest extends FormRequest
     public function rules(): array
     {
         $rules = Task::VALIDATION_RULES;
-        $rules['redirect'] = ['in:tasks,projects'];
-        $rules['status'] = [new Enum(TaskStatusEnum::class)];
         unset(
             $rules['author_id'],
             $rules['status']

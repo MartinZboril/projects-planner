@@ -2,27 +2,22 @@
 
 namespace App\Services\Data;
 
-use App\Enums\TicketStatusEnum;
-use App\Enums\Routes\{ProjectRouteEnum, TicketRouteEnum};
-use App\Models\Ticket;
-use App\Services\RouteService;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ValidatedInput;
+use App\Enums\TicketStatusEnum;
+use App\Models\{Comment, Ticket};
+use App\Services\FileService;
 
 class TicketService
 {
-    protected $projectUserService;
-
-    public function __construct(ProjectUserService $projectUserService)
+    public function __construct(private ProjectUserService $projectUserService)
     {
-        $this->projectUserService = $projectUserService;
     }
 
     /**
      * Save data for ticket.
      */
-    public function save(Ticket $ticket, ValidatedInput $inputs): Ticket
+    public function handleSave(Ticket $ticket, ValidatedInput $inputs): Ticket
     {
         $ticket = Ticket::updateOrCreate(
             ['id' => $ticket->id],
@@ -39,19 +34,37 @@ class TicketService
             ]
         );
 
-        $this->projectUserService->storeUser($ticket->project, $ticket->reporter);
+        $this->projectUserService->handleStoreUser($ticket->project, $ticket->reporter);
         
         if($ticket->assignee_id) {
-            $this->projectUserService->storeUser($ticket->project, $ticket->assignee);
+            $this->projectUserService->handleStoreUser($ticket->project, $ticket->assignee);
         }
 
         return $ticket;
     }
 
     /**
+     * Upload tickets files.
+     */
+    public function handleUploadFiles(Ticket $ticket, Array $uploadedFiles): void
+    {
+        foreach ($uploadedFiles as $uploadedFile) {
+            $ticket->files()->save((new FileService)->handleUpload($uploadedFile, 'tasks/files'));
+        }
+    }
+
+    /**
+     * Save tickets comments.
+     */
+    public function handleSaveComment(Ticket $ticket, Comment $comment): void
+    {
+        $ticket->comments()->save($comment);
+    }
+
+    /**
      * Change working status of the ticket.
      */
-    public function change(Ticket $ticket, int $status): Ticket
+    public function handleChange(Ticket $ticket, int $status): Ticket
     {
         $ticket->status = $status;
         $ticket->save();
@@ -61,7 +74,7 @@ class TicketService
     /**
      * Save that ticket was converted to task.
      */
-    public function convert(Ticket $ticket): void
+    public function handleConvert(Ticket $ticket): void
     {
         $ticket->update(['status' => TicketStatusEnum::archive, 'is_convert' => true]);
     }
@@ -69,30 +82,10 @@ class TicketService
     /**
      * Mark selected ticket.
      */
-    public function mark(Ticket $ticket): Ticket
+    public function handleMark(Ticket $ticket): Ticket
     {
         $ticket->is_marked = !$ticket->is_marked;
         $ticket->save();
         return $ticket;
-    }
-
-    /**
-     * Set up redirect for the action.
-     */
-    public function setUpRedirect(string $parent, string $type, Ticket $ticket): RedirectResponse
-    {
-        switch ($parent) {
-            case 'projects':
-                $redirectAction = $type ? ProjectRouteEnum::Tickets : ProjectRouteEnum::TicketsDetail;
-                $redirectVars = $type ? ['project' => $ticket->project] : ['project' => $ticket->project, 'ticket' => $ticket];
-                break;                
-
-            default:
-                $redirectAction = $type ? TicketRouteEnum::Index : TicketRouteEnum::Detail;
-                $redirectVars = $type ? [] : ['ticket' => $ticket];
-                break;
-        }
-        
-        return (new RouteService)->redirect($redirectAction->value, $redirectVars);
     }
 }

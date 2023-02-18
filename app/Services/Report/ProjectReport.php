@@ -45,7 +45,7 @@ class ProjectReport
         $projects = collect();
 
         $this->builderReport->reportMonthsFull->each(function ($month, $key) use($projects, $year) {
-            $projects->put($month['index'], Project::whereYear('created_at', $year)->whereMonth('created_at', $key)->count());
+            $projects->put($month['index'], Project::whereYear('created_at', $year)->whereMonth('created_at', $key + 1)->count());
         });
 
         return $projects;

@@ -2,27 +2,22 @@
 
 namespace App\Services\Data;
 
-use App\Enums\TaskStatusEnum;
-use App\Enums\Routes\{ProjectRouteEnum, TaskRouteEnum};
-use App\Models\Task;
-use App\Services\RouteService;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ValidatedInput;
+use App\Enums\TaskStatusEnum;
+use App\Models\{Comment, Task};
+use App\Services\FileService;
 
 class TaskService
 {
-    protected $projectUserService;
-
-    public function __construct(ProjectUserService $projectUserService)
+    public function __construct(private ProjectUserService $projectUserService)
     {
-        $this->projectUserService = $projectUserService;
     }
 
     /**
      * Save data for task.
      */
-    public function save(Task $task, ValidatedInput $inputs): Task
+    public function handleSave(Task $task, ValidatedInput $inputs): Task
     {
         $task = Task::updateOrCreate(
             ['id' => $task->id],
@@ -39,19 +34,37 @@ class TaskService
             ]
         );
 
-        $this->projectUserService->storeUser($task->project, $task->author);
-        $this->projectUserService->storeUser($task->project, $task->user);
+        $this->projectUserService->handleStoreUser($task->project, $task->author);
+        $this->projectUserService->handleStoreUser($task->project, $task->user);
 
         return $task;
     }
     
     /**
+     * Upload tasks files.
+     */
+    public function handleUploadFiles(Task $task, Array $uploadedFiles): void
+    {
+        foreach ($uploadedFiles as $uploadedFile) {
+            $task->files()->save((new FileService)->handleUpload($uploadedFile, 'tasks/files'));
+        }
+    }
+
+    /**
+     * Save tasks comments.
+     */
+    public function handleSaveComment(Task $task, Comment $comment): void
+    {
+        $task->comments()->save($comment);
+    }
+
+    /**
      * Change working status of the task.
      */
-    public function change(Task $task, int $status): Task
+    public function handleChangeStatus(Task $task, int $status): Task
     {
+        $task->is_returned = $task->isReturned($status) ? true : false;
         $task->status = $status;
-        $task->is_returned = $task->isReturned() ? true : false;
         $task->save();
         return $task;
     }
@@ -59,7 +72,7 @@ class TaskService
     /**
      * Pause work on the task.
      */
-    public function pause(Task $task): Task
+    public function handlePause(Task $task): Task
     {
         $task->is_stopped = !$task->is_stopped;
         $task->save();
@@ -69,30 +82,10 @@ class TaskService
     /**
      * Mark selected task.
      */
-    public function mark(Task $task): Task
+    public function handleMark(Task $task): Task
     {
         $task->is_marked = !$task->is_marked;
         $task->save();
         return $task;
-    }
-
-    /**
-     * Set up redirect for the action.
-     */
-    public function setUpRedirect(string $parent, string $type, Task $task): RedirectResponse
-    {
-        switch ($parent) {
-            case 'projects':
-                $redirectAction = $type ? ProjectRouteEnum::Tasks : ProjectRouteEnum::TasksDetail;
-                $redirectVars = $type ? ['project' => $task->project] : ['project' => $task->project, 'task' => $task];
-                break;                
-
-            default:
-                $redirectAction = $type ? TaskRouteEnum::Index : TaskRouteEnum::Detail;
-                $redirectVars = $type ? [] : ['task' => $task];
-                break;
-        }
-        
-        return (new RouteService)->redirect($redirectAction->value, $redirectVars);
     }
 }

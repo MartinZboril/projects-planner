@@ -17,17 +17,9 @@
                     </div>
                     <div class="card-body">
                         <!-- Message -->
-                        @include('site.partials.message', ['message' => Session::get('message'), 'type' => Session::get('type')])
+                        <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
                         <!-- Content -->
-                        <div class="row">
-                            @forelse ($notes as $note)
-                                <div class="col-md-3">
-                                    @include('notes.partials.card', ['note' => $note, 'editRoute' => route('notes.edit', ['note' => $note]), 'parentId' => null, 'parentType' => 'note'])
-                                </div>
-                            @empty
-                                No notes were found!
-                            @endforelse
-                        </div>
+                        <x-note.card :$notes edit-form-route-name="notes.edit" :parent="null" />
                     </div>
                 </div>            
             </div>

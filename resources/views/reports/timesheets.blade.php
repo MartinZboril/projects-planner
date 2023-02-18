@@ -18,61 +18,18 @@
                         <!-- Content -->
                         <div class="row">
                             <div class="col-md-4">
-                                @include('reports.partials.card', ['title' => 'Total time', 'value' => $data->get('total_timers_count') . ' hours', 'colour' => 'text-body'])
+                                <x-report.ui.card title="Total time" :value="$data->get('total_timers_count') . ' hours'" colour="text-body" />
                             </div>
                             <div class="col-md-8">
-                                <div class="card">
-                                    <div class="card-header bg-primary">{{ $data->get('year') }} – Yearly Overview</div>
-                                    <div class="card-body">
-                                        <canvas id="yearly-overview-chart" class="w-100"></canvas>
-                                    </div>
-                                </div>
+                                <x-chart.overview :report-months="$data->get('report_months')" :total-count="$data->get('total_timers_by_month')" :year="$data->get('year')" chart-id="yearly-overview-chart" />
                             </div>
                         </div>
                         <hr>
                         <!-- Quarterly reports  -->
-                        <div class="row">
-                            @foreach ($data['quarterly_recorded_timers'] as $value)
-                                @include('reports.partials.list', ['title' => $value['title'], 'values' => $value['values']])
-                            @endforeach
-                        </div>
+                        <x-report.ui.list :records="$data['quarterly_recorded_timers']" />
                     </div>
                 </div>            
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        new Chart("yearly-overview-chart", {
-            type: "line",
-            data: {
-                labels: @json($data->get('report_months')),
-                datasets: [{ 
-                    data: @json($data->get('total_timers_by_month')),
-                    borderColor: '#007bff',
-                    fill: false,
-                    label: 'Total'
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        min: 0,
-                        ticks: {
-                            stepSize: 5
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom',
-                    }
-                }
-            },
-        });
-    </script>
-@endpush

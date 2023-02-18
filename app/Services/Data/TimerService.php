@@ -2,19 +2,16 @@
 
 namespace App\Services\Data;
 
-use App\Enums\Routes\ProjectRouteEnum;
-use App\Models\Timer;
-use App\Services\RouteService;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ValidatedInput;
+use App\Models\Timer;
 
 class TimerService
 {
     /**
      * Save data for rate.
      */
-    public function save(Timer $timer, ValidatedInput $inputs)
+    public function handleSave(Timer $timer, ValidatedInput $inputs)
     {
         return Timer::updateOrCreate(
             ['id' => $timer->id],
@@ -32,7 +29,7 @@ class TimerService
     /**
      * Start measure new timer.
      */
-    public function start(ValidatedInput $inputs): void
+    public function handleStart(ValidatedInput $inputs): void
     {
         Timer::create([
             'project_id' => $inputs->project_id,
@@ -46,16 +43,8 @@ class TimerService
     /**
      * Stop measure the timer.
      */
-    public function stop(Timer $timer): void
+    public function handleStop(Timer $timer): void
     {
         $timer->update(['until' => now()]);
-    }
-
-    /**
-     * Set up redirect for the action.
-     */
-    public function setUpRedirect(Timer $timer): RedirectResponse
-    {
-        return (new RouteService)->redirect(ProjectRouteEnum::Timesheets->value, ['project' => $timer->project]);
     }
 }

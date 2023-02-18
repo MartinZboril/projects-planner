@@ -12,16 +12,12 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Form -->
-                @include('notes.forms.store', ['form' => 'note', 'note' => $note, 'parentId' => null, 'parentType' => 'note'])    
+                <form action="{{ route('notes.store') }}" method="post">
+                    @csrf
+                    @method('POST')
+                    <x-note.fields :note="null" :close-route="route('notes.index')" type="create" />
+                </form>       
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#content').summernote();
-        });
-    </script>
-@endpush

@@ -20,6 +20,9 @@ class StoreRateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return Rate::VALIDATION_RULES;
+        $rules = Rate::VALIDATION_RULES;
+        unset($rules['user_id']);
+
+        return $rules;
     }
 }

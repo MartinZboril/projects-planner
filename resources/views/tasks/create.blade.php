@@ -12,31 +12,12 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Form -->
-                @include('tasks.forms.store', ['form' => 'task', 'projects' => $projects, 'redirect' => 'tasks'])     
+                <form action="{{ route('tasks.store') }}" method="post">
+                    @csrf
+                    @method('POST')
+                    <x-task.fields type="create" :task="null" :project="null" />
+                </form> 
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(document).ready(function () {
-            $('#project-id').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select project'
-            });
-
-            $('#milestone-id').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select milestone'
-            });
-
-            $('#user-id').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select user'
-            });
-
-            $('#description').summernote();
-        });
-    </script>
-@endpush

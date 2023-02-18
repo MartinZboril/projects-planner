@@ -12,16 +12,12 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Form -->
-                @include('notes.forms.update', ['form' => 'note', 'note' => $note, 'parentId' => null, 'parentType' => 'note'])      
+                <form action="{{ route('notes.update', $note) }}" method="post">
+                    @csrf
+                    @method('PATCH')
+                    <x-note.fields :$note :close-route="route('notes.index')" type="edit" />
+                </form>      
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#content').summernote();
-        });
-    </script>
-@endpush

@@ -11,21 +11,7 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
-                <div class="card card-primary card-outline">
-                    <div class="card-header">Releases</div>
-                    <div class="card-body">
-                        <!-- Content -->
-                        @if ($releases->get('releases')->count() > 0)
-                            <div class="timeline">
-                                @foreach ($releases->get('releases')->sortByDesc('realese_date') as $key => $release)
-                                    @include('releases.partials.release', ['release' => $release])
-                                @endforeach
-                            </div>                            
-                        @else
-                            No releases were found!
-                        @endif
-                    </div>
-                </div>            
+                <x-release.card :$releases />
             </div>
         </section>
     </div>

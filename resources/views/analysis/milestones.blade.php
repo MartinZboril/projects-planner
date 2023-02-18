@@ -13,26 +13,10 @@
             <div class="container-fluid">
                 <div class="card card-primary card-outline">
                     <div class="card-body">
-                        <!-- Content -->
-                        @include('milestones.partials.table', ['id' => 'milestones-table', 'milestones' => $milestones, 'display' => ['project']])
+                        <x-milestone.table :$milestones table-id="milestones-table" />
                     </div>
                 </div>            
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(function () {
-            var table = $("#milestones-table").DataTable({
-                lengthChange: false,
-                buttons: [ 'copy', 'excel', 'pdf', 'colvis' ]
-            });
-            
-            table.buttons().container().appendTo( '#milestones-table_wrapper .col-md-6:eq(0)' );
-
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
-@endpush

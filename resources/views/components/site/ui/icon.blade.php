@@ -1,0 +1,1 @@
+<i @class([$icon, 'mr-1' => $text])></i>{{ $text }}

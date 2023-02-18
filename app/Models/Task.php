@@ -108,16 +108,16 @@ class Task extends Model
 
     public function getPausedAttribute(): bool
     {
-        return $this->is_stopped ? true : false;
+        return $this->is_stopped;
     }
 
     public function getReturnedAttribute(): bool
     {
-        return $this->is_returned ? true : false;
+        return $this->is_returned;
     }
 
-    public function isReturned(): bool
+    public function isReturned(int $changedStatus): bool
     {
-        return $this->status === TaskStatusEnum::complete && $this === TaskStatusEnum::new->value;
+        return $this->status === TaskStatusEnum::complete && $changedStatus === TaskStatusEnum::new->value;
     }
 }

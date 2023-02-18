@@ -21,8 +21,6 @@ class StoreCommentRequest extends FormRequest
     public function rules(): array
     {
         $rules = Comment::VALIDATION_RULES;
-        $rules['parent_id'] = ['required', 'integer'];
-        $rules['type'] = ['in:client,project,milestone,task,ticket'];
         unset($rules['user_id']);
 
         return $rules;

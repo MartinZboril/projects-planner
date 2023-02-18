@@ -2,18 +2,17 @@
 
 namespace App\Services\Data;
 
-use App\Models\Client;
-use App\Services\{FileService, RouteService};
-use App\Enums\Routes\ClientRouteEnum;
-use Illuminate\Http\{RedirectResponse, UploadedFile};
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\ValidatedInput;
+use App\Models\{Client, Comment, Note};
+use App\Services\FileService;
 
 class ClientService
 {
     /**
      * Save data for client.
      */
-    public function save(Client $client, ValidatedInput $inputs, ?UploadedFile $uploadedFile)
+    public function handleSave(Client $client, ValidatedInput $inputs, ?UploadedFile $uploadedFile)
     {
         $client = Client::updateOrCreate(
             ['id' => $client->id],
@@ -45,11 +44,37 @@ class ClientService
 
         return $client;
     }
+
+    /**
+     * Upload clients files.
+     */
+    public function handleUploadFiles(Client $client, Array $uploadedFiles): void
+    {
+        foreach ($uploadedFiles as $uploadedFile) {
+            $client->files()->save((new FileService)->handleUpload($uploadedFile, 'clients/files'));
+        }
+    }
     
+    /**
+     * Save clients comments.
+     */        
+    public function handleSaveComment(Client $client, Comment $comment): void
+    {
+        $client->comments()->save($comment);
+    }
+
+    /**
+     * Save clients notes.
+     */
+    public function handleSaveNote(Client $client, Note $note): void
+    {
+        $client->comments()->save($note);
+    }
+
     /**
      * Mark selected client.
      */
-    public function mark(Client $client): Client
+    public function handleMark(Client $client): Client
     {
         $client->is_marked = !$client->is_marked;
         $client->save();
@@ -59,24 +84,14 @@ class ClientService
     /**
      * Store client logo.
      */
-    public function storeLogo(Client $client, UploadedFile $uploadedFile): Client
+    private function storeLogo(Client $client, UploadedFile $uploadedFile): Client
     {   
         if ($oldLogoId = $client->logo_id) {
-            (new FileService)->removeFile($oldLogoId);
+            (new FileService)->handleRemoveFile($oldLogoId);
         }
 
-        $client->logo_id = ((new FileService)->upload($uploadedFile, 'clients/logos'))->id;
+        $client->logo_id = ((new FileService)->handleUpload($uploadedFile, 'clients/logos'))->id;
         $client->save();
         return $client;
-    }
-
-    /**
-     * Set up redirect for the action.
-     */
-    public function setUpRedirect(string $type, Client $client): RedirectResponse
-    {
-        $redirectAction = $type ? ClientRouteEnum::Index : ClientRouteEnum::Detail;
-        $redirectVars = $type ? [] : ['client' => $client];        
-        return (new RouteService)->redirect($redirectAction->value, $redirectVars);
     }
 }

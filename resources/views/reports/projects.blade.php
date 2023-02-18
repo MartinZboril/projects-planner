@@ -18,66 +18,23 @@
                         <!-- Content -->
                         <div class="row">
                             <div class="col-md-4">
-                                @include('reports.partials.card', ['title' => 'Total', 'value' => $data->get('total_projects_count'), 'colour' => 'text-body'])
-                                @include('reports.partials.card', ['title' => 'Active', 'value' => $data->get('active_projects_count'), 'colour' => 'text-danger'])
-                                @include('reports.partials.card', ['title' => 'Done', 'value' => $data->get('done_projects_count'), 'colour' => 'text-success'])
-                                @include('reports.partials.card', ['title' => 'Overdue', 'value' => $data->get('overdue_projects_count'), 'colour' => 'text-danger'])
-                                @include('reports.partials.card', ['title' => 'Avg. Spent Time', 'value' => round($data->get('spent_time_avg')) . ' Hours', 'colour' => 'text-body'])
-                                @include('reports.partials.card', ['title' => 'Avg. Amount', 'value' => round($data->get('amount_avg')), 'colour' => 'text-body', 'amount' => true])
+                                <x-report.ui.card title="Total" :value="$data->get('total_projects_count')" colour="text-body" />
+                                <x-report.ui.card title="Active" :value="$data->get('active_projects_count')" colour="text-danger" />
+                                <x-report.ui.card title="Done" :value="$data->get('done_projects_count')" colour="text-success" />
+                                <x-report.ui.card title="Overdue" :value="$data->get('overdue_projects_count')" colour="text-danger" />
+                                <x-report.ui.card title="Avg. Spent Time" :value="$data->get('spent_time_avg')" colour="text-body" />
+                                <x-report.ui.card title="Avg. Amount" :value="$data->get('amount_avg')" colour="text-body" :amount="true" />
                             </div>
                             <div class="col-md-8">
-                                <div class="card">
-                                    <div class="card-header bg-primary">{{ $data->get('year') }} – Yearly Overview</div>
-                                    <div class="card-body">
-                                        <canvas id="yearly-overview-chart" class="w-100"></canvas>
-                                    </div>
-                                </div>
+                                <x-chart.overview :report-months="$data->get('report_months')" :total-count="$data->get('total_projects_by_month')" :year="$data->get('year')" chart-id="yearly-overview-chart" />
                             </div>
                         </div>
                         <hr>
-                        <!-- Quarterly reports  -->
-                        <div class="row">
-                            @foreach ($data['quarterly_created_projects'] as $value)
-                                @include('reports.partials.list', ['title' => $value['title'], 'values' => $value['values']])
-                            @endforeach
-                        </div>
+                        <!-- Quarterly reports  -->                        
+                        <x-report.ui.list :records="$data['quarterly_created_projects']" />
                     </div>
                 </div>            
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        new Chart("yearly-overview-chart", {
-            type: "line",
-            data: {
-                labels: @json($data->get('report_months')),
-                datasets: [{ 
-                    data: @json($data->get('total_projects_by_month')),
-                    borderColor: '#007bff',
-                    fill: false,
-                    label: 'Total'
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        min: 0,
-                        ticks: {
-                            stepSize: 5
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom',
-                    }
-                }
-            },
-        });
-    </script>
-@endpush
