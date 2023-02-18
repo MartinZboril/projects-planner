@@ -30,8 +30,7 @@
                             <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('unassigned_tickets')->count() }}</span>
                         </div>
                         <div class="card-body">
-                            <!-- Content -->
-                            @include('tickets.partials.table', ['id' => 'unassigned-tickets-table', 'tickets' => $data->get('unassigned_tickets'), 'display' => ['project'], 'redirect' => 'tickets'])
+                            <x-ticket.table :tickets="$data->get('unassigned_tickets')" table-id="unassigned-tickets-table" type="tickets" />
                         </div>
                     </div> 
                 @endif
@@ -42,8 +41,7 @@
                             <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('overdue_tickets')->count() }}</span>
                         </div>
                         <div class="card-body">
-                            <!-- Content -->
-                            @include('tickets.partials.table', ['id' => 'overdue-tickets-table', 'tickets' => $data->get('overdue_tickets'), 'display' => ['project'], 'redirect' => 'tickets'])
+                            <x-ticket.table :tickets="$data->get('overdue_tickets')" table-id="overdue-tickets-table" type="tickets" />
                         </div>
                     </div>
                 @endif
@@ -122,14 +120,6 @@
         });
 
         $(function () {
-            $('#unassigned-tickets-table').DataTable({
-                'aLengthMenu': [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, 'All']],
-                'iDisplayLength': 5
-            });
-            $('#overdue-tickets-table').DataTable({
-                'aLengthMenu': [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, 'All']],
-                'iDisplayLength': 5
-            });
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>

@@ -42,7 +42,7 @@ class TaskReport
         $tasks = collect();
 
         $this->builderReport->reportMonthsFull->each(function ($month, $key) use($tasks, $year) {
-            $tasks->put($month['index'], Task::whereYear('created_at', $year)->whereMonth('created_at', $key)->count());
+            $tasks->put($month['index'], Task::whereYear('created_at', $year)->whereMonth('created_at', $key + 1)->count());
         });
 
         return $tasks;

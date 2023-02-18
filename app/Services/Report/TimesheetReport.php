@@ -39,7 +39,7 @@ class TimesheetReport
         $timers = collect();
 
         $this->builderReport->reportMonthsFull->each(function ($month, $key) use($timers, $year) {
-            $timers->put($month['index'], Timer::whereYear('created_at', $year)->whereMonth('created_at', $key)->get()->sum('total_time'));
+            $timers->put($month['index'], Timer::whereYear('created_at', $year)->whereMonth('created_at', $key + 1)->get()->sum('total_time'));
         });
 
         return $timers;

@@ -13,26 +13,10 @@
             <div class="container-fluid">
                 <div class="card card-primary card-outline">
                     <div class="card-body">
-                        <!-- Content -->
-                        @include('projects.timers.partials.table', ['timers' => $timers, 'display' => ['project']])
+                        <x-timer.table :$timers table-id="timers-table" />
                     </div>
                 </div>            
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(function () {
-            var table = $("#timesheets-table").DataTable({
-                lengthChange: false,
-                buttons: [ 'copy', 'excel', 'pdf', 'colvis' ]
-            });
-
-            table.buttons().container().appendTo( '#timesheets-table_wrapper .col-md-6:eq(0)' );
-
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
-@endpush

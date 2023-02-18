@@ -41,7 +41,7 @@ class MilestoneReport
         $milestones = collect();
 
         $this->builderReport->reportMonthsFull->each(function ($month, $key) use($milestones, $year) {
-            $milestones->put($month['index'], Milestone::whereYear('created_at', $year)->whereMonth('created_at', $key)->count());
+            $milestones->put($month['index'], Milestone::whereYear('created_at', $year)->whereMonth('created_at', $key + 1)->count());
         });
 
         return $milestones;

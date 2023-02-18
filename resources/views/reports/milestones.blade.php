@@ -18,63 +18,20 @@
                         <!-- Content -->
                         <div class="row">
                             <div class="col-md-4">
-                                @include('reports.partials.card', ['title' => 'Total', 'value' => $data->get('total_milestones_count'), 'colour' => 'text-body'])
-                                @include('reports.partials.card', ['title' => 'Overdue', 'value' => $data->get('overdue_milestones_count'), 'colour' => 'text-danger'])
-                                @include('reports.partials.card', ['title' => 'Unstarted', 'value' => $data->get('unstarted_milestones_count'), 'colour' => 'text-danger'])
+                                <x-report.ui.card title="Total" :value="$data->get('total_milestones_count')" colour="text-body" />
+                                <x-report.ui.card title="Overdue" :value="$data->get('overdue_milestones_count')" colour="text-danger" />
+                                <x-report.ui.card title="Unstarted" :value="$data->get('unstarted_milestones_count')" colour="text-danger" />
                             </div>
                             <div class="col-md-8">
-                                <div class="card">
-                                    <div class="card-header bg-primary">{{ $data->get('year') }} – Yearly Overview</div>
-                                    <div class="card-body">
-                                        <canvas id="yearly-overview-chart" class="w-100"></canvas>
-                                    </div>
-                                </div>
+                                <x-chart.overview :report-months="$data->get('report_months')" :total-count="$data->get('total_milestones_by_month')" :year="$data->get('year')" table-id="yearly-overview-chart" />
                             </div>
                         </div>
                         <hr>
                         <!-- Quarterly reports  -->
-                        <div class="row">
-                            @foreach ($data['quarterly_created_milestones'] as $value)
-                                @include('reports.partials.list', ['title' => $value['title'], 'values' => $value['values']])
-                            @endforeach
-                        </div>
+                        <x-report.ui.list :records="$data['quarterly_created_milestones']" />
                     </div>
                 </div>            
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        new Chart("yearly-overview-chart", {
-            type: "line",
-            data: {
-                labels: @json($data->get('report_months')),
-                datasets: [{ 
-                    data: @json($data->get('total_milestones_by_month')),
-                    borderColor: '#007bff',
-                    fill: false,
-                    label: 'Total'
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        min: 0,
-                        ticks: {
-                            stepSize: 5
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom',
-                    }
-                }
-            },
-        });
-    </script>
-@endpush

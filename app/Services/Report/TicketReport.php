@@ -42,7 +42,7 @@ class TicketReport
         $tickets = collect();
 
         $this->builderReport->reportMonthsFull->each(function ($month, $key) use($tickets, $year) {
-            $tickets->put($month['index'], Ticket::whereYear('created_at', $year)->whereMonth('created_at', $key)->count());
+            $tickets->put($month['index'], Ticket::whereYear('created_at', $year)->whereMonth('created_at', $key + 1)->count());
         });
 
         return $tickets;

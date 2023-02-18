@@ -14,25 +14,10 @@
                 <div class="card card-primary card-outline">
                     <div class="card-body">
                         <!-- Content -->
-                        @include('tasks.partials.table', ['id' => 'tasks-table', 'tasks' => $tasks, 'display' => ['project'], 'redirect' => 'tasks'])
+                        <x-task.table :$tasks table-id="tasks-table" type="tasks" />
                     </div>
                 </div>            
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(function () {
-            var table = $("#tasks-table").DataTable({
-                lengthChange: false,
-                buttons: [ 'copy', 'excel', 'pdf', 'colvis' ]
-            });
-            
-            table.buttons().container().appendTo( '#tasks-table_wrapper .col-md-6:eq(0)' );
-
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
-@endpush
