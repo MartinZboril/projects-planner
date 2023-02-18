@@ -3,26 +3,21 @@
 namespace App\View\Components\Project;
 
 use Illuminate\View\Component;
+use App\Models\{Client, User};
 
 class Fields extends Component
 {
-    /**
-     * Create a new component instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public $project;
+    public $type;
+
+    public function __construct($project, $type)
     {
-        //
+        $this->project = $project;
+        $this->type = $type;
     }
 
-    /**
-     * Get the view / contents that represent the component.
-     *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
-     */
     public function render()
     {
-        return view('components.project.fields');
+        return view('components.project.fields', ['clients' => Client::all(), 'users' => User::all()]);
     }
 }

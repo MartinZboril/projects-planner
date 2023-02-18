@@ -33,7 +33,7 @@ class ProjectTimerController extends Controller
      */
     public function create(Project $project): View
     {
-        return view('projects.timers.create', ['project' => $project, 'timer' => new Timer]);
+        return view('projects.timers.create', ['project' => $project]);
     }
 
     /**

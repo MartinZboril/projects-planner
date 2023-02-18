@@ -63,8 +63,8 @@ class TaskService
      */
     public function handleChangeStatus(Task $task, int $status): Task
     {
+        $task->is_returned = $task->isReturned($status) ? true : false;
         $task->status = $status;
-        $task->is_returned = $task->isReturned() ? true : false;
         $task->save();
         return $task;
     }

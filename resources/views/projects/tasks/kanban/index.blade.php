@@ -19,13 +19,13 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4">
-                            @include('projects.tasks.kanban.card', ['tasks' => $project->newTasks, 'label' => 'New', 'colour' => 'info'])
+                            <x-kanban.card :tasks="$project->newTasks" label="New" colour="info" />
                         </div>
                         <div class="col-md-4">
-                            @include('projects.tasks.kanban.card', ['tasks' => $project->inProgressTasks, 'label' => 'In Progress', 'colour' => 'warning'])
+                            <x-kanban.card :tasks="$project->inProgressTasks" label="In Progress" colour="warning" />
                         </div>
                         <div class="col-md-4">
-                            @include('projects.tasks.kanban.card', ['tasks' => $project->completedTasks, 'label' => 'Completed', 'colour' => 'success'])
+                            <x-kanban.card :tasks="$project->completedTasks" label="Completed" colour="success" />
                         </div>
                     </div>
                 </div>

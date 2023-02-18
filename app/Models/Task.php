@@ -116,8 +116,8 @@ class Task extends Model
         return $this->is_returned;
     }
 
-    public function isReturned(): bool
+    public function isReturned(int $changedStatus): bool
     {
-        return $this->status === TaskStatusEnum::complete && $this === TaskStatusEnum::new->value;
+        return $this->status === TaskStatusEnum::complete && $changedStatus === TaskStatusEnum::new->value;
     }
 }

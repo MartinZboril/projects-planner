@@ -58,7 +58,7 @@ class ProjectTaskController extends Controller
      */
     public function show(Project $project, Task $task): View
     {
-        return view('projects.tasks.show', ['project' => $project, 'task' => $task, 'milestones' => Milestone::where('project_id', $project->id)->get(), 'users' => User::all(), 'comment' => new Comment]);
+        return view('projects.tasks.show', ['task' => $task, 'milestones' => Milestone::where('project_id', $project->id)->get(), 'users' => User::all(), 'comment' => new Comment]);
     }
 
     /**
@@ -66,7 +66,7 @@ class ProjectTaskController extends Controller
      */
     public function edit(Project $project, Task $task): View
     {
-        return view('projects.tasks.edit', ['project' => $project, 'task' => $task, 'milestones' => Milestone::where('project_id', $project->id)->get(), 'users' => User::all()]);
+        return view('projects.tasks.edit', ['task' => $task, 'milestones' => Milestone::where('project_id', $project->id)->get(), 'users' => User::all()]);
     }
 
     /**

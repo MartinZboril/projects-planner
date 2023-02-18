@@ -23,7 +23,7 @@ class ProjectCommentController extends Controller
      */
     public function index(Project $project)
     {
-        return view('projects.comments.index', ['project' => $project, 'comment' => new Comment]);
+        return view('projects.comments.index', ['project' => $project]);
     }
 
     /**

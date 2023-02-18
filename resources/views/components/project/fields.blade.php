@@ -44,14 +44,14 @@
                 </div>                                
                 <div class="form-group required">
                     <label for="start_date" class="control-label">Start date</label>
-                    <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" placeholder="start date" value="{{ old('start_date', $project->start_date ? $project->start_date->format('Y-m-d') : null) }}" autocomplete="off">
+                    <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" placeholder="start date" value="{{ old('start_date', isset($project->start_date) ? $project->start_date->format('Y-m-d') : null) }}" autocomplete="off">
                     @error('start_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group required">
                     <label for="due_date" class="control-label">Due date</label>
-                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', $project->due_date ? $project->due_date->format('Y-m-d') : null) }}" autocomplete="off">
+                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', isset($project->due_date) ? $project->due_date->format('Y-m-d') : null) }}" autocomplete="off">
                     @error('due_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

@@ -20,7 +20,7 @@
                         <!-- Message -->
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
                         <!-- Content -->
-                        <x-task.table :tasks="$project->tasks" table-id="tasks-table" />
+                        <x-task.table :tasks="$project->tasks" table-id="tasks-table" type="projects" />
                     </div>
                 </div>
             </div>

@@ -5,15 +5,15 @@
         @forelse ($tasks as $task)
             <div class="card card-{{ $colour }} card-outline">
                 <div class="card-header">
-                    @include('projects.tasks.kanban.header', ['task' => $task])
+                    <x-kanban.header :$task />
                 </div>
                 <div class="card-body">
-                    @include('projects.tasks.kanban.information', ['task' => $task])
+                    <x-kanban.informations :$task />
                 </div>
             </div>
-            @include('projects.tasks.kanban.forms', ['task' => $task])
+            <x-kanban.forms :$task />
         @empty
-            @include('projects.tasks.kanban.empty')
+            <x-kanban.empty />
         @endforelse
     </div>
 </div>

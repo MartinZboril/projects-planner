@@ -33,7 +33,7 @@ class ProjectController extends Controller
      */
     public function create(): View
     {
-        return view('projects.create', ['project' => new Project, 'clients' => Client::all(), 'users' => User::all()]);
+        return view('projects.create');
     }
 
     /**
@@ -66,7 +66,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project): View
     {
-        return view('projects.edit', ['project' => $project, 'clients' => Client::all(), 'users' => User::all()]);
+        return view('projects.edit', ['project' => $project]);
     }
 
     /**
