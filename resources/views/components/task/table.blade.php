@@ -33,7 +33,7 @@
                         @if ($type === 'projects')
                             <a href="{{ route('projects.tasks.edit', ['project' => $task->project, 'task' => $task]) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
                             <a href="{{ route('projects.tasks.show', ['project' => $task->project, 'task' => $task]) }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
-                            @include('projects.tasks.partials.buttons', ['project' => $task->project, 'task' => $task, 'buttonSize' => 'xs', 'buttonText' => false])
+                            @include('projects.tasks.partials.buttons', ['project' => $task->project, 'task' => $task, 'buttonSize' => 'xs', 'hideButtonText' => ''])
                         @else
                             <a href="{{ route('tasks.edit', $task) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
                             <a href="{{ route('tasks.show', $task) }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>

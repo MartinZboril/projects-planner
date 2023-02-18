@@ -15,7 +15,7 @@
                 <form action="{{ route('tickets.update', $ticket) }}" method="post">
                     @csrf
                     @method('PATCH')
-                    <x-ticket.fields :$ticket type="edit" />
+                    <x-ticket.fields :$ticket type="edit" :project="null" />
                 </form>  
             </div>
         </section>

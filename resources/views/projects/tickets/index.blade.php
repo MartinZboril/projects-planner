@@ -20,19 +20,10 @@
                         <!-- Message -->
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
                         <!-- Content -->
-                        @include('tickets.partials.table', ['id' => 'tickets-table', 'tickets' => $project->tickets, 'display' => [], 'redirect' => 'projects'])
+                        <x-ticket.table :tickets="$project->tickets" table-id="tickets-table" type="projects" />
                     </div>
                 </div>
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(function () {
-            $("#tickets-table").DataTable();
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
-@endpush

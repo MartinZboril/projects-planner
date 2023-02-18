@@ -15,7 +15,7 @@
                 <form action="{{ route('tickets.store') }}" method="post">
                     @csrf
                     @method('POST')
-                    <x-ticket.fields :ticket="null" type="create" />
+                    <x-ticket.fields :ticket="null" type="create" :project="null" />
                 </form>         
             </div>
         </section>

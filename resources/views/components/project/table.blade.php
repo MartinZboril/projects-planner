@@ -19,7 +19,7 @@
                 <tr>
                     <td><a href="{{ route('projects.show', $project) }}">{{ $project->name }}</a></td>
                     <td><a href="{{ route('clients.show', $project->client) }}">{{ $project->client->name }}</a></td>
-                    <td><x-project.ui.status-badge :text="false" :status="$project->status" /></td>
+                    <td><x-project.ui.status-badge :text="true" :status="$project->status" /></td>
                     <td>
                         @foreach ($project->team as $user)
                             <x-site.ui.user-icon :$user />

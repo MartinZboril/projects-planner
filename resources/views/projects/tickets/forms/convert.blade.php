@@ -1,4 +1,4 @@
-<form id="{{ $id }}" action="{{ route('projects.tickets.convert_to_task', ['project' => $project, 'ticket' => $ticket]) }}" method="POST" class="hidden">
+<form id="{{ $id }}" action="{{ route('projects.tickets.convert_to_task', ['project' => $ticket->project, 'ticket' => $ticket]) }}" method="POST" class="hidden">
     @csrf
     @method('PATCH')
     <input type="hidden" name="project_id" value="{{ $ticket->project_id }}">

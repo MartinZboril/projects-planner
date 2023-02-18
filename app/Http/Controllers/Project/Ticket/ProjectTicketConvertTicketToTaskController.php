@@ -26,7 +26,15 @@ class ProjectTicketConvertTicketToTaskController extends Controller
     {
         try {
             $taskService = new TaskService(new ProjectUserService);
-            $task = $taskService->handleSave(new Task, $request->safe());
+            $task = $taskService->handleSave(new Task, $request->safe()->merge([
+                'project_id' => $ticket->project_id,
+                'author_id' => $ticket->reporter_id,
+                'user_id' => $ticket->assignee_id,
+                'name' => $ticket->subject,
+                'start_date' => $ticket->due_date,
+                'due_date' => $ticket->due_date,
+                'description' => $ticket->message,
+            ]));
             $this->ticketService->handleConvert($ticket);      
             $this->flash(__('messages.task.create'), 'info');
         } catch (Exception $exception) {

@@ -15,43 +15,9 @@
                 <form action="{{ route('projects.tickets.store', $project) }}" method="post">
                     @csrf
                     @method('POST')
-                    @include('projects.tickets.forms.fields', ['ticket' => $ticket, 'type' => 'create'])
+                    <x-ticket.fields :ticket="null" type="create" :$project />
                 </form>
             </div>
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#project-id').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select project'
-            });
-
-            $('#milestone-id').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select milestone'
-            });
-
-            $('#assignee-id').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select assignee',
-                allowClear: true
-            });
-
-            $('#type-id').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select type'
-            });
-
-            $('#priority-id').select2({
-                theme: 'bootstrap4',
-                placeholder: 'select priority'
-            });
-
-            $('#message').summernote();
-        });
-    </script>
-@endpush
