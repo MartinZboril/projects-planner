@@ -1,13 +1,13 @@
-<div class="card">
+<div class="card card-primary card-outline">
     <div class="card-header bg-primary">{{ $year }} – Yearly Overview</div>
-    <div class="card-body">
-        <canvas id="{{ $tableId }}" class="w-100"></canvas>
+    <div class="card-body" style="height: {{ $height ?? '400' }}px">
+        <canvas id="{{ $chartId }}" class="w-100"></canvas>
     </div>
 </div>
 
 @push('scripts')
     <script>
-        new Chart("{{ $tableId }}", {
+        new Chart("{{ $chartId }}", {
             type: "line",
             data: {
                 labels: @json($reportMonths),
@@ -20,6 +20,7 @@
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     y: {
                         min: 0,

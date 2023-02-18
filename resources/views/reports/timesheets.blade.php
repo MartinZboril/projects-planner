@@ -21,7 +21,7 @@
                                 <x-report.ui.card title="Total time" :value="$data->get('total_timers_count') . ' hours'" colour="text-body" />
                             </div>
                             <div class="col-md-8">
-                                <x-chart.overview :report-months="$data->get('report_months')" :total-count="$data->get('total_timers_by_month')" :year="$data->get('year')" table-id="yearly-overview-chart" />
+                                <x-chart.overview :report-months="$data->get('report_months')" :total-count="$data->get('total_timers_by_month')" :year="$data->get('year')" chart-id="yearly-overview-chart" />
                             </div>
                         </div>
                         <hr>

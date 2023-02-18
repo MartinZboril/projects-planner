@@ -28,7 +28,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('projects.index') }}" class="nav-link @if(str_contains(url()->current(), 'projects') && (!str_contains(url()->current(), 'report') && !str_contains(url()->current(), 'analyze') && !str_contains(url()->current(), 'dashboard'))){{ 'active' }}@endif">
+                    <a href="{{ route('projects.index') }}" class="nav-link @if(str_contains(url()->current(), 'projects') && (!str_contains(url()->current(), 'report') && !str_contains(url()->current(), 'analysis') && !str_contains(url()->current(), 'dashboard'))){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-clock"></i>
                         <p>
                             Projects
@@ -36,7 +36,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('tasks.index') }}" class="nav-link @if(str_contains(url()->current(), 'tasks') && !str_contains(url()->current(), 'projects')  && (!str_contains(url()->current(), 'report') && !str_contains(url()->current(), 'analyze') && !str_contains(url()->current(), 'dashboard'))){{ 'active' }}@endif">
+                    <a href="{{ route('tasks.index') }}" class="nav-link @if(str_contains(url()->current(), 'tasks') && !str_contains(url()->current(), 'projects')  && (!str_contains(url()->current(), 'report') && !str_contains(url()->current(), 'analysis') && !str_contains(url()->current(), 'dashboard'))){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-tasks"></i>
                         <p>
                             Tasks
@@ -44,7 +44,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('tickets.index') }}" class="nav-link @if(str_contains(url()->current(), 'tickets') && !str_contains(url()->current(), 'projects')  && (!str_contains(url()->current(), 'report') && !str_contains(url()->current(), 'analyze') && !str_contains(url()->current(), 'dashboard'))){{ 'active' }}@endif">
+                    <a href="{{ route('tickets.index') }}" class="nav-link @if(str_contains(url()->current(), 'tickets') && !str_contains(url()->current(), 'projects')  && (!str_contains(url()->current(), 'report') && !str_contains(url()->current(), 'analysis') && !str_contains(url()->current(), 'dashboard'))){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-life-ring"></i>
                         <p>
                             Tickets
@@ -60,7 +60,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('reports.index') }}" class="nav-link @if(str_contains(url()->current(), 'report') || str_contains(url()->current(), 'analyze')){{ 'active' }}@endif">
+                    <a href="{{ route('reports.index') }}" class="nav-link @if(str_contains(url()->current(), 'report') || str_contains(url()->current(), 'analysis')){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-chart-line"></i>
                         <p>
                             Reports

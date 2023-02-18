@@ -26,7 +26,7 @@
                                 <x-report.ui.card title="Avg. Amount" :value="$data->get('amount_avg')" colour="text-body" :amount="true" />
                             </div>
                             <div class="col-md-8">
-                                <x-chart.overview :report-months="$data->get('report_months')" :total-count="$data->get('total_projects_by_month')" :year="$data->get('year')" table-id="yearly-overview-chart" />
+                                <x-chart.overview :report-months="$data->get('report_months')" :total-count="$data->get('total_projects_by_month')" :year="$data->get('year')" chart-id="yearly-overview-chart" />
                             </div>
                         </div>
                         <hr>

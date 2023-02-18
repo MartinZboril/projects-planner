@@ -6,7 +6,7 @@
     <div class="card-body">
         <!-- Content -->
         <div class="table-responsive">
-            <table id="@if($items->count() > 0){{ $id }}@endif" class="table table-bordered table-striped">
+            <table id="{{ $items->count() == 0 ?: $tableId }}" class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -19,7 +19,7 @@
                     @forelse ($items as $item)
                         <tr>
                             <td><a href="{{ $item->get('url') }}">{{ $item->get('name') }}</a></td>
-                            <td>@include('dashboard.partials.type', ['type' => $item->get('type')]){{ __('pages.title.' . $item->get('type')) }}</td>
+                            <td><x-dashboard.type :type="$item->get('type')" /></td>
                             <td>{{ $item->get('due_date') ? $item->get('due_date')->format('d.m.Y') : '-' }}</td>
                             <td>
                                 <a href="{{ $item->get('url') }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
@@ -37,3 +37,14 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+    <script>
+        $(function () {
+            $('#{{ $tableId }}').DataTable({
+                'aLengthMenu': [[5, 10, 25, 50, 75, -1], [5, 10, 25, 50, 75, 'All']],
+                'iDisplayLength': 5
+            });
+        });
+    </script>
+@endpush

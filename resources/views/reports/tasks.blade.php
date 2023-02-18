@@ -24,7 +24,7 @@
                                 <x-report.ui.card title="Overdue" :value="$data->get('overdue_tasks_count')" colour="text-danger" />
                             </div>
                             <div class="col-md-8">
-                                <x-chart.overview :report-months="$data->get('report_months')" :total-count="$data->get('total_tasks_by_month')" :year="$data->get('year')" table-id="yearly-overview-chart" />
+                                <x-chart.overview :report-months="$data->get('report_months')" :total-count="$data->get('total_tasks_by_month')" :year="$data->get('year')" chart-id="yearly-overview-chart" />
                             </div>
                         </div>
                         <hr>
