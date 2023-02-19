@@ -12,7 +12,7 @@ class Table extends Component
     public $tableId;
     public $type;
 
-    public function __construct(Collection $tickets, string $tableId, string $type)
+    public function __construct(Collection $tickets, string $tableId, string $type="tickets")
     {
         $this->tickets = $tickets->each(function (Ticket $ticket) use($type) {
             $ticket->edit_route = $this->getEditRoute($ticket, $type);

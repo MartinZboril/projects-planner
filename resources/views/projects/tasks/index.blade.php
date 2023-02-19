@@ -17,9 +17,7 @@
                 <div class="card card-primary card-outline">
                     <div class="card-header"><a href="{{ route('projects.tasks.create', $project) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
                     <div class="card-body">
-                        <!-- Message -->
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                        <!-- Content -->
                         <x-task.table :tasks="$project->tasks" table-id="tasks-table" type="projects" />
                     </div>
                 </div>

@@ -15,7 +15,7 @@
                 <form action="{{ route('projects.timers.store', $project) }}" method="post">
                     @csrf
                     @method('POST')
-                    <x-timer.fields :timer="null" :close-route="route('projects.timers.index', $project)" type="create" />              
+                    <x-timer.fields :$project type="create" />              
                     <input type="hidden" name="project_id" value="{{ $project->id }}">
                 </form>     
             </div>

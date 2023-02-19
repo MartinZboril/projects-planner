@@ -1,7 +1,6 @@
 <div class="card card-{{ $colour }}">
     <div class="card-header">{{ $label }}</div>
     <div class="card-body">
-        <!-- Content -->
         @forelse ($tasks as $task)
             <div class="card card-{{ $colour }} card-outline">
                 <div class="card-header">

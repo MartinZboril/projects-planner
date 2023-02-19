@@ -13,7 +13,7 @@
             <div class="container-fluid">
                 <div class="card card-primary card-outline">
                     <div class="card-body">
-                        <x-ticket.table :$tickets table-id="tickets-table" type="tickets" />
+                        <x-ticket.table :$tickets table-id="tickets-table" />
                     </div>
                 </div>            
             </div>

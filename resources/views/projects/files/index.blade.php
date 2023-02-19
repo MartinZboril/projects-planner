@@ -14,9 +14,7 @@
                 <div class="card-header p-0 pb-2 mb-2">
                     @include('projects.partials.header', ['active' => 'file'])
                 </div>          
-                <!-- Message -->
                 <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                <!-- Content -->
                 <x-file.card :upload-form-route="route('projects.files.upload', $project)" :files="$project->files" :display-header="false" />
             </div>
         </section>

@@ -33,10 +33,10 @@
                     <label for="milestone-id">Milestone</label>
                     <select class="form-control @error('milestone_id') is-invalid @enderror" name="milestone_id" id="milestone-id" style="width: 100%;">
                         <option disabled selected value>select milestone</option>
-                        @if($task->project ?? null)
-                            @foreach($task->project->milestones as $milestone)
+                        @if ($milestones ?? false)
+                            @foreach($milestones as $milestone)
                                 <option value="{{ $milestone->id }}" @selected(old('milestone_id', $task->milestone->id ?? null) === $milestone->id)>{{ $milestone->name }}</option>
-                            @endforeach
+                            @endforeach                    
                         @endif
                     </select>
                     @error('milestone_id')
@@ -57,14 +57,14 @@
                 </div> 
                 <div class="form-group required">
                     <label for="start_date" class="control-label">Start date</label>
-                    <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" placeholder="start date" value="{{ old('start_date', isset($task->start_date) ? $task->start_date->format('Y-m-d') : null) }}" autocomplete="off">
+                    <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" placeholder="start date" value="{{ old('start_date', ($task->start_date ?? false) ? $task->start_date->format('Y-m-d') : now()->format('Y-m-d')) }}" autocomplete="off">
                     @error('start_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group required">
                     <label for="due_date" class="control-label">Due date</label>
-                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', isset($task->due_date) ? $task->due_date->format('Y-m-d') : null) }}" autocomplete="off">
+                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', ($task->due_date ?? false) ? $task->due_date->format('Y-m-d') : now()->addDays(7)->format('Y-m-d')) }}" autocomplete="off">
                     @error('due_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

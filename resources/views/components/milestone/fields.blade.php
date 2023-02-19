@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-7">
         <div class="card card-primary card-outline">
-            <div class="card-header">{{ $type ==== 'edit' ? 'Edit' : 'Create' }} Milestone</div>
+            <div class="card-header">{{ $type === 'edit' ? 'Edit' : 'Create' }} Milestone</div>
             <div class="card-body">
                 <div class="form-group required">
                     <label for="name" class="control-label">Name</label>
@@ -24,14 +24,14 @@
                 </div> 
                 <div class="form-group required">
                     <label for="start_date" class="control-label">Start date</label>
-                    <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" placeholder="start date" value="{{ old('start_date', ($milestone->start_date ?? false) ? $milestone->start_date->format('Y-m-d') : null) }}" autocomplete="off">
+                    <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" placeholder="start date" value="{{ old('start_date', ($milestone->start_date ?? false) ? $milestone->start_date->format('Y-m-d') : now()->format('Y-m-d')) }}" autocomplete="off">
                     @error('start_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group required">
                     <label for="due_date" class="control-label">End date</label>
-                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', ($milestone->due_date ?? false) ? $milestone->due_date->format('Y-m-d') : null) }}" autocomplete="off">
+                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', ($milestone->due_date ?? false) ? $milestone->due_date->format('Y-m-d') : now()->addDays(7)->format('Y-m-d')) }}" autocomplete="off">
                     @error('due_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -61,7 +61,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $type ==== 'edit' ? route('projects.milestones.show', ['project' => $project, 'milestone' => $milestone]) : route('projects.milestones.index', ['project' => $project]) }}" class="cancel-btn">Close</a></span>
+                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $closeRoute }}" class="cancel-btn">Close</a></span>
             </div>
         </div>
     </div>

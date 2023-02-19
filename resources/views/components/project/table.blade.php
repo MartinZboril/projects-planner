@@ -17,7 +17,7 @@
         <tbody>
             @forelse ($projects as $project)
                 <tr>
-                    <td><a href="{{ route('projects.show', $project) }}">{{ $project->name }}</a></td>
+                    <td><a href="{{ $project->show_route }}">{{ $project->name }}</a></td>
                     <td><a href="{{ route('clients.show', $project->client) }}">{{ $project->client->name }}</a></td>
                     <td><x-project.ui.status-badge :text="true" :status="$project->status" /></td>
                     <td>
@@ -31,9 +31,9 @@
                     <td><span class="text-{{ $project->budget_plan > 100 ? 'danger' : 'body' }}">{{ $project->budget_plan }} %</span></td>
                     <td>@money($project->amount)</td>
                     <td>
-                        <a href="{{ route('projects.edit', $project) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
-                        <a href="{{ route('projects.show', $project) }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
-                        @include('projects.partials.buttons', ['project' => $project, 'buttonSize' => 'xs', 'hideButtonText' => ''])
+                        <a href="{{ $project->edit_route }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="{{ $project->show_route }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
+                        @include('projects.partials.buttons', ['buttonSize' => 'xs', 'hideButtonText' => ''])
                     </td>
                 </tr>
             @empty

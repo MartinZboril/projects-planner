@@ -10,7 +10,6 @@
         </div>
         <!-- Main content -->
         <section class="content">
-            <!-- Message -->
             <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
             <div class="row">
                 <x-dashboard.widget text="Today" :value="$data->get('today_tasks_count')" icon="fas fa-calendar-day" colour="lightblue color-palette" :link="route('tasks.index')" />
@@ -40,7 +39,7 @@
                         <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('overdue_tasks')->count() }}</span>
                     </div>
                     <div class="card-body">
-                        <x-task.table :tasks="$data->get('overdue_tasks')" table-id="overdue-tasks-table" type="tasks" />
+                        <x-task.table :tasks="$data->get('overdue_tasks')" table-id="overdue-tasks-table" />
                     </div>
                 </div>
             @endif
@@ -51,7 +50,7 @@
                         <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('new_tasks')->count() }}</span>
                     </div>
                     <div class="card-body">
-                        <x-task.table :tasks="$data->get('new_tasks')" table-id="new-tasks-table" type="tasks" />
+                        <x-task.table :tasks="$data->get('new_tasks')" table-id="new-tasks-table" />
                     </div>
                 </div>  
             @endif

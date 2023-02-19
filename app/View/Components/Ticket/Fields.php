@@ -16,7 +16,7 @@ class Fields extends Component
     {
         $this->ticket = $ticket;
         $this->type = $type;
-        $this->project = $project;
+        $this->project = $project->exists ? $project : null;
         $this->closeRoute = $this->getCloseRoute($ticket, $project, $type);
     }
 

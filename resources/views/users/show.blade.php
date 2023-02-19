@@ -12,9 +12,7 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
-                <!-- Message -->
                 <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                <!-- Content -->
                 <div class="row">
                     <div class="col-md-4">
                         @include('users.partials.profile')

@@ -14,9 +14,7 @@
                 <div class="card-header p-0 pb-2 mb-2">
                     @include('projects.partials.header', ['active' => 'project'])
                 </div>
-                <!-- Message -->
                 <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                <!-- Content -->                
                 <div class="row">
                     <div class="col-md-4">
                         @include('projects.partials.informations')

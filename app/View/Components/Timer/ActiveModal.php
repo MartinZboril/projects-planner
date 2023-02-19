@@ -2,18 +2,14 @@
 
 namespace App\View\Components\Timer;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\Component;
 
 class ActiveModal extends Component
 {
-    public $timers;
-    public $modalId;
-
-    public function __construct($timers, $modalId)
+    public function __construct(public Collection $timers, public string $modalId)
     {
-        $this->timers = $timers;
-        $this->modalId = $modalId;
-    }
+    }    
 
     public function render()
     {

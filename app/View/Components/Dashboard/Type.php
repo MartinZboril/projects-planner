@@ -9,7 +9,7 @@ class Type extends Component
     public $type;
     public $icon;
     
-    public function __construct($type)
+    public function __construct(string $type)
     {
         $this->type = __('pages.title.' . $type);
         switch($type) {

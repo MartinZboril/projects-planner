@@ -10,7 +10,6 @@
         </div>
         <!-- Main content -->
         <section class="content">
-            <!-- Message -->
             <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
             <div class="row">
                 <x-dashboard.widget text="Today" :value="$data->get('today_timers_total_time_sum') . ' Hours'" icon="fas fa-calendar-day" colour="lightblue color-palette" :link="route('projects.index')" />

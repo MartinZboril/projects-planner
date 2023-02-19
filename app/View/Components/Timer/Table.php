@@ -2,17 +2,17 @@
 
 namespace App\View\Components\Timer;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\Component;
+use App\Models\Timer;
 
 class Table extends Component
 {
-    public $timers;
-    public $tableId;
-
-    public function __construct($timers, $tableId)
+    public function __construct(public Collection $timers, public string $tableId, public string $type='timers')
     {
-        $this->timers = $timers;
-        $this->tableId = $tableId;
+        $this->timers->each(function (Timer $timer) {
+            $timer->edit_route = $timer->until ? route('projects.timers.edit', ['project' => $timer->project, 'timer' => $timer]) : null;
+        });
     }
 
     public function render()

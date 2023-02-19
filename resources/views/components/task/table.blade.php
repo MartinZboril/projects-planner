@@ -16,7 +16,7 @@
         <tbody>
             @forelse ($tasks as $task)
                 <tr>
-                    <td><a href="{{ $type === 'projects' ? route('projects.tasks.show', ['project' => $task->project, 'task' => $task]) : route('tasks.show', $task) }}">{{ $task->name }}</a></td>
+                    <td><a href="{{ $task->show_route }}">{{ $task->name }}</a></td>
                     @if ($type === 'tasks')
                         <td><a href="{{ route('projects.show', $task->project) }}">{{ $task->project->name }}</a></td>
                     @endif
@@ -30,13 +30,11 @@
                     <td><span class="text-{{ $task->overdue ? 'danger' : 'body' }}">{{ $task->due_date->format('d.m.Y') }}</span></td>
                     <td><x-task.ui.status-badge :text="true" :$task /></td>
                     <td>
+                        <a href="{{ $task->edit_route }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="{{ $task->show_route }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
                         @if ($type === 'projects')
-                            <a href="{{ route('projects.tasks.edit', ['project' => $task->project, 'task' => $task]) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
-                            <a href="{{ route('projects.tasks.show', ['project' => $task->project, 'task' => $task]) }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
                             @include('projects.tasks.partials.buttons', ['project' => $task->project, 'task' => $task, 'buttonSize' => 'xs', 'hideButtonText' => ''])
                         @else
-                            <a href="{{ route('tasks.edit', $task) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
-                            <a href="{{ route('tasks.show', $task) }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
                             @include('tasks.partials.buttons', ['task' => $task, 'buttonSize' => 'xs', 'hideButtonText' => ''])
                         @endif
                     </td>

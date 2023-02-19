@@ -10,7 +10,6 @@
         </div>
         <!-- Main content -->
         <section class="content">
-            <!-- Message -->
             <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
             <div class="container-fluid">
                 <div class="card-header p-0 pb-2">

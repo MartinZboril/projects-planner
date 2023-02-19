@@ -4,6 +4,7 @@ namespace App\View\Components\Task\UI;
 
 use Illuminate\View\Component;
 use App\Enums\TaskStatusEnum;
+use App\Models\Task;
 
 class StatusBadge extends Component
 {
@@ -11,7 +12,7 @@ class StatusBadge extends Component
     public $background;
     public $text;
 
-    public function __construct($task, $text)
+    public function __construct(Task $task, string $text)
     {
         $this->text = $text;
         if ($task->paused) {

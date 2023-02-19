@@ -11,7 +11,7 @@ class Fields extends Component
     public $type;
     public $closeRoute;
 
-    public function __construct($client, $type)
+    public function __construct(?Client $client, string $type)
     {
         $this->client = $client;
         $this->type = $type;
@@ -21,8 +21,8 @@ class Fields extends Component
     private function getCloseRoute(?Client $client, string $type): string
     {
         return $type === 'edit'
-                ? route('clients.show', $client)
-                : route('clients.index');
+                    ? route('clients.show', $client)
+                    : route('clients.index');
     }
 
     public function render()

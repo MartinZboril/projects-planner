@@ -15,7 +15,7 @@
                 <form action="{{ route('projects.tasks.store', $project) }}" method="post">
                     @csrf
                     @method('POST')
-                    <x-task.fields type="create" :task="null" :project="$project" />
+                    <x-task.fields type="create" :project="$project" />
                 </form> 
             </div>
         </section>

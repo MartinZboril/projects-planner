@@ -21,8 +21,8 @@ class Fields extends Component
     private function getCloseRoute(?User $user, string $type): string
     {
         return $type === 'edit'
-                ? route('users.show', $user)
-                : route('users.index');
+                    ? route('users.show', $user)
+                    : route('users.index');
     }
 
     public function render()

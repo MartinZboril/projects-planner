@@ -16,14 +16,12 @@
                 </div>
                 <div class="card card-primary card-outline">
                     <div class="card-header">
-                        <a href="{{ route('projects.milestones.create', [$project]) }}" class="btn-sm btn-primary"><i class="fas fa-plus mr-1"></i>Create</a>
+                        <a href="{{ route('projects.milestones.create', $project) }}" class="btn-sm btn-primary"><i class="fas fa-plus mr-1"></i>Create</a>
                         <a href="{{ route('reports.milestones') }}" class="btn-sm btn-primary text-white"><i class="fas fa-chart-line mr-1"></i>Report</a>
                     </div>
                     <div class="card-body">
-                        <!-- Message -->
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                        <!-- Content -->
-                        <x-milestone.table :milestones="$project->milestones" table-id="milestones-table" />      
+                        <x-milestone.table :milestones="$project->milestones" table-id="milestones-table" type="projects" />      
                     </div>
                 </div>
             </div>

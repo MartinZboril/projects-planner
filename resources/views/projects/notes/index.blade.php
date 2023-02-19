@@ -19,9 +19,7 @@
                         <a href="{{ route('projects.notes.create', $project) }}" class="btn-sm btn-primary"><i class="fas fa-plus mr-1"></i>Create</a>
                     </div>
                     <div class="card-body">
-                        <!-- Message -->
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                        <!-- Content -->
                         <x-note.card :notes="$project->notes" edit-form-route-name="projects.notes.edit" :parent="$project" />
                     </div>
                 </div>
