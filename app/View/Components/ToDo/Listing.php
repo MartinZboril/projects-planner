@@ -7,13 +7,8 @@ use Illuminate\View\Component;
 
 class Listing extends Component
 {
-    public $todos;
-    public $checkerFormPartial;
-
-    public function __construct(Collection $todos, string $checkerFormPartial)
+    public function __construct(public Collection $todos, public string $checkerFormPartial)
     {
-        $this->todos = $todos;
-        $this->checkerFormPartial = $checkerFormPartial;
     }
 
     public function render()

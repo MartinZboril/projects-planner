@@ -7,15 +7,8 @@ use App\Models\Note;
 
 class Fields extends Component
 {
-    public $note;
-    public $type;
-    public $closeRoute;
-
-    public function __construct(?Note $note, string $type, string $closeRoute)
+    public function __construct(public ?Note $note, public string $type, public string $closeRoute)
     {
-        $this->note = $note;
-        $this->type = $type;
-        $this->closeRoute = $closeRoute;
     }
 
     public function render()

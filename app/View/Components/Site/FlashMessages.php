@@ -6,13 +6,8 @@ use Illuminate\View\Component;
 
 class FlashMessages extends Component
 {
-    public $message;
-    public $type;
-
-    public function __construct(?string $message, ?string $type)
+    public function __construct(public ?string $message, public ?string $type)
     {
-        $this->message = $message;
-        $this->type = $type;
     }
 
     public function render()

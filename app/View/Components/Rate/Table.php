@@ -8,16 +8,12 @@ use App\Models\Rate;
 
 class Table extends Component
 {
-    public $rates;
-    public $tableId;
-
-    public function __construct(Collection $rates, string $tableId)
+    public function __construct(public Collection $rates, public string $tableId)
     {
-        $this->rates = $rates->each(function (Rate $rate) {
+        $this->rates->each(function (Rate $rate) {
             $rate->edit_route = route('users.rates.edit', ['user' => $rate->user, 'rate' => $rate]);
             $rate->active = $rate->is_active ? 'Yes' : 'No';
         });
-        $this->tableId = $tableId;
     }
 
     public function render()

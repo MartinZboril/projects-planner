@@ -8,18 +8,12 @@ use App\Models\Task;
 
 class Table extends Component
 {
-    public $tasks;
-    public $tableId;
-    public $type;
-
-    public function __construct(Collection $tasks, string $tableId, ?string $type='tasks')
+    public function __construct(public Collection $tasks, public string $tableId, public ?string $type='tasks')
     {
-        $this->tasks = $tasks->each(function (Task $task) use($type) {
+        $this->tasks->each(function (Task $task) use($type) {
             $task->edit_route = $this->getEditRoute($task, $type);
             $task->show_route = $this->getShowRoute($task, $type);
         });
-        $this->tableId = $tableId;
-        $this->type = $type;
     }
 
     private function getEditRoute(?Task $task, string $type): string

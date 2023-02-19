@@ -7,13 +7,8 @@ use App\Models\Comment;
 
 class Fields extends Component
 {
-    public $comment;
-    public $type;
-
-    public function __construct(?Comment $comment, string $type)
+    public function __construct(public ?Comment $comment, public string $type)
     {
-        $this->comment = $comment;
-        $this->type = $type;
     }
 
     public function render()

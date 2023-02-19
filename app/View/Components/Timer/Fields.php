@@ -7,10 +7,14 @@ use App\Models\{Project, Timer};
 
 class Fields extends Component
 {
+    public $timer;
+    public $type;
     public $closeRoute;
 
-    public function __construct(public ?Timer $timer, public string $type, Project $project)
+    public function __construct(?Timer $timer, string $type, Project $project)
     {
+        $this->timer = $timer;
+        $this->type = $type;
         $this->closeRoute = route('projects.timers.index', $project);    
     }
 

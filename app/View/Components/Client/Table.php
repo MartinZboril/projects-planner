@@ -8,16 +8,12 @@ use App\Models\Client;
 
 class Table extends Component
 {
-    public $clients;
-    public $tableId;
-
-    public function __construct(Collection $clients, string $tableId)
+    public function __construct(public Collection $clients, public string $tableId)
     {
-        $this->clients = $clients->each(function (Client $client) {
+        $this->clients->each(function (Client $client) {
             $client->edit_route = route('clients.edit', $client);
             $client->show_route = route('clients.show', $client);
         });
-        $this->tableId = $tableId;
     }
 
     public function render()

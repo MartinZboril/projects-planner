@@ -8,16 +8,12 @@ use App\Models\User;
 
 class Table extends Component
 {
-    public $users;
-    public $tableId;
-
-    public function __construct(Collection $users, string $tableId)
+    public function __construct(public Collection $users, public string $tableId)
     {
-        $this->users = $users->each(function (User $user) {
+        $this->users->each(function (User $user) {
             $user->edit_route = route('users.edit', $user);
             $user->show_route = route('users.show', $user);
         });
-        $this->tableId = $tableId;
     }
 
     public function render()
