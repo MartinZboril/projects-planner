@@ -51,7 +51,7 @@
       <!-- Footer -->
       @include('site.footer')
       <!-- Timer -->
-      @include('site.partials.timer')
+      <x-timer.active-modal :timers="Auth::User()->activeTimers" modal-id="timers-preview-modal" />
       <!-- Error -->
       @if(Session::has('error'))
         <input type="hidden" id="error-content" value="{{ Session::get('error') }}">

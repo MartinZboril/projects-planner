@@ -67,7 +67,7 @@
                 </div> 
                 <div class="form-group required">
                     <label for="due_date" class="control-label">Due date</label>
-                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', isset($ticket->due_date) ? $ticket->due_date->format('Y-m-d') : null) }}" autocomplete="off">
+                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', ($ticket->due_date ?? false) ? $ticket->due_date->format('Y-m-d') : now()->addDays(7)->format('Y-m-d')) }}" autocomplete="off">
                     @error('due_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

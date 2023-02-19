@@ -17,10 +17,10 @@
                 <!-- Content -->
                 <div class="row">
                     <div class="col-md-4">
-                        <x-user.profile :$user />
+                        @include('users.partials.profile')
                     </div>
                     <div class="col-md-8">
-                        <x-rate.card :$user :create-form-route="route('users.rates.create', $user)" edit-form-route-name="users.rates.edit" />
+                        <x-rate.card :rates="$user->rates" :create-form-route="route('users.rates.create', $user)" />
                         <x-activity-feed.card />
                     </div>
                 </div>         

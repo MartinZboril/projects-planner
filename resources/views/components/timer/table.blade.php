@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table id="{{ $timers->count() == 0 ?: $tableId }}" class="table table-bordered table-striped">
+    <table id="{{ $timers->count() === 0 ?: $tableId }}" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>#</th>
@@ -30,7 +30,7 @@
                     <td>{{ $timer->until ? $timer->total_time : 'N/A' }}</td>
                     <td>
                         @if ($timer->until)
-                            <x-site.amount :value="$timer->amount" />
+                            @money($timer->amount)
                         @else
                             N/A
                         @endif  

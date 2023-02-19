@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-7">
         <div class="card card-primary card-outline">
-            <div class="card-header">{{ $type === 'create' ? 'Create' : 'Edit'}} user</div>
+            <div class="card-header">{{ $type === 'edit' ? 'Edit' : 'Create'}} User</div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
@@ -54,7 +54,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 text-center">
-                        <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar->path) : asset('dist/img/user.png') }}" class="img-circle" alt="User Image" style="width: 80px;height: 80px;">
+                        <img src="{{ ($user->avatar->id ?? false) ? asset('storage/' . $user->avatar->path) : asset('dist/img/user.png') }}" class="img-circle" alt="User Image" style="width: 80px;height: 80px;">
                     </div>
                 </div>
                 <hr>
@@ -181,7 +181,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $type === 'edit' ? route('users.show', $user) : route('users.index') }}" class="cancel-btn">Close</a></span>
+                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $closeRoute }}" class="cancel-btn">Close</a></span>
             </div>
         </div>
     </div>

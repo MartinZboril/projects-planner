@@ -16,8 +16,8 @@
                 <!-- Content -->
                 <div class="row">
                     <div class="col-md-5">
-                        <x-milestone.ui.informations :$milestone />
-                        <x-file.card :upload-form-route="route('projects.milestones.files.upload', ['project' => $milestone->project, 'milestone' => $milestone])" :files="$milestone->files" :display-header="true" />
+                        @include('projects.milestones.partials.informations')
+                        <x-file.card :upload-form-route="route('projects.milestones.files.upload', ['project' => $milestone->project, 'milestone' => $milestone])" :files="$milestone->files" />
                         <x-activity-feed.card />
                     </div>
                     <div class="col-md-7">
@@ -27,7 +27,7 @@
                                 <x-task.table table-id="tasks-table" :tasks="$milestone->tasks" type="projects" />
                             </div>
                         </div>
-                        <x-comment.card :comments="$milestone->comments" :parent="['project' => $milestone->project, 'milestone' => $milestone]" :store-form-route="route('projects.milestones.comments.store', ['project' => $milestone->project, 'milestone' => $milestone])" update-form-route-name="projects.milestones.comments.update" :display-header="true" /> 
+                        <x-comment.card :comments="$milestone->comments" :parent="['project' => $milestone->project, 'milestone' => $milestone]" :store-form-route="route('projects.milestones.comments.store', ['project' => $milestone->project, 'milestone' => $milestone])" update-form-route-name="projects.milestones.comments.update" /> 
                     </div>
                 </div>         
             </div>

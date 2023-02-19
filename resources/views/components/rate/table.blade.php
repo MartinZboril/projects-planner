@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table id="{{ $rates->count() == 0 ?: $tableId }}" class="table table-bordered table-striped">
+    <table id="{{ $rates->count() === 0 ?: $tableId }}" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>#</th>
@@ -19,12 +19,10 @@
                             #
                         @endif
                     </th>
-                    <td><a href="{{ route($editFormRouteName, ['user' => $rate->user, 'rate' => $rate]) }}">{{ $rate->name }}</a></td>
-                    <td>{{ $rate->is_active ? 'Yes' : 'No' }}</td>
-                    <td><x-site.amount :value="$rate->amount" /></td>
-                    <td>                                                    
-                        <a href="{{ route($editFormRouteName, ['user' => $rate->user, 'rate' => $rate]) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
-                    </td>
+                    <td><a href="{{ $rate->edit_route }}">{{ $rate->name }}</a></td>
+                    <td>{{ $rate->active }}</td>
+                    <td>@money($rate->value)</td>
+                    <td><a href="{{ $rate->edit_route }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a></td>
                 </tr>
             @empty
                 <tr>

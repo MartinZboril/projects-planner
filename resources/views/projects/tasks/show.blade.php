@@ -18,13 +18,13 @@
                 <!-- Content -->
                 <div class="row">
                     <div class="col-md-5">
-                        <x-task.ui.informations :$task />
+                        @include('tasks.partials.informations')
                         <x-activity-feed.card />
                     </div>
                     <div class="col-md-7">
                         <x-todo.card :parent="['project' => $task->project]" checker-form-partial="projects.tasks.todos.forms.check" :create-form-route="route('projects.tasks.todos.create', ['project' => $task->project, 'task' => $task])" edit-form-route-name="projects.tasks.todos.edit" :todos="$task->todos" />
-                        <x-file.card :upload-form-route="route('projects.tasks.files.upload', ['project' => $task->project, 'task' => $task])" :files="$task->files" :display-header="true" />
-                        <x-comment.card :comments="$task->comments" :parent="['project' => $task->project, 'task' => $task]" :store-form-route="route('projects.tasks.comments.store', ['project' => $task->project, 'task' => $task])" update-form-route-name="projects.tasks.comments.update" :display-header="true" />     
+                        <x-file.card :upload-form-route="route('projects.tasks.files.upload', ['project' => $task->project, 'task' => $task])" :files="$task->files" />
+                        <x-comment.card :comments="$task->comments" :parent="['project' => $task->project, 'task' => $task]" :store-form-route="route('projects.tasks.comments.store', ['project' => $task->project, 'task' => $task])" update-form-route-name="projects.tasks.comments.update" />     
                     </div>
                 </div> 
             </div>

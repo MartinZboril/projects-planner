@@ -66,7 +66,7 @@ class TicketController extends Controller
      */
     public function edit(Ticket $ticket): View
     {
-        return view('tickets.edit', ['ticket' => $ticket, 'projects' => Project::all(), 'users' => User::all()]);
+        return view('tickets.edit', ['ticket' => $ticket]);
     }
 
     /**

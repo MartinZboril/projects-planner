@@ -2,19 +2,22 @@
 
 namespace App\View\Components\Rate;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\Component;
+use App\Models\Rate;
 
 class Table extends Component
 {
     public $rates;
     public $tableId;
-    public $editFormRouteName;
 
-    public function __construct($rates, $tableId, $editFormRouteName)
+    public function __construct(Collection $rates, string $tableId)
     {
-        $this->rates = $rates;
+        $this->rates = $rates->each(function (Rate $rate) {
+            $rate->edit_route = route('users.rates.edit', ['user' => $rate->user, 'rate' => $rate]);
+            $rate->active = $rate->is_active ? 'Yes' : 'No';
+        });
         $this->tableId = $tableId;
-        $this->editFormRouteName = $editFormRouteName;
     }
 
     public function render()

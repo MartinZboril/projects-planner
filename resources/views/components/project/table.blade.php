@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table id="{{ $projects->count() == 0 ?: $tableId }}" class="table table-bordered table-striped">
+    <table id="{{ $projects->count() === 0 ?: $tableId }}" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>Name</th>
@@ -29,7 +29,7 @@
                     <td><span class="text-{{ $project->time_plan > 100 ? 'danger' : 'body' }}">{{ $project->time_plan }} %</span></td>
                     <td>{{ $project->total_time }} Hours</td>
                     <td><span class="text-{{ $project->budget_plan > 100 ? 'danger' : 'body' }}">{{ $project->budget_plan }} %</span></td>
-                    <td><x-site.amount :value="$project->amount" /></td>
+                    <td>@money($project->amount)</td>
                     <td>
                         <a href="{{ route('projects.edit', $project) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
                         <a href="{{ route('projects.show', $project) }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>

@@ -33,7 +33,7 @@ class ProjectTicketController extends Controller
      */
     public function create(Project $project): View
     {
-        return view('projects.tickets.create', ['project' => $project, 'ticket' => new Ticket]);
+        return view('projects.tickets.create', ['project' => $project]);
     }
 
     /**
@@ -58,7 +58,7 @@ class ProjectTicketController extends Controller
      */
     public function show(Project $project, Ticket $ticket): View
     {
-        return view('projects.tickets.show', ['project' => $project, 'ticket' => $ticket, 'comment' => new Comment]);
+        return view('projects.tickets.show', ['project' => $project, 'ticket' => $ticket]);
     }
 
     /**

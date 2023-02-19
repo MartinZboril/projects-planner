@@ -9,7 +9,7 @@ class Type extends Component
 {
     public $title;
 
-    public function __construct($type)
+    public function __construct(TicketTypeEnum $type)
     {
         switch ($type) {
             case TicketTypeEnum::error:

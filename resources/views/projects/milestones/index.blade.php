@@ -6,13 +6,13 @@
     <div class="content-wrapper">
         <!-- Content Header -->
         <div class="p-3 mb-3" style="background-color:white;">
-            <x-project.ui.actions :$project />
+            @include('projects.partials.actions')
         </div>
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
                 <div class="card-header p-0 pb-2 mb-2">
-                    <x-project.ui.header :$project active="milestone" />
+                    @include('projects.partials.header', ['active' => 'milestone'])
                 </div>
                 <div class="card card-primary card-outline">
                     <div class="card-header">
@@ -30,12 +30,3 @@
         </section>
     </div>
 @endsection
-
-@push('scripts')
-    <script>
-        $(function () {
-            $("#milestones-table").DataTable();
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-    </script>
-@endpush

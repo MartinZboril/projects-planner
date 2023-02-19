@@ -1,4 +1,4 @@
-<div class="modal" id="timers-preview-modal">
+<div class="modal" id="{{ $modalId }}">
     <div class="modal-dialog">
         <div class="modal-content">
             <!-- Modal Header -->
@@ -19,9 +19,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach(Auth::User()->activeTimers as $timer)
+                            @foreach($timers as $timer)
                                 <tr>
-                                    <td><a href="{{ route('projects.show', $timer->project->id) }}">{{ $timer->project->name }}</a></td>
+                                    <td><a href="{{ route('projects.show', $timer->project) }}">{{ $timer->project->name }}</a></td>
                                     <td>{{ $timer->rate->name }}</td>
                                     <td><span id="timer-{{ $timer->id }}-display" class="timer-record" data-since="{{ $timer->since }}"></span></td>
                                     <td><a href="#" class="btn btn-sm btn-danger" onclick="event.preventDefault(); document.getElementById('stop-working-on-timer-{{ $timer->id }}').submit();"><i class="fas fa-stop"></i></a></td>

@@ -17,9 +17,7 @@
                         Tickets
                     </div>
                     <div class="card-body">
-                        <!-- Message -->
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                        <!-- Content -->
                         <x-ticket.table :$tickets table-id="tickets-table" type="tickets" />
                     </div>
                 </div>            
