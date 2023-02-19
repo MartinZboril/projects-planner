@@ -94,7 +94,7 @@ class Ticket extends Model
 
     public function getOverdueAttribute(): bool
     {
-        return $this->due_date <= date('Y-m-d') && $this->status == TicketStatusEnum::open;
+        return $this->due_date <= date('Y-m-d') && $this->status ===TicketStatusEnum::open;
     }
     
     public function getAssignedAttribute(): bool

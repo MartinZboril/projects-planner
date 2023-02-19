@@ -6,7 +6,7 @@
         <div class="timeline">
             <x-comment.create :$storeFormRoute />
             @foreach ($comments as $comment)
-                <x-comment.item :$updateFormRouteName :$parent :$comment />
+                <x-comment.item :$comment />
             @endforeach
         </div>                                                    
         

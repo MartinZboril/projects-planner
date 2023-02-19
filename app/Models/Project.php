@@ -126,7 +126,7 @@ class Project extends Model
 
     public function getOverdueAttribute(): bool
     {
-        return $this->due_date <= date('Y-m-d') && $this->status == ProjectStatusEnum::active;
+        return $this->due_date <= date('Y-m-d') && $this->status === ProjectStatusEnum::active;
     }
 
     public function getDeadlineAttribute(): int

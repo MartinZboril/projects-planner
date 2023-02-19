@@ -15,7 +15,7 @@
                 <form action="{{ route('clients.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('POST')
-                    <x-client.fields :client="null" type="create" /> 
+                    <x-client.fields type="create" /> 
                 </form>     
             </div>
         </section>

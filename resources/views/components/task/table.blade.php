@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table id="{{ $tasks->count() == 0 ?: $tableId }}" class="table table-bordered table-striped">
+    <table id="{{ $tasks->count() === 0 ?: $tableId }}" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>Name</th>

@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-7">
         <div class="card card-primary card-outline">
-            <div class="card-header">{{ $type === 'edit' ? 'Edit' : 'Create' }} Milestone</div>
+            <div class="card-header">{{ $type ==== 'edit' ? 'Edit' : 'Create' }} Milestone</div>
             <div class="card-body">
                 <div class="form-group required">
                     <label for="name" class="control-label">Name</label>
@@ -15,7 +15,7 @@
                     <select class="form-control @error('owner_id') is-invalid @enderror" name="owner_id" id="owner-id" style="width: 100%;">
                         <option disabled selected value>select owner</option>
                         @foreach($project->team as $user)
-                            <option value="{{ $user->id }}" @selected(old('owner_id', $milestone->owner_id ?? null) == $user->id)>{{ $user->full_name }}</option>
+                            <option value="{{ $user->id }}" @selected(old('owner_id', $milestone->owner_id ?? null) === $user->id)>{{ $user->full_name }}</option>
                         @endforeach
                     </select>
                     @error('owner_id')
@@ -61,7 +61,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $type === 'edit' ? route('projects.milestones.show', ['project' => $project, 'milestone' => $milestone]) : route('projects.milestones.index', ['project' => $project]) }}" class="cancel-btn">Close</a></span>
+                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $type ==== 'edit' ? route('projects.milestones.show', ['project' => $project, 'milestone' => $milestone]) : route('projects.milestones.index', ['project' => $project]) }}" class="cancel-btn">Close</a></span>
             </div>
         </div>
     </div>

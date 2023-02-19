@@ -6,7 +6,7 @@
             <form action="{{ $storeFormRoute }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('POST')
-                <x-comment.fields type="create" :comment="null" />
+                <x-comment.fields type="create" />
             </form>
         </div>
     </div>
