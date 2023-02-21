@@ -3,7 +3,6 @@
 namespace App\Services\Data;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\ValidatedInput;
 use App\Enums\TaskStatusEnum;
 use App\Models\{Comment, Task};
 use App\Services\FileService;
@@ -17,23 +16,15 @@ class TaskService
     /**
      * Save data for task.
      */
-    public function handleSave(Task $task, ValidatedInput $inputs): Task
+    public function handleSave(Task $task, array $inputs): Task
     {
-        $task = Task::updateOrCreate(
-            ['id' => $task->id],
-            [
-                'status' => $task->status ?? TaskStatusEnum::new,
-                'author_id' => $inputs->author_id ?? ($task->author_id ?? Auth::id()),
-                'project_id' => $inputs->project_id,
-                'milestone_id' => $inputs->milestone_id ?? null,
-                'user_id' => $inputs->user_id,
-                'name' => $inputs->name,
-                'start_date' => $inputs->start_date,
-                'due_date' => $inputs->due_date,
-                'description' => $inputs->description,
-            ]
-        );
-
+        // Prepare fields
+        $inputs['status'] = $task->status ?? TaskStatusEnum::new;
+        $inputs['author_id'] = $inputs['author_id'] ?? ($task->author_id ?? Auth::id());
+        $inputs['milestone_id'] = $inputs['milestone_id'] ?? null;
+        // Save task
+        $task->fill($inputs)->save();
+        // Store tasks projects users
         $this->projectUserService->handleStoreUser($task->project, $task->author);
         $this->projectUserService->handleStoreUser($task->project, $task->user);
 
@@ -63,10 +54,11 @@ class TaskService
      */
     public function handleChangeStatus(Task $task, int $status): Task
     {
-        $task->is_returned = $task->isReturned($status) ? true : false;
-        $task->status = $status;
-        $task->save();
-        return $task;
+        $task->update([
+            'is_stopped' => $task->isReturned($status) ? true : false,
+            'status' => $status,
+        ]);
+        return $task->fresh();
     }
         
     /**
@@ -74,9 +66,8 @@ class TaskService
      */
     public function handlePause(Task $task): Task
     {
-        $task->is_stopped = !$task->is_stopped;
-        $task->save();
-        return $task;
+        $task->update(['is_stopped' => !$task->is_stopped]);
+        return $task->fresh();
     }
 
     /**
@@ -84,8 +75,7 @@ class TaskService
      */
     public function handleMark(Task $task): Task
     {
-        $task->is_marked = !$task->is_marked;
-        $task->save();
-        return $task;
+        $task->update(['is_marked' => !$task->is_marked]);
+        return $task->fresh();
     }
 }

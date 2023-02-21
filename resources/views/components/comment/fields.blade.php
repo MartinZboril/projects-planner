@@ -1,4 +1,4 @@
-<textarea name="content" class="form-control" id="{{ $type === 'edit' ? 'content-editor-comment-' . $comment->id : 'content' }}" cols="30" rows="10" placeholder="content">{{ old('content', $comment->content ?? null) }}</textarea>
+<textarea name="content" class="form-control @error('content') is-invalid @enderror" id="{{ $type === 'edit' ? 'content-editor-comment-' . $comment->id : 'content' }}" cols="30" rows="10" placeholder="content">{{ old('content', $comment->content ?? null) }}</textarea>
 @error('content')
     <div class="invalid-feedback">{{ $message }}</div>
 @enderror

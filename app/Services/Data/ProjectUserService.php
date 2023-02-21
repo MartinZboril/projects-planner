@@ -16,12 +16,4 @@ class ProjectUserService
             ['project_id' => $project->id, 'user_id' => $user->id]
         );
     }
-
-    /**
-     * Store new project users.
-     */
-    public function handleStoreUsers(Project $project, array $userIds): void
-    {
-        ($project->team()->count() === 0) ? $project->team()->attach($userIds) : $project->team()->sync($userIds);
-    }
 }

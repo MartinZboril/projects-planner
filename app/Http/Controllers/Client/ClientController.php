@@ -42,7 +42,7 @@ class ClientController extends Controller
     public function store(StoreClientRequest $request): RedirectResponse
     {
         try {
-            $client = $this->clientService->handleSave(new Client, $request->safe(), $request->file('logo'));
+            $client = $this->clientService->handleSave(new Client, $request->validated(), $request->file('logo'));
             $this->flash(__('messages.client.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
@@ -75,7 +75,7 @@ class ClientController extends Controller
     public function update(UpdateClientRequest $request, Client $client): RedirectResponse
     {
         try {
-            $client = $this->clientService->handleSave($client, $request->safe(), $request->file('logo'));
+            $client = $this->clientService->handleSave($client, $request->validated(), $request->file('logo'));
             $this->flash(__('messages.client.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);            

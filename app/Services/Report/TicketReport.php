@@ -7,11 +7,8 @@ use Illuminate\Support\Collection;
 
 class TicketReport
 {
-    protected $builderReport;
-    
-    public function __construct()
+    public function __construct(public BuilderReport $builderReport=new BuilderReport)
     {
-        $this->builderReport = new BuilderReport;
     }
 
     /**

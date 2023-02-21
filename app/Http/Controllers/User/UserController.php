@@ -42,7 +42,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $request): RedirectResponse
     {
         try {
-            $user = $this->userService->handleSave(new User, $request->safe(), $request->file('avatar'));
+            $user = $this->userService->handleSave(new User, $request->validated(), $request->file('avatar'));
             $this->flash(__('messages.user.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
@@ -75,7 +75,7 @@ class UserController extends Controller
     public function update(User $user, UpdateUserRequest $request): RedirectResponse
     {
         try {
-            $user = $this->userService->handleSave($user, $request->safe(), $request->file('avatar'));
+            $user = $this->userService->handleSave($user, $request->validated(), $request->file('avatar'));
             $this->flash(__('messages.user.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

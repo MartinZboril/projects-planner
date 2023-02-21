@@ -42,7 +42,7 @@ class ProjectMilestoneController extends Controller
     public function store(StoreMilestoneRequest $request, Project $project): RedirectResponse
     {
         try {
-            $milestone = $this->milestoneService->handleSave(new Milestone, $request->safe());
+            $milestone = $this->milestoneService->handleSave(new Milestone, $request->validated());
             $this->flash(__('messages.milestone.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
@@ -73,7 +73,7 @@ class ProjectMilestoneController extends Controller
     public function update(UpdateMilestoneRequest $request, Project $project, Milestone $milestone): RedirectResponse
     {
         try {
-            $milestone = $this->milestoneService->handleSave($milestone, $request->safe());
+            $milestone = $this->milestoneService->handleSave($milestone, $request->validated());
             $this->flash(__('messages.milestone.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

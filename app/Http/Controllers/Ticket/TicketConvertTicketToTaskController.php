@@ -25,7 +25,7 @@ class TicketConvertTicketToTaskController extends Controller
     public function __invoke(ConvertTicketRequest $request, Ticket $ticket): RedirectResponse
     {
         try {
-            $task = $this->taskService->handleSave(new Task, $request->safe()->merge([
+            $task = $this->taskService->handleSave(new Task, $request->validated() + [
                 'project_id' => $ticket->project_id,
                 'author_id' => $ticket->reporter_id,
                 'user_id' => $ticket->assignee_id,
@@ -33,7 +33,7 @@ class TicketConvertTicketToTaskController extends Controller
                 'start_date' => $ticket->due_date,
                 'due_date' => $ticket->due_date,
                 'description' => $ticket->message,
-            ]));
+            ]);
             $this->ticketService->handleConvert($ticket);      
             $this->flash(__('messages.task.create'), 'info');
         } catch (Exception $exception) {

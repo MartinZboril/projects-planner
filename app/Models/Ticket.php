@@ -12,10 +12,10 @@ class Ticket extends Model
 {
     use HasFactory, MarkedRecords, OverdueRecords;
 
-    protected $fillable = [
-        'status', 'reporter_id', 'project_id', 'assignee_id', 'subject', 'type', 'priority', 'due_date', 'message', 'is_convert',
-    ]; 
-
+    protected $guarded = [
+        'id', 'created_at', 'updated_at',
+    ];
+    
     protected $dates = ['due_date'];
 
     protected $appends = [

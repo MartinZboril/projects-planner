@@ -13,7 +13,7 @@ class Project extends Model
     use HasFactory, MarkedRecords, OverdueRecords;
 
     protected $fillable = [
-        'status', 'client_id', 'name', 'start_date', 'due_date', 'estimated_hours', 'budget', 'description',
+        'status', 'client_id', 'name', 'start_date', 'due_date', 'estimated_hours', 'budget', 'description', 'is_marked',
     ]; 
 
     protected $dates = ['start_date', 'due_date'];

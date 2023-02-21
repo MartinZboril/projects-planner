@@ -2,7 +2,6 @@
 
 namespace App\Services\Data;
 
-use Illuminate\Support\ValidatedInput;
 use App\Models\{Comment, Milestone};
 use App\Services\FileService;
 
@@ -11,20 +10,14 @@ class MilestoneService
     /**
      * Save data for milestone.
      */
-    public function handleSave(Milestone $milestone, ValidatedInput $inputs): Milestone
+    public function handleSave(Milestone $milestone, array $inputs): Milestone
     {
-        return Milestone::updateOrCreate(
-            ['id' => $milestone->id],
-            [
-                'project_id' => $milestone->project_id ?? $inputs->project_id,
-                'owner_id' => $milestone->owner_id ?? $inputs->owner_id,
-                'name' => $inputs->name,
-                'start_date' => $inputs->start_date,
-                'due_date' => $inputs->due_date,
-                'colour' => $inputs->colour,
-                'description' => $inputs->description,
-            ]
-        );
+        // Prepare fields
+        $inputs['project_id'] = $milestone->project_id ?? $inputs['project_id'];
+        $inputs['owner_id'] = $milestone->owner_id ?? $inputs['owner_id'];
+        // Save note
+        $milestone->fill($inputs)->save();
+        return $milestone;
     }
 
     /**
@@ -50,8 +43,7 @@ class MilestoneService
      */
     public function handleMark(Milestone $milestone): Milestone
     {
-        $milestone->is_marked = !$milestone->is_marked;
-        $milestone->save();
-        return $milestone;
+        $milestone->update(['is_marked' => !$milestone->is_marked]);
+        return $milestone->fresh();
     }
 }

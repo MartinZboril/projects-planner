@@ -3,7 +3,6 @@
 namespace App\Services\Data;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\ValidatedInput;
 use App\Models\Comment;
 use App\Services\FileService;
 
@@ -12,16 +11,13 @@ class CommentService
     /**
      * Save data for comment.
      */
-    public function handleSave(Comment $comment, ValidatedInput $inputs, ?Array $uploadedFiles): Comment
+    public function handleSave(Comment $comment, array $inputs, ?Array $uploadedFiles): Comment
     {
-        $comment = Comment::updateOrCreate(
-            ['id' => $comment->id],
-            [
-                'user_id' => $comment->user_id ?? Auth::id(),
-                'content' => $inputs->content,
-            ]
-        );
-
+        // Prepare fields
+        $inputs['user_id'] = $comment->user_id ?? Auth::id();
+        // Save note
+        $comment->fill($inputs)->save();
+        // Store comments files
         if ($uploadedFiles) {
             $this->storeFiles($comment, $uploadedFiles);
         }

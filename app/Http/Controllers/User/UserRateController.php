@@ -34,9 +34,9 @@ class UserRateController extends Controller
     public function store(StoreRateRequest $request, User $user): RedirectResponse
     {
         try {
-            $this->rateService->handleSave(new Rate, $request->safe()->merge([
+            $this->rateService->handleSave(new Rate, $request->validated() + [
                 'user_id' => $user->id
-            ]));
+            ]);
             $this->flash(__('messages.rate.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
@@ -61,7 +61,7 @@ class UserRateController extends Controller
     public function update(UpdateRateRequest $request, User $user, Rate $rate): RedirectResponse
     {
         try {
-            $this->rateService->handleSave($rate, $request->safe());
+            $this->rateService->handleSave($rate, $request->validated());
             $this->flash(__('messages.rate.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

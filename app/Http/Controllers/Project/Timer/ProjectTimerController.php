@@ -42,7 +42,7 @@ class ProjectTimerController extends Controller
     public function store(StoreTimerRequest $request, Project $project): RedirectResponse
     {
         try {
-            $timer = $this->timerService->handleSave(new Timer, $request->safe());
+            $timer = $this->timerService->handleSave(new Timer, $request->validated());
             $this->flash(__('messages.timer.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
@@ -65,7 +65,7 @@ class ProjectTimerController extends Controller
     public function update(UpdateTimerRequest $request, Project $project, Timer $timer): RedirectResponse
     {
         try {
-            $timer = $this->timerService->handleSave($timer, $request->safe());
+            $timer = $this->timerService->handleSave($timer, $request->validated());
             $this->flash(__('messages.timer.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

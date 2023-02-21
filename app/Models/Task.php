@@ -12,9 +12,9 @@ class Task extends Model
 {
     use HasFactory, MarkedRecords, OverdueRecords;
 
-    protected $fillable = [
-        'status', 'author_id', 'user_id', 'project_id', 'milestone_id', 'name', 'start_date', 'due_date', 'description',
-    ]; 
+    protected $guarded = [
+        'id', 'created_at', 'updated_at',
+    ];
 
     protected $dates = ['start_date', 'due_date'];
 

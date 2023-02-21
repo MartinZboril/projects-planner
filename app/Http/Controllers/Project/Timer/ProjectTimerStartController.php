@@ -25,7 +25,7 @@ class ProjectTimerStartController extends Controller
     public function __invoke(StartTimerRequest $request, Project $project): RedirectResponse
     {
         try {
-            $this->timerService->handleStart($request->safe());
+            $this->timerService->handleStart($project->id, $request->rate_id);
             $this->flash(__('messages.timer.start'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

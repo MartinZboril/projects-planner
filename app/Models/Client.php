@@ -12,7 +12,7 @@ class Client extends Model
     use HasFactory, MarkedRecords;
 
     protected $guarded = [
-        'id', 'is_marked', 'logo_id', 'created_at', 'updated_at',
+        'id', 'created_at', 'updated_at',
     ];
 
     protected $appends = [

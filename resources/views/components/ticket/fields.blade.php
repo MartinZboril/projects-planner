@@ -74,7 +74,7 @@
                 </div>
                 <div class="form-group required">
                     <label for="message" class="control-label">Message</label>
-                    <textarea name="message" class="form-control summernote" id="message" cols="30" rows="10" placeholder="message">{{ old('message', $ticket->message ?? null) }}</textarea>
+                    <textarea name="message" class="form-control @error('description') is-invalid @enderror" id="message" cols="30" rows="10" placeholder="message">{{ old('message', $ticket->message ?? null) }}</textarea>
                     @error('message')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

@@ -42,7 +42,7 @@ class TaskController extends Controller
     public function store(StoreTaskRequest $request): RedirectResponse
     {
         try {
-            $task = $this->taskService->handleSave(new Task, $request->safe());
+            $task = $this->taskService->handleSave(new Task, $request->validated());
             $this->flash(__('messages.task.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
@@ -75,7 +75,7 @@ class TaskController extends Controller
     public function update(UpdateTaskRequest $request, Task $task): RedirectResponse
     {
         try {
-            $task = $this->taskService->handleSave($task, $request->safe());
+            $task = $this->taskService->handleSave($task, $request->validated());
             $this->flash(__('messages.task.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
