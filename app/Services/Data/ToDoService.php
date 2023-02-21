@@ -22,7 +22,7 @@ class ToDoService
      */
     public function handleCheck(ToDo $todo): ToDo
     {
-        $todo->update(['is_marked' => !$todo->is_finished]);
+        $todo->update(['is_finished' => !$todo->is_finished]);
         return $todo->fresh();
     }
 }

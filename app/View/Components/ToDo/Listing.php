@@ -7,7 +7,7 @@ use Illuminate\View\Component;
 
 class Listing extends Component
 {
-    public function __construct(public Collection $todos, public string $checkerFormPartial)
+    public function __construct(public Collection $todos)
     {
     }
 
