@@ -3,7 +3,9 @@
     <div class="invalid-feedback">{{ $message }}</div>
 @enderror
 <input type="file" name="files[]" multiple>
-
+@error('files')
+    <div class="invalid-feedback">{{ $message }}</div>
+@enderror
 <hr>
 <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"></span>
 @if ($type === 'edit')                

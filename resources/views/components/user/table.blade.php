@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table id="{{ $users->count() == 0 ?: $tableId }}" class="table table-bordered table-striped">
+    <table id="{{ $users->count() === 0 ?: $tableId }}" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>Name</th>
@@ -14,15 +14,15 @@
         <tbody>
             @forelse ($users as $user)
                 <tr>
-                    <td><x-site.ui.user-icon :user="$user" /><a href="{{ route('users.show', $user) }}">{{ $user->full_name }}</a></td>
+                    <td><x-site.ui.user-icon :user="$user" /><a href="{{ $user->show_route }}">{{ $user->full_name }}</a></td>
                     <td>{{ $user->email }}</td>
                     <td>{{ $user->job_title }}</td>
                     <td>{{ $user->mobile }}</td>
                     <td>{{ $user->city }}</td>
                     <td>{{ $user->created_at->format('d.m.Y') }}</td>
                     <td>
-                        <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
-                        <a href="{{ route('users.show', $user) }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                        <a href="{{ $user->edit_route }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="{{ $user->show_route }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
                     </td>
                 </tr>
             @empty

@@ -52,7 +52,7 @@ class UserRateController extends Controller
      */
     public function edit(User $user, Rate $rate): View
     {
-        return view('users.rates.edit', ['user' => $user, 'rate' => $rate]);
+        return view('users.rates.edit', ['rate' => $rate]);
     }
 
     /**

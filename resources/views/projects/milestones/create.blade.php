@@ -15,7 +15,7 @@
                 <form action="{{ route('projects.milestones.store', $project) }}" method="post">
                     @csrf
                     @method('POST')
-                    <x-milestone.fields :$project :milestone="null" type="create" />                                                                                       
+                    <x-milestone.fields :$project type="create" />                                                                                       
                     <input type="hidden" name="project_id" value="{{ $project->id }}">                  
                 </form>     
             </div>

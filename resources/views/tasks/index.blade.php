@@ -17,10 +17,8 @@
                         Tasks
                     </div>
                     <div class="card-body">
-                        <!-- Message -->
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                        <!-- Content -->
-                        <x-task.table table-id="tasks-table" :$tasks type="tasks" />
+                        <x-task.table table-id="tasks-table" :$tasks />
                     </div>
                 </div>            
             </div>

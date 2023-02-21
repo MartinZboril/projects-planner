@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Task\{StoreTaskRequest, UpdateTaskRequest};
-use App\Models\{Comment, Milestone, Project, Task, User};
+use App\Models\{Project, Task};
 use App\Services\Data\TaskService;
 use App\Traits\FlashTrait;
 
@@ -33,7 +33,7 @@ class ProjectTaskController extends Controller
      */
     public function create(Project $project): View
     {
-        return view('projects.tasks.create', ['project' => $project, 'milestones' => Milestone::where('project_id', $project->id)->get(), 'users' => User::all(), 'task' => new Task]);
+        return view('projects.tasks.create', ['project' => $project]);
     }
 
     /**
@@ -58,7 +58,7 @@ class ProjectTaskController extends Controller
      */
     public function show(Project $project, Task $task): View
     {
-        return view('projects.tasks.show', ['task' => $task, 'milestones' => Milestone::where('project_id', $project->id)->get(), 'users' => User::all(), 'comment' => new Comment]);
+        return view('projects.tasks.show', ['task' => $task]);
     }
 
     /**
@@ -66,7 +66,7 @@ class ProjectTaskController extends Controller
      */
     public function edit(Project $project, Task $task): View
     {
-        return view('projects.tasks.edit', ['task' => $task, 'milestones' => Milestone::where('project_id', $project->id)->get(), 'users' => User::all()]);
+        return view('projects.tasks.edit', ['task' => $task]);
     }
 
     /**

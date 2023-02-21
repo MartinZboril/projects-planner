@@ -2,7 +2,7 @@
     <div class="card-body">
         <b>{{ $title }}</b> <a class="float-right {{ $colour }}">
             @if (!empty($amount))
-                <x-site.amount :$value />
+                @money($value)
             @else
                 {{ $value }}                
             @endif

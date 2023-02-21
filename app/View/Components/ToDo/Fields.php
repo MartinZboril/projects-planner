@@ -3,21 +3,18 @@
 namespace App\View\Components\ToDo;
 
 use Illuminate\View\Component;
+use App\Models\{Task, ToDo};
 
 class Fields extends Component
 {
     public $todo;
-    public $task;
     public $type;
-    public $isProject;
     public $closeRoute;
 
-    public function __construct($todo, $task, $type, $isProject)
+    public function __construct(?ToDo $todo, Task $task, string $type, ?bool $isProject=false)
     {
         $this->todo = $todo;
-        $this->task = $task;
         $this->type = $type;
-        $this->isProject = $isProject;
         $this->closeRoute = $this->getCloseRoute($task, $isProject);
     }
 
@@ -26,7 +23,7 @@ class Fields extends Component
         return view('components.todo.fields');
     }
 
-    private function getCloseRoute($task, $isProject)
+    private function getCloseRoute(Task $task, bool $isProject)
     {
         return $isProject
                     ? route('projects.tasks.show', ['project' => $task->project, 'task' => $task])

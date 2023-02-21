@@ -13,18 +13,16 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
-                <!-- Message -->
                 <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                <!-- Content -->
                 <div class="row">
                     <div class="col-md-5">
-                        <x-task.ui.informations :$task />
+                        @include('tasks.partials.informations')
                         <x-activity-feed.card />
                     </div>
                     <div class="col-md-7">
-                        <x-todo.card :parent="[]" checker-form-partial="tasks.todos.forms.check" :create-form-route="route('tasks.todos.create', $task)" edit-form-route-name="tasks.todos.edit" :todos="$task->todos" />
-                        <x-file.card :upload-form-route="route('tasks.files.upload', $task)" :files="$task->files" :display-header="true" />
-                        <x-comment.card :comments="$task->comments" :parent="[$task]" :store-form-route="route('tasks.comments.store', $task)" update-form-route-name="tasks.comments.update" :display-header="true" /> 
+                        <x-todo.card :parent="['task' => $task]" checker-form-partial="tasks.todos.forms.check" :create-form-route="route('tasks.todos.create', $task)" edit-form-route-name="tasks.todos.edit" :todos="$task->todos" />
+                        <x-file.card :upload-form-route="route('tasks.files.upload', $task)" :files="$task->files" />
+                        <x-comment.card :comments="$task->comments" :parent="['task' => $task]" :store-form-route="route('tasks.comments.store', $task)" update-form-route-name="tasks.comments.update" /> 
                     </div>
                 </div> 
             </div>

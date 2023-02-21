@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Ticket\{StoreTicketRequest, UpdateTicketRequest};
-use App\Models\{Comment, Project, Ticket, User};
+use App\Models\Ticket;
 use App\Services\Data\TicketService;
 use App\Traits\FlashTrait;
 
@@ -66,7 +66,7 @@ class TicketController extends Controller
      */
     public function edit(Ticket $ticket): View
     {
-        return view('tickets.edit', ['ticket' => $ticket, 'projects' => Project::all(), 'users' => User::all()]);
+        return view('tickets.edit', ['ticket' => $ticket]);
     }
 
     /**

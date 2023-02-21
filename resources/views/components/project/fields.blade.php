@@ -15,7 +15,7 @@
                     <select class="form-control @error('client_id') is-invalid @enderror" name="client_id" id="client-id" style="width: 100%;">
                         <option disabled selected value>select client</option>
                         @foreach($clients as $client)
-                            <option value="{{ $client->id }}" @selected(old('client_id', $project->client_id ?? null) === $client->id)>{{ $client->name }}</option>
+                            <option value="{{ $client->id }}" @selected(old('client_id', $project->client->id ?? null) === $client->id)>{{ $client->name }}</option>
                         @endforeach
                     </select>
                     @error('client_id')
@@ -44,14 +44,14 @@
                 </div>                                
                 <div class="form-group required">
                     <label for="start_date" class="control-label">Start date</label>
-                    <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" placeholder="start date" value="{{ old('start_date', isset($project->start_date) ? $project->start_date->format('Y-m-d') : null) }}" autocomplete="off">
+                    <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" placeholder="start date" value="{{ old('start_date', ($project->start_date ?? false) ? $project->start_date->format('Y-m-d') : now()->format('Y-m-d')) }}" autocomplete="off">
                     @error('start_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group required">
                     <label for="due_date" class="control-label">Due date</label>
-                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', isset($project->due_date) ? $project->due_date->format('Y-m-d') : null) }}" autocomplete="off">
+                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', ($project->due_date ?? false) ? $project->due_date->format('Y-m-d') : now()->addMonths(1)->format('Y-m-d')) }}" autocomplete="off">
                     @error('due_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -88,7 +88,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $type === 'edit' ? route('projects.show', $project) : route('projects.index') }}" class="cancel-btn">Close</a></span>
+                <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $closeRoute }}" class="cancel-btn">Close</a></span>
             </div>
         </div>
     </div>

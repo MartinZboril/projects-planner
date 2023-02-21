@@ -3,16 +3,12 @@
 namespace App\View\Components\Note;
 
 use Illuminate\View\Component;
+use App\Models\Note;
 
 class Fields extends Component
 {
-    public $note;
-    public $type;
-
-    public function __construct($note, $type)
+    public function __construct(public ?Note $note, public string $type, public string $closeRoute)
     {
-        $this->note = $note;
-        $this->type = $type;
     }
 
     public function render()

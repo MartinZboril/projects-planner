@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table id="{{ $clients->count() == 0 ?: $tableId }}" class="table table-bordered table-striped">
+    <table id="{{ $clients->count() === 0 ?: $tableId }}" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>Name</th>
@@ -12,14 +12,14 @@
         <tbody>
             @forelse ($clients as $client)
                 <tr>
-                    <td><a href="{{ route('clients.show', $client) }}">{{ $client->name }}</a></td>
+                    <td><a href="{{ $client->show_route }}">{{ $client->name }}</a></td>
                     <td>{{ $client->contact_person_label }}</td>
                     <td>{{ $client->email_label }}</td>
                     <td>{{ $client->created_at->format('d.m.Y') }}</td>
                     <td>
-                        <a href="{{ route('clients.edit', $client) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
-                        <a href="{{ route('clients.show', $client) }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
-                        @include('clients.partials.buttons', ['client' => $client, 'buttonSize' => 'xs', 'buttonText' => true])
+                        <a href="{{ $client->edit_route }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="{{ $client->show_route }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
+                        @include('clients.partials.buttons', ['buttonSize' => 'xs'])
                     </td>
                 </tr>
             @empty

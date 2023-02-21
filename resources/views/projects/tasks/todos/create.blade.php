@@ -15,7 +15,7 @@
                 <form action="{{ route('projects.tasks.todos.store', ['project' => $task->project, 'task' => $task]) }}" method="post">
                     @csrf
                     @method('POST')
-                    <x-todo.fields type="create" :is-project="true" :todo="null" :$task />
+                    <x-todo.fields type="create" :is-project="true" :$task />
                 </form>
             </div>
         </section>

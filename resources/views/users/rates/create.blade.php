@@ -15,7 +15,7 @@
                 <form action="{{ route('users.rates.store', $user) }}" method="post">
                     @csrf
                     @method('POST')
-                    <x-rate.fields :rate="null" :$user type="create" />
+                    <x-rate.fields :$user type="create" />
                 </form>     
             </div>
         </section>

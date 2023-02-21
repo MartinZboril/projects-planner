@@ -23,7 +23,7 @@ class ClientCommentController extends Controller
      */
     public function index(Client $client)
     {
-        return view('clients.comments.index', ['client' => $client, 'comment' => new Comment]);
+        return view('clients.comments.index', ['client' => $client]);
     }
 
     /**

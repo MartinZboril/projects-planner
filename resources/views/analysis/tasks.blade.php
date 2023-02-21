@@ -13,8 +13,7 @@
             <div class="container-fluid">
                 <div class="card card-primary card-outline">
                     <div class="card-body">
-                        <!-- Content -->
-                        <x-task.table :$tasks table-id="tasks-table" type="tasks" />
+                        <x-task.table :$tasks table-id="tasks-table" />
                     </div>
                 </div>            
             </div>

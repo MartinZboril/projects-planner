@@ -11,7 +11,7 @@ class StatusBadge extends Component
     public $background;
     public $text;
 
-    public function __construct($status, $text)
+    public function __construct(TicketStatusEnum $status, string $text)
     {
         $this->text = $text;
         switch($status) {

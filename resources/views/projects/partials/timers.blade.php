@@ -1,4 +1,4 @@
-@if ($project->status == App\Enums\ProjectStatusEnum::active)
+@if ($project->status === App\Enums\ProjectStatusEnum::active)
     @foreach (Auth::User()->rates as $rate)
         @include('projects.timers.forms.start', ['id' => 'start-working-on-project-' . $project->id . '-with-rate-' . $rate->id, 'project' => $project, 'rateId' => $rate->id])            
     @endforeach

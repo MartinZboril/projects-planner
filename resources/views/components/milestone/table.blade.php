@@ -1,9 +1,11 @@
 <div class="table-responsive">
-    <table id="{{ $milestones->count() == 0 ?: $tableId }}" class="table table-bordered table-striped">
+    <table id="{{ $milestones->count() === 0 ?: $tableId }}" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Project</th>
+                @if ($type === 'milestones')
+                    <th>Project</th>                        
+                @endif                  
                 <th>Owner</th>
                 <th>Progress</th>
                 <th>Start Date</th>
@@ -14,15 +16,18 @@
         <tbody>
             @forelse ($milestones as $milestone)
                 <tr>                                        
-                    <td><a href="{{ route('projects.milestones.show', ['project' => $milestone->project, 'milestone' => $milestone]) }}">{{ $milestone->name }}</a></td>                                        
-                    <td>{{ $milestone->project->name }}</td>
+                    <td><a href="{{ $milestone->show_route }}">{{ $milestone->name }}</a></td>
+                    @if ($type === 'milestones')
+                        <td><a href="{{ $milestone->project_show_route }}">{{ $milestone->project->name }}</a></td>                        
+                    @endif                                        
                     <td><x-site.ui.user-icon :user="$milestone->owner" /></td>
                     <td><x-milestone.ui.progress :$milestone /></td>
                     <td>{{ $milestone->start_date->format('d.m.Y') }}</td>
                     <td><span class="text-{{ $milestone->overdue ? 'danger' : 'body' }}">{{ $milestone->due_date->format('d.m.Y') }}</span></td>
                     <td>
-                        <a href="{{ route('projects.milestones.edit', ['project' => $milestone->project, 'milestone' => $milestone]) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
-                        <a href="{{ route('projects.milestones.show', ['project' => $milestone->project, 'milestone' => $milestone]) }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
+                        <a href="{{ $milestone->edit_route }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="{{ $milestone->show_route }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
+                        @include('projects.milestones.partials.buttons', ['buttonSize' => 'xs', 'hideButtonText' => ''])
                     </td>
                 </tr>
             @empty
@@ -38,7 +43,6 @@
     <script>
         $(function () {
             $("#{{ $tableId }}").DataTable();
-            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
 @endpush

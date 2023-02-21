@@ -1,10 +1,10 @@
 @switch($type)
     @case('client')
-        @include('clients.partials.buttons', ['client' => $item, 'buttonSize' => 'xs', 'buttonText' => true])
+        @include('clients.partials.buttons', ['client' => $item, 'buttonSize' => 'xs'])
         @break
 
     @case('milestone')
-        @include('projects.milestones.partials.buttons', ['milestone' => $item, 'buttonSize' => 'xs', 'buttonText' => true])
+        @include('projects.milestones.partials.buttons', ['milestone' => $item, 'buttonSize' => 'xs'])
         @break
 
     @case('project')

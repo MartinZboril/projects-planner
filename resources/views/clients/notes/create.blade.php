@@ -15,7 +15,7 @@
                 <form action="{{ route('clients.notes.store', $client) }}" method="post">
                     @csrf
                     @method('POST')
-                    <x-note.fields :note="null" :close-route="route('clients.notes.index', $client)" type="create" />
+                    <x-note.fields :close-route="route('clients.notes.index', $client)" type="create" />
                 </form>         
             </div>
         </section>

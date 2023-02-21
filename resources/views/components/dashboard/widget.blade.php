@@ -9,7 +9,7 @@
             </span>
             <span class="info-box-number">
                 @if (!empty($amount))
-                    <x-site.amount :$value />
+                    @money($value)
                 @else
                     {{ $value }}                
                 @endif

@@ -58,10 +58,10 @@ class SummaryDashboard
     {
         $items->each(function ($item, $key) use($summary, $type) {
             $summaryItem = collect([
-                'name' => $type == 'ticket' ? $item->subject : $item->name,
+                'name' => $type ==='ticket' ? $item->subject : $item->name,
                 'type' => $type,
                 'due_date' => (in_array($type, ['client'])) ? null : $item->due_date,
-                'url' => $this->getItemUrl($type, $type == 'todo' ? $item->task->id : $item->id),
+                'url' => $this->getItemUrl($type, $type ==='todo' ? $item->task->id : $item->id),
                 'item' => $item
             ]);
 

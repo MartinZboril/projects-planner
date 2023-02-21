@@ -15,7 +15,7 @@
                 <form action="{{ route('users.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('POST')
-                    <x-user.fields :user="null" type="create" />
+                    <x-user.fields type="create" />
                 </form>     
             </div>
         </section>

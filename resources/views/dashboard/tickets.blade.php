@@ -11,7 +11,6 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
-                <!-- Message -->
                 <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
                 <div class="row">
                     <x-dashboard.widget text="Today" :value="$data->get('today_tickets_count')" icon="fas fa-calendar-day" colour="lightblue color-palette" :link="route('tickets.index')" />
@@ -30,7 +29,7 @@
                             <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('unassigned_tickets')->count() }}</span>
                         </div>
                         <div class="card-body">
-                            <x-ticket.table :tickets="$data->get('unassigned_tickets')" table-id="unassigned-tickets-table" type="tickets" />
+                            <x-ticket.table :tickets="$data->get('unassigned_tickets')" table-id="unassigned-tickets-table" />
                         </div>
                     </div> 
                 @endif
@@ -41,7 +40,7 @@
                             <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('overdue_tickets')->count() }}</span>
                         </div>
                         <div class="card-body">
-                            <x-ticket.table :tickets="$data->get('overdue_tickets')" table-id="overdue-tickets-table" type="tickets" />
+                            <x-ticket.table :tickets="$data->get('overdue_tickets')" table-id="overdue-tickets-table" />
                         </div>
                     </div>
                 @endif

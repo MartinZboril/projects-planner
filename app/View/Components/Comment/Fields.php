@@ -3,16 +3,12 @@
 namespace App\View\Components\Comment;
 
 use Illuminate\View\Component;
+use App\Models\Comment;
 
 class Fields extends Component
 {
-    public $comment;
-    public $type;
-
-    public function __construct($comment, $type)
+    public function __construct(public ?Comment $comment, public string $type)
     {
-        $this->comment = $comment;
-        $this->type = $type;
     }
 
     public function render()

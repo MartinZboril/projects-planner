@@ -38,11 +38,11 @@
         @endif
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar->path) : asset('dist/img/user.png') }}" class="img-circle mr-2" alt="User Image" style="width: 25px;height: 25px;">
+                <img src="{{ (Auth::user()->avatar ?? false) ? asset('storage/' . Auth::user()->avatar->path) : asset('dist/img/user.png') }}" class="img-circle mr-2" alt="User Image" style="width: 25px;height: 25px;">
                 {{ Auth::User()->name }}
             </a>
             <div class="dropdown-menu">
-                <a class="dropdown-item" href="{{ route('users.show', ['user' => Auth::User()->id]) }}">Profile</a>
+                <a class="dropdown-item" href="{{ route('users.show', Auth::User()) }}">Profile</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="{{ route('logout') }}"
                     onclick="event.preventDefault();

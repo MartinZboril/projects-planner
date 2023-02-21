@@ -7,11 +7,15 @@ use Illuminate\View\View;
 
 class ReleaseController extends Controller
 {
+    public function __construct(private IndexRelease $indexRelease)
+    {  
+    }
+
     /**
      * Show the application releases.
      */
     public function __invoke(): View
     {
-        return view('releases.index', ['releases' => (new IndexRelease)->getReleases()]);
+        return view('releases.index', ['releases' => $this->indexRelease->getReleases()]);
     }
 }

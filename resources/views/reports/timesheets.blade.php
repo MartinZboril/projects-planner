@@ -15,7 +15,6 @@
                 <div class="card card-primary card-outline">
                     <div class="card-header">Report for Timesheets</div>
                     <div class="card-body">
-                        <!-- Content -->
                         <div class="row">
                             <div class="col-md-4">
                                 <x-report.ui.card title="Total time" :value="$data->get('total_timers_count') . ' hours'" colour="text-body" />

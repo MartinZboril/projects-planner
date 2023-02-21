@@ -33,7 +33,7 @@ class ClientController extends Controller
      */
     public function create(): View
     {
-        return view('clients.create', ['client' => new Client]);
+        return view('clients.create');
     }
 
     /**

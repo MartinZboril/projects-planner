@@ -9,7 +9,7 @@ class Priority extends Component
 {
     public $title;
 
-    public function __construct($priority)
+    public function __construct(TicketPriorityEnum $priority)
     {
         switch ($priority) {
             case TicketPriorityEnum::low:

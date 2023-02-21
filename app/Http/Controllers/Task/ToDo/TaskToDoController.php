@@ -50,7 +50,7 @@ class TaskToDoController extends Controller
 =    */
     public function edit(Task $task, ToDo $todo): View
     {
-        return view('tasks.todos.edit', ['task' => $task, 'todo' => $todo]);
+        return view('tasks.todos.edit', ['todo' => $todo]);
     }
 
     /**

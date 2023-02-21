@@ -23,7 +23,7 @@ class ProjectMilestoneCommentController extends Controller
      */
     public function index(Project $project, Milestone $milestone)
     {
-        return view('projects.comments.index', ['project' => $project, 'milestone' => $milestone, 'comment' => new Comment]);
+        return view('projects.comments.index', ['milestone' => $milestone]);
     }
 
     /**
@@ -41,7 +41,7 @@ class ProjectMilestoneCommentController extends Controller
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
-        return redirect()->route('projects.milestones.show', ['project' => $project, 'milestone' => $milestone]);
+        return redirect()->route('projects.milestones.show', ['milestone' => $milestone]);
     }
 
     /**

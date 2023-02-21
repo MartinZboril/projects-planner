@@ -16,9 +16,7 @@
                         Users
                     </div>
                     <div class="card-body">
-                        <!-- Message -->
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                        <!-- Content -->
                         <x-user.table table-id="users-table" :$users />
                     </div>
                 </div>            

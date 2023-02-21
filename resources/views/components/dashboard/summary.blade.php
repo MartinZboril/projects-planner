@@ -4,9 +4,8 @@
         <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $items->count() }}</span>
     </div>
     <div class="card-body">
-        <!-- Content -->
         <div class="table-responsive">
-            <table id="{{ $items->count() == 0 ?: $tableId }}" class="table table-bordered table-striped">
+            <table id="{{ $items->count() === 0 ?: $tableId }}" class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>Name</th>

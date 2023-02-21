@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Milestone\{StoreMilestoneRequest, UpdateMilestoneRequest};
-use App\Models\{Comment, Milestone, Project};
+use App\Models\{Milestone, Project};
 use App\Traits\FlashTrait;
 use App\Services\Data\MilestoneService;
 
@@ -33,7 +33,7 @@ class ProjectMilestoneController extends Controller
      */
     public function create(Project $project): View
     {
-        return view('projects.milestones.create', ['project' => $project, 'milestone' => new Milestone]);
+        return view('projects.milestones.create', ['project' => $project]);
     }
 
     /**
@@ -56,7 +56,7 @@ class ProjectMilestoneController extends Controller
      */
     public function show(Project $project, Milestone $milestone): View
     {
-        return view('projects.milestones.show', ['project' => $project, 'milestone' => $milestone, 'comment' => new Comment]);
+        return view('projects.milestones.show', ['milestone' => $milestone]);
     }
 
     /**
@@ -64,7 +64,7 @@ class ProjectMilestoneController extends Controller
      */
     public function edit(Project $project, Milestone $milestone): View
     {
-        return view('projects.milestones.edit', ['project' => $project, 'milestone' => $milestone]);
+        return view('projects.milestones.edit', ['milestone' => $milestone]);
     }
 
     /**

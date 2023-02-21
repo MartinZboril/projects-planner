@@ -13,17 +13,15 @@
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
-                <!-- Message -->
                 <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                <!-- Content -->
                 <div class="row">
                     <div class="col-md-5">
-                        <x-ticket.ui.informations :$ticket />
+                        @include('tickets.partials.informations')
                         <x-activity-feed.card />
                     </div>
                     <div class="col-md-7">
-                        <x-file.card :upload-form-route="route('projects.tickets.files.upload', ['project' => $ticket->project, 'ticket' => $ticket])" :files="$ticket->files" :display-header="true" />
-                        <x-comment.card :comments="$ticket->comments" :parent="['project' => $ticket->project, 'ticket' => $ticket]" :store-form-route="route('projects.tickets.comments.store', ['project' => $ticket->project, 'ticket' => $ticket])" update-form-route-name="projects.tickets.comments.update" :display-header="true" />     
+                        <x-file.card :upload-form-route="route('projects.tickets.files.upload', ['project' => $ticket->project, 'ticket' => $ticket])" :files="$ticket->files" />
+                        <x-comment.card :comments="$ticket->comments" :parent="['project' => $ticket->project, 'ticket' => $ticket]" :store-form-route="route('projects.tickets.comments.store', ['project' => $ticket->project, 'ticket' => $ticket])" update-form-route-name="projects.tickets.comments.update" />     
                     </div>
                 </div> 
             </div>

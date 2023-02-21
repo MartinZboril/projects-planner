@@ -1,9 +1,11 @@
 <div class="table-responsive">
-    <table id="{{ $timers->count() == 0 ?: $tableId }}" class="table table-bordered table-striped">
+    <table id="{{ $timers->count() === 0 ?: $tableId }}" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>#</th>
-                <th>Project</th>
+                @if ($type === 'timers')
+                    <th>Project</th>                    
+                @endif
                 <th>Type</th>
                 <th>User</th>
                 <th>Total time (Hours)</th>
@@ -24,13 +26,15 @@
                             #
                         @endif
                     </th>
-                    <td><a href="{{ route('projects.show', $timer->project) }}">{{ $timer->project->name }}</a></td>
+                    @if ($type === 'timers')
+                        <td><a href="{{ route('projects.show', $timer->project) }}">{{ $timer->project->name }}</a></td>                        
+                    @endif                    
                     <td><a href="{{ route('users.rates.edit', ['user' => $timer->user, 'rate' => $timer->rate]) }}">{{ $timer->rate->name }}</a></td>
                     <td><x-site.ui.user-icon :user="$timer->user" /></td>
                     <td>{{ $timer->until ? $timer->total_time : 'N/A' }}</td>
                     <td>
                         @if ($timer->until)
-                            <x-site.amount :value="$timer->amount" />
+                            @money($timer->amount)
                         @else
                             N/A
                         @endif  
@@ -39,8 +43,8 @@
                     <td>{{ $timer->until ? $timer->until->format('d.m.Y H:i') : 'N/A' }}</td>
                     <td>{{ $timer->since->format('d.m.Y') }}</td>
                     <td>
-                        @if($timer->until)
-                            <a href="{{ route('projects.timers.edit', ['project' => $timer->project, 'timer' => $timer]) }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
+                        @if($timer->edit_route)
+                            <a href="{{ $timer->edit_route }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
                         @else
                             N/A
                         @endif
@@ -59,7 +63,6 @@
     <script>
         $(function () {
             $("#{{ $tableId }}").DataTable();
-            $('[data-toggle="tooltip"]').tooltip();
             $('[data-toggle="popover"]').popover();
         });
     </script>
