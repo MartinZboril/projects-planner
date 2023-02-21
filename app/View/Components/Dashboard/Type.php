@@ -21,6 +21,10 @@ class Type extends Component
                 $this->icon = 'fas fa-clock';
                 break;
                 
+            case('milestone'):
+                $this->icon = 'far fa-calendar-times';
+                break;
+
             case('task'):
                 $this->icon = 'fas fa-tasks';
                 break;

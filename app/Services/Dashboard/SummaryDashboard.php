@@ -43,6 +43,7 @@ class SummaryDashboard
     {
         $summary = collect();
         $summary = $this->pushItemsToSummary($summary, 'project', Project::active()->overdue()->get());
+        $summary = $this->pushItemsToSummary($summary, 'milestone', Milestone::overdue()->get());
         $summary = $this->pushItemsToSummary($summary, 'task', Task::active()->overdue()->get());
         $summary = $this->pushItemsToSummary($summary, 'ticket', Ticket::active()->overdue()->get());
         $summary = $this->pushItemsToSummary($summary, 'todo', ToDo::finished(false)->overdue()->get());
@@ -57,7 +58,9 @@ class SummaryDashboard
                 'name' => $type ==='ticket' ? $item->subject : $item->name,
                 'type' => $type,
                 'due_date' => (in_array($type, ['client'])) ? null : $item->due_date,
-                'url' => $this->getItemUrl($type, $type ==='todo' ? $item->task->id : $item->id),
+                'url' => ($type === 'milestone')
+                            ? route('projects.milestones.show', ['project' => $item->project, 'milestone' => $item])
+                            : $this->getItemUrl($type, $type ==='todo' ? $item->task->id : $item->id),
                 'item' => $item
             ]);
 
