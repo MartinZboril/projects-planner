@@ -28,7 +28,7 @@
                         <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('overdue_todos')->count() }}</span>
                     </div>
                     <div class="card-body">
-                        <x-todo.listing :parent="[]" checker-form-partial="tasks.todos.forms.check" edit-form-route-name="tasks.todos.edit" :todos="$data->get('overdue_todos')" />         
+                        <x-todo.listing :todos="$data->get('overdue_todos')" />         
                     </div>
                 </div>
             @endif

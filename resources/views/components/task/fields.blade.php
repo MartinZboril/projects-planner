@@ -5,7 +5,7 @@
             <div class="card-body">
                 <div class="form-group required">
                     <label for="name" class="control-label">Name</label>
-                    <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" placeholder="name" value="{{ old('name', $task->name ?? null) }}" autocomplete="off">
+                    <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" placeholder="name" value="{{ old('name', $task->name ?? null) }}" >
                     @error('name')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -57,14 +57,14 @@
                 </div> 
                 <div class="form-group required">
                     <label for="start_date" class="control-label">Start date</label>
-                    <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" placeholder="start date" value="{{ old('start_date', ($task->start_date ?? false) ? $task->start_date->format('Y-m-d') : now()->format('Y-m-d')) }}" autocomplete="off">
+                    <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" placeholder="start date" value="{{ old('start_date', ($task->start_date ?? false) ? $task->start_date->format('Y-m-d') : now()->format('Y-m-d')) }}" >
                     @error('start_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group required">
                     <label for="due_date" class="control-label">Due date</label>
-                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', ($task->due_date ?? false) ? $task->due_date->format('Y-m-d') : now()->addDays(7)->format('Y-m-d')) }}" autocomplete="off">
+                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', ($task->due_date ?? false) ? $task->due_date->format('Y-m-d') : now()->addDays(7)->format('Y-m-d')) }}" >
                     @error('due_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

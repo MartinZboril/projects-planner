@@ -5,7 +5,7 @@
             <div class="card-body">
                 <div class="form-group required">
                     <label for="name" class="control-label">Name</label>
-                    <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" placeholder="name" value="{{ old('name', $note->name ?? null) }}" autocomplete="off">
+                    <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" placeholder="name" value="{{ old('name', $note->name ?? null) }}" >
                     @error('name')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -30,7 +30,7 @@
                 </div>
                 <div class="form-group required">
                     <label for="content" class="control-label">Content</label>
-                    <textarea name="content" id="content" class="form-control @error('content') is-invalid @enderror" rows="5" placeholder="content" autocomplete="off">{{ old('content', $note->content ?? null) }}</textarea>
+                    <textarea name="content" id="content" class="form-control @error('content') is-invalid @enderror" rows="5" placeholder="content" >{{ old('content', $note->content ?? null) }}</textarea>
                     @error('content')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

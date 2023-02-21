@@ -5,7 +5,7 @@
             <div class="card-body">
                 <div class="form-group required">
                     <label for="name" class="control-label">Name</label>
-                    <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" placeholder="name" value="{{ old('name', $project->name ?? null) }}" autocomplete="off">
+                    <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" placeholder="name" value="{{ old('name', $project->name ?? null) }}" >
                     @error('name')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -44,28 +44,28 @@
                 </div>                                
                 <div class="form-group required">
                     <label for="start_date" class="control-label">Start date</label>
-                    <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" placeholder="start date" value="{{ old('start_date', ($project->start_date ?? false) ? $project->start_date->format('Y-m-d') : now()->format('Y-m-d')) }}" autocomplete="off">
+                    <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" placeholder="start date" value="{{ old('start_date', ($project->start_date ?? false) ? $project->start_date->format('Y-m-d') : now()->format('Y-m-d')) }}" >
                     @error('start_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group required">
                     <label for="due_date" class="control-label">Due date</label>
-                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', ($project->due_date ?? false) ? $project->due_date->format('Y-m-d') : now()->addMonths(1)->format('Y-m-d')) }}" autocomplete="off">
+                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', ($project->due_date ?? false) ? $project->due_date->format('Y-m-d') : now()->addMonths(1)->format('Y-m-d')) }}" >
                     @error('due_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group required">
                     <label for="estimated_hours" class="control-label">Estimated hours</label>
-                    <input type="number" name="estimated_hours" id="estimated_hours" class="form-control @error('estimated_hours') is-invalid @enderror" placeholder="estimated hours" value="{{ old('estimated_hours', $project->estimated_hours ?? 0) }}" autocomplete="off">
+                    <input type="number" name="estimated_hours" id="estimated_hours" class="form-control @error('estimated_hours') is-invalid @enderror" placeholder="estimated hours" value="{{ old('estimated_hours', $project->estimated_hours ?? 0) }}" >
                     @error('estimated_hours')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group required">
                     <label for="budget" class="control-label">Budget</label>
-                    <input type="number" name="budget" id="budget" class="form-control @error('budget') is-invalid @enderror" placeholder="budget" value="{{ old('budget', $project->budget ?? 0) }}" autocomplete="off">
+                    <input type="number" name="budget" id="budget" class="form-control @error('budget') is-invalid @enderror" placeholder="budget" value="{{ old('budget', $project->budget ?? 0) }}" >
                     @error('budget')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
