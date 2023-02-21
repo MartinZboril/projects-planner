@@ -13,6 +13,7 @@ class Table extends Component
         $this->projects->each(function (Project $project) {
             $project->edit_route = route('projects.edit', $project);
             $project->show_route = route('projects.show', $project);
+            $project->client_show_route = route('clients.show', $project->client);
         });
     }
 

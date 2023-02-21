@@ -13,5 +13,5 @@
     <i class="{{ ($ticket->is_marked ? 'fas' : 'far') }} fa-bookmark"></i>
 </a>
 <!-- Tickets forms -->
-@include('projects.tickets.partials.forms', ['project' => $project, 'ticket' => $ticket])
-@include('projects.tickets.forms.mark', ['id' => ($ticket->is_marked ? 'unmark' : 'mark') . '-ticket-' . $ticket->id . '-form', 'project' => $project, 'ticket' => $ticket])
+@include('projects.tickets.partials.forms', ['project' =>$ticket->project, 'ticket' => $ticket])
+@include('projects.tickets.forms.mark', ['id' => ($ticket->is_marked ? 'unmark' : 'mark') . '-ticket-' . $ticket->id . '-form', 'project' =>$ticket->project, 'ticket' => $ticket])

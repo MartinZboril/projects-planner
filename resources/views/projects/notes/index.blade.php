@@ -20,7 +20,7 @@
                     </div>
                     <div class="card-body">
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                        <x-note.card :notes="$project->notes" edit-form-route-name="projects.notes.edit" :parent="$project" />
+                        <x-note.card :notes="$project->notes" edit-form-route-name="projects.notes.edit" :parent="['project' => $project]" />
                     </div>
                 </div>
             </div>

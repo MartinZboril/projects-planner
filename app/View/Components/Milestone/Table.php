@@ -13,6 +13,7 @@ class Table extends Component
         $this->milestones->each(function (Milestone $milestone) {
             $milestone->edit_route = route('projects.milestones.edit', ['project' => $milestone->project, 'milestone' => $milestone]);
             $milestone->show_route = route('projects.milestones.show', ['project' => $milestone->project, 'milestone' => $milestone]);
+            $milestone->project_show_route = route('projects.show', $milestone->project);
         });
     }
 

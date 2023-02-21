@@ -33,7 +33,7 @@ class NoteController extends Controller
      */
     public function create(): View
     {
-        return view('notes.create', ['note' => new Note]);
+        return view('notes.create');
     }
 
     /**

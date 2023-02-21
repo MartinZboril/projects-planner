@@ -1,5 +1,5 @@
 <div>
-    <img class="img-circle ml-3" src="{{ $comment->user->avatar ? asset('storage/' . $comment->user->avatar->path) : asset('dist/img/user.png') }}" alt="{{ $comment->user->full_name }}" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $comment->user->full_name }}">
+    <img class="img-circle ml-3" src="{{ ($comment->user->avatar ?? false) ? asset('storage/' . $comment->user->avatar->path) : asset('dist/img/user.png') }}" alt="{{ $comment->user->full_name }}" style="width:35px;height:35px;" data-toggle="tooltip" title="{{ $comment->user->full_name }}">
     <div class="timeline-item">
         <span class="time"><i class="fas fa-clock"></i> {{ $comment->created_at->diffForHumans() }}</span>
         <h3 class="timeline-header"><a href="{{ route('users.show', $comment->user) }}">{{ $comment->user->fullname }}</a></h3>

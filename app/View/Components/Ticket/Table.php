@@ -13,6 +13,7 @@ class Table extends Component
         $this->tickets->each(function (Ticket $ticket) use($type) {
             $ticket->edit_route = $this->getEditRoute($ticket, $type);
             $ticket->show_route = $this->getShowRoute($ticket, $type);
+            $ticket->project_show_route = route('projects.show', $ticket->project);
         });
     }
 

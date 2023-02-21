@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Task\{StoreTaskRequest, UpdateTaskRequest};
-use App\Models\{Comment, Milestone, Project, Task, User};
+use App\Models\{Project, Task};
 use App\Services\Data\TaskService;
 use App\Traits\FlashTrait;
 

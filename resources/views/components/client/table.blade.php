@@ -19,7 +19,7 @@
                     <td>
                         <a href="{{ $client->edit_route }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
                         <a href="{{ $client->show_route }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
-                        @include('clients.partials.buttons', ['buttonSize' => 'xs', 'buttonText' => true])
+                        @include('clients.partials.buttons', ['buttonSize' => 'xs'])
                     </td>
                 </tr>
             @empty

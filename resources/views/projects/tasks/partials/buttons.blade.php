@@ -8,11 +8,11 @@
         <a href="#" class="btn btn-{{ $buttonSize }} btn-danger" onclick="event.preventDefault(); document.getElementById('stop-working-on-task-{{ $task->id }}-form').submit();"><x-site.ui.icon icon="fas fa-stop" :text="$hideButtonText ?? 'Stop'" /></a>
     @endif
 @else
-    <a href="#" class="btn btn-{{ $buttonSize }} btn-danger" onclick="event.preventDefault(); document.getElementById('return-working-on-task-{{ $task->id }}-form').submit();"<x-site.ui.icon icon="fas fa-undo" :text="$hideButtonText ?? 'Return'" /></a>
+    <a href="#" class="btn btn-{{ $buttonSize }} btn-danger" onclick="event.preventDefault(); document.getElementById('return-working-on-task-{{ $task->id }}-form').submit();"><x-site.ui.icon icon="fas fa-undo" :text="$hideButtonText ?? 'Return'" /></a>
 @endif
 <a href="#" class="btn btn-{{ $buttonSize }} btn-primary" onclick="event.preventDefault(); document.getElementById('{{ ($task->is_marked ? 'unmark' : 'mark') . '-task-' . $task->id . '-form'}}').submit();">
     <i class="{{ ($task->is_marked ? 'fas' : 'far') }} fa-bookmark"></i>
 </a>
 <!-- Tasks forms -->
-@include('projects.tasks.partials.forms', ['project' => $task->project, 'task' => $task])
-@include('projects.tasks.forms.mark', ['id' => ($task->is_marked ? 'unmark' : 'mark') . '-task-' . $task->id . '-form', 'project' => $project, 'task' => $task])
+@include('projects.tasks.partials.forms', ['task' => $task])
+@include('projects.tasks.forms.mark', ['id' => ($task->is_marked ? 'unmark' : 'mark') . '-task-' . $task->id . '-form'])

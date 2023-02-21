@@ -21,6 +21,7 @@ class NoteService
                 'content' => $inputs->content,
                 'is_private' => $inputs->is_private ?? false,
                 'is_basic' => $basic,
+                'is_marked' => $inputs->is_marked ?? false,
             ]
         ); 
     }

@@ -18,7 +18,7 @@
                 <tr>                                        
                     <td><a href="{{ $milestone->show_route }}">{{ $milestone->name }}</a></td>
                     @if ($type === 'milestones')
-                        <td><a href="{{ route('projects.show', $milestone->project) }}">{{ $milestone->project->name }}</a></td>                        
+                        <td><a href="{{ $milestone->project_show_route }}">{{ $milestone->project->name }}</a></td>                        
                     @endif                                        
                     <td><x-site.ui.user-icon :user="$milestone->owner" /></td>
                     <td><x-milestone.ui.progress :$milestone /></td>
@@ -27,6 +27,7 @@
                     <td>
                         <a href="{{ $milestone->edit_route }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
                         <a href="{{ $milestone->show_route }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
+                        @include('projects.milestones.partials.buttons', ['buttonSize' => 'xs', 'hideButtonText' => ''])
                     </td>
                 </tr>
             @empty
@@ -42,7 +43,6 @@
     <script>
         $(function () {
             $("#{{ $tableId }}").DataTable();
-            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
 @endpush

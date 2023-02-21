@@ -18,11 +18,11 @@
                 <tr>
                     <td><a href="{{ $task->show_route }}">{{ $task->name }}</a></td>
                     @if ($type === 'tasks')
-                        <td><a href="{{ route('projects.show', $task->project) }}">{{ $task->project->name }}</a></td>
+                        <td><a href="{{ $task->project_show_route }}">{{ $task->project->name }}</a></td>
                     @endif
                     <td>
                         @if ($task->milestone)
-                            <a href="{{ route('projects.milestones.show', ['project' => $task->project, 'milestone' => $task->milestone]) }}">{{ $task->milestone->name }}</a></td>                            
+                            <a href="{{ $task->milestone_show_route }}">{{ $task->milestone->name }}</a></td>                            
                         @else
                             NaN
                         @endif
@@ -33,9 +33,9 @@
                         <a href="{{ $task->edit_route }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
                         <a href="{{ $task->show_route }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
                         @if ($type === 'projects')
-                            @include('projects.tasks.partials.buttons', ['project' => $task->project, 'task' => $task, 'buttonSize' => 'xs', 'hideButtonText' => ''])
+                            @include('projects.tasks.partials.buttons', ['project' => $task->project, 'buttonSize' => 'xs', 'hideButtonText' => ''])
                         @else
-                            @include('tasks.partials.buttons', ['task' => $task, 'buttonSize' => 'xs', 'hideButtonText' => ''])
+                            @include('tasks.partials.buttons', ['buttonSize' => 'xs', 'hideButtonText' => ''])
                         @endif
                     </td>
                 </tr>
@@ -52,7 +52,6 @@
     <script>
         $(function () {
             $('#{{ $tableId }}').DataTable();
-            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
 @endpush

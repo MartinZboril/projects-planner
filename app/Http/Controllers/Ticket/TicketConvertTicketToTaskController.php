@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Ticket\ConvertTicketRequest;
 use App\Models\{Task, Ticket};
 use App\Traits\FlashTrait;
-use App\Services\Data\{ProjectUserService, TaskService, TicketService};
+use App\Services\Data\{TaskService, TicketService};
 
 class TicketConvertTicketToTaskController extends Controller
 {

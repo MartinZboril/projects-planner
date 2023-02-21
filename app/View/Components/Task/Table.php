@@ -13,6 +13,8 @@ class Table extends Component
         $this->tasks->each(function (Task $task) use($type) {
             $task->edit_route = $this->getEditRoute($task, $type);
             $task->show_route = $this->getShowRoute($task, $type);
+            $task->project_show_route = route('projects.show', $task->project);
+            $task->milestone_show_route = $task->milestone ? route('projects.milestones.show', ['project' => $task->project, 'milestone' => $task->milestone]) : '';
         });
     }
 

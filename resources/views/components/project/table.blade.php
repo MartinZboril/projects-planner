@@ -18,7 +18,7 @@
             @forelse ($projects as $project)
                 <tr>
                     <td><a href="{{ $project->show_route }}">{{ $project->name }}</a></td>
-                    <td><a href="{{ route('clients.show', $project->client) }}">{{ $project->client->name }}</a></td>
+                    <td><a href="{{ $project->client_show_route }}">{{ $project->client->name }}</a></td>
                     <td><x-project.ui.status-badge :text="true" :status="$project->status" /></td>
                     <td>
                         @foreach ($project->team as $user)
@@ -49,7 +49,6 @@
     <script>
         $(function () {
             $("#{{ $tableId }}").DataTable();
-            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
 @endpush

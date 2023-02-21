@@ -12,7 +12,7 @@ class Note extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'name', 'content', 'is_private', 'is_basic',
+        'user_id', 'name', 'content', 'is_private', 'is_basic', 'is_marked',
     ];
 
     public const VALIDATION_RULES = [

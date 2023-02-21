@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Project\{StoreProjectRequest, UpdateProjectRequest};
-use App\Models\{Client, Project, User};
+use App\Models\Project;
 use App\Traits\FlashTrait;
 use App\Services\Data\ProjectService;
 

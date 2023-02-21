@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Ticket\{StoreTicketRequest, UpdateTicketRequest};
-use App\Models\{Comment, Project, Ticket, User};
+use App\Models\Ticket;
 use App\Services\Data\TicketService;
 use App\Traits\FlashTrait;
 

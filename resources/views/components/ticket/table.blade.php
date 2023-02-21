@@ -21,7 +21,7 @@
                 <tr>
                     <td><a href="{{ $ticket->show_route }}">{{ $ticket->subject }}</a></td>
                     @if ($type === 'tickets')
-                        <td><a href="{{ route('projects.show', $ticket->project) }}">{{ $ticket->project->name }}</a></td>
+                        <td><a href="{{ $ticket->project_show_route }}">{{ $ticket->project->name }}</a></td>
                     @endif
                     <td><x-site.ui.user-icon :user="$ticket->reporter" /></td>
                     <td><x-site.ui.user-icon :user="$ticket->assignee ?? null" /></td>
@@ -34,7 +34,7 @@
                         <a href="{{ $ticket->edit_route }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
                         <a href="{{ $ticket->show_route }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
                         @if ($type === 'projects')
-                            @include('projects.tickets.partials.buttons', ['project' => $ticket->project, 'ticket' => $ticket, 'buttonSize' => 'xs', 'hideButtonText' => ''])               
+                            @include('projects.tickets.partials.buttons', ['buttonSize' => 'xs', 'hideButtonText' => ''])               
                         @else
                             @include('tickets.partials.buttons', ['buttonSize' => 'xs', 'hideButtonText' => ''])      
                         @endif
@@ -53,7 +53,6 @@
     <script>
         $(function () {
             $("#{{ $tableId }}").DataTable();
-            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
 @endpush

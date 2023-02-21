@@ -63,7 +63,6 @@
     <script>
         $(function () {
             $("#{{ $tableId }}").DataTable();
-            $('[data-toggle="tooltip"]').tooltip();
             $('[data-toggle="popover"]').popover();
         });
     </script>

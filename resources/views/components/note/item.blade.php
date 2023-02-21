@@ -2,7 +2,7 @@
     <div class="card-header">
         <h3 class="card-title">{{ $note->name }}</h3>
         <div class="card-tools">
-            <a href="{{ $editFormRoute }}" class="btn btn-tool">
+            <a href="{{ $note->edit_route }}" class="btn btn-tool">
                 <i class="fas fa-edit"></i>
             </a>
             <a href="#" class="btn btn-tool" onclick="event.preventDefault(); document.getElementById('{{ ($note->is_marked ? 'unmark' : 'mark') . '-note-' . $note->id . '-form'}}').submit();">

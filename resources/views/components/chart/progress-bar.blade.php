@@ -10,7 +10,7 @@
                 @endif
             </h6>
             <span class="text-muted">
-                @if (!empty($titleAmount))
+                @if (!empty($subtitleAmount))
                     @money($subtitle)
                 @else
                     {{ $subtitle }}                
