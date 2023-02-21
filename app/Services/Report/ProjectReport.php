@@ -8,13 +8,10 @@ use Illuminate\Support\Collection;
 
 class ProjectReport
 {
-    protected $builderReport;
-    
-    public function __construct()
+    public function __construct(public BuilderReport $builderReport=new BuilderReport)
     {
-        $this->builderReport = new BuilderReport;
     }
-
+    
     /**
      * Get report for projects by year.
      */

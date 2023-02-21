@@ -2,37 +2,23 @@
 
 namespace App\Services\Data;
 
-use Illuminate\Support\ValidatedInput;
 use App\Enums\ProjectStatusEnum;
 use App\Models\{Comment, Note, Project};
 use App\Services\FileService;
 
 class ProjectService
 {
-    public function __construct(private ProjectUserService $projectUserService)
-    {
-    }
-
     /**
      * Save data for project.
      */
-    public function handleSave(Project $project, ValidatedInput $inputs)
+    public function handleSave(Project $project, array $inputs)
     {
-        $project = Project::updateOrCreate(
-            ['id' => $project->id],
-            [
-                'status' => $project->status_id ?? ProjectStatusEnum::active,
-                'client_id' => $inputs->client_id,
-                'name' => $inputs->name,
-                'start_date' => $inputs->start_date,
-                'due_date' => $inputs->due_date,
-                'estimated_hours' => $inputs->estimated_hours,
-                'budget' => $inputs->budget,
-                'description' => $inputs->description,
-            ]
-        );
-
-        $this->projectUserService->handleStoreUsers($project, $inputs->team);
+        // Prepare fields
+        $inputs['status'] = $project->status_id ?? ProjectStatusEnum::active;
+        // Save note
+        $project->fill($inputs)->save();
+        // Store projects team
+        ($project->team()->count() === 0) ? $project->team()->attach($inputs['team']) : $project->team()->sync($inputs['team']);
 
         return $project;
     }
@@ -76,8 +62,7 @@ class ProjectService
      */
     public function handleMark(Project $project): Project
     {
-        $project->is_marked = !$project->is_marked;
-        $project->save();
-        return $project;
+        $project->update(['is_marked' => !$project->is_marked]);
+        return $project->fresh();
     }
 }

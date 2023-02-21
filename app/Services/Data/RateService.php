@@ -2,7 +2,6 @@
 
 namespace App\Services\Data;
 
-use Illuminate\Support\ValidatedInput;
 use App\Models\Rate;
 
 class RateService
@@ -10,17 +9,12 @@ class RateService
     /**
      * Save data for rate.
      */
-    public function handleSave(Rate $rate, ValidatedInput $inputs): void
+    public function handleSave(Rate $rate, array $inputs): void
     {
-        Rate::updateOrCreate(
-            ['id' => $rate->id],
-            [
-                'user_id' => $rate->user_id ?? $inputs->user_id,
-                'name' => $inputs->name,
-                'is_active' => $inputs->has('is_active'),
-                'value' => $inputs->value,
-                'note' => $inputs->note ?? null,
-            ]
-        );
+        // Prepare fields
+        $inputs['user_id'] = $rate->user_id ?? $inputs['user_id'];
+        $inputs['note'] = $rate->note ?? null;
+        // Save note
+        $rate->fill($inputs)->save();
     }
 }

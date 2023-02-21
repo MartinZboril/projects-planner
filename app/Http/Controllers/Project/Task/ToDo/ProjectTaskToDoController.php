@@ -34,7 +34,7 @@ class ProjectTaskToDoController extends Controller
     public function store(StoreToDoRequest $request, Project $project, Task $task): RedirectResponse
     {
         try {
-            $this->toDoService->handleSave(new ToDo, $request->safe(), $task);
+            $this->toDoService->handleSave(new ToDo, $request->validated(), $task);
             $this->flash(__('messages.todo.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
@@ -59,7 +59,7 @@ class ProjectTaskToDoController extends Controller
     public function update(UpdateToDoRequest $request, Project $project, Task $task, ToDo $todo): RedirectResponse
     {
         try {
-            $this->toDoService->handleSave($todo, $request->safe(), $task);
+            $this->toDoService->handleSave($todo, $request->validated(), $task);
             $this->flash(__('messages.todo.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

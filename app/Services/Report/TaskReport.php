@@ -7,11 +7,8 @@ use Illuminate\Support\Collection;
 
 class TaskReport
 {
-    protected $builderReport;
-    
-    public function __construct()
+    public function __construct(public BuilderReport $builderReport=new BuilderReport)
     {
-        $this->builderReport = new BuilderReport;
     }
 
     /**

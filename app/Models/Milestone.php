@@ -13,7 +13,7 @@ class Milestone extends Model
     use HasFactory, MarkedRecords, OverdueRecords;
 
     protected $fillable = [
-        'project_id', 'owner_id', 'name', 'start_date', 'due_date', 'colour', 'description',
+        'project_id', 'owner_id', 'name', 'start_date', 'due_date', 'colour', 'description', 'is_marked',
     ]; 
 
     protected $dates = ['start_date', 'due_date'];

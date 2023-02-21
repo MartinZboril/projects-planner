@@ -34,14 +34,14 @@ class ProjectMilestoneCommentController extends Controller
         try {
             $this->milestoneService->handleSaveComment(
                 $milestone,
-                $this->commentService->handleSave(new Comment, $request->safe(), $request->file('files'))
+                $this->commentService->handleSave(new Comment, $request->validated(), $request->file('files'))
             );
             $this->flash(__('messages.comment.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
-        return redirect()->route('projects.milestones.show', ['milestone' => $milestone]);
+        return redirect()->route('projects.milestones.show', ['project' => $project, 'milestone' => $milestone]);
     }
 
     /**
@@ -50,7 +50,7 @@ class ProjectMilestoneCommentController extends Controller
     public function update(UpdateCommentRequest $request, Project $project, Milestone $milestone, Comment $comment)
     {
         try {
-            $this->commentService->handleSave($comment, $request->safe(), $request->file('files'));
+            $this->commentService->handleSave($comment, $request->validated(), $request->file('files'));
             $this->flash(__('messages.comment.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

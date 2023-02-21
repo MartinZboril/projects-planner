@@ -15,7 +15,7 @@ class ToDo extends Model
     protected $table = 'todos';
     
     protected $fillable = [
-        'task_id', 'name', 'due_date', 'is_finished', 'description'
+        'task_id', 'name', 'due_date', 'is_finished', 'description', 'is_marked',
     ]; 
 
     protected $dates = ['due_date'];

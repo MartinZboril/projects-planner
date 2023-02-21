@@ -3,7 +3,6 @@
 namespace App\Services\Data;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\ValidatedInput;
 use App\Enums\TicketStatusEnum;
 use App\Models\{Comment, Ticket};
 use App\Services\FileService;
@@ -17,25 +16,16 @@ class TicketService
     /**
      * Save data for ticket.
      */
-    public function handleSave(Ticket $ticket, ValidatedInput $inputs): Ticket
+    public function handleSave(Ticket $ticket, array $inputs): Ticket
     {
-        $ticket = Ticket::updateOrCreate(
-            ['id' => $ticket->id],
-            [
-                'status' => $ticket->status ?? TicketStatusEnum::open,
-                'reporter_id' => $ticket->reporter_id ?? Auth::id(),
-                'project_id' => $inputs->project_id,
-                'assignee_id' => $inputs->assignee_id ?? null,
-                'subject' => $inputs->subject,
-                'type' => $inputs->type,
-                'priority' => $inputs->priority,
-                'due_date' => $inputs->due_date,
-                'message' => $inputs->message,
-            ]
-        );
-
+        // Prepare fields
+        $inputs['status'] = $ticket->status ?? TicketStatusEnum::open;
+        $inputs['reporter_id'] = $ticket->reporter_id ?? Auth::id();
+        $inputs['assignee_id'] = $inputs['assignee_id'] ?? null;
+        // Save ticket
+        $ticket->fill($inputs)->save();
+        // Store tickets projects users
         $this->projectUserService->handleStoreUser($ticket->project, $ticket->reporter);
-        
         if($ticket->assignee_id) {
             $this->projectUserService->handleStoreUser($ticket->project, $ticket->assignee);
         }
@@ -66,9 +56,8 @@ class TicketService
      */
     public function handleChange(Ticket $ticket, int $status): Ticket
     {
-        $ticket->status = $status;
-        $ticket->save();
-        return $ticket;
+        $ticket->update(['status' => $status]);
+        return $ticket->fresh();
     }
 
     /**
@@ -84,8 +73,7 @@ class TicketService
      */
     public function handleMark(Ticket $ticket): Ticket
     {
-        $ticket->is_marked = !$ticket->is_marked;
-        $ticket->save();
-        return $ticket;
+        $ticket->update(['is_marked' => !$ticket->is_marked]);
+        return $ticket->fresh();
     }
 }

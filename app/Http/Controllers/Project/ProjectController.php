@@ -42,7 +42,7 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request): RedirectResponse
     {
         try {
-            $project = $this->projectService->handleSave(new Project, $request->safe());
+            $project = $this->projectService->handleSave(new Project, $request->validated());
             $this->flash(__('messages.project.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
@@ -75,7 +75,7 @@ class ProjectController extends Controller
     public function update(UpdateProjectRequest $request, Project $project): RedirectResponse
     {
         try {
-            $project = $this->projectService->handleSave($project, $request->safe());
+            $project = $this->projectService->handleSave($project, $request->validated());
             $this->flash(__('messages.project.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

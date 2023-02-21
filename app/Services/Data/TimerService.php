@@ -3,7 +3,6 @@
 namespace App\Services\Data;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\ValidatedInput;
 use App\Models\Timer;
 
 class TimerService
@@ -11,30 +10,25 @@ class TimerService
     /**
      * Save data for rate.
      */
-    public function handleSave(Timer $timer, ValidatedInput $inputs)
+    public function handleSave(Timer $timer, array $inputs): Timer
     {
-        return Timer::updateOrCreate(
-            ['id' => $timer->id],
-            [
-                'project_id' => $timer->project_id ?? $inputs->project_id,
-                'user_id' => $timer->user_id ?? Auth::id(),
-                'rate_id' => $inputs->rate_id,
-                'since' => $inputs->since,
-                'until' => $inputs->until,
-                'note' => $inputs->note,
-            ]
-        );
+        // Prepare fields
+        $inputs['project_id'] = $timer->project_id ?? $inputs['project_id'];
+        $inputs['user_id'] = $timer->user_id ?? Auth::id();
+        // Save timer
+        $timer->fill($inputs)->save();
+        return $timer;
     }
 
     /**
      * Start measure new timer.
      */
-    public function handleStart(ValidatedInput $inputs): void
+    public function handleStart(int $projectId, int $rateId): void
     {
         Timer::create([
-            'project_id' => $inputs->project_id,
+            'project_id' => $projectId,
             'user_id' => Auth::id(),
-            'rate_id' => $inputs->rate_id,
+            'rate_id' => $rateId,
             'since' => now(),
             'until' => null,
         ]);

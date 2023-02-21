@@ -3,7 +3,7 @@
 namespace App\Services\Data;
 
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\{Str, ValidatedInput};
+use Illuminate\Support\Str;
 use App\Models\User;
 use App\Services\FileService;
 
@@ -12,53 +12,27 @@ class UserService
     /**
      * Save data for user.
      */
-    public function handleSave(User $user, ValidatedInput $inputs, ?UploadedFile $avatar)
+    public function handleSave(User $user, array $inputs, ?UploadedFile $avatar)
     {
-        $user = User::updateOrCreate(
-            ['id' => $user->id],
-            [
-                'name' => $inputs->name,
-                'surname' => $inputs->surname,
-                'email' => $inputs->email,
-                'username' => $inputs->username,
-                'password' => $inputs->password ?? ($user->password ?? Str::random(8)),
-                'job_title' => $inputs->job_title,
-                'mobile' => $inputs->mobile,
-                'phone' => $inputs->phone,
-                'street' => $inputs->street,
-                'house_number' => $inputs->house_number,
-                'city' => $inputs->city,
-                'country' => $inputs->country,
-                'zip_code' => $inputs->zip_code,
-            ]
-        );
-
         if ($avatar) {
-            $user = $this->uploadAvatar($user, $avatar);
+            $inputs['avatar_id'] = ((new FileService)->handleUpload($avatar, 'users/avatars'))->id;
+            $oldAvatarId = $user->avatar_id ?? null;
+        }
+
+        $inputs['password'] = $inputs['password'] ?? ($user->password ?? Str::random(8));
+        $user->fill($inputs)->save();
+
+        if ($oldAvatarId ?? false) {
+            (new FileService)->handleRemoveFile($oldAvatarId);
         }
 
         if ($user->rates()->count() === 0) {
             $user->rates()->create([
-                'name' => $inputs->rate_name,
+                'name' => $inputs['rate_name'],
                 'is_active' => true,
-                'value' => $inputs->rate_value,
+                'value' => $inputs['rate_value'],
             ]);
         }
-
-        return $user;
-    }
-
-    /**
-     * Upload users avatar.
-     */
-    private function uploadAvatar(User $user, ?UploadedFile $avatar): User
-    {
-        if ($oldAvatarId = $user->avatar_id) {
-            (new FileService)->handleRemoveFile($oldAvatarId);
-        }
-
-        $user->avatar_id = ((new FileService)->handleUpload($avatar, 'users/avatars'))->id;
-        $user->save();
 
         return $user;
     }

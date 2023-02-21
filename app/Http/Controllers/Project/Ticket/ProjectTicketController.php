@@ -42,7 +42,7 @@ class ProjectTicketController extends Controller
     public function store(StoreTicketRequest $request, Project $project): RedirectResponse
     {
         try {
-            $ticket = $this->ticketService->handleSave(new Ticket, $request->safe());
+            $ticket = $this->ticketService->handleSave(new Ticket, $request->validated());
             $this->flash(__('messages.ticket.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
@@ -75,7 +75,7 @@ class ProjectTicketController extends Controller
     public function update(UpdateTicketRequest $request, Project $project, Ticket $ticket): RedirectResponse
     {
         try {
-            $ticket = $this->ticketService->handleSave($ticket, $request->safe());
+            $ticket = $this->ticketService->handleSave($ticket, $request->validated());
             $this->flash(__('messages.ticket.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
