@@ -32,11 +32,7 @@
                     <td>
                         <a href="{{ $task->edit_route }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
                         <a href="{{ $task->show_route }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
-                        @if ($type === 'projects')
-                            @include('projects.tasks.partials.buttons', ['project' => $task->project, 'buttonSize' => 'xs', 'hideButtonText' => ''])
-                        @else
-                            @include('tasks.partials.buttons', ['buttonSize' => 'xs', 'hideButtonText' => ''])
-                        @endif
+                        @include('tasks.partials.buttons', ['buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table'])
                     </td>
                 </tr>
             @empty

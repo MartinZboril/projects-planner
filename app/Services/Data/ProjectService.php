@@ -52,9 +52,10 @@ class ProjectService
     /**
      * Change working status of the project.
      */
-    public function handleChange(Project $project, int $status): void
+    public function handleChange(Project $project, int $status): Project
     {
         $project->update(['status' => $status]);
+        return $project->fresh();
     }
   
     /**

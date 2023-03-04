@@ -55,7 +55,7 @@ class TaskService
     public function handleChangeStatus(Task $task, int $status): Task
     {
         $task->update([
-            'is_stopped' => $task->isReturned($status) ? true : false,
+            'is_returned' => $task->isReturned($status) ? true : false,
             'status' => $status,
         ]);
         return $task->fresh();

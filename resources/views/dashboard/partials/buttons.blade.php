@@ -8,15 +8,15 @@
         @break
 
     @case('project')
-        @include('projects.partials.buttons', ['project' => $item, 'buttonSize' => 'xs', 'hideButtonText' => ''])
+        @include('projects.partials.buttons', ['project' => $item, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table'])
         @break
         
     @case('task')
-        @include('tasks.partials.buttons', ['task' => $item, 'buttonSize' => 'xs', 'hideButtonText' => ''])
+        @include('tasks.partials.buttons', ['task' => $item, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table'])
         @break
         
     @case('ticket')
-        @include('tickets.partials.buttons', ['ticket' => $item, 'buttonSize' => 'xs', 'hideButtonText' => ''])
+        @include('tickets.partials.buttons', ['ticket' => $item, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table'])
         @break
 
     @case('todo')

@@ -3,18 +3,15 @@
 namespace App\Http\Controllers\Project\Timer;
 
 use Exception;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\{Auth, Log};
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Timer\StartTimerRequest;
 use App\Models\Project;
-use App\Traits\FlashTrait;
 use App\Services\Data\TimerService;
 
 class ProjectTimerStartController extends Controller
 {
-    use FlashTrait;
-
     public function __construct(private TimerService $timerService)
     {
     }
@@ -22,15 +19,18 @@ class ProjectTimerStartController extends Controller
     /**
      * Start working on new timer.
      */
-    public function __invoke(StartTimerRequest $request, Project $project): RedirectResponse
+    public function __invoke(StartTimerRequest $request, Project $project): JsonResponse
     {
         try {
-            $this->timerService->handleStart($project->id, $request->rate_id);
-            $this->flash(__('messages.timer.start'), 'info');
+            $timer = $this->timerService->handleStart($project->id, $request->rate_id);
         } catch (Exception $exception) {
             Log::error($exception);
-            return redirect()->back()->with(['error' => __('messages.error')]);
         }
-        return redirect()->route('projects.timers.index', [$project]); 
+        return response()->json([
+            'message' => __('messages.timer.start'),
+            'active_timers' => Auth::User()->activeTimers,
+            'timer' => $timer,
+            'project' => $project,
+        ]);
     }
 }

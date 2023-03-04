@@ -111,7 +111,6 @@
       <script src="{{ asset('plugins/progress-bar/progressbar.js' ) }}"></script>        
     @endif
     <!-- Custom scripts -->
-    <script src="{{ asset('js/timer.js') }}"></script>
     <script src="{{ asset('js/error.js') }}"></script>
     @if(!empty($toaster))
       <script src="{{ asset('js/toastr.js') }}"></script>      

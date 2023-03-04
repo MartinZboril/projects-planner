@@ -23,9 +23,9 @@ class TimerService
     /**
      * Start measure new timer.
      */
-    public function handleStart(int $projectId, int $rateId): void
+    public function handleStart(int $projectId, int $rateId): Timer
     {
-        Timer::create([
+        return Timer::create([
             'project_id' => $projectId,
             'user_id' => Auth::id(),
             'rate_id' => $rateId,

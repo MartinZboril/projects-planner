@@ -131,7 +131,7 @@ class Project extends Model
 
     public function getDeadlineAttribute(): int
     {
-        return ($this->overdue ? -1 : 1) * abs($this->due_date->diffInDays(now()->format('Y-m-d')));
+        return $this->status === ProjectStatusEnum::finish ? 0 : (($this->overdue ? -1 : 1) * abs($this->due_date->diffInDays(now()->format('Y-m-d'))));
     }
        
     public function getTotalTimeAttribute(): float

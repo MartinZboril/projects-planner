@@ -130,17 +130,12 @@ Route::middleware(['auth'])->group(function () {
             // Kanban
             Route::get('/kanban', App\Http\Controllers\Project\Task\ProjectTaskKanbanController::class)->name('kanban');
             Route::group(['prefix' => '{task}'], function () {
-                // Actions
-                Route::patch('/change-status', App\Http\Controllers\Project\Task\ProjectTaskChangeStatusController::class)->name('change_status');
-                Route::patch('/mark', App\Http\Controllers\Project\Task\ProjectTaskMarkController::class)->name('mark');
-                Route::patch('/pause', App\Http\Controllers\Project\Task\ProjectTaskPauseController::class)->name('pause');
                 // Comments
                 Route::resource('comments', App\Http\Controllers\Project\Task\ProjectTaskCommentController::class)
                     ->only(['store', 'update']);
                 // Files
                 Route::post('/files/upload', App\Http\Controllers\Project\Task\ProjectTaskFileUploaderController::class)->name('files.upload');
                 // ToDos
-                Route::patch('/todos/{todo}/check', App\Http\Controllers\Project\Task\ToDo\ProjectTaskToDoCheckController::class)->name('todos.check');
                 Route::resource('todos', App\Http\Controllers\Project\Task\ToDo\ProjectTaskToDoController::class)
                     ->except(['index', 'show', 'destroy']);
             });
@@ -149,10 +144,6 @@ Route::middleware(['auth'])->group(function () {
             ->except(['destroy']);
         // Tickets
         Route::group(['prefix' => 'tickets/{ticket}', 'as' => 'tickets.'], function () {
-            // Actions
-            Route::patch('/convert', App\Http\Controllers\Project\Ticket\ProjectTicketConvertTicketToTaskController::class)->name('convert_to_task');
-            Route::patch('/change-status', App\Http\Controllers\Project\Ticket\ProjectTicketChangeStatusController::class)->name('change_status');
-            Route::patch('/mark', App\Http\Controllers\Project\Ticket\ProjectTicketMarkController::class)->name('mark');
             // Comments
             Route::resource('comments', App\Http\Controllers\Project\Ticket\ProjectTicketCommentController::class)
                 ->only(['store', 'update']);

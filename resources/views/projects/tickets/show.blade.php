@@ -8,7 +8,7 @@
         <div class="p-3 mb-3" style="background-color:white;">
             <a href="{{ route('projects.tickets.index', $ticket->project) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
             <a href="{{ route('projects.tickets.edit', ['project' => $ticket->project, 'ticket' => $ticket]) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
-            @include('projects.tickets.partials.buttons', ['project' => $ticket->project, 'ticket' => $ticket, 'buttonSize' => 'sm'])
+            @include('tickets.partials.buttons', ['buttonSize' => 'sm', 'type' => 'detail'])
         </div>
         <!-- Main content -->
         <section class="content">

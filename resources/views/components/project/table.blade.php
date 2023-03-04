@@ -33,7 +33,7 @@
                     <td>
                         <a href="{{ $project->edit_route }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
                         <a href="{{ $project->show_route }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
-                        @include('projects.partials.buttons', ['buttonSize' => 'xs', 'hideButtonText' => ''])
+                        @include('projects.partials.buttons', ['buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table'])
                     </td>
                 </tr>
             @empty

@@ -1,4 +1,4 @@
-<a href="#" class="btn btn-{{ $buttonSize }} btn-primary" onclick="event.preventDefault(); document.getElementById('{{ ($client->is_marked ? 'unmark' : 'mark') . '-client-' . $client->id . '-form'}}').submit();">
-    <i class="{{ ($client->is_marked ? 'fas' : 'far') }} fa-bookmark"></i>
+<a href="#" class="btn btn-{{ $buttonSize }} btn-primary" onclick="markClient('{{ route('clients.mark', $client) }}')">
+    <i class="{{ ($client->is_marked ? 'fas' : 'far') }} fa-bookmark" id="client-{{ $client->id }}-marked"></i>
 </a>
-@include('clients.forms.mark', ['id' => ($client->is_marked ? 'unmark' : 'mark') . '-client-' . $client->id . '-form'])
+<script src="{{ asset('js/actions/client.js') }}" defer></script>

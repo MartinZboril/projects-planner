@@ -33,11 +33,7 @@
                     <td>
                         <a href="{{ $ticket->edit_route }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
                         <a href="{{ $ticket->show_route }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
-                        @if ($type === 'projects')
-                            @include('projects.tickets.partials.buttons', ['buttonSize' => 'xs', 'hideButtonText' => ''])               
-                        @else
-                            @include('tickets.partials.buttons', ['buttonSize' => 'xs', 'hideButtonText' => ''])      
-                        @endif
+                        @include('tickets.partials.buttons', ['buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table'])
                     </td>
                 </tr>
             @empty
