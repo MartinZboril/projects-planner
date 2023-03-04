@@ -17,4 +17,3 @@
 <a href="#" class="btn btn-{{ $buttonSize }} btn-primary ticket-mark-button" onclick="markTicket('{{ route('tickets.mark', $ticket) }}')">
     <i class="{{ ($ticket->is_marked ? 'fas' : 'far') }} fa-bookmark" id="ticket-{{ $ticket->id }}-marked"></i>
 </a>
-<script src="{{ asset('js/actions/ticket.js') }}" defer></script>

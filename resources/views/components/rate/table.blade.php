@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table id="{{ $rates->count() === 0 ?: $tableId }}" class="table table-bordered table-striped">
+    <table id="{{ $tableId }}" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>#</th>
@@ -9,35 +9,27 @@
                 <th></th>
             </tr>
         </thead>
-        <tbody>
-            @forelse ($rates as $rate)
-                <tr>
-                    <th>
-                        @if ($rate->note)
-                            <i class="fas fa-info-circle" data-toggle="popover" title="Note" data-content="{{ $rate->note }}"></i>
-                        @else
-                            #
-                        @endif
-                    </th>
-                    <td><a href="{{ $rate->edit_route }}">{{ $rate->name }}</a></td>
-                    <td>{{ $rate->active }}</td>
-                    <td>@money($rate->value)</td>
-                    <td><a href="{{ $rate->edit_route }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a></td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="100%" class="text-center">No rates were found!</td>
-                </tr>
-            @endforelse
-        </tbody>
     </table>  
 </div>
 
 @push('scripts')
     <script>
         $(function () {
-            $("#{{ $tableId }}").DataTable();
-            $('[data-toggle="popover"]').popover();
+            const table = $('#{{ $tableId }}').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('users.rates.load', $user) }}",
+                columns: [
+                    {data: 'note_popover', name: 'note_popover'},
+                    {data: 'detail', name: 'detail'},
+                    {data: 'is_active', name: 'is_active'},
+                    {data: 'value', name: 'value'},
+                    {data: 'buttons', name: 'buttons', orderable: false, searchable: false},
+                ]
+            });
+            $('#{{ $tableId }}').on('draw.dt', function() {
+                $('[data-toggle="popover"]').popover();
+            });
         });
     </script>
 @endpush

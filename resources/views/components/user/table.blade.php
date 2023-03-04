@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table id="{{ $users->count() === 0 ?: $tableId }}" class="table table-bordered table-striped">
+    <table id="{{ $tableId }}" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>Name</th>
@@ -11,33 +11,26 @@
                 <th></th>
             </tr>
         </thead>
-        <tbody>
-            @forelse ($users as $user)
-                <tr>
-                    <td><x-site.ui.user-icon :user="$user" /><a href="{{ $user->show_route }}">{{ $user->full_name }}</a></td>
-                    <td>{{ $user->email }}</td>
-                    <td>{{ $user->job_title }}</td>
-                    <td>{{ $user->mobile }}</td>
-                    <td>{{ $user->city }}</td>
-                    <td>{{ $user->created_at->format('d.m.Y') }}</td>
-                    <td>
-                        <a href="{{ $user->edit_route }}" class="btn btn-sm btn-dark"><i class="fas fa-pencil-alt"></i></a>
-                        <a href="{{ $user->show_route }}" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="100%" class="text-center">No users were found!</td>
-                </tr>
-            @endforelse
-        </tbody>
     </table>  
 </div>
 
 @push('scripts')
     <script>
         $(function () {
-            $('#{{ $tableId }}').DataTable();
+            const table = $('#{{ $tableId }}').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('users.load') }}",
+                columns: [
+                    {data: 'detail', name: 'detail'},
+                    {data: 'email', name: 'email'},
+                    {data: 'job_title', name: 'job_title'},
+                    {data: 'mobile', name: 'mobile'},
+                    {data: 'city', name: 'city'},
+                    {data: 'created_at', name: 'created_at'},
+                    {data: 'buttons', name: 'buttons', orderable: false, searchable: false},
+                ]
+            });
         });
     </script>
 @endpush

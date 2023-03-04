@@ -9,6 +9,7 @@
             <a href="{{ route('tasks.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
             <a href="{{ route('tasks.edit', $task) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
             @include('tasks.partials.buttons', ['buttonSize' => 'sm', 'type' => 'detail'])
+            <script src="{{ asset('js/actions/task.js') }}" defer></script>
         </div>
         <!-- Main content -->
         <section class="content">

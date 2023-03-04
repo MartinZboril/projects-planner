@@ -45,6 +45,8 @@
     </table>  
 </div>
 
+<script src="{{ asset('js/actions/ticket.js') }}" defer></script>
+
 @push('scripts')
     <script>
         $(function () {

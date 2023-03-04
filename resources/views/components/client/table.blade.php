@@ -31,6 +31,8 @@
     </table>  
 </div>
 
+<script src="{{ asset('js/actions/client.js') }}" defer></script>
+
 @push('scripts')
     <script>
         $(function () {

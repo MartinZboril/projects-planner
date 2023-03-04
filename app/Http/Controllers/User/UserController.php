@@ -23,9 +23,9 @@ class UserController extends Controller
     /**
      * Display a listing of the users.
      */
-    public function index(): View
+    public function index(): view
     {
-        return view('users.index', ['users' => User::all()]);
+        return view('users.index');
     }
 
     /**

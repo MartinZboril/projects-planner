@@ -6,6 +6,6 @@
         </div>   
     </div>
     <div class="card-body">
-        <x-rate.table :$rates table-id="rates-table" />
+        <x-rate.table :$user table-id="rates-table" />
     </div>
 </div>

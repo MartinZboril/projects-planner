@@ -7,6 +7,7 @@
         <!-- Content Header -->
         <div class="p-3 mb-3" style="background-color:white;">
             @include('projects.partials.actions')
+            <script src="{{ asset('js/actions/project.js') }}" defer></script>
         </div>
         <!-- Main content -->
         <section class="content">

@@ -13,7 +13,7 @@ class RateService
     {
         // Prepare fields
         $inputs['user_id'] = $rate->user_id ?? $inputs['user_id'];
-        $inputs['note'] = $rate->note ?? null;
+        $inputs['is_active'] = $inputs['is_active'] ?? false;
         // Save note
         $rate->fill($inputs)->save();
     }

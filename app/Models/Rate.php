@@ -11,7 +11,7 @@ class Rate extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'name', 'value', 'is_active', 'note'
+        'user_id', 'name', 'value', 'is_active', 'note',
     ]; 
 
     public const VALIDATION_RULES = [

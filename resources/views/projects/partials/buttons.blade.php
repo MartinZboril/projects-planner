@@ -25,4 +25,3 @@
 <a href="#" class="btn btn-{{ $buttonSize }} btn-primary" onclick="markProject('{{ route('projects.mark', $project) }}')">
     <i class="{{ ($project->is_marked ? 'fas' : 'far') }} fa-bookmark" id="project-{{ $project->id }}-marked"></i>
 </a>
-<script src="{{ asset('js/actions/project.js') }}" defer></script>

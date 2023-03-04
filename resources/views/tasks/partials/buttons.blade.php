@@ -18,4 +18,3 @@
 <a href="#" class="btn btn-{{ $buttonSize }} btn-primary" onclick="markTask('{{ route('tasks.mark', $task) }}')">
     <i class="{{ ($task->is_marked ? 'fas' : 'far') }} fa-bookmark" id="task-{{ $task->id }}-marked"></i>
 </a>
-<script src="{{ asset('js/actions/task.js') }}" defer></script>
