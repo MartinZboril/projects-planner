@@ -30,6 +30,7 @@ Route::middleware(['auth'])->group(function () {
         // Marking
         Route::patch('/mark', App\Http\Controllers\Client\ClientMarkController::class)->name('mark');
     });
+    Route::get('/clients/load', App\Http\Controllers\Client\LoadClientController::class)->name('clients.load');
     Route::resource('clients', App\Http\Controllers\Client\ClientController::class)
         ->except(['destroy']);
     // Dashboard
