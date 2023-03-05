@@ -21,17 +21,16 @@ class LoadClientController extends Controller
                 return '<a href="' . route('clients.show', $data) . '">' . $data->name . '</a>';
             })
             ->addColumn('buttons', function($data) {
-                $buttons = '<a href="' . route('clients.edit', $data) . '" class="btn btn-xs btn-dark mr-1"><i class="fas fa-pencil-alt"></i></a>';
-                $buttons .= '<a href="' . route('clients.show', $data) . '" class="btn btn-xs btn-info mr-1"><i class="fas fa-eye"></i></a>';
-                $buttons .= '<a href="#" class="btn btn-xs btn-primary" onclick="markClient(\'' . route('clients.mark', $data) . '\')"><i class="' . ($data->is_marked ? 'fas' : 'far') . ' fa-bookmark" id="client-' . $data->id . '-marked"></i></a>';
+                $buttons = '<a href="' . route('clients.edit', $data) . '" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a> ';
+                $buttons .= '<a href="' . route('clients.show', $data) . '" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a> ';
+                $buttons .= view('clients.partials.buttons', ['buttonSize' => 'xs', 'client' => $data, 'type' => 'table']);
                 return $buttons;
             })
             ->editColumn('email', function($data) {
                 return $data->email_label;
             })
             ->editColumn('created_at', function($data) {
-                $formatedDate = Carbon::createFromFormat('Y-m-d H:i:s', $data->created_at)->format('d.m.Y');
-                return $formatedDate;
+                return Carbon::createFromFormat('Y-m-d H:i:s', $data->created_at)->format('d.m.Y');
             })
             ->rawColumns(['detail', 'buttons'])
             ->make(true);

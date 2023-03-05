@@ -1,4 +1,4 @@
-function markClient(url) {
+function markClient(url, type) {
     const token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: url,
@@ -9,15 +9,19 @@ function markClient(url) {
         error: function() {
             toastr.error('An error has occurred!');
         },
-        success: function (data){
-            const id = data.client.id;
-            const marked = data.client.is_marked;   
-            const newFill = marked ? 'fas' : 'far';
-            const oldFill = marked ? 'far' : 'fas';
-            // Marked icon
-            const markedIcon = $('#client-' + id + '-marked');                               
-            // Update tickets view
-            updateCssClass(markedIcon, newFill, oldFill);
+        success: function (data) {
+            if (type === 'table') {
+                $('#clients-table').DataTable().ajax.reload(); 
+            } else {
+                const id = data.client.id;
+                const marked = data.client.is_marked;   
+                const newFill = marked ? 'fas' : 'far';
+                const oldFill = marked ? 'far' : 'fas';
+                // Marked icon
+                const markedIcon = $('#client-' + id + '-marked');                               
+                // Update tickets view
+                updateCssClass(markedIcon, newFill, oldFill);
+            }
             toastr.info(data.message);
         }
     });
