@@ -13,7 +13,7 @@
             <div class="container-fluid">
                 <div class="card card-primary card-outline">
                     <div class="card-body">
-                        <x-timer.table :$timers table-id="timers-table" />
+                        <x-timer.table table-id="timers-table" />
                     </div>
                 </div>            
             </div>

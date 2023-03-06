@@ -18,7 +18,7 @@
                     <div class="card-header"><a href="{{ route('projects.tickets.create', $project) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
                     <div class="card-body">
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                        <x-ticket.table :tickets="$project->tickets" table-id="tickets-table" type="projects" />
+                        <x-ticket.table table-id="tickets-table" type="projects" :project-id="$project->id" />
                     </div>
                 </div>
             </div>

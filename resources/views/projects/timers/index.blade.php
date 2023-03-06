@@ -21,7 +21,7 @@
                     </div>
                     <div class="card-body">
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                        <x-timer.table :timers="$project->timers" table-id="timesheets-table" type="projects" />       
+                        <x-timer.table table-id="timesheets-table" type="projects" :project-id="$project->id" />       
                     </div>
                 </div>
             </div>

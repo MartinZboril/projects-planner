@@ -39,7 +39,7 @@
                         <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('overdue_tasks')->count() }}</span>
                     </div>
                     <div class="card-body">
-                        <x-task.table :tasks="$data->get('overdue_tasks')" table-id="overdue-tasks-table" />
+                        <x-task.table table-id="overdue-tasks-table" :overdue="true" />
                     </div>
                 </div>
             @endif
@@ -50,7 +50,7 @@
                         <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('new_tasks')->count() }}</span>
                     </div>
                     <div class="card-body">
-                        <x-task.table :tasks="$data->get('new_tasks')" table-id="new-tasks-table" />
+                        <x-task.table :tasks="$data->get('new_tasks')" table-id="new-tasks-table" status="1" />
                     </div>
                 </div>  
             @endif

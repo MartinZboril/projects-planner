@@ -40,7 +40,7 @@
                             <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('overdue_tickets')->count() }}</span>
                         </div>
                         <div class="card-body">
-                            <x-ticket.table :tickets="$data->get('overdue_tickets')" table-id="overdue-tickets-table" />
+                            <x-ticket.table :tickets="$data->get('overdue_tickets')" table-id="overdue-tickets-table" :overdue="true" />
                         </div>
                     </div>
                 @endif

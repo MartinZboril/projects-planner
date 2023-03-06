@@ -1,11 +1,9 @@
 <div class="table-responsive">
-    <table id="{{ $tickets->count() === 0 ?: $tableId }}" class="table table-bordered table-striped">
+    <table id="{{ $tableId }}" class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>Subject</th>
-                @if ($type === 'tickets')
-                    <th>Project</th>
-                @endif
+                <th>Project</th>
                 <th>Reporter</th>
                 <th>Assignee</th>
                 <th>Date</th>
@@ -16,32 +14,6 @@
                 <th></th>
             </tr>
         </thead>
-        <tbody>
-            @forelse ($tickets as $ticket)
-                <tr>
-                    <td><a href="{{ $ticket->show_route }}">{{ $ticket->subject }}</a></td>
-                    @if ($type === 'tickets')
-                        <td><a href="{{ $ticket->project_show_route }}">{{ $ticket->project->name }}</a></td>
-                    @endif
-                    <td><x-site.ui.user-icon :user="$ticket->reporter" /></td>
-                    <td><x-site.ui.user-icon :user="$ticket->assignee ?? null" /></td>
-                    <td>{{ $ticket->created_at->format('d.m.Y') }}</td>
-                    <td><x-ticket.ui.status-badge :text="true" :status="$ticket->status" /></td>
-                    <td><x-ticket.ui.type :type="$ticket->type" /></td>
-                    <td><span class="text-{{ $ticket->urgent ? 'danger font-weight-bold' : 'body' }}"><x-ticket.ui.priority :priority="$ticket->priority" /></span></td>
-                    <td><span class="text-{{ $ticket->overdue ? 'danger' : 'body' }}">{{ $ticket->due_date->format('d.m.Y') }}</span></td>
-                    <td>
-                        <a href="{{ $ticket->edit_route }}" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>
-                        <a href="{{ $ticket->show_route }}" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>
-                        @include('tickets.partials.buttons', ['buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table'])
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="100%" class="text-center">No tickets were found!</td>
-                </tr>
-            @endforelse
-        </tbody>
     </table>  
 </div>
 
@@ -50,7 +22,33 @@
 @push('scripts')
     <script>
         $(function () {
-            $("#{{ $tableId }}").DataTable();
+            const type = '{{ $type }}';
+            const projectId = '{{ $projectId }}';
+            const overdue = '{{ $overdue }}';
+            const table = $('#{{ $tableId }}').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('tickets.load') }}",
+                    data: function(data) { 
+                        data.type = type; 
+                        data.project_id = projectId; 
+                        data.overdue = overdue; 
+                    },
+                },
+                columns: [
+                    {data: 'detail', name: 'detail'},
+                    {data: 'project', name: 'project', visible: type === 'tickets' ? true : false},
+                    {data: 'reporter', name: 'reporter'},
+                    {data: 'assignee', name: 'assignee'},
+                    {data: 'date', name: 'date'},
+                    {data: 'status_badge', name: 'status_badge'},
+                    {data: 'type', name: 'type'},
+                    {data: 'priority', name: 'priority'},
+                    {data: 'due_date', name: 'due_date'},
+                    {data: 'buttons', name: 'buttons', orderable: false, searchable: false},
+                ]
+            });
         });
     </script>
 @endpush

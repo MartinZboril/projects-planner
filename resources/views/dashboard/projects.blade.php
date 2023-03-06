@@ -28,7 +28,7 @@
                         <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('overdue_projects')->count() }}</span>
                     </div>
                     <div class="card-body">
-                        <x-project.table :projects="$data->get('overdue_projects')" table-id="overdue-projects-table" />
+                        <x-project.table table-id="overdue-projects-table" :overdue="true" />
                     </div>
                 </div>
             @endif
@@ -39,7 +39,7 @@
                         <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('overdue_milestones')->count() }}</span>
                     </div>
                     <div class="card-body">
-                        <x-milestone.table :milestones="$data->get('overdue_milestones')" table-id="overdue-milestones-table" />
+                        <x-milestone.table table-id="overdue-milestones-table" />
                     </div>
                 </div>
             @endif

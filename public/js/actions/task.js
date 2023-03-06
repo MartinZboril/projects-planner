@@ -122,12 +122,13 @@ function modifyOverdue(id, overdue) {
     }
 }
 // Mark task
-function markTask(url) {
+function markTask(url, type) {
     const token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: url,
-        type: 'PATCH',
+        type: 'post',
         data: {
+            "_method": "PATCH",
             "_token": token,
         },
         error: function() {

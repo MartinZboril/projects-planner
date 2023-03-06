@@ -75,6 +75,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('todos', App\Http\Controllers\Task\ToDo\TaskToDoController::class)
             ->except(['index', 'show', 'destroy']);
     });
+    Route::get('/tasks/load', App\Http\Controllers\Task\LoadTaskController::class)->name('tasks.load');
     Route::resource('tasks', App\Http\Controllers\Task\TaskController::class)
         ->except(['destroy']);
     // Tickets
@@ -89,6 +90,7 @@ Route::middleware(['auth'])->group(function () {
         // Files
         Route::post('/files/upload', App\Http\Controllers\Ticket\TicketFileUploaderController::class)->name('files.upload');
     });
+    Route::get('/tickets/load', App\Http\Controllers\Ticket\LoadTicketController::class)->name('tickets.load');
     Route::resource('tickets', App\Http\Controllers\Ticket\TicketController::class)
         ->except(['destroy']);
     // Users
@@ -101,6 +103,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users/load', App\Http\Controllers\User\LoadUserController::class)->name('users.load');
     Route::resource('users', App\Http\Controllers\User\UserController::class)
         ->except(['destroy']);
+    // Milestones
+    Route::get('/milestones/load', App\Http\Controllers\Project\Milestone\LoadMilestoneController::class)->name('milestones.load');
+    // Timers
+    Route::get('/timers/load', App\Http\Controllers\Project\Timer\LoadTimerController::class)->name('timers.load');
     // Projects
     Route::group(['prefix' => 'projects/{project}', 'as' => 'projects.'], function () {
         // Actions
@@ -163,6 +169,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('timers', App\Http\Controllers\Project\Timer\ProjectTimerController::class)
             ->except(['show', 'destroy']);
     });
+    Route::get('/projects/load', App\Http\Controllers\Project\LoadProjectController::class)->name('projects.load');
     Route::resource('projects', App\Http\Controllers\Project\ProjectController::class)
         ->except(['destroy']);
 });

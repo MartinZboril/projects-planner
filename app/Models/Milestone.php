@@ -28,11 +28,6 @@ class Milestone extends Model
         'description' => ['nullable', 'string', 'max:65553'],
     ];
 
-    protected $appends = [
-        'overdue',
-        'progress',
-    ];
-
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');

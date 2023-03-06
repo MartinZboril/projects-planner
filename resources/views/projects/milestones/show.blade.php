@@ -22,7 +22,7 @@
                         <div class="card card-primary card-outline">
                             <div class="card-header">Tasks</div>
                             <div class="card-body">
-                                <x-task.table table-id="tasks-table" :tasks="$milestone->tasks" type="projects" />
+                                <x-task.table table-id="tasks-table" type="projects" :project-id="$milestone->project->id" :milestone-id="$milestone->id" />
                             </div>
                         </div>
                         <x-comment.card :comments="$milestone->comments" :parent="['project' => $milestone->project, 'milestone' => $milestone]" :store-form-route="route('projects.milestones.comments.store', ['project' => $milestone->project, 'milestone' => $milestone])" update-form-route-name="projects.milestones.comments.update" /> 

@@ -18,7 +18,7 @@
                     </div>
                     <div class="card-body">
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                        <x-task.table table-id="tasks-table" :$tasks />
+                        <x-task.table table-id="tasks-table" />
                     </div>
                 </div>            
             </div>
