@@ -1,5 +1,5 @@
 // Start work on project
-function startWorkTimer(url, projectId, rateId) {
+function startWorkTimer(url, projectId, rateId, type) {
     const token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: url,
@@ -16,9 +16,13 @@ function startWorkTimer(url, projectId, rateId) {
             const project = data.project;
             const timer = data.timer;
             const activeTimers = data.active_timers;
-            $('#project-' + project.id + '-stop-work').attr('onclick', 'stopWorkTimer(\'' + timer.stop_route +'\', \'project\', \'timers-preview-modal\')');
-            $('#project-' + project.id + '-stop-work').show();
-            $('#project-' + project.id + '-start-work-div').hide();
+            if (type === 'table') {
+                $('#projects-table').DataTable().ajax.reload(); 
+            } else {
+                $('#project-' + project.id + '-stop-work').attr('onclick', 'stopWorkTimer(\'' + timer.stop_route +'\', \'project\', \'timers-preview-modal\')');
+                $('#project-' + project.id + '-stop-work').show();
+                $('#project-' + project.id + '-start-work-div').hide();
+            }
             // Update active timers count
             if (activeTimers.length > 0) {
                 $('#timer-nav').show();
@@ -54,6 +58,9 @@ function stopWorkTimer(url, type, modalId) {
             } else if(type === 'project') {
                 $('#project-' + project.id + '-stop-work').hide();
                 $('#project-' + project.id + '-start-work-div').show();
+            }
+            if ($('#projects-table').DataTable()) {
+                $('#projects-table').DataTable().ajax.reload();
             }
             // Update active timers count
             if (activeTimersCount > 0) {

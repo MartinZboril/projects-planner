@@ -16,12 +16,12 @@
     </button>
     <div class="dropdown-menu">
         @foreach (Auth::User()->rates as $rate)
-            <a class="dropdown-item" href="#" onclick="startWorkTimer('{{ route('projects.timers.start', $project) }}', {{ $project->id }}, {{ $rate->id }})">
+            <a class="dropdown-item" href="#" onclick="startWorkTimer('{{ route('projects.timers.start', $project) }}', {{ $project->id }}, {{ $rate->id }}, '{{ $type }}')">
                 {{ $rate->name }} ({{ $rate->value }})
             </a>
         @endforeach
     </div>
 </div>
-<a href="#" class="btn btn-{{ $buttonSize }} btn-primary" onclick="markProject('{{ route('projects.mark', $project) }}')">
+<a href="#" class="btn btn-{{ $buttonSize }} btn-primary" onclick="markProject('{{ route('projects.mark', $project) }}', '{{ $type }}')">
     <i class="{{ ($project->is_marked ? 'fas' : 'far') }} fa-bookmark" id="project-{{ $project->id }}-marked"></i>
 </a>

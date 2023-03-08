@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\User;
 
 use Exception;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\User\{StoreUserRequest, UpdateUserRequest};
 use App\Models\User;
+use Illuminate\View\View;
 use App\Traits\FlashTrait;
+use App\DataTables\UsersDataTable;
 use App\Services\Data\UserService;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\{JsonResponse, RedirectResponse};
+use App\Http\Requests\User\{StoreUserRequest, UpdateUserRequest};
 
 class UserController extends Controller
 {
@@ -23,9 +24,9 @@ class UserController extends Controller
     /**
      * Display a listing of the users.
      */
-    public function index(): view
+    public function index(UsersDataTable $dataTable)
     {
-        return view('users.index');
+        return $dataTable->render('users.index');
     }
 
     /**

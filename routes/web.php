@@ -173,3 +173,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('projects', App\Http\Controllers\Project\ProjectController::class)
         ->except(['destroy']);
 });
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

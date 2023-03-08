@@ -1,3 +1,4 @@
+{{ $dataTable->table() }}
 <div class="table-responsive">
     <table id="{{ $tableId }}" class="table table-bordered table-striped">
         <thead>
@@ -16,7 +17,7 @@
 
 @push('scripts')
     <script>
-        $(function () {
+        /*$(function () {
             const table = $('#{{ $tableId }}').DataTable({
                 processing: true,
                 serverSide: true,
@@ -31,6 +32,9 @@
                     {data: 'buttons', name: 'buttons', orderable: false, searchable: false},
                 ]
             });
-        });
+        });*/
     </script>
+@endpush
+@push('scripts')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
 @endpush
