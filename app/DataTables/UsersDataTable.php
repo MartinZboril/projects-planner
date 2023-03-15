@@ -17,17 +17,21 @@ class UsersDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
                     ->setRowId('id')
+                    ->filterColumn('name', function($query, $keyword) {
+                        $sql = "CONCAT(users.name, '-' , users.surname)  like ?";
+                        $query->whereRaw($sql, ["%{$keyword}%"]);
+                    })
                     ->editColumn('name', function(User $user) {
                         return Blade::render('<x-site.ui.user-icon :user="$user" />', ['user' => $user]) . '<a href="' . route('users.show', $user) . '" class="ml-1">' . $user->name . ' ' . $user->surname . '</a>';
                     })
-                    ->editColumn('job_title', function($data) {
-                        return $data->job_title_label;
+                    ->editColumn('job_title', function(User $user) {
+                        return $user->job_title_label;
                     })
-                    ->editColumn('mobile', function($data) {
-                        return $data->mobile_label;
+                    ->editColumn('mobile', function(User $user) {
+                        return $user->mobile_label;
                     })
-                    ->editColumn('city', function($data) {
-                        return $data->city_label;
+                    ->editColumn('city', function(User $user) {
+                        return $user->city_label;
                     })
                     ->editColumn('created_at', function(User $user) {
                         $formatedDate = Carbon::createFromFormat('Y-m-d H:i:s', $user->created_at)->format('d.m.Y');

@@ -96,7 +96,6 @@ Route::middleware(['auth'])->group(function () {
     // Users
     Route::group(['prefix' => 'users/{user}', 'as' => 'users.'], function () {
         // Rates
-        Route::get('/rates/load', App\Http\Controllers\User\Rate\LoadUserRateController::class)->name('rates.load');
         Route::resource('rates', App\Http\Controllers\User\Rate\UserRateController::class)
             ->except(['index', 'show', 'destroy']);
     });

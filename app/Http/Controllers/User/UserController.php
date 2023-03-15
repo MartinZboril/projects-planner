@@ -6,11 +6,12 @@ use Exception;
 use App\Models\User;
 use Illuminate\View\View;
 use App\Traits\FlashTrait;
+use App\DataTables\RatesDataTable;
 use App\DataTables\UsersDataTable;
 use App\Services\Data\UserService;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\{JsonResponse, RedirectResponse};
+use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
 use App\Http\Requests\User\{StoreUserRequest, UpdateUserRequest};
 
 class UserController extends Controller
@@ -57,9 +58,11 @@ class UserController extends Controller
     /**
      * Display the user.
      */
-    public function show(User $user): View
+    public function show(User $user, RatesDataTable $dataTable)
     {
-        return view('users.show', ['user' => $user]);
+        return $dataTable->with([
+            'user_id' => $user->id,
+        ])->render('users.show', ['user' => $user]);
     }
 
     /**
