@@ -3,16 +3,15 @@
 namespace App\Http\Controllers\User;
 
 use Exception;
-use App\Models\User;
-use Illuminate\View\View;
-use App\Traits\FlashTrait;
-use App\DataTables\RatesDataTable;
-use App\DataTables\UsersDataTable;
-use App\Services\Data\UserService;
+use Illuminate\Http\{JsonResponse, RedirectResponse};
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
+use App\DataTables\{RatesDataTable, UsersDataTable};
 use App\Http\Controllers\Controller;
-use Illuminate\Http\{JsonResponse, RedirectResponse, Request};
 use App\Http\Requests\User\{StoreUserRequest, UpdateUserRequest};
+use App\Models\User;
+use App\Traits\FlashTrait;
+use App\Services\Data\UserService;
 
 class UserController extends Controller
 {
@@ -25,9 +24,9 @@ class UserController extends Controller
     /**
      * Display a listing of the users.
      */
-    public function index(UsersDataTable $dataTable)
+    public function index(UsersDataTable $usersDataTable): JsonResponse|View 
     {
-        return $dataTable->render('users.index');
+        return $usersDataTable->render('users.index');
     }
 
     /**
@@ -58,9 +57,9 @@ class UserController extends Controller
     /**
      * Display the user.
      */
-    public function show(User $user, RatesDataTable $dataTable)
+    public function show(User $user, RatesDataTable $ratesDataTable): JsonResponse|View
     {
-        return $dataTable->with([
+        return $ratesDataTable->with([
             'user_id' => $user->id,
         ])->render('users.show', ['user' => $user]);
     }
