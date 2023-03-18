@@ -21,10 +21,12 @@
                     </div>
                     <div class="card-body">
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                        <x-milestone.table table-id="milestones-table" type="projects" />      
+                        {{ $dataTable->table() }}  
                     </div>
                 </div>
             </div>
         </section>
     </div>
 @endsection
+
+{{ $dataTable->scripts(attributes: ['type' => 'module']) }}

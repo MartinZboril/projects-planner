@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Project\Milestone;
 use Exception;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\{JsonResponse, RedirectResponse};
+use App\DataTables\MilestonesDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Milestone\{StoreMilestoneRequest, UpdateMilestoneRequest};
 use App\Models\{Milestone, Project};
@@ -23,9 +24,12 @@ class ProjectMilestoneController extends Controller
     /**
      * Display the milestones of project.
      */
-    public function index(Project $project): View
+    public function index(Project $project, MilestonesDataTable $milestonesDataTable): JsonResponse|View
     {
-        return view('projects.milestones.index', ['project' => $project]);
+        return $milestonesDataTable->with([
+            'project_id' => $project->id,
+            'view' => '',
+        ])->render('projects.milestones.index', ['project' => $project]);
     }
 
     /**
