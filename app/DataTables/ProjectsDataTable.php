@@ -2,87 +2,104 @@
 
 namespace App\DataTables;
 
-use App\Models\Project;
-use Yajra\DataTables\Html\Button;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Illuminate\Support\Facades\Blade;
+use Yajra\DataTables\EloquentDataTable;
+use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use App\Models\Project;
+
 
 class ProjectsDataTable extends DataTable
 {
-    /**
-     * Build DataTable class.
-     *
-     * @param mixed $query Results from query() method.
-     * @return \Yajra\DataTables\DataTableAbstract
-     */
-    public function dataTable($query)
+    public function dataTable($query): EloquentDataTable
     {
-        return datatables()
-            ->eloquent($query)
-            ->addColumn('action', 'project.action');
+        return (new EloquentDataTable($query))
+                    ->setRowId('id')                                                       
+                    ->editColumn('name', function(Project $project) {
+                        return '<a href="' . route('projects.show', $project) . '">' . $project->name . '</a>';
+                    })
+                    ->editColumn('client.name', function(Project $project) {
+                        return '<a href="' . route('clients.show', $project->client) . '">' . $project->client->name . '</a>';
+                    })   
+                    ->editColumn('status', function(Project $project) {
+                        return Blade::render('<x-project.ui.status-badge :text="true" :status="$status" />', ['status' => $project->status]);
+                    })    
+                    ->editColumn('team', function(Project $project) {
+                        $team = '';
+                        foreach ($project->team as $key => $user) {
+                            $team .= Blade::render('<x-site.ui.user-icon :user="$user" />', ['user' => $user]);
+                        }
+                        return $team;
+                    })                                                     
+                    ->editColumn('amount', function(Project $project) {
+                        return number_format($project->amount, 2);
+                    })
+                    ->editColumn('time_plan', function(Project $project) {
+                        return '<span class="text-' . ($project->overdue ? 'danger' : 'body') . '">' . $project->time_plan . ' %' . '</span>';
+                    })
+                    ->editColumn('total_time', function(Project $project) {
+                        return $project->total_time . ' Hours';
+                    })            
+                    ->editColumn('budget_plan', function(Project $project) {
+                        return '<span class="text-' . ($project->overdue ? 'danger' : 'body') . '">' . $project->budget_plan . ' %' . '</span>';
+                    })
+                    ->editColumn('due_date', function(Project $project) {
+                        return '<span class="text-' . ($project->overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $project->due_date)->format('d.m.Y') . '</span>';
+                    })       
+                    ->editColumn('buttons', function(Project $project) {
+                        $buttons = '<a href="' . route('projects.edit', $project) . '" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a> ';
+                        $buttons .= '<a href="' . route('projects.show', $project) . '" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a> ';
+                        $buttons .= view('projects.partials.buttons', ['project' => $project, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table']);
+                        return $buttons;
+                    })                                 
+                    ->rawColumns(['name', 'client.name', 'status', 'team', 'buttons', 'due_date', 'time_plan', 'budget_plan']);                    
     }
 
-    /**
-     * Get query source of dataTable.
-     *
-     * @param \App\Models\Project $model
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function query(Project $model)
+    public function query(Project $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->with('client')->select('projects.*')->newQuery();
     }
 
-    /**
-     * Optional method if you want to use html builder.
-     *
-     * @return \Yajra\DataTables\Html\Builder
-     */
-    public function html()
+    public function html(): HtmlBuilder
     {
         return $this->builder()
                     ->setTableId('projects-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+                    ->orderBy(4)
+                    ->parameters([
+                        'responsive' => true,
+                        'autoWidth' => false,
+                        'lengthMenu' => [
+                            [ 10, 25, 50, -1 ],
+                            [ '10 rows', '25 rows', '50 rows', 'Show all' ]
+                        ],  
+                        'buttons' => [
+                            'pageLength',
+                        ],
+                    ]);
     }
 
-    /**
-     * Get columns.
-     *
-     * @return array
-     */
-    protected function getColumns()
+    protected function getColumns(): array
     {
         return [
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('add your columns'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+            Column::make('name')->title('Project'),
+            Column::make('client.name')->data('client.name')->title('Client'),
+            Column::make('status')->orderable(false)->searchable(false),
+            Column::make('team')->orderable(false)->searchable(false),
+            Column::make('due_date'),
+            Column::make('time_plan')->orderable(false)->searchable(false),
+            Column::make('total_time')->orderable(false)->searchable(false),
+            Column::make('budget_plan')->orderable(false)->searchable(false),
+            Column::make('amount')->orderable(false)->searchable(false),
+            Column::make('buttons')->title('')->orderable(false)->searchable(false),
         ];
     }
 
-    /**
-     * Get filename for export.
-     *
-     * @return string
-     */
-    protected function filename()
+    protected function filename(): string
     {
         return 'Project_' . date('YmdHis');
     }

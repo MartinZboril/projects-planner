@@ -13,10 +13,12 @@
             <div class="container-fluid">
                 <div class="card card-primary card-outline">
                     <div class="card-body">
-                        <x-milestone.table table-id="milestones-table" />
+                        {{ $dataTable->table() }}  
                     </div>
                 </div>            
             </div>
         </section>
     </div>
 @endsection
+
+{{ $dataTable->scripts(attributes: ['type' => 'module']) }}

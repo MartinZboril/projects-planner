@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Project;
 
 use Exception;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\{JsonResponse, RedirectResponse};
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
+use App\DataTables\ProjectsDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Project\{StoreProjectRequest, UpdateProjectRequest};
 use App\Models\Project;
@@ -23,9 +24,9 @@ class ProjectController extends Controller
     /**
      * Display a listing of the projects.
      */
-    public function index(): View
+    public function index(ProjectsDataTable $projectsDataTable): JsonResponse|View
     {
-        return view('projects.index', ['projects' => Project::all()]);
+        return $projectsDataTable->render('projects.index');
     }
 
     /**

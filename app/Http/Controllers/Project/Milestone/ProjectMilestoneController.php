@@ -28,7 +28,7 @@ class ProjectMilestoneController extends Controller
     {
         return $milestonesDataTable->with([
             'project_id' => $project->id,
-            'view' => '',
+            'view' => 'project',
         ])->render('projects.milestones.index', ['project' => $project]);
     }
 

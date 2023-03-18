@@ -24,10 +24,10 @@ class MilestonesDataTable extends DataTable
                     ->editColumn('name', function(Milestone $milestone) {
                         return '<a href="' . route('projects.milestones.show', ['project' => $milestone->project, 'milestone' => $milestone]) . '">' . $milestone->name . '</a>';
                     })
-                    ->editColumn('project_id', function(Milestone $milestone) {
+                    ->editColumn('project.name', function(Milestone $milestone) {
                         return '<a href="' . route('projects.show', $milestone->project) . '">' . $milestone->project->name . '</a>';
                     })
-                    ->editColumn('owner_id', function(Milestone $milestone) {
+                    ->editColumn('owner.full_name', function(Milestone $milestone) {
                         return Blade::render('<x-site.ui.user-icon :user="$owner" />', ['owner' => $milestone->owner]);
                     })    
                     ->editColumn('progress', function(Milestone $milestone) {
@@ -45,7 +45,7 @@ class MilestonesDataTable extends DataTable
                     ->editColumn('due_date', function(Milestone $milestone) {
                         return '<span class="text-' . ($milestone->overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $milestone->due_date)->format('d.m.Y') . '</span>';
                     })
-                    ->rawColumns(['name', 'project_id', 'owner.name', 'progress', 'due_date', 'owner', 'buttons']);
+                    ->rawColumns(['name', 'project.name', 'owner.full_name', 'progress', 'due_date', 'buttons']);
     }
 
     public function query(Milestone $model): QueryBuilder
@@ -80,7 +80,7 @@ class MilestonesDataTable extends DataTable
     {
         return [
             Column::make('name')->title('Milestone'),
-            Column::make('project_id')->title('Project')->visible($this->view === 'project' ?? false ? false : true)->orderable(false),
+            Column::make('project.name')->data('project.name')->title('Project')->visible($this->view === 'project' ?? false ? false : true),
             Column::make('owner.name')->data('owner.full_name')->title('Owner'),
             Column::make('progress')->orderable(false)->searchable(false),
             Column::make('start_date'),

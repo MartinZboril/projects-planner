@@ -100,8 +100,6 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::resource('users', App\Http\Controllers\User\UserController::class)
         ->except(['destroy']);
-    // Milestones
-    Route::get('/milestones/load', App\Http\Controllers\Project\Milestone\LoadMilestoneController::class)->name('milestones.load');
     // Timers
     Route::get('/timers/load', App\Http\Controllers\Project\Timer\LoadTimerController::class)->name('timers.load');
     // Projects
