@@ -18,10 +18,20 @@
                     </div>
                     <div class="card-body">
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                        <x-ticket.table table-id="tickets-table" />
+                        {{ $dataTable->table() }}
                     </div>
                 </div>            
             </div>
         </section>
     </div>
 @endsection
+
+@push('scripts')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+    <script>
+        $('#tickets-table').on('draw.dt', function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>       
+    <script src="{{ asset('js/actions/ticket.js') }}" defer></script>
+@endpush

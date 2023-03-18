@@ -18,10 +18,20 @@
                     <div class="card-header"><a href="{{ route('projects.tickets.create', $project) }}" class="bn btn-primary btn-sm"><i class="fas fa-plus mr-1"></i>Create</a></div>
                     <div class="card-body">
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                        <x-ticket.table table-id="tickets-table" type="projects" :project-id="$project->id" />
+                        {{ $dataTable->table() }}
                     </div>
                 </div>
             </div>
         </section>
     </div>
 @endsection
+
+@push('scripts')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+    <script>
+        $('#tickets-table').on('draw.dt', function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>       
+    <script src="{{ asset('js/actions/ticket.js') }}" defer></script>
+@endpush

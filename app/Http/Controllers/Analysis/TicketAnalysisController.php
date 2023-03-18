@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers\Analysis;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 use App\Http\Controllers\Controller;
-use App\Services\Analysis\TicketAnalysis;
+use App\DataTables\TicketsDataTable;
 
 class TicketAnalysisController extends Controller
 {
     /**
      * Display an analyze for tickets.
      */
-    public function __invoke(): View
+    public function __invoke(TicketsDataTable $ticketsDataTable): JsonResponse|View
     {
-        return view('analysis.tickets', ['tickets' => (new TicketAnalysis)->getAnalyze()]);
+        return $ticketsDataTable->with([
+            'view' => 'analysis',
+        ])->render('tickets.index');
     }
 }

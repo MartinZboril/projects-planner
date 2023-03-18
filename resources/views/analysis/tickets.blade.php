@@ -13,10 +13,20 @@
             <div class="container-fluid">
                 <div class="card card-primary card-outline">
                     <div class="card-body">
-                        <x-ticket.table :$tickets table-id="tickets-table" />
+                        {{ $dataTable->table() }}
                     </div>
                 </div>            
             </div>
         </section>
     </div>
 @endsection
+
+@push('scripts')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+    <script>
+        $('#tickets-table').on('draw.dt', function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>       
+    <script src="{{ asset('js/actions/ticket.js') }}" defer></script>
+@endpush

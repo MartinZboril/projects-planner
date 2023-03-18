@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Project\Ticket;
 
 use Exception;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\{JsonResponse, RedirectResponse};
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
+use App\DataTables\TicketsDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Ticket\{StoreTicketRequest, UpdateTicketRequest};
 use App\Models\{Comment, Project, Ticket};
@@ -23,9 +24,12 @@ class ProjectTicketController extends Controller
     /**
      * Display the tickets of project.
      */
-    public function index(Project $project): View
+    public function index(Project $project, TicketsDataTable $ticketsDataTable): JsonResponse|View
     {
-        return view('projects.tickets.index', ['project' => $project]);
+        return $ticketsDataTable->with([
+            'project_id' => $project->id,
+            'view' => 'project',
+        ])->render('projects.tickets.index', ['project' => $project]);
     }
 
     /**
