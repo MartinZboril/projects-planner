@@ -2,87 +2,93 @@
 
 namespace App\DataTables;
 
-use App\Models\Timer;
-use Yajra\DataTables\Html\Button;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Illuminate\Support\Facades\Blade;
+use Yajra\DataTables\EloquentDataTable;
+use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use App\Models\Timer;
 
 class TimersDataTable extends DataTable
 {
-    /**
-     * Build DataTable class.
-     *
-     * @param mixed $query Results from query() method.
-     * @return \Yajra\DataTables\DataTableAbstract
-     */
-    public function dataTable($query)
+    public function dataTable($query): EloquentDataTable
     {
-        return datatables()
-            ->eloquent($query)
-            ->addColumn('action', 'timer.action');
+        return (new EloquentDataTable($query))
+            ->setRowId('id')
+            ->editColumn('note', function(Timer $timer) {
+                return ($timer->note) ? '<i class="fas fa-info-circle" data-toggle="popover" title="Note" data-content="' . $timer->note . '"></i>' : '#';
+            })
+            ->editColumn('project.name', function(Timer $timer) {
+                return '<a href="' . route('projects.show', $timer->project) . '">' . $timer->project->name . '</a>';
+            })
+            ->editColumn('rate.name', function(Timer $timer) {
+                return '<a href="' . route('users.rates.edit', ['user' => $timer->user, 'rate' => $timer->rate]) . '">' . $timer->rate->name . '</a>';
+            })            
+            ->editColumn('user.full_name', function(Timer $timer) {
+                return Blade::render('<x-site.ui.user-icon :user="$user" />', ['user' => $timer->user]);
+            })      
+            ->editColumn('since', function(Timer $timer) {
+                return Carbon::createFromFormat('Y-m-d H:i:s', $timer->since)->format('d.m.Y H:i');
+            })
+            ->editColumn('until', function(Timer $timer) {
+                return $timer->until ? Carbon::createFromFormat('Y-m-d H:i:s', $timer->until)->format('d.m.Y H:i') : 'NaN';
+            })
+            ->editColumn('created_at', function(Timer $timer) {
+                return Carbon::createFromFormat('Y-m-d H:i:s', $timer->created_at)->format('d.m.Y') . (($timer->note) ? ' <i class="fas fa-info-circle" data-toggle="tooltip" title="' . $timer->note . '"></i>' : '');
+            })                     
+            ->editColumn('buttons', function(Timer $timer) {
+                return $timer->until ? '<a href="' . route('projects.timers.edit', ['project' => $timer->project, 'timer' => $timer]) . '" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>' : 'NaN';
+            })
+            ->rawColumns(['created_at', 'project.name', 'rate.name', 'user.full_name', 'buttons']);
     }
 
-    /**
-     * Get query source of dataTable.
-     *
-     * @param \App\Models\Timer $model
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function query(Timer $model)
+    public function query(Timer $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->when(
+            $this->project_id ?? false,
+            fn ($query, $value) => $query->where('project_id', $value)
+        )->with('project', 'rate', 'user')->select('timers.*')->newQuery();
     }
 
-    /**
-     * Optional method if you want to use html builder.
-     *
-     * @return \Yajra\DataTables\Html\Builder
-     */
-    public function html()
+    public function html(): HtmlBuilder
     {
         return $this->builder()
                     ->setTableId('timers-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+                    ->orderBy(7)
+                    ->parameters([
+                        'responsive' => true,
+                        'autoWidth' => false,
+                        'lengthMenu' => [
+                            [ 10, 25, 50, -1 ],
+                            [ '10 rows', '25 rows', '50 rows', 'Show all' ]
+                        ],  
+                        'buttons' => [
+                            'pageLength',
+                        ],
+                    ]);
     }
 
-    /**
-     * Get columns.
-     *
-     * @return array
-     */
-    protected function getColumns()
+    protected function getColumns(): array
     {
         return [
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('add your columns'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+            Column::make('project.name')->data('project.name')->title('Project')->visible($this->view === 'project' ?? false ? false : true),
+            Column::make('rate.name')->data('rate.name')->title('Rate'),
+            Column::make('user.name')->data('user.full_name')->title('User'),
+            Column::make('total_time')->orderable(false)->searchable(false),
+            Column::make('amount')->orderable(false)->searchable(false),
+            Column::make('since'),
+            Column::make('until'),
+            Column::make('created_at')->title('Date'),
+            Column::make('buttons')->title('')->orderable(false)->searchable(false),
+            Column::make('user.surname')->visible(false),
         ];
     }
 
-    /**
-     * Get filename for export.
-     *
-     * @return string
-     */
-    protected function filename()
+    protected function filename(): string
     {
         return 'Timer_' . date('YmdHis');
     }

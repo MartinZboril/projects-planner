@@ -21,10 +21,19 @@
                     </div>
                     <div class="card-body">
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                        <x-timer.table table-id="timesheets-table" type="projects" :project-id="$project->id" />       
+                        {{ $dataTable->table() }} 
                     </div>
                 </div>
             </div>
         </section>
     </div>
 @endsection
+
+@push('scripts')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+    <script>
+        $('#timers-table').on('draw.dt', function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+@endpush

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Project\Timer;
 
 use Exception;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\{JsonResponse, RedirectResponse};
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
+use App\DataTables\TimersDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Timer\{StoreTimerRequest, UpdateTimerRequest};
 use App\Models\{Project, Timer};
@@ -23,9 +24,12 @@ class ProjectTimerController extends Controller
     /**
      * Display the timers of project.
      */
-    public function index(Project $project): View
+    public function index(Project $project, TimersDataTable $timersDataTable): JsonResponse|View
     {
-        return view('projects.timers.index', ['project' => $project]);
+        return $timersDataTable->with([
+            'project_id' => $project->id,
+            'view' => 'project',
+        ])->render('projects.timers.index', ['project' => $project]);
     }
 
     /**

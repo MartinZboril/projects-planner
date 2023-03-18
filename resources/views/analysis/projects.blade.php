@@ -23,5 +23,10 @@
 
 @push('scripts')
     {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
-    <script src="{{ asset('js/actions/project.js') }}" defer></script>
+    <script>
+        $('#projects-table').on('draw.dt', function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>    
+    <script src="{{ asset('js/actions/project.js') }}" defer></script>    
 @endpush

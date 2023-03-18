@@ -100,8 +100,6 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::resource('users', App\Http\Controllers\User\UserController::class)
         ->except(['destroy']);
-    // Timers
-    Route::get('/timers/load', App\Http\Controllers\Project\Timer\LoadTimerController::class)->name('timers.load');
     // Projects
     Route::group(['prefix' => 'projects/{project}', 'as' => 'projects.'], function () {
         // Actions
@@ -164,7 +162,6 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('timers', App\Http\Controllers\Project\Timer\ProjectTimerController::class)
             ->except(['show', 'destroy']);
     });
-    Route::get('/projects/load', App\Http\Controllers\Project\LoadProjectController::class)->name('projects.load');
     Route::resource('projects', App\Http\Controllers\Project\ProjectController::class)
         ->except(['destroy']);
 });

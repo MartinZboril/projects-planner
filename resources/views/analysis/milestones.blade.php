@@ -21,4 +21,11 @@
     </div>
 @endsection
 
-{{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+@push('scripts')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+    <script>
+        $('#milestones-table').on('draw.dt', function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+@endpush
