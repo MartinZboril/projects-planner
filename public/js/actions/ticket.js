@@ -12,46 +12,49 @@ function changeTicketStatus(url, status, type, featureText, featureBadge) {
             toastr.error('An error has occurred!');
         },
         success: function (data) {
-            const id = data.ticket.id;
-            const status = data.ticket.status;
-            const overdue = data.ticket.overdue; 
-            const converted = data.ticket.is_convert;
-            const assignee = data.ticket.assignee_id;
-            // Buttons Ids
-            const openButton = $('#ticket-' + id + '-open-status');
-            const closeButton = $('#ticket-' + id + '-close-status');
-            const archiveButton = $('#ticket-' + id + '-archive-status');
-            const convertToTaskButton = $('#ticket-' + id + '-convert-to-task');
-            // Modify user view
-            switch (status) {
-                case 1:
-                    openButton.hide();
-                    closeButton.show();
-                    archiveButton.show();                
-                    break;
-                case 2:
-                    openButton.show();
-                    closeButton.hide();
-                    archiveButton.hide();
-                    break;
-                case 3:
-                    openButton.show();
-                    closeButton.hide();
-                    archiveButton.hide();
-                    break;
-                default:
-                    openButton.hide();
-                    closeButton.hide();
-                    archiveButton.hide();
-            }
-            // Display convert to task
-            if (!converted && assignee && status != 2 && status != 3) {
-                convertToTaskButton.show();
+            if (type === 'table') {
+                $('#tickets-table').DataTable().ajax.reload(); 
             } else {
-                convertToTaskButton.hide();
-            }
-            // Change status text
-            if (type === 'detail') {
+                const id = data.ticket.id;
+                const status = data.ticket.status;
+                const overdue = data.ticket.overdue; 
+                const converted = data.ticket.is_convert;
+                const assignee = data.ticket.assignee_id;
+                // Buttons Ids
+                const openButton = $('#ticket-' + id + '-open-status');
+                const closeButton = $('#ticket-' + id + '-close-status');
+                const archiveButton = $('#ticket-' + id + '-archive-status');
+                const convertToTaskButton = $('#ticket-' + id + '-convert-to-task');
+                // Modify user view
+                switch (status) {
+                    case 1:
+                        openButton.hide();
+                        closeButton.show();
+                        archiveButton.show();                
+                        break;
+                    case 2:
+                        openButton.show();
+                        closeButton.hide();
+                        archiveButton.hide();
+                        break;
+                    case 3:
+                        openButton.show();
+                        closeButton.hide();
+                        archiveButton.hide();
+                        break;
+                    default:
+                        openButton.hide();
+                        closeButton.hide();
+                        archiveButton.hide();
+                }
+                // Display convert to task
+                if (!converted && assignee && status != 2 && status != 3) {
+                    convertToTaskButton.show();
+                } else {
+                    convertToTaskButton.hide();
+                }
+
+                // Change status text
                 $('#ticket-status-badge').html('<span class="badge badge-' + featureBadge + ' ml-2" style="font-size:14px;">' + featureText + '</span>');
                 $('#ticket-status-text').html(featureText);
                 // Change overdue informations
@@ -87,7 +90,7 @@ function convertTicket(url) {
     });
 }
 // Mark Ticket
-function markTicket(url) {
+function markTicket(url, type) {
     const token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: url,
@@ -99,14 +102,18 @@ function markTicket(url) {
             toastr.error('An error has occurred!');
         },
         success: function (data){
-            const id = data.ticket.id;
-            const marked = data.ticket.is_marked;   
-            const newFill = marked ? 'fas' : 'far';
-            const oldFill = marked ? 'far' : 'fas';     
-            // Marked icon
-            const markedIcon = $('#ticket-' + id + '-marked');              
-            // Update tickets view
-            updateCssClass(markedIcon, newFill, oldFill);
+            if (type === 'table') {
+                $('#tickets-table').DataTable().ajax.reload(); 
+            } else {
+                const id = data.ticket.id;
+                const marked = data.ticket.is_marked;   
+                const newFill = marked ? 'fas' : 'far';
+                const oldFill = marked ? 'far' : 'fas';     
+                // Marked icon
+                const markedIcon = $('#ticket-' + id + '-marked');              
+                // Update tickets view
+                updateCssClass(markedIcon, newFill, oldFill);
+            }
             toastr.info(data.message);
         }
     });

@@ -74,7 +74,6 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('todos', App\Http\Controllers\Task\ToDo\TaskToDoController::class)
             ->except(['index', 'show', 'destroy']);
     });
-    Route::get('/tasks/load', App\Http\Controllers\Task\LoadTaskController::class)->name('tasks.load');
     Route::resource('tasks', App\Http\Controllers\Task\TaskController::class)
         ->except(['destroy']);
     // Tickets
@@ -89,7 +88,6 @@ Route::middleware(['auth'])->group(function () {
         // Files
         Route::post('/files/upload', App\Http\Controllers\Ticket\TicketFileUploaderController::class)->name('files.upload');
     });
-    Route::get('/tickets/load', App\Http\Controllers\Ticket\LoadTicketController::class)->name('tickets.load');
     Route::resource('tickets', App\Http\Controllers\Ticket\TicketController::class)
         ->except(['destroy']);
     // Users

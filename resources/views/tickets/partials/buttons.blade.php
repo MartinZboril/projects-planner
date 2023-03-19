@@ -14,6 +14,6 @@
     <x-site.ui.icon icon="fas fa-archive" text="" />
 </a>
 
-<a href="#" class="btn btn-{{ $buttonSize }} btn-primary ticket-mark-button" onclick="markTicket('{{ route('tickets.mark', $ticket) }}')">
+<a href="#" class="btn btn-{{ $buttonSize }} btn-primary ticket-mark-button" onclick="markTicket('{{ route('tickets.mark', $ticket) }}', '{{ $type }}')">
     <i class="{{ ($ticket->is_marked ? 'fas' : 'far') }} fa-bookmark" id="ticket-{{ $ticket->id }}-marked"></i>
 </a>
