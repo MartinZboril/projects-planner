@@ -22,7 +22,7 @@
                         <div class="card card-primary card-outline">
                             <div class="card-header">Tasks</div>
                             <div class="card-body">
-                                <x-task.table table-id="tasks-table" type="projects" :project-id="$milestone->project->id" :milestone-id="$milestone->id" />
+                                {{ $dataTable->table() }}
                             </div>
                         </div>
                         <x-comment.card :comments="$milestone->comments" :parent="['project' => $milestone->project, 'milestone' => $milestone]" :store-form-route="route('projects.milestones.comments.store', ['project' => $milestone->project, 'milestone' => $milestone])" update-form-route-name="projects.milestones.comments.update" /> 
@@ -32,3 +32,13 @@
         </section>
     </div>
 @endsection
+
+@push('scripts')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+    <script>
+        $('#tasks-table').on('draw.dt', function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>       
+    <script src="{{ asset('js/actions/task.js') }}" defer></script>
+@endpush

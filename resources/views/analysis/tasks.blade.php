@@ -13,10 +13,20 @@
             <div class="container-fluid">
                 <div class="card card-primary card-outline">
                     <div class="card-body">
-                        <x-task.table :$tasks table-id="tasks-table" />
+                        {{ $dataTable->table() }}
                     </div>
                 </div>            
             </div>
         </section>
     </div>
 @endsection
+
+@push('scripts')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+    <script>
+        $('#tasks-table').on('draw.dt', function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>       
+    <script src="{{ asset('js/actions/task.js') }}" defer></script>
+@endpush

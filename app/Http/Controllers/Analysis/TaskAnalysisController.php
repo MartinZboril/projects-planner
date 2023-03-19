@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers\Analysis;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use App\DataTables\TasksDataTable;
 use App\Http\Controllers\Controller;
-use App\Services\Analysis\TaskAnalysis;
 
 class TaskAnalysisController extends Controller
 {
     /**
      * Display an analyze for tasks.
      */
-    public function __invoke(): View
+    public function __invoke(TasksDataTable $tasksDataTable): JsonResponse|View
     {
-        return view('analysis.tasks', ['tasks' => (new TaskAnalysis)->getAnalyze()]);
+        return $tasksDataTable->with([
+            'view' => 'analysis',
+        ])->render('tasks.index');
     }
 }

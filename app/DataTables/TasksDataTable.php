@@ -2,87 +2,97 @@
 
 namespace App\DataTables;
 
-use App\Models\Task;
-use Yajra\DataTables\Html\Button;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Illuminate\Support\Facades\Blade;
+use Yajra\DataTables\EloquentDataTable;
+use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use App\Models\Task;
 
 class TasksDataTable extends DataTable
 {
-    /**
-     * Build DataTable class.
-     *
-     * @param mixed $query Results from query() method.
-     * @return \Yajra\DataTables\DataTableAbstract
-     */
-    public function dataTable($query)
+    public function dataTable($query): EloquentDataTable
     {
-        return datatables()
-            ->eloquent($query)
-            ->addColumn('action', 'task.action');
+        return (new EloquentDataTable($query))
+                    ->setRowId('id')
+                    ->editColumn('name', function(Task $task) {
+                        return '<a href="' . ($this->view === 'project' ? route('projects.tasks.show', ['project' => $task->project, 'task' => $task]) : route('tasks.show', $task)) . '">' . $task->name . '</a>';
+                    })                    
+                    ->editColumn('project.name', function(Task $task) {
+                        return '<a href="' . route('projects.show', $task->project) . '">' . $task->project->name . '</a>';
+                    })
+                    ->editColumn('milestone.name', function(Task $task) {
+                        if ($task->milestone ?? false) {
+                            return '<a href="' . route('projects.milestones.show', ['project' => $task->project, 'milestone' => $task->milestone]) . '">' . $task->milestone->name . '</a>';                
+                        }
+                        return 'NaN';
+                    })
+                    ->editColumn('user.full_name', function(Task $task) {
+                        return Blade::render('<x-site.ui.user-icon :user="$user" />', ['user' => $task->user]);
+                    })  
+                    ->editColumn('due_date', function(Task $task) {
+                        return '<span class="text-' . ($task->overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $task->due_date)->format('d.m.Y') . '</span>';
+                    })
+                    ->editColumn('status', function(Task $task) {
+                        return Blade::render('<x-task.ui.status-badge :text="true" :task="$task" />', ['task' => $task]);
+                    })                    
+                    ->editColumn('buttons', function(Task $task) {
+                        $buttons = '<a href="' . ($this->view === 'project' ? route('projects.tasks.edit', ['project' => $task->project, 'task' => $task]) : route('tasks.edit', $task)) . '" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a> ';
+                        $buttons .= '<a href="' . ($this->view === 'project' ? route('projects.tasks.show', ['project' => $task->project, 'task' => $task]) : route('tasks.show', $task)) . '" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a> ';
+                        $buttons .= view('tasks.partials.buttons', ['task' => $task, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table']);
+                        return $buttons;
+                    })
+                    ->rawColumns(['name', 'project.name', 'milestone.name', 'user.full_name', 'status', 'due_date', 'buttons']);
     }
 
-    /**
-     * Get query source of dataTable.
-     *
-     * @param \App\Models\Task $model
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function query(Task $model)
+    public function query(Task $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->when(
+            $this->project_id ?? false,
+            fn ($query, $value) => $query->where('project_id', $value)
+        )->when(
+            $this->milestone_id ?? false,
+            fn ($query, $value) => $query->where('milestone_id', $value)
+        )->with('project', 'milestone', 'user')->select('tasks.*')->newQuery();
     }
 
-    /**
-     * Optional method if you want to use html builder.
-     *
-     * @return \Yajra\DataTables\Html\Builder
-     */
-    public function html()
+    public function html(): HtmlBuilder
     {
         return $this->builder()
                     ->setTableId('tasks-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+                    ->orderBy(4)
+                    ->parameters([
+                        'responsive' => true,
+                        'autoWidth' => false,
+                        'lengthMenu' => [
+                            [ 10, 25, 50, -1 ],
+                            [ '10 rows', '25 rows', '50 rows', 'Show all' ]
+                        ],  
+                        'buttons' => [
+                            'pageLength',
+                        ],
+                    ]);
     }
 
-    /**
-     * Get columns.
-     *
-     * @return array
-     */
-    protected function getColumns()
+    protected function getColumns(): array
     {
         return [
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('add your columns'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
+            Column::make('name'),
+            Column::make('project.name')->data('project.name')->title('Project')->visible($this->view === 'project' ?? false ? false : true),
+            Column::make('milestone.name')->data('milestone.name')->title('Milestone')->visible($this->view === 'milestone' ?? false ? false : true),
+            Column::make('user.name')->data('user.full_name')->title('User'),
+            Column::make('due_date'),
+            Column::make('status')->orderable(false)->searchable(false),
+            Column::make('buttons')->title('')->orderable(false)->searchable(false),
+            Column::make('user.surname')->visible(false),
         ];
     }
 
-    /**
-     * Get filename for export.
-     *
-     * @return string
-     */
-    protected function filename()
+    protected function filename(): string
     {
         return 'Task_' . date('YmdHis');
     }
