@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Project\Milestone;
 
 use Exception;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\{Project, Milestone};
@@ -21,16 +21,17 @@ class ProjectMilestoneMarkController extends Controller
     /**
      * Mark selected milestone.
      */
-    public function __invoke(Project $project, Milestone $milestone): RedirectResponse
+    public function __invoke(Project $project, Milestone $milestone): JsonResponse
     {
         try {
             $milestone = $this->milestoneService->handleMark($milestone);
-            $this->flash(__('messages.milestone.' . ($milestone->is_marked ? 'mark' : 'unmark')), 'info');
-            return redirect()->back();
         } catch (Exception $exception) {
             Log::error($exception);
-            return redirect()->back()->with(['error' => __('messages.error')]);
         }
-        return redirect()->route('projects.milestones.show', ['project' => $project, 'milestone' => $milestone]);
-    } 
+        return response()->json([
+            'message' => __('messages.milestone.' . ($milestone->is_marked ? 'mark' : 'unmark')),
+            'project' => $project,
+            'milestone' => $milestone
+        ]);
+    }
 }

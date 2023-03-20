@@ -36,4 +36,5 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>   
+    <script src="{{ asset('js/actions/milestone.js') }}" defer></script>     
 @endpush

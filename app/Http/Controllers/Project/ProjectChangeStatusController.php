@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Project;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\{Auth, Log};
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Project\ChangeProjectRequest;
 use App\Models\Project;

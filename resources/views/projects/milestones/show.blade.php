@@ -6,7 +6,8 @@
     <div class="content-wrapper">
         <!-- Content Header -->
         <div class="p-3 mb-3" style="background-color:white;">
-            @include('projects.milestones.partials.actions')
+            @include('projects.milestones.partials.actions', ['buttonSize' => 'sm', 'type' => 'detail'])
+            <script src="{{ asset('js/actions/milestone.js') }}" defer></script>     
         </div>
         <!-- Main content -->
         <section class="content">
@@ -40,5 +41,4 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>       
-    <script src="{{ asset('js/actions/task.js') }}" defer></script>
 @endpush

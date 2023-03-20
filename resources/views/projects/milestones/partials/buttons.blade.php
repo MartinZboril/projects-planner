@@ -1,4 +1,3 @@
-<a href="#" class="btn btn-{{ $buttonSize }} btn-primary" onclick="event.preventDefault(); document.getElementById('{{ ($milestone->is_marked ? 'unmark' : 'mark') . '-milestone-' . $milestone->id . '-form'}}').submit();">
-    <i class="{{ ($milestone->is_marked ? 'fas' : 'far') }} fa-bookmark pt-1 pb-1"></i>
+<a href="#" class="btn btn-{{ $buttonSize }} btn-primary" onclick="markMilestone('{{ route('projects.milestones.mark', ['project' => $milestone->project, 'milestone' => $milestone]) }}', '{{  $type }}')">
+    <i class="{{ ($milestone->is_marked ? 'fas' : 'far') }} fa-bookmark pt-1 pb-1" id="milestone-{{ $milestone->id }}-marked"></i>
 </a>
-@include('projects.milestones.forms.mark', ['id' => ($milestone->is_marked ? 'unmark' : 'mark') . '-milestone-' . $milestone->id . '-form'])
