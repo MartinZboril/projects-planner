@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'toaster' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'milestone' => true, 'project' => true])
 
 @section('title', __('pages.title.project'))
 
@@ -36,5 +36,4 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>   
-    <script src="{{ asset('js/actions/milestone.js') }}" defer></script>     
 @endpush

@@ -1,4 +1,4 @@
-@extends('layouts.master', ['summernote' => true, 'toaster' => true])
+@extends('layouts.master', ['summernote' => true, 'toaster' => true, 'ticket' => true])
 
 @section('title', __('pages.title.project'))
 
@@ -9,7 +9,6 @@
             <a href="{{ route('projects.tickets.index', $ticket->project) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
             <a href="{{ route('projects.tickets.edit', ['project' => $ticket->project, 'ticket' => $ticket]) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
             @include('tickets.partials.buttons', ['buttonSize' => 'sm', 'type' => 'detail'])
-            <script src="{{ asset('js/actions/ticket.js') }}" defer></script>
         </div>
         <!-- Main content -->
         <section class="content">

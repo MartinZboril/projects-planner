@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'toaster' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'client' => true])
 
 @section('title', __('pages.title.client'))
 
@@ -27,5 +27,4 @@
 
 @push('scripts')
     {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
-    <script src="{{ asset('js/actions/client.js') }}" defer></script>
 @endpush

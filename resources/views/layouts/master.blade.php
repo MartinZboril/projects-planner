@@ -94,15 +94,33 @@
     @if(!empty($progressbar))
       <script src="{{ asset('plugins/progress-bar/progressbar.js' ) }}"></script>        
     @endif
+    @if(!empty($datatables))
+      <!-- DataTables -->
+      <script src="https://cdn.datatables.net/v/bs4/dt-1.13.3/b-2.3.5/r-2.4.0/datatables.min.js"></script>
+    @endif    
     <!-- Custom scripts -->
     <script src="{{ asset('js/error.js') }}"></script>
     @if(!empty($toaster))
       <script src="{{ asset('js/toastr.js') }}"></script>      
     @endif
-    @if(!empty($datatables))
-      <!-- DataTables -->
-      <script src="https://cdn.datatables.net/v/bs4/dt-1.13.3/b-2.3.5/r-2.4.0/datatables.min.js"></script>
+    @if(!empty($client))
+      <script src="{{ asset('js/actions/client.js') }}"></script>  
     @endif
+    @if(!empty($milestone))
+      <script src="{{ asset('js/actions/milestone.js') }}"></script>  
+    @endif
+    @if(!empty($project))
+      <script src="{{ asset('js/actions/project.js') }}"></script>  
+    @endif
+    @if(!empty($task))
+      <script src="{{ asset('js/actions/task.js') }}"></script>  
+    @endif
+    @if(!empty($ticket))
+      <script src="{{ asset('js/actions/ticket.js') }}"></script>  
+    @endif
+    @if(!empty($todo))
+      <script src="{{ asset('js/actions/todo.js') }}"></script>  
+    @endif                    
     <script src="{{ mix('js/app.js') }}"></script>
     @stack('scripts')
   </body>

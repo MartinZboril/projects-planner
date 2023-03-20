@@ -16,4 +16,3 @@
         </li>
     @endforeach
 </ul>
-<script src="{{ asset('js/actions/todo.js') }}" defer></script>

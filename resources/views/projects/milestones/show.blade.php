@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'summernote' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'summernote' => true, 'milestone' => true])
 
 @section('title', __('pages.title.milestone'))
 
@@ -7,7 +7,6 @@
         <!-- Content Header -->
         <div class="p-3 mb-3" style="background-color:white;">
             @include('projects.milestones.partials.actions', ['buttonSize' => 'sm', 'type' => 'detail'])
-            <script src="{{ asset('js/actions/milestone.js') }}" defer></script>     
         </div>
         <!-- Main content -->
         <section class="content">

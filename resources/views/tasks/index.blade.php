@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'toaster' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'task' => true])
 
 @section('title', __('pages.title.task'))
 
@@ -33,5 +33,4 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>       
-    <script src="{{ asset('js/actions/task.js') }}" defer></script>
 @endpush
