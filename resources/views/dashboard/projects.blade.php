@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'chartJS' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'chartJS' => true, 'doughnut' => true])
 
 @section('title', __('pages.title.dashboard'))
 

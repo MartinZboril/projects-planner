@@ -74,6 +74,9 @@
     @if(!empty($chartJS))
       <!-- ChartJS -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      @if(!empty($doughnut))
+      <script src="{{ asset('js/charts/doughnut.js') }}"></script>      
+      @endif      
     @endif
     @if(!empty($momment))
       <!-- momment -->
@@ -92,7 +95,8 @@
       <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
     @endif
     @if(!empty($progressbar))
-      <script src="{{ asset('plugins/progress-bar/progressbar.js' ) }}"></script>        
+      <script src="{{ asset('plugins/progress-bar/progressbar.js' ) }}"></script>    
+      <script src="{{ asset('js/charts/progress_bar.js') }}"></script>      
     @endif
     @if(!empty($datatables))
       <!-- DataTables -->

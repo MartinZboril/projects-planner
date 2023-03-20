@@ -4,25 +4,8 @@
         <canvas id="{{ $chartId }}" style="w-100"></canvas>
     </div>
 </div>
-
-@push('scripts')
-    <script>
-        new Chart("{{ $chartId }}", {
-            type: "doughnut",
-            data: {
-                labels: @json($labels),
-                datasets: [{
-                    backgroundColor: @json($colours),
-                    data: @json($data)
-                }]
-            },
-            options: {
-                title: {
-                    display: true,
-                },
-                responsive: true,
-                maintainAspectRatio: false
-            }
-        });
-    </script>
-@endpush
+<!-- Doughnut values -->
+<input type="hidden" class="doughnut-identifier" value="{{ $chartId }}" />
+<input type="hidden" class="doughnut-label" value="{{ str_replace('"', "'", json_encode($labels, JSON_HEX_APOS)) }}" />
+<input type="hidden" class="doughnut-colour" value="{{ str_replace('"', "'", json_encode($colours, JSON_HEX_APOS)) }}" />
+<input type="hidden" class="doughnut-data" value="{{ str_replace('"', "'", json_encode($data, JSON_HEX_APOS)) }}" />
