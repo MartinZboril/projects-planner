@@ -88,7 +88,7 @@ class TicketsDataTable extends DataTable
     {
         return [
             Column::make('subject')->title('Ticket'),
-            Column::make('project.name')->data('project.name')->title('Project')->visible($this->view === 'project' ?? false ? false : true),
+            Column::make('project.name')->data('project.name')->title('Project')->visible($this->view === 'project' ? false : true),
             Column::make('reporter.name')->data('reporter.full_name')->title('Reporter'),
             Column::make('assignee.name')->data('assignee.full_name')->title('Assignee'),
             Column::make('created_at'),
@@ -96,7 +96,7 @@ class TicketsDataTable extends DataTable
             Column::make('type')->orderable(false)->searchable(false),
             Column::make('priority')->orderable(false)->searchable(false),
             Column::make('due_date'),
-            Column::make('buttons')->title('')->orderable(false)->searchable(false),
+            Column::make('buttons')->title('')->orderable(false)->searchable(false)->visible($this->view === 'analysis' ? false : true),
             Column::make('reporter.surname')->visible(false),
             Column::make('assignee.surname')->visible(false),
         ];

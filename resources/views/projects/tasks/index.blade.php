@@ -32,6 +32,6 @@
         $('#tasks-table').on('draw.dt', function() {
             $('[data-toggle="tooltip"]').tooltip();
         });
-    </script>       
-    <script src="{{ asset('js/actions/task.js') }}" defer></script>
+    </script>  
+    <script src="{{ asset('js/actions/task.js') }}" defer></script>     
 @endpush

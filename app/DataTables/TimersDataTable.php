@@ -75,7 +75,7 @@ class TimersDataTable extends DataTable
     protected function getColumns(): array
     {
         return [
-            Column::make('project.name')->data('project.name')->title('Project')->visible($this->view === 'project' ?? false ? false : true),
+            Column::make('project.name')->data('project.name')->title('Project')->visible($this->view === 'project' ? false : true),
             Column::make('rate.name')->data('rate.name')->title('Rate'),
             Column::make('user.name')->data('user.full_name')->title('User'),
             Column::make('total_time')->orderable(false)->searchable(false),
@@ -83,7 +83,7 @@ class TimersDataTable extends DataTable
             Column::make('since'),
             Column::make('until'),
             Column::make('created_at')->title('Date'),
-            Column::make('buttons')->title('')->orderable(false)->searchable(false),
+            Column::make('buttons')->title('')->orderable(false)->searchable(false)->visible($this->view === 'analysis' ? false : true),
             Column::make('user.surname')->visible(false),
         ];
     }

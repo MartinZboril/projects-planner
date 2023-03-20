@@ -14,6 +14,8 @@ class ProjectAnalysisController extends Controller
      */
     public function __invoke(ProjectsDataTable $projectsDataTable): JsonResponse|View
     {
-        return $projectsDataTable->render('analysis.projects');
+        return $projectsDataTable->with([
+            'view' => 'analysis',
+        ])->render('analysis.projects');
     }
 }

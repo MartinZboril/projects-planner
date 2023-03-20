@@ -82,12 +82,12 @@ class TasksDataTable extends DataTable
     {
         return [
             Column::make('name'),
-            Column::make('project.name')->data('project.name')->title('Project')->visible($this->view === 'project' ?? false ? false : true),
-            Column::make('milestone.name')->data('milestone.name')->title('Milestone')->visible($this->view === 'milestone' ?? false ? false : true),
+            Column::make('project.name')->data('project.name')->title('Project')->visible($this->view === 'project' ? false : true),
+            Column::make('milestone.name')->data('milestone.name')->title('Milestone')->visible($this->view === 'milestone' ? false : true),
             Column::make('user.name')->data('user.full_name')->title('User'),
             Column::make('due_date'),
             Column::make('status')->orderable(false)->searchable(false),
-            Column::make('buttons')->title('')->orderable(false)->searchable(false),
+            Column::make('buttons')->title('')->orderable(false)->searchable(false)->visible(in_array($this->view, ['analysis', 'milestone']) ? false : true),
             Column::make('user.surname')->visible(false),
         ];
     }

@@ -95,7 +95,7 @@ class ProjectsDataTable extends DataTable
             Column::make('total_time')->orderable(false)->searchable(false),
             Column::make('budget_plan')->orderable(false)->searchable(false),
             Column::make('amount')->orderable(false)->searchable(false),
-            Column::make('buttons')->title('')->orderable(false)->searchable(false),
+            Column::make('buttons')->title('')->orderable(false)->searchable(false)->visible($this->view === 'analysis' ? false : true),
         ];
     }
 

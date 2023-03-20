@@ -28,5 +28,4 @@
             $('[data-toggle="tooltip"]').tooltip();
         });
     </script>       
-    <script src="{{ asset('js/actions/task.js') }}" defer></script>
 @endpush

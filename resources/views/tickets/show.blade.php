@@ -9,6 +9,7 @@
             <a href="{{ route('tickets.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
             <a href="{{ route('tickets.edit', $ticket) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
             @include('tickets.partials.buttons', ['buttonSize' => 'sm', 'type' => 'detail'])
+            <script src="{{ asset('js/actions/ticket.js') }}" defer></script>
         </div>
         <!-- Main content -->
         <section class="content">

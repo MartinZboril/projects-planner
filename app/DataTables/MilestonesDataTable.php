@@ -80,12 +80,12 @@ class MilestonesDataTable extends DataTable
     {
         return [
             Column::make('name')->title('Milestone'),
-            Column::make('project.name')->data('project.name')->title('Project')->visible($this->view === 'project' ?? false ? false : true),
+            Column::make('project.name')->data('project.name')->title('Project')->visible($this->view === 'project' ? false : true),
             Column::make('owner.name')->data('owner.full_name')->title('Owner'),
             Column::make('progress')->orderable(false)->searchable(false),
             Column::make('start_date'),
             Column::make('due_date'),
-            Column::make('buttons')->title('')->orderable(false)->searchable(false),
+            Column::make('buttons')->title('')->orderable(false)->searchable(false)->visible($this->view === 'analysis' ? false : true),
             Column::make('owner.surname')->visible(false),
         ];
     }
