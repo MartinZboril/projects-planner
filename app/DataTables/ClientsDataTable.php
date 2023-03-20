@@ -28,7 +28,7 @@ class ClientsDataTable extends DataTable
                     ->editColumn('buttons', function(Client $client) {
                         $buttons = '<a href="' . route('clients.edit', $client) . '" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a> ';
                         $buttons .= '<a href="' . route('clients.show', $client) . '" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a> ';
-                        $buttons .= view('clients.partials.buttons', ['buttonSize' => 'xs', 'client' => $client, 'type' => 'table']);
+                        $buttons .= view('clients.partials.buttons', ['buttonSize' => 'xs', 'client' => $client, 'type' => 'table', 'tableIdentifier' => '#' . ($this->table_identifier ?? 'clients-table')]);
                         return $buttons;
                     })                    
                     ->rawColumns(['name', 'buttons']);
@@ -42,7 +42,7 @@ class ClientsDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('clients-table')
+                    ->setTableId($this->table_identifier ?? 'clients-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->orderBy(3)

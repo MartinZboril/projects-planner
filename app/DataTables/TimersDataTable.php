@@ -55,7 +55,7 @@ class TimersDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('timers-table')
+                    ->setTableId($this->table_identifier ?? 'timers-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->orderBy(7)

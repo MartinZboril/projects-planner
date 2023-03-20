@@ -47,7 +47,7 @@ class TicketsDataTable extends DataTable
                     ->editColumn('buttons', function(Ticket $ticket) {
                         $buttons = '<a href="' . ($this->view === 'project' ? route('projects.tickets.edit', ['project' => $ticket->project, 'ticket' => $ticket]) : route('tickets.edit', $ticket)) . '" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a> ';
                         $buttons .= '<a href="' . ($this->view === 'project' ? route('projects.tickets.show', ['project' => $ticket->project, 'ticket' => $ticket]) : route('tickets.show', $ticket)) . '" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a> ';
-                        $buttons .= view('tickets.partials.buttons', ['ticket' => $ticket, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table']);
+                        $buttons .= view('tickets.partials.buttons', ['ticket' => $ticket, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#' . ($this->table_identifier ?? 'tickets-table')]);
                         return $buttons;
                     })
                     ->editColumn('assignee.surname', function(Ticket $ticket) {
@@ -67,7 +67,7 @@ class TicketsDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('tickets-table')
+                    ->setTableId($this->table_identifier ?? 'tickets-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->orderBy(8)

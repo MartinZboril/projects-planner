@@ -53,7 +53,7 @@ class UsersDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('users-table')
+                    ->setTableId($this->table_identifier ?? 'users-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->orderBy(5)

@@ -1,4 +1,4 @@
-function markClient(url, type) {
+function markClient(url, type, tableIdentifier = '#clients-table') {
     const token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: url,
@@ -11,7 +11,7 @@ function markClient(url, type) {
         },
         success: function (data) {
             if (type === 'table') {
-                $('#clients-table').DataTable().ajax.reload(); 
+                $(tableIdentifier).DataTable().ajax.reload(); 
             } else {
                 const id = data.client.id;
                 const marked = data.client.is_marked;   

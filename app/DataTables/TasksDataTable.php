@@ -41,7 +41,7 @@ class TasksDataTable extends DataTable
                     ->editColumn('buttons', function(Task $task) {
                         $buttons = '<a href="' . ($this->view === 'project' ? route('projects.tasks.edit', ['project' => $task->project, 'task' => $task]) : route('tasks.edit', $task)) . '" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a> ';
                         $buttons .= '<a href="' . ($this->view === 'project' ? route('projects.tasks.show', ['project' => $task->project, 'task' => $task]) : route('tasks.show', $task)) . '" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a> ';
-                        $buttons .= view('tasks.partials.buttons', ['task' => $task, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table']);
+                        $buttons .= view('tasks.partials.buttons', ['task' => $task, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#' . ($this->table_identifier ?? 'tasks-table')]);
                         return $buttons;
                     })
                     ->rawColumns(['name', 'project.name', 'milestone.name', 'user.full_name', 'status', 'due_date', 'buttons']);
@@ -61,7 +61,7 @@ class TasksDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('tasks-table')
+                    ->setTableId($this->table_identifier ?? 'tasks-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->orderBy(4)

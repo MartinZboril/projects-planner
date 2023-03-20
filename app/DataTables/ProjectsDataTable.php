@@ -52,7 +52,7 @@ class ProjectsDataTable extends DataTable
                     ->editColumn('buttons', function(Project $project) {
                         $buttons = '<a href="' . route('projects.edit', $project) . '" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a> ';
                         $buttons .= '<a href="' . route('projects.show', $project) . '" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a> ';
-                        $buttons .= view('projects.partials.buttons', ['project' => $project, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table']);
+                        $buttons .= view('projects.partials.buttons', ['project' => $project, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#' . ($this->table_identifier ?? 'projects-table')]);
                         return $buttons;
                     })                                 
                     ->rawColumns(['name', 'client.name', 'status', 'team', 'buttons', 'due_date', 'time_plan', 'budget_plan']);                    
@@ -66,7 +66,7 @@ class ProjectsDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('projects-table')
+                    ->setTableId($this->table_identifier ?? 'projects-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->orderBy(4)

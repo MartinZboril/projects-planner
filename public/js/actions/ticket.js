@@ -1,5 +1,5 @@
 // Change ticket status
-function changeTicketStatus(url, status, type, featureText, featureBadge) {
+function changeTicketStatus(url, status, type, featureText, featureBadge, tableIdentifier = '#tickets-table') {
     const token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: url,
@@ -13,7 +13,7 @@ function changeTicketStatus(url, status, type, featureText, featureBadge) {
         },
         success: function (data) {
             if (type === 'table') {
-                $('#tickets-table').DataTable().ajax.reload(); 
+                $(tableIdentifier).DataTable().ajax.reload(); 
             } else {
                 const id = data.ticket.id;
                 const status = data.ticket.status;
@@ -90,7 +90,7 @@ function convertTicket(url) {
     });
 }
 // Mark Ticket
-function markTicket(url, type) {
+function markTicket(url, type, tableIdentifier = '#tickets-table') {
     const token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: url,
@@ -103,7 +103,7 @@ function markTicket(url, type) {
         },
         success: function (data){
             if (type === 'table') {
-                $('#tickets-table').DataTable().ajax.reload(); 
+                $(tableIdentifier).DataTable().ajax.reload(); 
             } else {
                 const id = data.ticket.id;
                 const marked = data.ticket.is_marked;   

@@ -1,4 +1,4 @@
-function markMilestone(url, type) {
+function markMilestone(url, type, tableIdentifier = '#milestones-table') {
     const token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: url,
@@ -11,7 +11,7 @@ function markMilestone(url, type) {
         },
         success: function (data) {
             if (type === 'table') {
-                $('#milestones-table').DataTable().ajax.reload(); 
+                $(tableIdentifier).DataTable().ajax.reload(); 
             } else {
                 const id = data.milestone.id;
                 const marked = data.milestone.is_marked;   

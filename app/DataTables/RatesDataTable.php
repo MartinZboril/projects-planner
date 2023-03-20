@@ -42,7 +42,7 @@ class RatesDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('rates-table')
+                    ->setTableId($this->table_identifier ?? 'rates-table')
                     ->columns($this->getColumns())
                     ->orderBy(1)
                     ->parameters([

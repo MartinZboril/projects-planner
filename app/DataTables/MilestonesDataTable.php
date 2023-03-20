@@ -36,7 +36,7 @@ class MilestonesDataTable extends DataTable
                     ->editColumn('buttons', function(Milestone $milestone) {
                         $buttons = '<a href="' . route('projects.milestones.edit', ['project' => $milestone->project, 'milestone' => $milestone]) . '" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt pt-1 pb-1"></i></a> ';
                         $buttons .= '<a href="' . route('projects.milestones.show', ['project' => $milestone->project, 'milestone' => $milestone]) . '" class="btn btn-xs btn-info"><i class="fas fa-eye pt-1 pb-1"></i></a> ';
-                        $buttons .= view('projects.milestones.partials.buttons', ['milestone' => $milestone, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table']);
+                        $buttons .= view('projects.milestones.partials.buttons', ['milestone' => $milestone, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#' . ($this->table_identifier ?? 'milestones-table')]);
                         return $buttons;
                     })
                     ->editColumn('start_date', function(Milestone $milestone) {
@@ -59,7 +59,7 @@ class MilestonesDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('milestones-table')
+                    ->setTableId($this->table_identifier ?? 'milestones-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     ->orderBy(5)

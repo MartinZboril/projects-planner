@@ -1,5 +1,5 @@
 // Pause task
-function pauseTask(url, type, featureText, featureBadge) {
+function pauseTask(url, type, featureText, featureBadge, tableIdentifier = '#tasks-table') {
     const token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: url,
@@ -12,7 +12,7 @@ function pauseTask(url, type, featureText, featureBadge) {
         },
         success: function (data) {
             if (type === 'table') {
-                $('#tasks-table').DataTable().ajax.reload(); 
+                $(tableIdentifier).DataTable().ajax.reload(); 
             } else {
                 const id = data.task.id;
                 const paused = data.task.paused;
@@ -48,7 +48,7 @@ function pauseTask(url, type, featureText, featureBadge) {
     });
 }
 // Change task status
-function changeTaskStatus(url, status, type, featureText, featureBadge) {
+function changeTaskStatus(url, status, type, featureText, featureBadge, tableIdentifier = '#tasks-table') {
     const token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: url,
@@ -62,7 +62,7 @@ function changeTaskStatus(url, status, type, featureText, featureBadge) {
         },
         success: function (data) {
             if (type === 'table') {
-                $('#tasks-table').DataTable().ajax.reload(); 
+                $(tableIdentifier).DataTable().ajax.reload(); 
             } else {
                 const id = data.task.id;
                 const status = data.task.status;
@@ -126,7 +126,7 @@ function modifyOverdue(id, overdue) {
     }
 }
 // Mark task
-function markTask(url, type) {
+function markTask(url, type, tableIdentifier = '#tasks-table') {
     const token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: url,
@@ -140,7 +140,7 @@ function markTask(url, type) {
         },
         success: function (data) {
             if (type === 'table') {
-                $('#tasks-table').DataTable().ajax.reload(); 
+                $(tableIdentifier).DataTable().ajax.reload(); 
             } else {
                 const id = data.task.id;
                 const marked = data.task.is_marked;   

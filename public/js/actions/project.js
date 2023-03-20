@@ -1,5 +1,5 @@
 // Change project status
-function changeProjectStatus(url, status, type, featureText, featureBadge) {
+function changeProjectStatus(url, status, type, featureText, featureBadge, tableIdentifier = '#projects-table') {
     const token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: url,
@@ -13,7 +13,7 @@ function changeProjectStatus(url, status, type, featureText, featureBadge) {
         },
         success: function (data) {
             if (type === 'table') {
-                $('#projects-table').DataTable().ajax.reload(); 
+                $(tableIdentifier).DataTable().ajax.reload(); 
             } else {
                 const id = data.project.id;
                 const status = data.project.status;
@@ -75,7 +75,7 @@ function changeProjectStatus(url, status, type, featureText, featureBadge) {
     });
 }
 // Mark project
-function markProject(url, type) {
+function markProject(url, type, tableIdentifier = '#projects-table') {
     var token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: url,
@@ -88,7 +88,7 @@ function markProject(url, type) {
         },
         success: function (data){
             if (type === 'table') {
-                $('#projects-table').DataTable().ajax.reload(); 
+                $(tableIdentifier).DataTable().ajax.reload(); 
             } else {
                 const id = data.project.id;
                 const marked = data.project.is_marked;   
