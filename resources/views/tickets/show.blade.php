@@ -1,4 +1,4 @@
-@extends('layouts.master', ['toaster' => true, 'summernote' => true, 'ticket' => true])
+@extends('layouts.master', ['toaster' => true, 'summernote' => true, 'ticket' => true, 'comment' => true])
 
 @section('title', __('pages.title.ticket'))
 

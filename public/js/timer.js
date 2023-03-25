@@ -16,6 +16,7 @@ function startWorkTimer(url, projectId, rateId, type) {
             const project = data.project;
             const timer = data.timer;
             const activeTimers = data.active_timers;
+            // Change project view
             if (type === 'table') {
                 $('#projects-table').DataTable().ajax.reload(); 
             } else {
@@ -23,6 +24,12 @@ function startWorkTimer(url, projectId, rateId, type) {
                 $('#project-' + project.id + '-stop-work').show();
                 $('#project-' + project.id + '-start-work-div').hide();
             }
+            // Update timers datatable
+            if ($('.dataTable').length) {
+                if ($('#timers-table').DataTable()) {
+                    $('#timers-table').DataTable().ajax.reload();
+                }
+            }            
             // Update active timers count
             if (activeTimers.length > 0) {
                 $('#timer-nav').show();
@@ -51,16 +58,29 @@ function stopWorkTimer(url, type, modalId) {
         success: function (data) {
             const timer = data.timer;
             const project = data.project;
-            const activeTimersCount = data.active_timers_count;
+            const activeTimersCount = data.active_timers_count;  
+            // Change content of modal     
             $('#timer-' + timer.id + '-modal-row').html('');
             if (type === 'modal') {
-                $('#' + modalId).modal('hide');
-            } else if(type === 'project') {
+                $('#' + modalId).removeClass("in");
+                $(".modal-backdrop").remove();
+                $('#' + modalId).hide(); 
+            }
+            // Project buttons
+            if ($('#project-' + project.id + '-stop-work')) {
                 $('#project-' + project.id + '-stop-work').hide();
+            }
+            if ($('#project-' + project.id + '-start-work-div')) {
                 $('#project-' + project.id + '-start-work-div').show();
             }
-            if ($('#projects-table').DataTable()) {
-                $('#projects-table').DataTable().ajax.reload();
+            // Update datatables
+            if ($('.dataTable').length) {
+                if ($('#projects-table').DataTable()) {
+                    $('#projects-table').DataTable().ajax.reload();
+                }
+                if ($('#timers-table').DataTable()) {
+                    $('#timers-table').DataTable().ajax.reload();
+                }
             }
             // Update active timers count
             if (activeTimersCount > 0) {

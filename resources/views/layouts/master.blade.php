@@ -127,7 +127,11 @@
     @endif
     @if(!empty($todo))
       <script src="{{ asset('js/actions/todo.js') }}"></script>  
-    @endif                    
+    @endif   
+    @if(!empty($comment))
+      <script src="{{ asset('js/helpers/comment.js') }}"></script>  
+    @endif                        
+    <script src="{{ asset('js/timer.js') }}" defer></script>
     <script src="{{ mix('js/app.js') }}"></script>
     @stack('scripts')
   </body>

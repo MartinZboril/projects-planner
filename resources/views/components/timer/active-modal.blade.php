@@ -38,4 +38,3 @@
         </div>
     </div>
 </div>
-<script src="{{ asset('js/timer.js') }}" defer></script>
