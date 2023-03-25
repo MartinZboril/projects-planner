@@ -3,7 +3,7 @@ $(function () {
     const chartColours  = $.map($('.progress-bar-colour'), function (el) { return el.value; });
     const chartTexts = $.map($('.progress-bar-text'), function (el) { return el.value; });
     const chartValues  = $.map($('.progress-bar-value'), function (el) { return el.value; });
-
+    // generate progress bars
     for(let i = 0; i < chartIdentifiers.length; i++)
     {
         const budgetProgressBar = new ProgressBar.Circle('#' + chartIdentifiers[i], {

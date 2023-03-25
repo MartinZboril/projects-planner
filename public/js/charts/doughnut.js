@@ -3,9 +3,8 @@ $(function () {
     const chartLabels  = $.map($('.doughnut-label'), function (el) { return el.value; });
     const chartColours = $.map($('.doughnut-colour'), function (el) { return el.value; });
     const chartData  = $.map($('.doughnut-data'), function (el) { return el.value; });
-
-    for(let i = 0; i < chartIdentifiers.length; i++)
-    {
+    // generate doughnut charts
+    for(let i = 0; i < chartIdentifiers.length; i++) {
         // labels
         labels = chartLabels[i].replace(/'/g, '"');
         labels = JSON.parse(labels);
@@ -15,7 +14,7 @@ $(function () {
         // data
         data = chartData[i].replace(/'/g, '"');
         data = JSON.parse(data);
-        // Chart
+        // chart
         new Chart(chartIdentifiers[i], {
             type: "doughnut",
             data: {
