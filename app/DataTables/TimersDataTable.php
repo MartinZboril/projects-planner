@@ -17,9 +17,6 @@ class TimersDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->setRowId('id')
-            ->editColumn('note', function(Timer $timer) {
-                return ($timer->note) ? '<i class="fas fa-info-circle" data-toggle="popover" title="Note" data-content="' . $timer->note . '"></i>' : '#';
-            })
             ->editColumn('project.name', function(Timer $timer) {
                 return '<a href="' . route('projects.show', $timer->project) . '">' . $timer->project->name . '</a>';
             })

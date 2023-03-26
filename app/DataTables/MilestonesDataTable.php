@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Enums\TaskStatusEnum;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Blade;
@@ -53,6 +54,11 @@ class MilestonesDataTable extends DataTable
         return $model->when(
             $this->project_id ?? false,
             fn ($query, $value) => $query->where('project_id', $value)
+        )->when(
+            $this->overdue ?? false,
+            fn ($query, $value) => $query->where('due_date', '<=', date('Y-m-d'))->whereHas('tasks', function (QueryBuilder $query) {
+                $query->where('status', '!=', TaskStatusEnum::complete->value);
+            })->orWhere('due_date', '<=', date('Y-m-d'))->has('tasks', '=', 0)
         )->with('owner', 'project')->select('milestones.*')->newQuery();
     }
 

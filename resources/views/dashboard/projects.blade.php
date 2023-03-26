@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'chartJS' => true, 'doughnut' => true, 'overview' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'chartJS' => true, 'doughnut' => true, 'overview' => true, 'icheck' => true, 'project' => true])
 
 @section('title', __('pages.title.dashboard'))
 
@@ -22,15 +22,7 @@
                 <x-dashboard.widget text="Total" :value="$data->get('total_projects_count')" icon="fas fa-clock" colour="primary" :link="route('reports.projects')" />
             </div>
             @if($data->get('overdue_projects')->count() > 0)
-                <div class="card card-primary card-outline">
-                    <div class="card-header">
-                        Overdue Projects
-                        <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('overdue_projects')->count() }}</span>
-                    </div>
-                    <div class="card-body">
-                        <x-project.table table-id="overdue-projects-table" :overdue="true" />
-                    </div>
-                </div>
+                <x-dashboard.listing :items="$data->get('overdue_projects')" title="Overdue Projects" type="project" />
             @endif
             @if($data->get('overdue_milestones')->count() > 0)
                 <div class="card card-primary card-outline">
@@ -39,7 +31,7 @@
                         <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('overdue_milestones')->count() }}</span>
                     </div>
                     <div class="card-body">
-                        <x-milestone.table table-id="overdue-milestones-table" />
+                        {{ $dataTable->table() }}  
                     </div>
                 </div>
             @endif
@@ -54,3 +46,12 @@
         </section>
     </div>
 @endsection
+
+@push('scripts')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+    <script>
+        $('#milestones-table').on('draw.dt', function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>   
+@endpush

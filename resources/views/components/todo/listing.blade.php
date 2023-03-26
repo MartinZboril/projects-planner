@@ -1,4 +1,4 @@
-<ul class="todo-list ui-sortable" data-widget="todo-list">
+<ul class="todo-list" data-widget="todo-list">
     @foreach ($todos as $todo)
         <li>
             <div class="icheck-primary d-inline ml-2">

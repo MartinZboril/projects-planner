@@ -14,7 +14,14 @@ function changeProjectStatus(url, status, type, featureText, featureBadge, table
         success: function (data) {
             if (type === 'table') {
                 $(tableIdentifier).DataTable().ajax.reload(); 
-            } else {
+            } else if (type === 'list') {
+                $('#project-item-' + data.project.id).remove();
+                const remainingProjectsCount = $('#project-items-list').children().length;
+                $('#project-items-count-list').html(remainingProjectsCount);
+                if (remainingProjectsCount === 0) {
+                    $('#project-list').hide();
+                }
+            }else {
                 const id = data.project.id;
                 const status = data.project.status;
                 const overdue = data.project.overdue; 
