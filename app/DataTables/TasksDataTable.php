@@ -55,6 +55,9 @@ class TasksDataTable extends DataTable
         )->when(
             $this->milestone_id ?? false,
             fn ($query, $value) => $query->where('milestone_id', $value)
+        )->when(
+            $this->newed ?? false,
+            fn ($query, $value) => $query->where('status', 1)
         )->with('project', 'milestone', 'user')->select('tasks.*')->newQuery();
     }
 

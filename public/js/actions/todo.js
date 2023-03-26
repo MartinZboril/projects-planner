@@ -1,4 +1,4 @@
-function checkTodo(url) {
+function checkTodo(url, type = '') {
     const token = $('meta[name="csrf-token"]').attr('content');
     $.ajax({
         url: url,
@@ -10,12 +10,21 @@ function checkTodo(url) {
             toastr.error('An error has occurred!');
         },
         success: function (data){
-            const id = data.todo.id;
-            const overdue = data.todo.overdue;   
-            // Due date badge
-            const dueDateBadge = $('#todo-' + id + '-due-date');                 
-            if (overdue) {
-                updateCssClass(dueDateBadge, 'badge-danger', 'badge-secondary');
+            if (type === 'list') {
+                $('#todo-item-' + data.todo.id).remove();
+                const remainingToDosCount = $('#todo-items-list').children().length;
+                $('#todo-items-count-list').html(remainingToDosCount);
+                if (remainingToDosCount === 0) {
+                    $('#todo-list').hide();
+                }
+            } else {
+                const id = data.todo.id;
+                const overdue = data.todo.overdue;   
+                // Due date badge
+                const dueDateBadge = $('#todo-' + id + '-due-date');                 
+                if (overdue) {
+                    updateCssClass(dueDateBadge, 'badge-danger', 'badge-secondary');
+                }
             }
             toastr.info(data.message);
         }

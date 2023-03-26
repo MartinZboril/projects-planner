@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'icheck' => true, 'chartJS' => true, 'todo' => true, 'doughnut' => true, 'overview' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'icheck' => true, 'chartJS' => true, 'todo' => true, 'doughnut' => true, 'overview' => true, 'task' => true])
 
 @section('title', __('pages.title.dashboard'))
 
@@ -22,35 +22,19 @@
                 <x-dashboard.widget text="Total" :value="$data->get('total_tasks_count')" icon="fas fa-tasks" colour="primary" :link="route('reports.tasks')" />
             </div>
             @if($data->get('overdue_todos')->count() > 0)
-                <div class="card card-primary card-outline">
-                    <div class="card-header">
-                        Overdue ToDos
-                        <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('overdue_todos')->count() }}</span>
-                    </div>
-                    <div class="card-body">
-                        <x-todo.listing :todos="$data->get('overdue_todos')" />         
-                    </div>
-                </div>
-            @endif
+                <x-dashboard.listing :items="$data->get('overdue_todos')" title="Overdue ToDos" type="todo" />
+            @endif            
             @if($data->get('overdue_tasks')->count() > 0)
-                <div class="card card-primary card-outline">
-                    <div class="card-header">
-                        Overdue Tasks
-                        <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('overdue_tasks')->count() }}</span>
-                    </div>
-                    <div class="card-body">
-                        <x-task.table table-id="overdue-tasks-table" :overdue="true" />
-                    </div>
-                </div>
+                <x-dashboard.listing :items="$data->get('overdue_tasks')" title="Overdue Tasks" type="task" />
             @endif
             @if($data->get('new_tasks')->count() > 0)
-                <div class="card card-primary card-outline">
+                <div class="card card-primary card-outline" id="newed-tasks-card">
                     <div class="card-header">
                         New Tasks
-                        <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('new_tasks')->count() }}</span>
+                        <span class="badge badge-primary ml-2" style="font-size:14px;" id="newed-task-items-count-list">{{ $data->get('new_tasks')->count() }}</span>
                     </div>
                     <div class="card-body">
-                        <x-task.table :tasks="$data->get('new_tasks')" table-id="new-tasks-table" status="1" />
+                        {{ $dataTable->table() }}  
                     </div>
                 </div>  
             @endif
@@ -65,3 +49,12 @@
         </section>
     </div>
 @endsection
+
+@push('scripts')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+    <script>
+        $('#tasks-table').on('draw.dt', function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>   
+@endpush

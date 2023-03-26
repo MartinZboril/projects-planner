@@ -21,7 +21,7 @@ function changeProjectStatus(url, status, type, featureText, featureBadge, table
                 if (remainingProjectsCount === 0) {
                     $('#project-list').hide();
                 }
-            }else {
+            } else {
                 const id = data.project.id;
                 const status = data.project.status;
                 const overdue = data.project.overdue; 

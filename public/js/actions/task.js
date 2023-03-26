@@ -63,6 +63,26 @@ function changeTaskStatus(url, status, type, featureText, featureBadge, tableIde
         success: function (data) {
             if (type === 'table') {
                 $(tableIdentifier).DataTable().ajax.reload(); 
+            } else if (type === 'list') {
+                $('#task-item-' + data.task.id).remove();
+                const remainingTasksCount = $('#task-items-list').children().length;
+                $('#task-items-count-list').html(remainingTasksCount);
+                if (remainingTasksCount === 0) {
+                    $('#task-list').hide();
+                }
+                // Update tasks datatable
+                if ($('.dataTable').length) {
+                    if ($('#tasks-table').DataTable()) {
+                        $('#tasks-table').DataTable().ajax.reload(function(json) {
+                            var newedTasksCount = json.recordsTotal;
+                            console.log(newedTasksCount);
+                            $('#newed-task-items-count-list').html(newedTasksCount);
+                            if (newedTasksCount === 0) {
+                                $('#newed-tasks-card').hide();
+                            }
+                        });
+                    }
+                }  
             } else {
                 const id = data.task.id;
                 const status = data.task.status;
