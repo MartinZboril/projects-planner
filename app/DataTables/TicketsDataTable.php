@@ -61,6 +61,9 @@ class TicketsDataTable extends DataTable
         return $model->when(
             $this->project_id ?? false,
             fn ($query, $value) => $query->where('project_id', $value)
+        )->when(
+            $this->unassigned ?? false,
+            fn ($query, $value) => $query->unassigned()->active()
         )->with('project', 'reporter', 'assignee')->select('tickets.*')->newQuery();
     }
 

@@ -9,6 +9,7 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
+use App\Enums\TaskStatusEnum;
 use App\Models\Task;
 
 class TasksDataTable extends DataTable
@@ -57,7 +58,7 @@ class TasksDataTable extends DataTable
             fn ($query, $value) => $query->where('milestone_id', $value)
         )->when(
             $this->newed ?? false,
-            fn ($query, $value) => $query->where('status', 1)
+            fn ($query, $value) => $query->where('status', TaskStatusEnum::new)
         )->with('project', 'milestone', 'user')->select('tasks.*')->newQuery();
     }
 

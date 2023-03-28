@@ -14,6 +14,25 @@ function changeTicketStatus(url, status, type, featureText, featureBadge, tableI
         success: function (data) {
             if (type === 'table') {
                 $(tableIdentifier).DataTable().ajax.reload(); 
+            } else if (type === 'list') {
+                $('#ticket-item-' + data.ticket.id).remove();
+                const remainingTicketsCount = $('#ticket-items-list').children().length;
+                $('#ticket-items-count-list').html(remainingTicketsCount);
+                if (remainingTicketsCount === 0) {
+                    $('#ticket-list').hide();
+                }
+                // Update tickets datatable
+                if ($('.dataTable').length) {
+                    if ($('#tickets-table').DataTable()) {
+                        $('#tickets-table').DataTable().ajax.reload(function(json) {
+                            var unassignedTicketsCount = json.recordsTotal;
+                            $('#unassigned-ticket-items-count-list').html(unassignedTicketsCount);
+                            if (unassignedTicketsCount === 0) {
+                                $('#unassigned-tickets-card').hide();
+                            }
+                        });
+                    }
+                }  
             } else {
                 const id = data.ticket.id;
                 const status = data.ticket.status;

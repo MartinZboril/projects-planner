@@ -75,7 +75,6 @@ function changeTaskStatus(url, status, type, featureText, featureBadge, tableIde
                     if ($('#tasks-table').DataTable()) {
                         $('#tasks-table').DataTable().ajax.reload(function(json) {
                             var newedTasksCount = json.recordsTotal;
-                            console.log(newedTasksCount);
                             $('#newed-task-items-count-list').html(newedTasksCount);
                             if (newedTasksCount === 0) {
                                 $('#newed-tasks-card').hide();

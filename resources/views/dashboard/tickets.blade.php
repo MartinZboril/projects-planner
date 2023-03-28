@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'chartJS' => true, 'doughnut' => true, 'overview' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'chartJS' => true, 'doughnut' => true, 'overview' => true, 'icheck' => true, 'ticket' => true])
 
 @section('title', __('pages.title.dashboard'))
 
@@ -23,26 +23,18 @@
                     <x-dashboard.widget text="Total" :value="$data->get('total_tickets_count')" icon="fas fa-life-ring" colour="primary" :link="route('reports.tickets')" />
                 </div>
                 @if($data->get('unassigned_tickets')->count() > 0)
-                    <div class="card card-primary card-outline">
+                    <div class="card card-primary card-outline" id="unassigned-tickets-card">
                         <div class="card-header">
                             Unassigned Tickets
-                            <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('unassigned_tickets')->count() }}</span>
+                            <span class="badge badge-primary ml-2" style="font-size:14px;" id="unassigned-ticket-items-count-list">{{ $data->get('unassigned_tickets')->count() }}</span>
                         </div>
                         <div class="card-body">
-                            <x-ticket.table :tickets="$data->get('unassigned_tickets')" table-id="unassigned-tickets-table" />
-                        </div>
-                    </div> 
-                @endif
-                @if($data->get('overdue_tickets')->count() > 0)     
-                    <div class="card card-primary card-outline">
-                        <div class="card-header">
-                            Overdue Tickets
-                            <span class="badge badge-primary ml-2" style="font-size:14px;">{{ $data->get('overdue_tickets')->count() }}</span>
-                        </div>
-                        <div class="card-body">
-                            <x-ticket.table :tickets="$data->get('overdue_tickets')" table-id="overdue-tickets-table" :overdue="true" />
+                            {{ $dataTable->table() }}  
                         </div>
                     </div>
+                @endif
+                @if($data->get('overdue_tickets')->count() > 0)    
+                    <x-dashboard.listing :items="$data->get('overdue_tickets')" title="Overdue Tickets" type="ticket" /> 
                 @endif
                 <div class="row">
                     <div class="col-md-4">
@@ -56,3 +48,12 @@
         </section>
     </div>
 @endsection
+
+@push('scripts')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+    <script>
+        $('#tickets-table').on('draw.dt', function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>   
+@endpush
