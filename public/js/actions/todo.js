@@ -17,6 +17,13 @@ function checkTodo(url, type = '') {
                 if (remainingToDosCount === 0) {
                     $('#todo-list').hide();
                 }
+            } else if (type === 'summary') {
+                $('#summary-item-todo-' + data.todo.id).remove();
+                const remainingSummaryCount = $('#summary-items-list').children().length;
+                $('#summary-items-count-list').html(remainingSummaryCount);
+                if (remainingSummaryCount === 0) {
+                    $('#summary-list').hide();
+                }
             } else {
                 const id = data.todo.id;
                 const overdue = data.todo.overdue;   

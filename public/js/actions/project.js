@@ -21,6 +21,13 @@ function changeProjectStatus(url, status, type, featureText, featureBadge, table
                 if (remainingProjectsCount === 0) {
                     $('#project-list').hide();
                 }
+            } else if (type === 'summary') {
+                $('#summary-item-project-' + data.project.id).remove();
+                const remainingSummaryCount = $('#summary-items-list').children().length;
+                $('#summary-items-count-list').html(remainingSummaryCount);
+                if (remainingSummaryCount === 0) {
+                    $('#summary-list').hide();
+                }
             } else {
                 const id = data.project.id;
                 const status = data.project.status;

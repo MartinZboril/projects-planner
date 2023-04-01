@@ -20,7 +20,7 @@ class SummaryDashboard
             'active_projects_count' => Project::active()->count(),
             'active_tasks_count' => Task::active()->stopped(false)->count(),
             'active_tickets_count' => Ticket::active()->count(),
-            'today_summary' => $this->getTodaySummary(),
+            'today_summary' => $this->getTodaySummary()->sortByDesc('due_date'),
             'marked_items' => $this->getMarkedItems(),
         ]);
 
@@ -36,14 +36,14 @@ class SummaryDashboard
         $summary = $this->pushItemsToSummary($summary, 'ticket', Ticket::marked()->get());
         $summary = $this->pushItemsToSummary($summary, 'task', Task::marked()->get());
 
-        return $summary;
+        return $summary->sortByDesc('due_date');
     }
     
     protected function getTodaySummary(): Collection
     {
         $summary = collect();
         $summary = $this->pushItemsToSummary($summary, 'project', Project::active()->overdue()->get());
-        $summary = $this->pushItemsToSummary($summary, 'milestone', Milestone::overdue()->get());
+        $summary = $this->pushItemsToSummary($summary, 'milestone', Milestone::overdue()->get()->where('progress', '<', 1));
         $summary = $this->pushItemsToSummary($summary, 'task', Task::active()->overdue()->get());
         $summary = $this->pushItemsToSummary($summary, 'ticket', Ticket::active()->overdue()->get());
         $summary = $this->pushItemsToSummary($summary, 'todo', ToDo::finished(false)->overdue()->get());
@@ -55,9 +55,11 @@ class SummaryDashboard
     {
         $items->each(function ($item, $key) use($summary, $type) {
             $summaryItem = collect([
+                'id' => $item->id,
                 'name' => $type ==='ticket' ? $item->subject : $item->name,
                 'type' => $type,
                 'due_date' => (in_array($type, ['client'])) ? null : $item->due_date,
+                'overdue' => false,
                 'url' => ($type === 'milestone')
                             ? route('projects.milestones.show', ['project' => $item->project, 'milestone' => $item])
                             : $this->getItemUrl($type, $type ==='todo' ? $item->task->id : $item->id),

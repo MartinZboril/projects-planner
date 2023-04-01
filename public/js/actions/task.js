@@ -82,6 +82,13 @@ function changeTaskStatus(url, status, type, featureText, featureBadge, tableIde
                         });
                     }
                 }  
+            } else if (type === 'summary') {
+                $('#summary-item-task-' + data.task.id).remove();
+                const remainingSummaryCount = $('#summary-items-list').children().length;
+                $('#summary-items-count-list').html(remainingSummaryCount);
+                if (remainingSummaryCount === 0) {
+                    $('#summary-list').hide();
+                }
             } else {
                 const id = data.task.id;
                 const status = data.task.status;

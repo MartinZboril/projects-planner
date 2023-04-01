@@ -33,6 +33,13 @@ function changeTicketStatus(url, status, type, featureText, featureBadge, tableI
                         });
                     }
                 }  
+            } else if (type === 'summary') {
+                $('#summary-item-ticket-' + data.ticket.id).remove();
+                const remainingSummaryCount = $('#summary-items-list').children().length;
+                $('#summary-items-count-list').html(remainingSummaryCount);
+                if (remainingSummaryCount === 0) {
+                    $('#summary-list').hide();
+                }
             } else {
                 const id = data.ticket.id;
                 const status = data.ticket.status;

@@ -7,11 +7,14 @@ use Illuminate\View\Component;
 class Type extends Component
 {
     public $type;
+    public $displayIcon;
     public $icon;
     
-    public function __construct(string $type)
+    public function __construct(string $type, ?bool $displayIcon=true)
     {
         $this->type = __('pages.title.' . $type);
+        $this->displayIcon = $displayIcon;
+        
         switch($type) {
             case('client'):
                 $this->icon = 'fas fa-address-book';
