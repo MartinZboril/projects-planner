@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'summernote' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'summernote' => true, 'milestone' => true, 'comment' => true])
 
 @section('title', __('pages.title.milestone'))
 
@@ -6,7 +6,7 @@
     <div class="content-wrapper">
         <!-- Content Header -->
         <div class="p-3 mb-3" style="background-color:white;">
-            @include('projects.milestones.partials.actions')
+            @include('projects.milestones.partials.actions', ['buttonSize' => 'sm', 'type' => 'detail'])
         </div>
         <!-- Main content -->
         <section class="content">
@@ -22,7 +22,7 @@
                         <div class="card card-primary card-outline">
                             <div class="card-header">Tasks</div>
                             <div class="card-body">
-                                <x-task.table table-id="tasks-table" :tasks="$milestone->tasks" type="projects" />
+                                {{ $dataTable->table() }}
                             </div>
                         </div>
                         <x-comment.card :comments="$milestone->comments" :parent="['project' => $milestone->project, 'milestone' => $milestone]" :store-form-route="route('projects.milestones.comments.store', ['project' => $milestone->project, 'milestone' => $milestone])" update-form-route-name="projects.milestones.comments.update" /> 
@@ -32,3 +32,12 @@
         </section>
     </div>
 @endsection
+
+@push('scripts')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+    <script>
+        $('#tasks-table').on('draw.dt', function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>       
+@endpush

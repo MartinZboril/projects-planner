@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Project\Task;
 
 use Exception;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\{JsonResponse, RedirectResponse};
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
+use App\DataTables\TasksDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Task\{StoreTaskRequest, UpdateTaskRequest};
 use App\Models\{Project, Task};
@@ -23,9 +24,12 @@ class ProjectTaskController extends Controller
     /**
      * Display the tasks of project.
      */
-    public function index(Project $project): View
+    public function index(Project $project, TasksDataTable $tasksDataTable): JsonResponse|View
     {
-        return view('projects.tasks.index', ['project' => $project]);
+        return $tasksDataTable->with([
+            'project_id' => $project->id,
+            'view' => 'project',
+        ])->render('projects.tasks.index', ['project' => $project]);
     }
 
     /**

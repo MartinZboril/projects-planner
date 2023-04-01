@@ -3,17 +3,14 @@
 namespace App\Http\Controllers\Project\Timer;
 
 use Exception;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\{Auth, Log};
 use App\Http\Controllers\Controller;
 use App\Models\{Project, Timer};
-use App\Traits\FlashTrait;
 use App\Services\Data\TimerService;
 
 class ProjectTimerStopController extends Controller
 {
-    use FlashTrait;
-
     public function __construct(private TimerService $timerService)
     {
     }
@@ -21,15 +18,18 @@ class ProjectTimerStopController extends Controller
     /**
      * Start working on new timer.
      */
-    public function __invoke(Project $project, Timer $timer): RedirectResponse
+    public function __invoke(Project $project, Timer $timer): JsonResponse
     {
         try {
             $this->timerService->handleStop($timer);
-            $this->flash(__('messages.timer.stop'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
-            return redirect()->back()->with(['error' => __('messages.error')]);
         }
-        return redirect()->route('projects.timers.index', [$project]); 
+        return response()->json([
+            'message' => __('messages.timer.stop'),
+            'timer' => $timer,
+            'active_timers_count' => Auth::User()->activeTimers->count(),
+            'project' => $project,
+        ]);
     }
 }

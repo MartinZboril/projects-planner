@@ -4,38 +4,7 @@
         <canvas id="{{ $chartId }}" class="w-100"></canvas>
     </div>
 </div>
-
-@push('scripts')
-    <script>
-        new Chart("{{ $chartId }}", {
-            type: "line",
-            data: {
-                labels: @json($reportMonths),
-                datasets: [{ 
-                    data: @json($totalCount),
-                    borderColor: '#007bff',
-                    fill: false,
-                    label: 'Total'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        min: 0,
-                        ticks: {
-                            stepSize: 5
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom',
-                    }
-                }
-            },
-        });
-    </script>
-@endpush
+<!-- Overview values -->
+<input type="hidden" class="overview-identifier" value="{{ $chartId }}" />
+<input type="hidden" class="overview-month" value="{{ str_replace('"', "'", json_encode($reportMonths, JSON_HEX_APOS)) }}" />
+<input type="hidden" class="overview-total-count" value="{{ str_replace('"', "'", json_encode($totalCount, JSON_HEX_APOS)) }}" />

@@ -13,10 +13,19 @@
             <div class="container-fluid">
                 <div class="card card-primary card-outline">
                     <div class="card-body">
-                        <x-milestone.table :$milestones table-id="milestones-table" />
+                        {{ $dataTable->table() }}  
                     </div>
                 </div>            
             </div>
         </section>
     </div>
 @endsection
+
+@push('scripts')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+    <script>
+        $('#milestones-table').on('draw.dt', function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+@endpush

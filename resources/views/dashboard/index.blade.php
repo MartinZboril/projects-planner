@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'toaster' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'icheck' => true, 'project' => true, 'task' => true, 'ticket' => true, 'todo' => true])
 
 @section('title', __('pages.title.dashboard'))
 
@@ -21,12 +21,12 @@
                 <x-dashboard.widget text="Tickets" :value="$data->get('active_tickets_count')" icon="fas fa-life-ring" colour="lightblue color-palette" :link="route('tickets.index')" />
                 <x-dashboard.widget text="NaN" value="NaN" icon="fas fa-times" colour="danger color-palette" :link="null" />
             </div>
-            @if ($data->get('marked_items')->count() > 0)
-                <x-dashboard.summary :items="$data->get('marked_items')" table-id="marked-items-table" title="Marked items" />               
-            @endif
             @if ($data->get('today_summary')->count() > 0)
-                <x-dashboard.summary :items="$data->get('today_summary')" table-id="today-summary-table" title="Today summary" />  
+                <x-dashboard.summary :items="$data->get('today_summary')" type="summary" title="Today summary" />  
             @endif
+            @if ($data->get('marked_items')->count() > 0)
+                <x-dashboard.items :items="$data->get('marked_items')" title="Marked items" />
+            @endif            
         </section>
     </div>
 @endsection

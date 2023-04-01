@@ -13,7 +13,6 @@
                     <span class="d-block">Milestone: <b>@if($task->milestone)<a href="{{ route('projects.milestones.show', ['project' => $task->milestone->project, 'milestone' => $task->milestone]) }}">{{ $task->milestone_label }}</a>@else{{ $task->milestone_label }}@endif</b></span>
                 </div>
             </div>
-            <x-kanban.forms :$task />
         @empty
             <div class="card">
                 <div class="card-header">There are no tasks!</div>

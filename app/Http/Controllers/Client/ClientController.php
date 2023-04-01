@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Client;
 
 use Exception;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\{JsonResponse, RedirectResponse};
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
+use App\DataTables\ClientsDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Client\{StoreClientRequest, UpdateClientRequest};
 use App\Models\Client;
@@ -23,9 +24,9 @@ class ClientController extends Controller
     /**
      * Display a listing of the clients.
      */
-    public function index(): View
+    public function index(ClientsDataTable $clientsDataTable): JsonResponse|View
     {
-        return view('clients.index', ['clients' => Client::all()]);
+        return $clientsDataTable->render('clients.index');
     }
 
     /**

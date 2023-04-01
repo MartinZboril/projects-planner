@@ -1,4 +1,4 @@
-@extends('layouts.master', ['chartJS' => true])
+@extends('layouts.master', ['chartJS' => true, 'overview' => true])
 
 @section('title', __('pages.title.report'))
 

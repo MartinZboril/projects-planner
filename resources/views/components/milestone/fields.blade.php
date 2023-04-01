@@ -5,7 +5,7 @@
             <div class="card-body">
                 <div class="form-group required">
                     <label for="name" class="control-label">Name</label>
-                    <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" placeholder="name" value="{{ old('name', $milestone->name ?? null) }}" autocomplete="off">
+                    <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" placeholder="name" value="{{ old('name', $milestone->name ?? null) }}" >
                     @error('name')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -24,21 +24,21 @@
                 </div> 
                 <div class="form-group required">
                     <label for="start_date" class="control-label">Start date</label>
-                    <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" placeholder="start date" value="{{ old('start_date', ($milestone->start_date ?? false) ? $milestone->start_date->format('Y-m-d') : now()->format('Y-m-d')) }}" autocomplete="off">
+                    <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" placeholder="start date" value="{{ old('start_date', ($milestone->start_date ?? false) ? $milestone->start_date->format('Y-m-d') : now()->format('Y-m-d')) }}" >
                     @error('start_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group required">
                     <label for="due_date" class="control-label">End date</label>
-                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', ($milestone->due_date ?? false) ? $milestone->due_date->format('Y-m-d') : now()->addDays(7)->format('Y-m-d')) }}" autocomplete="off">
+                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', ($milestone->due_date ?? false) ? $milestone->due_date->format('Y-m-d') : now()->addDays(7)->format('Y-m-d')) }}" >
                     @error('due_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group required">
                     <label for="colour" class="control-label">Colour</label>
-                    <input type="color" name="colour" id="colour" class="form-control @error('colour') is-invalid @enderror" placeholder="colour" value="{{ old('colour', $milestone->colour ?? null) }}" autocomplete="off">
+                    <input type="color" name="colour" id="colour" class="form-control @error('colour') is-invalid @enderror" placeholder="colour" value="{{ old('colour', $milestone->colour ?? null) }}" >
                     @error('colour')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

@@ -18,7 +18,17 @@
                         @include('users.partials.profile')
                     </div>
                     <div class="col-md-8">
-                        <x-rate.card :rates="$user->rates" :create-form-route="route('users.rates.create', $user)" />
+                        <div class="card card-primary card-outline">
+                            <div class="card-header">
+                                <div class="card-title">Rates</div>
+                                <div class="card-tools">
+                                    <a href="{{ route('users.rates.create', $user) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-plus mr-1"></i>Create</a>
+                                </div>                               
+                            </div>
+                            <div class="card-body">
+                                {{ $dataTable->table() }}
+                            </div>
+                        </div>
                         <x-activity-feed.card />
                     </div>
                 </div>         
@@ -27,3 +37,7 @@
         <!-- /.content -->
     </div>
 @endsection
+
+@push('scripts')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+@endpush

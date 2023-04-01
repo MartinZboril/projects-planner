@@ -10,15 +10,16 @@ class Card extends Component
 {
     public $todos;
     public $createFormRoute;
-    public $checkerFormPartial;
 
-    public function __construct(array $parent, Collection $todos, string $createFormRoute, string $editFormRouteName, string $checkerFormPartial)
+    public function __construct(Collection $todos, string $createFormRoute, ?string $type='tasks')
     {
-        $this->todos = $todos->each(function (ToDo $todo) use($parent, $editFormRouteName) {
-            $todo->edit_route = route($editFormRouteName, $parent + ['todo' => $todo]);
+        $this->todos = $todos->each(function (ToDo $todo) use($type) {
+            $todo->edit_route = ($type === 'projects')
+                                    ? route('projects.tasks.todos.edit', ['project' => $todo->task->project, 'task' => $todo->task, 'todo' => $todo])
+                                    : route('tasks.todos.edit', ['task' => $todo->task, 'todo' => $todo]);
+            $todo->check_route = route('tasks.todos.check', ['task' => $todo->task, 'todo' => $todo]);
         });        
         $this->createFormRoute = $createFormRoute;
-        $this->checkerFormPartial = $checkerFormPartial;
     }
 
     public function render()

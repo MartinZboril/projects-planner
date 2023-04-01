@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers\Analysis;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use App\DataTables\ProjectsDataTable;
 use App\Http\Controllers\Controller;
-use App\Services\Analysis\ProjectAnalysis;
 
 class ProjectAnalysisController extends Controller
 {
     /**
      * Display an analyze for projects.
      */
-    public function __invoke(): View
+    public function __invoke(ProjectsDataTable $projectsDataTable): JsonResponse|View
     {
-        return view('analysis.projects', ['projects' => (new ProjectAnalysis)->getAnalyze()]);
+        return $projectsDataTable->with([
+            'view' => 'analysis',
+        ])->render('analysis.projects');
     }
 }

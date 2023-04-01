@@ -4,6 +4,8 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('dist/img/icon.png') }}">
     <title>@yield('title') | {{ config('app.name', 'Laravel') }}</title>
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -30,9 +32,7 @@
     @endif
     @if(!empty($datatables))
       <!-- DataTables -->
-      <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-      <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-      <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">    
+      <link href="https://cdn.datatables.net/v/bs4/dt-1.13.3/b-2.3.5/r-2.4.0/datatables.min.css" rel="stylesheet"/>
     @endif
     <!-- Toastr -->
     <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.css') }}">
@@ -74,6 +74,12 @@
     @if(!empty($chartJS))
       <!-- ChartJS -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+      @if(!empty($doughnut))
+        <script src="{{ asset('js/charts/doughnut.js') }}"></script>      
+      @endif   
+      @if(!empty($overview))
+        <script src="{{ asset('js/charts/overview.js') }}"></script>      
+      @endif            
     @endif
     @if(!empty($momment))
       <!-- momment -->
@@ -91,30 +97,48 @@
       <!-- Select2 -->
       <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
     @endif
+    @if(!empty($progressbar))
+      <script src="{{ asset('plugins/progress-bar/progressbar.js' ) }}"></script>    
+      <script src="{{ asset('js/charts/progress_bar.js') }}"></script>      
+    @endif
     @if(!empty($datatables))
       <!-- DataTables -->
-      <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
-      <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-      <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-      <script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-      <script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-      <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-      <script src="{{ asset('plugins/jszip/jszip.min.js') }}"></script>
-      <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
-      <script src="{{ asset('plugins/pdfmake/vfs_fonts.js') }}"></script>
-      <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
-      <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-      <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-    @endif
-    @if(!empty($progressbar))
-      <script src="{{ asset('plugins/progress-bar/progressbar.js' ) }}"></script>        
-    @endif
+      <script src="https://cdn.datatables.net/v/bs4/dt-1.13.3/b-2.3.5/r-2.4.0/datatables.min.js"></script>
+    @endif    
     <!-- Custom scripts -->
-    <script src="{{ asset('js/timer.js') }}"></script>
     <script src="{{ asset('js/error.js') }}"></script>
     @if(!empty($toaster))
       <script src="{{ asset('js/toastr.js') }}"></script>      
     @endif
+    @if(!empty($client))
+      <script src="{{ asset('js/actions/client.js') }}"></script>  
+    @endif
+    @if(!empty($milestone))
+      <script src="{{ asset('js/actions/milestone.js') }}"></script>  
+    @endif
+    @if(!empty($project))
+      <script src="{{ asset('js/actions/project.js') }}"></script>  
+    @endif
+    @if(!empty($task))
+      <script src="{{ asset('js/actions/task.js') }}"></script>  
+    @endif
+    @if(!empty($ticket))
+      <script src="{{ asset('js/actions/ticket.js') }}"></script>  
+    @endif
+    @if(!empty($todo))
+      <script src="{{ asset('js/actions/todo.js') }}"></script>  
+    @endif   
+    @if(!empty($comment))
+      <script src="{{ asset('js/helpers/comment.js') }}"></script>  
+    @endif 
+    @if(!empty($note))
+      <script src="{{ asset('js/actions/note.js') }}"></script>  
+    @endif       
+    @if(!empty($kanban))
+      <script src="{{ asset('js/actions/kanban.js') }}"></script>  
+    @endif                          
+    <script src="{{ asset('js/timer.js') }}" defer></script>
+    <script src="{{ mix('js/app.js') }}"></script>
     @stack('scripts')
   </body>
 </html>

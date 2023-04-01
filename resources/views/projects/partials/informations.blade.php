@@ -1,8 +1,10 @@
 <div class="card card-primary card-outline">
     <div class="card-header">
         Project
-        <x-project.ui.status-badge :text="true" :status="$project->status" />
-        @if($project->overdue)<span class="badge badge-danger ml-1" style="font-size:14px;">Overdue</span>@endif
+        <span id="project-status-badge">
+            <x-project.ui.status-badge :text="false" :status="$project->status" />
+        </span>
+        <span style="{{ $project->overdue ? '' : 'display: none;' }}font-size:14px;" id="project-{{ $project->id }}-overdue-badge" class="badge badge-danger ml-1">Overdue</span>
     </div>
     <div class="card-body">
         <div class="text-muted">
@@ -17,7 +19,9 @@
             <p class="text-sm">Information
                 <span class="d-block ml-2">Start date: <b>{{ $project->start_date->format('d.m.Y') }}</b></span>
                 <span class="d-block ml-2">Due date: <b>{{ $project->due_date->format('d.m.Y') }}</b></span>
-                <span class="d-block ml-2">Deadline: <span class="badge badge-{{ $project->deadline >= 0 ? 'success' : 'danger' }}">{{ $project->deadline }} day(s)</span>
+                <span style="{{ $project->status === App\Enums\ProjectStatusEnum::active ? '' : 'display: none;' }}" id="project-{{ $project->id }}-deadline">
+                    <span class="d-block ml-2">Deadline: <span class="badge badge-{{ $project->deadline >= 0 ? 'success' : 'danger' }}" id="project-{{ $project->id }}-deadline-badge">{{ $project->deadline }} day(s)</span>
+                </span>
             </span>
             </p>
             <p class="text-sm">Cost

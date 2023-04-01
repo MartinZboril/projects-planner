@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'toaster' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'client' => true])
 
 @section('title', __('pages.title.client'))
 
@@ -17,10 +17,14 @@
                     </div>                    
                     <div class="card-body">
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                        <x-client.table :$clients table-id="clients-table" />
+                        {{ $dataTable->table() }}
                     </div>
                 </div>            
             </div>
         </section>
     </div>
 @endsection
+
+@push('scripts')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+@endpush

@@ -29,13 +29,11 @@
                 </form>
             </div>
         </li>
-        @if(Auth::User()->activeTimers->count() > 0)
-            <li class="nav-item dropdown">
-                <a href="#" class="nav-link" data-toggle="modal" data-target="#timers-preview-modal">
-                    <i class="fas fa-clock mr-1"></i>{{ Auth::User()->activeTimers->count() }}
-                </a>
-            </li>
-        @endif
+        <li style="{{ Auth::User()->activeTimers->count() > 0 ? '' : 'display: none;' }}" id="timer-nav" class="nav-item dropdown">
+            <a href="#" id="timer-counter" class="nav-link" data-toggle="modal" data-target="#timers-preview-modal">
+                <i class="fas fa-clock mr-1"></i>{{ Auth::User()->activeTimers->count() }}
+            </a>
+        </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                 <img src="{{ (Auth::user()->avatar ?? false) ? asset('storage/' . Auth::user()->avatar->path) : asset('dist/img/user.png') }}" class="img-circle mr-2" alt="User Image" style="width: 25px;height: 25px;">

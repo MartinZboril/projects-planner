@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Task;
 
 use Exception;
-use Illuminate\View\View;
+use Illuminate\Http\{JsonResponse, RedirectResponse};
 use Illuminate\Support\Facades\Log;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use App\DataTables\TasksDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Task\{StoreTaskRequest, UpdateTaskRequest};
 use App\Models\Task;
@@ -23,9 +24,11 @@ class TaskController extends Controller
     /**
      * Display a listing of the tasks.
      */
-    public function index(): View
+    public function index(TasksDataTable $tasksDataTable): JsonResponse|View
     {
-        return view('tasks.index', ['tasks' => Task::all()]);
+        return $tasksDataTable->with([
+            'view' => 'tasks',
+        ])->render('tasks.index');
     }
 
     /**

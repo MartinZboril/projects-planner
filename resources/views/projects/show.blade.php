@@ -1,4 +1,4 @@
-@extends('layouts.master', ['toaster' => true, 'progressbar' => true])
+@extends('layouts.master', ['toaster' => true, 'progressbar' => true, 'project' => true])
 
 @section('title', __('pages.title.project'))
 
@@ -22,13 +22,13 @@
                     <div class="col-md-8">
                         <div class="row">
                             <div class="col-md-4">
-                                <x-chart.progress-bar :title="$project->amount" :title-amount="true" :subtitle="$project->budget" :subtitle-amount="true" chart-id="budget-progress-bar" :value="$project->budget_plan >= 100 ? '1.0' : ($project->budget_plan / 100)" :text="$project->budget_plan . '%'" :colour="'#' . ($project->budget_plan > 100 ? 'dc3545' : '28a745')" />
+                                <x-chart.progress-bar headline="Budget" :title="$project->amount" :title-amount="true" :subtitle="$project->budget" :subtitle-amount="true" chart-id="budget-progress-bar" :value="$project->budget_plan >= 100 ? '1.0' : ($project->budget_plan / 100)" :text="$project->budget_plan . '%'" :colour="'#' . ($project->budget_plan > 100 ? 'dc3545' : '28a745')" />
                             </div>
                             <div class="col-md-4">
-                                <x-chart.progress-bar :title="$project->total_time . ' Hours'" :subtitle="'Est. Hours: ' . $project->estimated_hours . ' Hours'" chart-id="plan-progress-bar" :value="$project->time_plan >= 100 ? '1.0' : ($project->time_plan / 100)" :text="$project->time_plan . '%'" :colour="'#' . ($project->time_plan > 100 ? 'dc3545' : '28a745')" />
+                                <x-chart.progress-bar headline="Time Plan" :title="$project->total_time . ' Hours'" :subtitle="'Est. Hours: ' . $project->estimated_hours . ' Hours'" chart-id="plan-progress-bar" :value="$project->time_plan >= 100 ? '1.0' : ($project->time_plan / 100)" :text="$project->time_plan . '%'" :colour="'#' . ($project->time_plan > 100 ? 'dc3545' : '28a745')" />
                             </div>
                             <div class="col-md-4">
-                                <x-chart.progress-bar :title="$project->pending_tasks_count . ' Pending'" :subtitle="$project->done_tasks_count . ' Done'" chart-id="tasks-progress-bar" :value="$project->tasks_plan >= 100 ? '1.0' : ($project->tasks_plan / 100)" :text="$project->tasks_plan . '%'" :colour="'#' . ($project->tasks_plan > 100 ? 'dc3545' : '28a745')" />
+                                <x-chart.progress-bar headline="Tasks" :title="$project->pending_tasks_count . ' Pending'" :subtitle="$project->done_tasks_count . ' Done'" chart-id="tasks-progress-bar" :value="$project->tasks_plan >= 100 ? '1.0' : ($project->tasks_plan / 100)" :text="$project->tasks_plan . '%'" :colour="'#' . ($project->tasks_plan > 100 ? 'dc3545' : '28a745')" />
                             </div>
                         </div>
                         <x-activity-feed.card />

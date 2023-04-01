@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\User;
 
 use Exception;
+use Illuminate\Http\{JsonResponse, RedirectResponse};
 use Illuminate\Support\Facades\Log;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use App\DataTables\{RatesDataTable, UsersDataTable};
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\{StoreUserRequest, UpdateUserRequest};
 use App\Models\User;
@@ -23,9 +24,9 @@ class UserController extends Controller
     /**
      * Display a listing of the users.
      */
-    public function index(): View
+    public function index(UsersDataTable $usersDataTable): JsonResponse|View 
     {
-        return view('users.index', ['users' => User::all()]);
+        return $usersDataTable->render('users.index');
     }
 
     /**
@@ -56,9 +57,11 @@ class UserController extends Controller
     /**
      * Display the user.
      */
-    public function show(User $user): View
+    public function show(User $user, RatesDataTable $ratesDataTable): JsonResponse|View
     {
-        return view('users.show', ['user' => $user]);
+        return $ratesDataTable->with([
+            'user_id' => $user->id,
+        ])->render('users.show', ['user' => $user]);
     }
 
     /**

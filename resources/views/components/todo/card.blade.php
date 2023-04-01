@@ -9,6 +9,6 @@
         </div>
     </div>
     <div class="card-body">
-        <x-todo.listing :$checkerFormPartial :$todos />            
+        <x-todo.listing :$todos />            
     </div>
 </div>

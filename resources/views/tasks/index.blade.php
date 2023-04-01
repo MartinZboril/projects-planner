@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'toaster' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'task' => true])
 
 @section('title', __('pages.title.task'))
 
@@ -18,10 +18,19 @@
                     </div>
                     <div class="card-body">
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                        <x-task.table table-id="tasks-table" :$tasks />
+                        {{ $dataTable->table() }}
                     </div>
                 </div>            
             </div>
         </section>
     </div>
 @endsection
+
+@push('scripts')
+    {{ $dataTable->scripts(attributes: ['type' => 'module']) }}
+    <script>
+        $('#tasks-table').on('draw.dt', function() {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>       
+@endpush

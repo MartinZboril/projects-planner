@@ -5,7 +5,7 @@
             <a href="{{ $note->edit_route }}" class="btn btn-tool">
                 <i class="fas fa-edit"></i>
             </a>
-            <a href="#" class="btn btn-tool" onclick="event.preventDefault(); document.getElementById('{{ ($note->is_marked ? 'unmark' : 'mark') . '-note-' . $note->id . '-form'}}').submit();">
+            <a href="#" class="btn btn-tool" onclick="markNote('{{ route('notes.mark', $note) }}', '{{ $redirect }}')">
                 <i class="{{ ($note->is_marked ? 'fas' : 'far') }} fa-bookmark"></i>
             </a>
         </div>
@@ -14,5 +14,3 @@
         {!! $note->content !!}
     </div>
 </div>
-
-@include('notes.forms.mark', ['note' => $note, 'id' => ($note->is_marked ? 'unmark' : 'mark') . '-note-' . $note->id . '-form'])

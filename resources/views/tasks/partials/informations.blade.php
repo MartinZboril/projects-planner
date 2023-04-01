@@ -1,8 +1,10 @@
 <div class="card card-primary card-outline">
     <div class="card-header">
         {{ $task->name }}
-        <x-task.ui.status-badge :text="false" :$task />
-        @if($task->overdue)<span class="badge badge-danger ml-1" style="font-size:14px;">Overdue</span>@endif
+        <span id="task-status-badge">
+            <x-task.ui.status-badge :text="false" :$task />
+        </span>
+        <span style="{{ $task->overdue ? '' : 'display: none;' }}font-size:14px;" id="task-{{ $task->id }}-overdue-badge" class="badge badge-danger ml-1">Overdue</span>
     </div>
     <div class="card-body">
         <div class="row">
@@ -10,7 +12,7 @@
                 <div class="info-box bg-light">
                     <div class="info-box-content">
                         <span class="info-box-text text-center text-muted">Due date</span>
-                        <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-{{ $task->overdue ? 'danger' : 'secondary' }}">{{ $task->due_date->format('d.m.Y') }}</span></span>
+                        <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-{{ $task->overdue ? 'danger' : 'secondary' }}" id="task-{{ $task->id }}-due-date">{{ $task->due_date->format('d.m.Y') }}</span></span>
                     </div>
                 </div>
             </div>
@@ -38,7 +40,7 @@
         @endif
         <span class="d-block">User: <b><a href="{{ route('users.show', $task->user) }}">{{ $task->user->full_name }}</a></b></span>
         <span class="d-block">Author: <b><a href="{{ route('users.show', $task->author) }}">{{ $task->author->full_name }}</a></b></span>
-        <span class="d-block">Status: <b><x-task.ui.status-badge :text="true" :$task /></b></span>
+        <span class="d-block">Status: <b id="task-status-text"><x-task.ui.status-badge :text="true" :$task /></b></span>
         <hr>
         {!! $task->description !!}
     </div>

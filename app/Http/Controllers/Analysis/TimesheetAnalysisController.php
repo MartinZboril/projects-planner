@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers\Analysis;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use App\DataTables\TimersDataTable;
 use App\Http\Controllers\Controller;
-use App\Services\Analysis\TimesheetAnalysis;
 
 class TimesheetAnalysisController extends Controller
 {
     /**
      * Display an analyze for timesheets.
      */
-    public function __invoke(): View
+    public function __invoke(TimersDataTable $timersDataTable): JsonResponse|View
     {
-        return view('analysis.timesheets', ['timers' => (new TimesheetAnalysis)->getAnalyze()]);
+        return $timersDataTable->with([
+            'view' => 'analysis',
+        ])->render('analysis.timesheets');
     }
 }

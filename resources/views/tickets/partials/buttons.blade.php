@@ -1,17 +1,19 @@
-@if (!$ticket->is_convert && $ticket->assignee_id && $ticket->status != App\Enums\TicketStatusEnum::close && $ticket->status != App\Enums\TicketStatusEnum::archive)
-    <a href="#" class="btn btn-{{ $buttonSize }} btn-primary" onclick="event.preventDefault(); document.getElementById('convert-ticket-{{ $ticket->id }}-to-task-form').submit();"><x-site.ui.icon icon="fas fa-tasks" :text="$hideButtonText ?? 'Convert to task'" /></a>
-@endif
-@if ($ticket->status === App\Enums\TicketStatusEnum::open)
-    <a href="#" class="btn btn-{{ $buttonSize }} btn-success" onclick="event.preventDefault(); document.getElementById('close-ticket-{{ $ticket->id }}-form').submit();"><x-site.ui.icon icon="fas fa-check" :text="$hideButtonText ?? 'Close'" /></a>
-@elseif ($ticket->status === App\Enums\TicketStatusEnum::close || $ticket->status === App\Enums\TicketStatusEnum::archive)
-    <a href="#" class="btn btn-{{ $buttonSize }} btn-info" onclick="event.preventDefault(); document.getElementById('open-ticket-{{ $ticket->id }}-form').submit();"><x-site.ui.icon icon="fas fa-bell" :text="$hideButtonText ?? 'Open'" /></a>
-@endif
-@if ($ticket->status != App\Enums\TicketStatusEnum::close && $ticket->status != App\Enums\TicketStatusEnum::archive)
-    <a href="#" class="btn btn-{{ $buttonSize }} btn-primary" onclick="event.preventDefault(); document.getElementById('archive-ticket-{{ $ticket->id }}-form').submit();"><x-site.ui.icon icon="fas fa-archive" text="" /></a>
-@endif
-<a href="#" class="btn btn-{{ $buttonSize }} btn-primary" onclick="event.preventDefault(); document.getElementById('{{ ($ticket->is_marked ? 'unmark' : 'mark') . '-ticket-' . $ticket->id . '-form'}}').submit();">
-    <i class="{{ ($ticket->is_marked ? 'fas' : 'far') }} fa-bookmark"></i>
+<a href="#" style="{{ !$ticket->is_convert && $ticket->assignee_id && $ticket->status != App\Enums\TicketStatusEnum::close && $ticket->status != App\Enums\TicketStatusEnum::archive ? '' : 'display: none;' }}" id="ticket-{{ $ticket->id }}-convert-to-task" class="btn btn-{{ $buttonSize }} btn-primary" onclick="convertTicket('{{ route('tickets.convert_to_task', $ticket) }}')">
+    <x-site.ui.icon icon="fas fa-tasks" :text="$hideButtonText ?? 'Convert to task'" />
 </a>
-<!-- Tickets forms -->
-@include('tickets.partials.forms')
-@include('tickets.forms.mark', ['id' => ($ticket->is_marked ? 'unmark' : 'mark') . '-ticket-' . $ticket->id . '-form'])
+
+<a href="#" style="{{ $ticket->status === App\Enums\TicketStatusEnum::open ? '' : 'display: none;' }}" id="ticket-{{ $ticket->id }}-close-status" class="btn btn-{{ $buttonSize }} btn-success" onclick="changeTicketStatus('{{ route('tickets.change_status', $ticket) }}', {{ App\Enums\TicketStatusEnum::close }}, '{{ $type }}', '{{ __('pages.content.tickets.statuses.close') }}', 'success', '{{ $tableIdentifier }}')">
+    <x-site.ui.icon icon="fas fa-check" :text="$hideButtonText ?? 'Close'" />
+</a>
+
+<a href="#" style="{{ $ticket->status === App\Enums\TicketStatusEnum::close || $ticket->status === App\Enums\TicketStatusEnum::archive ? '' : 'display: none;' }}" id="ticket-{{ $ticket->id }}-open-status" class="btn btn-{{ $buttonSize }} btn-info" onclick="changeTicketStatus('{{ route('tickets.change_status', $ticket) }}', {{ App\Enums\TicketStatusEnum::open }}, '{{ $type }}', '{{ __('pages.content.tickets.statuses.open') }}', 'info', '{{ $tableIdentifier }}')">
+    <x-site.ui.icon icon="fas fa-bell" :text="$hideButtonText ?? 'Open'" />
+</a>
+
+<a href="#" style="{{ $ticket->status != App\Enums\TicketStatusEnum::close && $ticket->status != App\Enums\TicketStatusEnum::archive ? '' : 'display: none;' }}" id="ticket-{{ $ticket->id }}-archive-status" class="btn btn-{{ $buttonSize }} btn-primary" onclick="changeTicketStatus('{{ route('tickets.change_status', $ticket) }}', {{ App\Enums\TicketStatusEnum::archive }}, '{{ $type }}', '{{ __('pages.content.tickets.statuses.archive') }}', 'primary', '{{ $tableIdentifier }}')">
+    <x-site.ui.icon icon="fas fa-archive" text="" />
+</a>
+
+<a href="#" class="btn btn-{{ $buttonSize }} btn-primary ticket-mark-button" onclick="markTicket('{{ route('tickets.mark', $ticket) }}', '{{ $type }}', '{{ $tableIdentifier }}')">
+    <i class="{{ ($ticket->is_marked ? 'fas' : 'far') }} fa-bookmark" id="ticket-{{ $ticket->id }}-marked"></i>
+</a>

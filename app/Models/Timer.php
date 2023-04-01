@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\{Builder, Model};
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Timer extends Model
@@ -29,6 +29,8 @@ class Timer extends Model
     protected $appends = [
         'total_time',
         'amount',
+        'stop_route',
+        'project_route',
     ];
 
     public function project(): BelongsTo
@@ -64,5 +66,15 @@ class Timer extends Model
     public function getAmountAttribute(): float
     {
         return round($this->totalTime * $this->rate->value, 2);
+    }
+
+    public function getStopRouteAttribute(): string
+    {
+        return (!$this->until) ? route('projects.timers.stop', ['project' => $this->project, 'timer' => $this]) : '';
+    }
+
+    public function getProjectRouteAttribute(): string
+    {
+        return route('projects.show', $this->project);
     }
 }

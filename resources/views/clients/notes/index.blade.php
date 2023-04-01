@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'toaster' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'client' => true, 'note' => true])
 
 @section('title', __('pages.title.client'))
 
@@ -20,7 +20,7 @@
                     </div>
                     <div class="card-body">
                         <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                        <x-note.card :notes="$client->notes" edit-form-route-name="clients.notes.edit" :parent="['client' => $client]" />
+                        <x-note.card :notes="$client->notes" edit-form-route-name="clients.notes.edit" :parent="['client' => $client]" type="client" />
                     </div>
                 </div>
             </div>

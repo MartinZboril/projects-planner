@@ -5,7 +5,7 @@
             <div class="card-body">
                 <div class="form-group required">
                     <label for="subject" class="control-label">Subject</label>
-                    <input type="text" name="subject" id="subject" class="form-control @error('subject') is-invalid @enderror" placeholder="subject" value="{{ old('subject', $ticket->subject ?? null) }}" autocomplete="off">
+                    <input type="text" name="subject" id="subject" class="form-control @error('subject') is-invalid @enderror" placeholder="subject" value="{{ old('subject', $ticket->subject ?? null) }}" >
                     @error('subject')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -67,7 +67,7 @@
                 </div> 
                 <div class="form-group required">
                     <label for="due_date" class="control-label">Due date</label>
-                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', ($ticket->due_date ?? false) ? $ticket->due_date->format('Y-m-d') : now()->addDays(3)->format('Y-m-d')) }}" autocomplete="off">
+                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', ($ticket->due_date ?? false) ? $ticket->due_date->format('Y-m-d') : now()->addDays(3)->format('Y-m-d')) }}" >
                     @error('due_date')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

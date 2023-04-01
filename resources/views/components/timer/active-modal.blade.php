@@ -9,7 +9,7 @@
             <!-- Modal body -->
             <div class="modal-body">
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table" id="active-timers-table">
                         <thead>
                             <tr>
                             <th>Project</th>
@@ -20,13 +20,16 @@
                         </thead>
                         <tbody>
                             @foreach($timers as $timer)
-                                <tr>
-                                    <td><a href="{{ route('projects.show', $timer->project) }}">{{ $timer->project->name }}</a></td>
+                                <tr id="timer-{{ $timer->id }}-modal-row">
+                                    <td><a href="{{ $timer->project_route }}">{{ $timer->project->name }}</a></td>
                                     <td>{{ $timer->rate->name }}</td>
                                     <td><span id="timer-{{ $timer->id }}-display" class="timer-record" data-since="{{ $timer->since }}"></span></td>
-                                    <td><a href="#" class="btn btn-sm btn-danger" onclick="event.preventDefault(); document.getElementById('stop-working-on-timer-{{ $timer->id }}').submit();"><i class="fas fa-stop"></i></a></td>
-                                </tr>
-                                @include('projects.timers.forms.stop', ['id' => 'stop-working-on-timer-' . $timer->id, 'project' => $timer->project, 'timer' => $timer])            
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-danger" onclick="stopWorkTimer('{{ route('projects.timers.stop', ['project' => $timer->project, 'timer' => $timer]) }}', 'modal', '{{ $modalId }}')">
+                                            <i class="fas fa-stop"></i>
+                                        </a>
+                                    </td>
+                                </tr>                                      
                             @endforeach
                         </tbody>
                     </table>
