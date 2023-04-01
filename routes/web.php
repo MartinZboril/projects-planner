@@ -24,7 +24,6 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/upload', App\Http\Controllers\Client\File\ClientFileUploaderController::class)->name('upload');    
         });
         // Notes
-        Route::patch('/notes/{note}/mark', App\Http\Controllers\Client\Note\ClientNoteMarkController::class)->name('notes.mark');
         Route::resource('notes', App\Http\Controllers\Client\Note\ClientNoteController::class)
             ->except(['show', 'destroy']);
         // Marking
@@ -122,7 +121,6 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('milestones', App\Http\Controllers\Project\Milestone\ProjectMilestoneController::class)
             ->except(['destroy']);     
         // Notes
-        Route::patch('/notes/{note}/mark', App\Http\Controllers\Project\Note\ProjectNoteMarkController::class)->name('notes.mark');
         Route::resource('notes', App\Http\Controllers\Project\Note\ProjectNoteController::class)
             ->except(['show', 'destroy']);
         // Tasks

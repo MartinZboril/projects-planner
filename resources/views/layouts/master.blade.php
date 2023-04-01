@@ -130,7 +130,10 @@
     @endif   
     @if(!empty($comment))
       <script src="{{ asset('js/helpers/comment.js') }}"></script>  
-    @endif                        
+    @endif 
+    @if(!empty($note))
+      <script src="{{ asset('js/actions/note.js') }}"></script>  
+    @endif                            
     <script src="{{ asset('js/timer.js') }}" defer></script>
     <script src="{{ mix('js/app.js') }}"></script>
     @stack('scripts')
