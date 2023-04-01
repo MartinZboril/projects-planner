@@ -35,6 +35,10 @@ class Fields extends Component
 
     public function render()
     {
-        return view('components.task.fields', ['projects' => Project::all(), 'users' => User::all(), 'milestones' => $this->project ?? false ? Milestone::where('project_id', $this->project->id)->get() : null, 'users' => User::all()]);
+        $milestones = $this->project ?? false 
+                            ? Milestone::where('project_id', $this->project->id)->get()
+                            : Milestone::where('project_id', $this->task->project_id)->get();
+
+        return view('components.task.fields', ['projects' => Project::all(), 'users' => User::all(), 'milestones' => $milestones, 'users' => User::all()]);
     }
 }

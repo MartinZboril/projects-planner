@@ -112,6 +112,27 @@
             });
 
             $('#description').summernote();
+
+            $('#project-id').on('change', function () {
+                var projectId = this.value;
+                $("#milestone-id").html('');
+                $.ajax({
+                    url: "{{ route('milestones.load') }}",
+                    type: "POST",
+                    data: {
+                        project_id: projectId,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function (result) {
+                        $('#milestone-id').html('<option value="">select milestone</option>');
+                        $.each(result.milestones, function (key, value) {
+                            $("#milestone-id").append('<option value="' + value
+                                .id + '">' + value.name + '</option>');
+                        });
+                    }
+                });
+            });            
         });
     </script>
 @endpush

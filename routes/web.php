@@ -40,6 +40,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/tickets', App\Http\Controllers\Dashboard\TicketDashboardController::class)->name('tickets');
         });
     });
+    // Milestones
+    Route::post('/milestones/load', App\Http\Controllers\MilestoneLoadByProjectController::class)->name('milestones.load');
     // Notes
     Route::patch('notes/{note}/mark', App\Http\Controllers\Note\NoteMarkController::class)->name('notes.mark');
     Route::resource('notes', App\Http\Controllers\Note\NoteController::class)
