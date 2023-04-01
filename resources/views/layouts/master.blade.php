@@ -133,7 +133,10 @@
     @endif 
     @if(!empty($note))
       <script src="{{ asset('js/actions/note.js') }}"></script>  
-    @endif                            
+    @endif       
+    @if(!empty($kanban))
+      <script src="{{ asset('js/actions/kanban.js') }}"></script>  
+    @endif                          
     <script src="{{ asset('js/timer.js') }}" defer></script>
     <script src="{{ mix('js/app.js') }}"></script>
     @stack('scripts')

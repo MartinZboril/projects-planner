@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'project' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'project' => true, 'kanban' => true])
 
 @section('title', __('pages.title.project'))
 

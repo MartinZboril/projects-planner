@@ -2,7 +2,7 @@
     <a href="{{ route('projects.tasks.show', ['project' => $task->project->id, 'task' => $task->id]) }}">{{ $task->name }}</a>
     @switch($task->status)
         @case(App\Enums\TaskStatusEnum::new)
-            <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('start-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-play" data-toggle="tooltip" data-placement="bottom" title="Start"></i></a>
+            <a href="#" class="btn btn-sm btn-tool" onclick="changeTaskStatus('{{ route('tasks.change_status', $task) }}', {{ App\Enums\TaskStatusEnum::in_progress }})"><i class="fas fa-play" data-toggle="tooltip" data-placement="bottom" title="Start"></i></a>
             @break
     
         @case(App\Enums\TaskStatusEnum::in_progress)
@@ -22,15 +22,15 @@
     
         @case(App\Enums\TaskStatusEnum::in_progress)
             @if ($task->paused)
-                <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('resume-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-hourglass-start" data-toggle="tooltip" data-placement="bottom" title="Resume"></i></a>
+                <a href="#" class="btn btn-sm btn-tool" onclick="pauseTask('{{ route('tasks.pause', $task) }}')"><i class="fas fa-hourglass-start" data-toggle="tooltip" data-placement="bottom" title="Resume"></i></a>
             @else
-                <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('complete-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-check" data-toggle="tooltip" data-placement="bottom" title="Complete"></i></a>
-                <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('stop-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-stop" data-toggle="tooltip" data-placement="bottom" title="Stop"></i></a>
+                <a href="#" class="btn btn-sm btn-tool" onclick="changeTaskStatus('{{ route('tasks.change_status', $task) }}', {{ App\Enums\TaskStatusEnum::complete }})"><i class="fas fa-check" data-toggle="tooltip" data-placement="bottom" title="Complete"></i></a>
+                <a href="#" class="btn btn-sm btn-tool" onclick="pauseTask('{{ route('tasks.pause', $task) }}')"><i class="fas fa-stop" data-toggle="tooltip" data-placement="bottom" title="Stop"></i></a>
             @endif
             @break
             
         @case(App\Enums\TaskStatusEnum::complete)
-            <a href="#" class="btn btn-sm btn-tool" onclick="event.preventDefault(); document.getElementById('return-working-on-task-{{ $task->id }}-form').submit();"><i class="fas fa-undo" data-toggle="tooltip" data-placement="bottom" title="Return"></i></a>
+            <a href="#" class="btn btn-sm btn-tool" onclick="changeTaskStatus('{{ route('tasks.change_status', $task) }}', {{ App\Enums\TaskStatusEnum::new }})"><i class="fas fa-undo" data-toggle="tooltip" data-placement="bottom" title="Return"></i></a>
             @break
                       
     @endswitch
