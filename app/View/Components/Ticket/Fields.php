@@ -22,7 +22,12 @@ class Fields extends Component
 
     public function render()
     {
-        return view('components.ticket.fields', ['projects' => Project::all(), 'users' => User::all()]);
+        $users = $this->project ?? false 
+                    ? $this->project->team
+                    : ($this->ticket->project ?? false ? $this->ticket->project->team : []);
+
+
+        return view('components.ticket.fields', ['projects' => Project::all(), 'users' => $users]);
     }
     
     private function getCloseRoute(?Ticket $ticket, ?Project $project, string $type): string

@@ -129,6 +129,28 @@
                 placeholder: 'select priority'
             });
 
+            $('#project-id').on('change', function () {
+                const projectId = this.value;
+                $("#assignee-id").html('');
+                $.ajax({
+                    url: "{{ route('users.load') }}",
+                    type: "POST",
+                    data: {
+                        project_id: projectId,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function (result) {
+                        $('#assignee-id').html('<option value="">select assignee</option>');
+                        $.each(result.users, function (key, value) {
+                            $("#assignee-id").append('<option value="' + value
+                                .id + '">' + value.fullname + '</option>');
+                        });
+                    }
+                });                
+            });            
+
+
             $('#message').summernote();
         });
     </script>

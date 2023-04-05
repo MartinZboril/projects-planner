@@ -92,6 +92,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('tickets', App\Http\Controllers\Ticket\TicketController::class)
         ->except(['destroy']);
     // Users
+    Route::post('/users/load', App\Http\Controllers\UserLoadByProjectController::class)->name('users.load');
     Route::group(['prefix' => 'users/{user}', 'as' => 'users.'], function () {
         // Rates
         Route::resource('rates', App\Http\Controllers\User\Rate\UserRateController::class)

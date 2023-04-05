@@ -9,7 +9,7 @@ use App\Services\FileService;
 
 class TaskService
 {
-    public function __construct(private ProjectUserService $projectUserService)
+    public function __construct()
     {
     }
 
@@ -24,9 +24,6 @@ class TaskService
         $inputs['milestone_id'] = $inputs['milestone_id'] ?? null;
         // Save task
         $task->fill($inputs)->save();
-        // Store tasks projects users
-        $this->projectUserService->handleStoreUser($task->project, $task->author);
-        $this->projectUserService->handleStoreUser($task->project, $task->user);
 
         return $task;
     }

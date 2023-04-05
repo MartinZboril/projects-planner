@@ -9,7 +9,7 @@ use App\Services\FileService;
 
 class TicketService
 {
-    public function __construct(private ProjectUserService $projectUserService)
+    public function __construct()
     {
     }
 
@@ -24,11 +24,6 @@ class TicketService
         $inputs['assignee_id'] = $inputs['assignee_id'] ?? null;
         // Save ticket
         $ticket->fill($inputs)->save();
-        // Store tickets projects users
-        $this->projectUserService->handleStoreUser($ticket->project, $ticket->reporter);
-        if($ticket->assignee_id) {
-            $this->projectUserService->handleStoreUser($ticket->project, $ticket->assignee);
-        }
 
         return $ticket;
     }

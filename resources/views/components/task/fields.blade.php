@@ -114,7 +114,7 @@
             $('#description').summernote();
 
             $('#project-id').on('change', function () {
-                var projectId = this.value;
+                const projectId = this.value;
                 $("#milestone-id").html('');
                 $.ajax({
                     url: "{{ route('milestones.load') }}",
@@ -132,6 +132,23 @@
                         });
                     }
                 });
+                $("#user-id").html('');
+                $.ajax({
+                    url: "{{ route('users.load') }}",
+                    type: "POST",
+                    data: {
+                        project_id: projectId,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function (result) {
+                        $('#user-id').html('<option value="">select user</option>');
+                        $.each(result.users, function (key, value) {
+                            $("#user-id").append('<option value="' + value
+                                .id + '">' + value.fullname + '</option>');
+                        });
+                    }
+                });                
             });            
         });
     </script>
