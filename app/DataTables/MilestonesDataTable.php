@@ -53,12 +53,12 @@ class MilestonesDataTable extends DataTable
     {
         return $model->when(
             $this->project_id ?? false,
-            fn ($query, $value) => $query->where('project_id', $value)
+            fn ($query, $value) => $query->where('milestones.project_id', $value)
         )->when(
             $this->overdue ?? false,
-            fn ($query, $value) => $query->where('due_date', '<=', date('Y-m-d'))->whereHas('tasks', function (QueryBuilder $query) {
+            fn ($query, $value) => $query->where('milestones.due_date', '<=', date('Y-m-d'))->whereHas('tasks', function (QueryBuilder $query) {
                 $query->where('status', '!=', TaskStatusEnum::complete->value);
-            })->orWhere('due_date', '<=', date('Y-m-d'))->has('tasks', '=', 0)
+            })->orWhere('milestones.due_date', '<=', date('Y-m-d'))->has('tasks', '=', 0)
         )->with('owner', 'project')->select('milestones.*')->newQuery();
     }
 

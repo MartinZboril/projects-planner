@@ -60,7 +60,7 @@ class TicketService
      */
     public function handleConvert(Ticket $ticket): void
     {
-        $ticket->update(['status' => TicketStatusEnum::archive, 'is_convert' => true]);
+        $ticket->update(['status' => TicketStatusEnum::convert]);
     }
 
     /**

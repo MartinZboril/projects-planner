@@ -44,7 +44,6 @@ function changeTicketStatus(url, status, type, featureText, featureBadge, tableI
                 const id = data.ticket.id;
                 const status = data.ticket.status;
                 const overdue = data.ticket.overdue; 
-                const converted = data.ticket.is_convert;
                 const assignee = data.ticket.assignee_id;
                 // Buttons Ids
                 const openButton = $('#ticket-' + id + '-open-status');
@@ -74,7 +73,7 @@ function changeTicketStatus(url, status, type, featureText, featureBadge, tableI
                         archiveButton.hide();
                 }
                 // Display convert to task
-                if (!converted && assignee && status != 2 && status != 3) {
+                if (status != 4 && assignee && status != 2 && status != 3) {
                     convertToTaskButton.show();
                 } else {
                     convertToTaskButton.hide();

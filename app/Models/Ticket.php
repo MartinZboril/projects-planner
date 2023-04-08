@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use Illuminate\Database\Eloquent\{Builder, Model};
+use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Enums\{TicketPriorityEnum, TicketTypeEnum, TicketStatusEnum};
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasOne};
 
 class Ticket extends Model
 {
@@ -65,6 +65,11 @@ class Ticket extends Model
     public function comments(): BelongsToMany
     {
         return $this->belongsToMany(Comment::class, 'tickets_comments', 'ticket_id', 'comment_id')->orderByDesc('created_at');
+    }
+
+    public function task(): HasOne
+    {
+        return $this->hasOne(Task::class, 'ticket_id');
     }
     
     public function scopeStatus(Builder $query, TicketStatusEnum $type): Builder

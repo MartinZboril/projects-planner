@@ -34,6 +34,7 @@ class Task extends Model
         'author_id' => ['required', 'integer', 'exists:users,id'],
         'user_id' => ['required', 'integer', 'exists:users,id'],
         'milestone_id' => ['nullable', 'integer', 'exists:milestones,id'],
+        'ticket_id' => ['nullable', 'integer', 'exists:tickets,id'],
         'status' => ['required', 'integer'],
         'name' => ['required', 'string', 'max:255'],
         'start_date' => ['required', 'date'],
@@ -59,6 +60,11 @@ class Task extends Model
     public function milestone(): BelongsTo
     {
         return $this->belongsTo(Milestone::class, 'milestone_id');
+    }
+
+    public function ticket(): BelongsTo
+    {
+        return $this->belongsTo(Ticket::class, 'ticket_id');
     }
 
     public function files(): BelongsToMany

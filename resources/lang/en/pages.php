@@ -45,6 +45,7 @@ return [
                 'open' => 'Open',
                 'close' => 'Closed',
                 'archive' => 'Archived',
+                'convert' => 'Converted',
             ],
             'types' => [
                 'error' => 'Error',

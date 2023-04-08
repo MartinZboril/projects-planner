@@ -45,7 +45,7 @@ class TimersDataTable extends DataTable
     {
         return $model->when(
             $this->project_id ?? false,
-            fn ($query, $value) => $query->where('project_id', $value)
+            fn ($query, $value) => $query->where('timers.project_id', $value)
         )->with('project', 'rate', 'user')->select('timers.*')->newQuery();
     }
 

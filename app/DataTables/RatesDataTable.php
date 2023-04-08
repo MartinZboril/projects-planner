@@ -35,7 +35,7 @@ class RatesDataTable extends DataTable
     {
         return $model->when(
             $this->user_id ?? false,
-            fn ($query, $value) => $query->where('user_id', $value)
+            fn ($query, $value) => $query->where('rates.user_id', $value)
         )->select('id', 'user_id', 'name', 'value', 'is_active')->newQuery();
     }
 

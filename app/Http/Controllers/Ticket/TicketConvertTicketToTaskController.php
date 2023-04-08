@@ -32,6 +32,7 @@ class TicketConvertTicketToTaskController extends Controller
                 'description' => $ticket->message,
                 'is_stopped' => 0,
                 'is_returned' => 0,
+                'ticket_id' => $ticket->id,
             ]);
             $this->ticketService->handleConvert($ticket);  
         } catch (Exception $exception) {

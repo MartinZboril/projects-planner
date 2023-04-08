@@ -4,6 +4,11 @@
         <span id="task-status-badge">
             <x-task.ui.status-badge :text="false" :$task />
         </span>
+        @if($task->ticket_id)
+            <span class="badge badge-info ml-1" style="font-size:14px;">
+                Converted
+            </span>
+        @endif        
         <span style="{{ $task->overdue ? '' : 'display: none;' }}font-size:14px;" id="task-{{ $task->id }}-overdue-badge" class="badge badge-danger ml-1">Overdue</span>
     </div>
     <div class="card-body">
@@ -38,6 +43,7 @@
         @if($task->milestone)
             <span class="d-block">Milestone: <b><a href="{{ route('projects.milestones.show', ['project' => $task->milestone->project, 'milestone' => $task->milestone]) }}">{{ $task->milestone_label }}</a></b></span>
         @endif
+        @if($task->ticket_id)<span class="d-block">From Ticket: <b><a href="{{ route(($project ?? false) ? 'projects.tickets.show' : 'tickets.show', ($project ?? false) ? ['project' => $task->project, 'ticket' => $task->ticket] : $task->ticket) }}">{{ $task->ticket->subject }}</a></b></span>@endif
         <span class="d-block">User: <b><a href="{{ route('users.show', $task->user) }}">{{ $task->user->full_name }}</a></b></span>
         <span class="d-block">Author: <b><a href="{{ route('users.show', $task->author) }}">{{ $task->author->full_name }}</a></b></span>
         <span class="d-block">Status: <b id="task-status-text"><x-task.ui.status-badge :text="true" :$task /></b></span>
