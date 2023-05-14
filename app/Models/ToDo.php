@@ -6,11 +6,11 @@ use App\Traits\Scopes\OverdueRecords;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\{Builder, Model};
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ToDo extends Model
 {
-    
-    use HasFactory, OverdueRecords;
+    use HasFactory, OverdueRecords, SoftDeletes;
 
     protected $table = 'todos';
     

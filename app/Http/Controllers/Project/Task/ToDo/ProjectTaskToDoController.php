@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\Project\Task\ToDo;
 
 use Exception;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ToDo\{StoreToDoRequest, UpdateToDoRequest};
-use App\Models\{Project, Task, ToDo};
 use App\Traits\FlashTrait;
+use Illuminate\Http\JsonResponse;
 use App\Services\Data\ToDoService;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use App\Models\{Project, Task, ToDo};
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\ToDo\DestroyToDoRequest;
+use App\Http\Requests\ToDo\{StoreToDoRequest, UpdateToDoRequest};
 
 class ProjectTaskToDoController extends Controller
 {
@@ -40,9 +42,7 @@ class ProjectTaskToDoController extends Controller
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
-        return $request->has('save_and_close')
-            ? redirect()->route('projects.tasks.index', $project)
-            : redirect()->route('projects.tasks.show', ['project' => $project, 'task' => $task]);
+        return redirect()->route('projects.tasks.show', ['project' => $project, 'task' => $task]);
     }
 
     /**
@@ -65,8 +65,29 @@ class ProjectTaskToDoController extends Controller
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
-        return $request->has('save_and_close')
-            ? redirect()->route('projects.tasks.index', $project)
-            : redirect()->route('projects.tasks.show', ['project' => $project, 'task' => $task]);
+        return redirect()->route('projects.tasks.show', ['project' => $project, 'task' => $task]);
+    }
+
+    /**
+     * Remove the todo from storage.
+     */
+    public function destroy(DestroyToDoRequest $request, Project $project, Task $task, ToDo $todo): JsonResponse|RedirectResponse
+    {
+        try {
+            $todo->delete();
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
+
+        if ($request->redirect ?? false) {
+            $this->flash(__('messages.todo.delete'), 'danger');
+            return redirect()->route('projects.tasks.show', ['project' => $project, 'task' => $task]);
+        }
+
+        return response()->json([
+            'message' => __('messages.todo.delete'),
+            'todo' => $todo,
+        ]);
     }
 }

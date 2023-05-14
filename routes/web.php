@@ -73,7 +73,7 @@ Route::middleware(['auth'])->group(function () {
         // ToDos
         Route::patch('/todos/{todo}/check', App\Http\Controllers\Task\ToDo\TaskToDoCheckController::class)->name('todos.check');
         Route::resource('todos', App\Http\Controllers\Task\ToDo\TaskToDoController::class)
-            ->except(['index', 'show', 'destroy']);
+            ->except(['index', 'show']);
     });
     Route::resource('tasks', App\Http\Controllers\Task\TaskController::class)
         ->except(['destroy']);
@@ -138,7 +138,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/files/upload', App\Http\Controllers\Project\Task\ProjectTaskFileUploaderController::class)->name('files.upload');
                 // ToDos
                 Route::resource('todos', App\Http\Controllers\Project\Task\ToDo\ProjectTaskToDoController::class)
-                    ->except(['index', 'show', 'destroy']);
+                    ->except(['index', 'show']);
             });
         });
         Route::resource('tasks', App\Http\Controllers\Project\Task\ProjectTaskController::class)

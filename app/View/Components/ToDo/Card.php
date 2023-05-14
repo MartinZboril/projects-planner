@@ -18,6 +18,9 @@ class Card extends Component
                                     ? route('projects.tasks.todos.edit', ['project' => $todo->task->project, 'task' => $todo->task, 'todo' => $todo])
                                     : route('tasks.todos.edit', ['task' => $todo->task, 'todo' => $todo]);
             $todo->check_route = route('tasks.todos.check', ['task' => $todo->task, 'todo' => $todo]);
+            $todo->destroy_route = ($type === 'projects')
+                                    ? route('projects.tasks.todos.destroy', ['project' => $todo->task->project, 'task' => $todo->task, 'todo' => $todo])
+                                    : route('tasks.todos.destroy', ['task' => $todo->task, 'todo' => $todo]);
         });        
         $this->createFormRoute = $createFormRoute;
     }
