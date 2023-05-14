@@ -59,6 +59,17 @@
             <div class="card-body">
             </div>
         </div>
+        @if ($type === 'create')
+            <div class="card card-primary card-outline">
+                <div class="card-header">Files</div>
+                <div class="card-body">
+                    <input type="file" name="files[]" multiple class="@error('files'){{ 'is-invalid' }}@enderror"> 
+                    @error('files')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>            
+        @endif          
         <div class="card">
             <div class="card-body">
                 <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $closeRoute }}" class="cancel-btn">Close</a></span>

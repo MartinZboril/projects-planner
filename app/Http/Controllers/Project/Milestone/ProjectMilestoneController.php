@@ -46,7 +46,7 @@ class ProjectMilestoneController extends Controller
     public function store(StoreMilestoneRequest $request, Project $project): RedirectResponse
     {
         try {
-            $milestone = $this->milestoneService->handleSave(new Milestone, $request->validated());
+            $milestone = $this->milestoneService->handleSave(new Milestone, $request->validated(), $request->file('files'));
             $this->flash(__('messages.milestone.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

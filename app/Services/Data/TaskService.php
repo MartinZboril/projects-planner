@@ -16,7 +16,7 @@ class TaskService
     /**
      * Save data for task.
      */
-    public function handleSave(Task $task, array $inputs): Task
+    public function handleSave(Task $task, array $inputs, ?Array $uploadedFiles=[]): Task
     {
         // Prepare fields
         $inputs['status'] = $task->status ?? TaskStatusEnum::new;
@@ -24,7 +24,10 @@ class TaskService
         $inputs['milestone_id'] = $inputs['milestone_id'] ?? null;
         // Save task
         $task->fill($inputs)->save();
-
+        // Upload files
+        if ($uploadedFiles) {
+            $this->handleUploadFiles($task, $uploadedFiles);
+        } 
         return $task;
     }
     

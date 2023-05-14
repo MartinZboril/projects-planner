@@ -46,7 +46,7 @@ class ProjectTicketController extends Controller
     public function store(StoreTicketRequest $request, Project $project): RedirectResponse
     {
         try {
-            $ticket = $this->ticketService->handleSave(new Ticket, $request->validated());
+            $ticket = $this->ticketService->handleSave(new Ticket, $request->validated(), $request->file('files'));
             $this->flash(__('messages.ticket.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

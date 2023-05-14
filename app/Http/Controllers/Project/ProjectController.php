@@ -43,7 +43,7 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request): RedirectResponse
     {
         try {
-            $project = $this->projectService->handleSave(new Project, $request->validated());
+            $project = $this->projectService->handleSave(new Project, $request->validated(), $request->file('files'));
             $this->flash(__('messages.project.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

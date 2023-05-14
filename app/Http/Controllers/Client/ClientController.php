@@ -43,7 +43,7 @@ class ClientController extends Controller
     public function store(StoreClientRequest $request): RedirectResponse
     {
         try {
-            $client = $this->clientService->handleSave(new Client, $request->validated(), $request->file('logo'));
+            $client = $this->clientService->handleSave(new Client, $request->validated(), $request->file('logo'), $request->file('files'));
             $this->flash(__('messages.client.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

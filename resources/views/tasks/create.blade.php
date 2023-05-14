@@ -12,7 +12,7 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Form -->
-                <form action="{{ route('tasks.store') }}" method="post">
+                <form action="{{ route('tasks.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('POST')
                     <x-task.fields type="create" />

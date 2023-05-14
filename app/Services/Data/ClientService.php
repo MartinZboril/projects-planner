@@ -11,7 +11,7 @@ class ClientService
     /**
      * Save data for client.
      */
-    public function handleSave(Client $client, Array $inputs, ?UploadedFile $uploadedFile)
+    public function handleSave(Client $client, Array $inputs, ?UploadedFile $uploadedFile, ?Array $uploadedFiles=[])
     {
         // Upload logo
         if ($uploadedFile) {
@@ -20,6 +20,10 @@ class ClientService
         }
         // Store fields
         $client->fill($inputs)->save();
+        // Upload files
+        if ($uploadedFiles) {
+            $this->handleUploadFiles($client, $uploadedFiles);
+        }
         // Remove old logo
         if ($oldLogoId ?? false) {
             (new FileService)->handleRemoveFile($oldLogoId);

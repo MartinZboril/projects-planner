@@ -195,6 +195,17 @@
                 </div>
             </div>
         </div>
+        @if ($type === 'create')
+            <div class="card card-primary card-outline">
+                <div class="card-header">Files</div>
+                <div class="card-body">
+                    <input type="file" name="files[]" multiple class="@error('files'){{ 'is-invalid' }}@enderror"> 
+                    @error('files')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>            
+        @endif        
         <div class="card card-primary card-outline">
             <div class="card-header">Note</div>
             <div class="card-body">

@@ -16,7 +16,7 @@ class TicketService
     /**
      * Save data for ticket.
      */
-    public function handleSave(Ticket $ticket, array $inputs): Ticket
+    public function handleSave(Ticket $ticket, array $inputs, ?Array $uploadedFiles=[]): Ticket
     {
         // Prepare fields
         $inputs['status'] = $ticket->status ?? TicketStatusEnum::open;
@@ -24,7 +24,10 @@ class TicketService
         $inputs['assignee_id'] = $inputs['assignee_id'] ?? null;
         // Save ticket
         $ticket->fill($inputs)->save();
-
+        // Upload files
+        if ($uploadedFiles) {
+            $this->handleUploadFiles($ticket, $uploadedFiles);
+        } 
         return $ticket;
     }
 
