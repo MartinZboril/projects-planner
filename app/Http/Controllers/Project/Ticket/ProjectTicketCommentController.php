@@ -24,10 +24,7 @@ class ProjectTicketCommentController extends Controller
     public function store(StoreCommentRequest $request, Project $project, Ticket $ticket)
     {
         try {
-            $this->ticketService->handleSaveComment(
-                $ticket,
-                $this->commentService->handleSave(new Comment, $request->validated(), $request->file('files'))
-            );
+            $this->commentService->handleSave(new Comment, $request->validated(), $ticket, $request->file('files'));
             $this->flash(__('messages.comment.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
@@ -42,7 +39,7 @@ class ProjectTicketCommentController extends Controller
     public function update(UpdateCommentRequest $request, Project $project, Ticket $ticket, Comment $comment)
     {
         try {
-            $comment = $this->commentService->handleSave($comment, $request->validated(), $request->file('files'));
+            $comment = $this->commentService->handleSave($comment, $request->validated(), $ticket, $request->file('files'));
             $this->flash(__('messages.comment.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

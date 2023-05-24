@@ -38,14 +38,6 @@ class ProjectService
     }
 
     /**
-     * Save projects comments.
-     */
-    public function handleSaveComment(Project $project, Comment $comment): void
-    {
-        $project->comments()->save($comment);
-    }
-
-    /**
      * Save projects notes.
      */
     public function handleSaveNote(Project $project, Note $note): void

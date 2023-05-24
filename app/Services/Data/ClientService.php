@@ -41,14 +41,6 @@ class ClientService
             (new FileService)->handleUpload($uploadedFile, 'clients/files', $client);
         }
     }
-    
-    /**
-     * Save clients comments.
-     */        
-    public function handleSaveComment(Client $client, Comment $comment): void
-    {
-        $client->comments()->save($comment);
-    }
 
     /**
      * Save clients notes.

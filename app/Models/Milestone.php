@@ -43,9 +43,9 @@ class Milestone extends Model
         return $this->morphMany(File::class, 'fileable');
     }
     
-    public function comments(): BelongsToMany
+    public function comments()
     {
-        return $this->belongsToMany(Comment::class, 'milestones_comments', 'milestone_id', 'comment_id')->orderByDesc('created_at');
+        return $this->morphMany(Comment::class, 'commentable');
     }
     
     public function tasks(): HasMany

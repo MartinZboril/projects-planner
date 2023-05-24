@@ -42,14 +42,6 @@ class TaskService
     }
 
     /**
-     * Save tasks comments.
-     */
-    public function handleSaveComment(Task $task, Comment $comment): void
-    {
-        $task->comments()->save($comment);
-    }
-
-    /**
      * Change working status of the task.
      */
     public function handleChangeStatus(Task $task, int $status): Task

@@ -25,14 +25,6 @@ class MilestoneService
     }
 
     /**
-     * Save milestones comments.
-     */
-    public function handleSaveComment(Milestone $milestone, Comment $comment): void
-    {
-        $milestone->comments()->save($comment);
-    }
-    
-    /**
      * Upload milestones files.
      */
     public function handleUploadFiles(Milestone $milestone, Array $uploadedFiles): void

@@ -62,9 +62,9 @@ class Ticket extends Model
         return $this->morphMany(File::class, 'fileable');
     }
         
-    public function comments(): BelongsToMany
+    public function comments()
     {
-        return $this->belongsToMany(Comment::class, 'tickets_comments', 'ticket_id', 'comment_id')->orderByDesc('created_at');
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
     public function task(): HasOne

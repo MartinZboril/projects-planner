@@ -11,7 +11,7 @@ class Comment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'content',
+        'commentable_id', 'commentable_type', 'user_id', 'content',
     ]; 
 
     public const VALIDATION_RULES = [
@@ -22,6 +22,11 @@ class Comment extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function commentable()
+    {
+        return $this->morphTo();
     }
 
     public function files()

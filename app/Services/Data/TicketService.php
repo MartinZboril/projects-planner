@@ -4,7 +4,7 @@ namespace App\Services\Data;
 
 use Illuminate\Support\Facades\Auth;
 use App\Enums\TicketStatusEnum;
-use App\Models\{Comment, Ticket};
+use App\Models\Ticket;
 use App\Services\FileService;
 
 class TicketService
@@ -39,14 +39,6 @@ class TicketService
         foreach ($uploadedFiles as $uploadedFile) {
             (new FileService)->handleUpload($uploadedFile, 'tickets/files', $ticket);
         }
-    }
-
-    /**
-     * Save tickets comments.
-     */
-    public function handleSaveComment(Ticket $ticket, Comment $comment): void
-    {
-        $ticket->comments()->save($comment);
     }
 
     /**
