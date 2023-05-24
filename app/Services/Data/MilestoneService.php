@@ -38,7 +38,7 @@ class MilestoneService
     public function handleUploadFiles(Milestone $milestone, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            $milestone->files()->save((new FileService)->handleUpload($uploadedFile, 'milestones/files'));
+            (new FileService)->handleUpload($uploadedFile, 'milestones/files', $milestone);
         }
     }
 

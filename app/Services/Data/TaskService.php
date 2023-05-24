@@ -37,7 +37,7 @@ class TaskService
     public function handleUploadFiles(Task $task, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            $task->files()->save((new FileService)->handleUpload($uploadedFile, 'tasks/files'));
+            (new FileService)->handleUpload($uploadedFile, 'tasks/files', $task);
         }
     }
 

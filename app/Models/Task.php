@@ -67,9 +67,9 @@ class Task extends Model
         return $this->belongsTo(Ticket::class, 'ticket_id');
     }
 
-    public function files(): BelongsToMany
+    public function files()
     {
-        return $this->belongsToMany(File::class, 'tasks_files', 'task_id', 'file_id')->orderByDesc('created_at');
+        return $this->morphMany(File::class, 'fileable');
     }
         
     public function comments(): BelongsToMany

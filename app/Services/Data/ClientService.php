@@ -38,7 +38,7 @@ class ClientService
     public function handleUploadFiles(Client $client, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            $client->files()->save((new FileService)->handleUpload($uploadedFile, 'clients/files'));
+            (new FileService)->handleUpload($uploadedFile, 'clients/files', $client);
         }
     }
     

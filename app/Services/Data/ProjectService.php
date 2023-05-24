@@ -33,7 +33,7 @@ class ProjectService
     public function handleUploadFiles(Project $project, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            $project->files()->save((new FileService)->handleUpload($uploadedFile, 'projects/files'));
+            (new FileService)->handleUpload($uploadedFile, 'projects/files', $project);
         }
     }
 

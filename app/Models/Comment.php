@@ -24,8 +24,8 @@ class Comment extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function files(): BelongsToMany
+    public function files()
     {
-        return $this->belongsToMany(File::class, 'comments_files', 'comment_id', 'file_id');
+        return $this->morphMany(File::class, 'fileable');
     }
 }

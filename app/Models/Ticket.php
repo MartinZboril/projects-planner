@@ -57,9 +57,9 @@ class Ticket extends Model
         return $this->belongsTo(User::class, 'assignee_id');
     }
 
-    public function files(): BelongsToMany
+    public function files()
     {
-        return $this->belongsToMany(File::class, 'tickets_files', 'ticket_id', 'file_id')->orderByDesc('created_at');
+        return $this->morphMany(File::class, 'fileable');
     }
         
     public function comments(): BelongsToMany

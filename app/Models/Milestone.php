@@ -38,9 +38,9 @@ class Milestone extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-    public function files(): BelongsToMany
+    public function files()
     {
-        return $this->belongsToMany(File::class, 'milestones_files', 'milestone_id', 'file_id')->orderByDesc('created_at');
+        return $this->morphMany(File::class, 'fileable');
     }
     
     public function comments(): BelongsToMany

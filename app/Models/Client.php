@@ -63,9 +63,9 @@ class Client extends Model
         return $this->belongsToMany(Comment::class, 'clients_comments', 'client_id', 'comment_id')->orderByDesc('created_at');
     }
 
-    public function files(): BelongsToMany
+    public function files()
     {
-        return $this->belongsToMany(File::class, 'clients_files', 'client_id', 'file_id')->orderByDesc('created_at');
+        return $this->morphMany(File::class, 'fileable');
     }
 
     public function getEmailLabelAttribute(): string

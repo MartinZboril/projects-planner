@@ -22,6 +22,11 @@ class File extends Model
         'file_path' => ['required', 'max:255'],
     ];
 
+    public function fileable()
+    {
+        return $this->morphTo();
+    }
+
     public function getKilobytesSizeAttribute(): string
     {
         return round($this->size / 1000, 2);

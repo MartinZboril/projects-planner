@@ -31,7 +31,7 @@ class CommentService
     private function storeFiles(Comment $comment, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            $comment->files()->save((new FileService)->handleUpload($uploadedFile, 'comments'));
+            (new FileService)->handleUpload($uploadedFile, 'comments', $comment);
         }
     }
 }

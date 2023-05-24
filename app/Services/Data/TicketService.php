@@ -37,7 +37,7 @@ class TicketService
     public function handleUploadFiles(Ticket $ticket, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            $ticket->files()->save((new FileService)->handleUpload($uploadedFile, 'tasks/files'));
+            (new FileService)->handleUpload($uploadedFile, 'tickets/files', $ticket);
         }
     }
 
