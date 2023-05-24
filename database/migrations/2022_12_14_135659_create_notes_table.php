@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('noteable_id')->nullable();
+            $table->string('noteable_type')->nullable();   
             $table->foreignId('user_id');
             $table->string('name');
             $table->text('content');

@@ -42,10 +42,7 @@ class ProjectNoteController extends Controller
     public function store(StoreNoteRequest $request, Project $project): RedirectResponse
     {
         try {
-            $this->projectService->handleSaveNote(
-                $project,
-                $this->noteService->handleSave(new Note, $request->validated())
-            );
+            $this->noteService->handleSave(new Note, $request->validated(), $project);
             $this->flash(__('messages.note.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
@@ -68,7 +65,7 @@ class ProjectNoteController extends Controller
     public function update(UpdateNoteRequest $request, Project $project, Note $note): RedirectResponse
     {
         try {
-            $this->noteService->handleSave($note, $request->validated());
+            $this->noteService->handleSave($note, $request->validated(), $project);
             $this->flash(__('messages.note.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

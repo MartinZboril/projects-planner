@@ -53,9 +53,9 @@ class Client extends Model
         return $this->belongsTo(File::class, 'logo_id');
     }
 
-    public function notes(): BelongsToMany
+    public function notes()
     {
-        return $this->belongsToMany(Note::class, 'clients_notes', 'client_id', 'note_id')->visible()->orderByDesc('is_marked');
+        return $this->morphMany(Note::class, 'noteable');
     }
 
     public function comments()

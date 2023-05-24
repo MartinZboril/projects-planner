@@ -36,15 +36,7 @@ class ProjectService
             (new FileService)->handleUpload($uploadedFile, 'projects/files', $project);
         }
     }
-
-    /**
-     * Save projects notes.
-     */
-    public function handleSaveNote(Project $project, Note $note): void
-    {
-        $project->notes()->save($note);
-    }
-
+    
     /**
      * Change working status of the project.
      */

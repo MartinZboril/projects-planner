@@ -43,14 +43,6 @@ class ClientService
     }
 
     /**
-     * Save clients notes.
-     */
-    public function handleSaveNote(Client $client, Note $note): void
-    {
-        $client->notes()->save($note);
-    }
-
-    /**
      * Mark selected client.
      */
     public function handleMark(Client $client): Client

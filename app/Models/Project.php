@@ -104,9 +104,9 @@ class Project extends Model
         return $this->hasMany(Ticket::class, 'project_id');
     }
 
-    public function notes(): BelongsToMany
+    public function notes()
     {
-        return $this->belongsToMany(Note::class, 'projects_notes', 'project_id', 'note_id')->visible()->orderByDesc('is_marked');
+        return $this->morphMany(Note::class, 'noteable');
     }
 
     public function scopeStatus(Builder $query, ProjectStatusEnum $type): Builder

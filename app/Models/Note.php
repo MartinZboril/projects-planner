@@ -12,7 +12,7 @@ class Note extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'name', 'content', 'is_private', 'is_basic', 'is_marked',
+        'noteable_id', 'noteable_type', 'user_id', 'name', 'content', 'is_private', 'is_basic', 'is_marked',
     ];
 
     public const VALIDATION_RULES = [
@@ -27,6 +27,11 @@ class Note extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function fileable()
+    {
+        return $this->morphTo();
     }
 
     public function scopeVisible(Builder $query): Builder

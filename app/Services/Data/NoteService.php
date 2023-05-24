@@ -4,19 +4,26 @@ namespace App\Services\Data;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\Note;
+use Illuminate\Database\Eloquent\Model;
 
 class NoteService
 {
     /**
      * Save data for note.
      */
-    public function handleSave(Note $note, array $inputs, bool $basic = false): Note
+    public function handleSave(Note $note, array $inputs, Model $model=null, bool $basic = false): Note
     {
         // Prepare fields
         $inputs['user_id'] = $note->user_id ?? Auth::id();
         $inputs['is_private'] = $inputs['is_private'] ?? false;
         $inputs['is_marked'] = $inputs['is_marked'] ?? false;
         $inputs['is_basic'] = $basic;
+
+        if ($model ?? false) {
+            $inputs['noteable_id'] = $model->id;
+            $inputs['noteable_type'] = $model::class;                
+        }
+
         // Save note
         $note->fill($inputs)->save();
         return $note;
