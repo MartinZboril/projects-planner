@@ -36,7 +36,7 @@ function startWorkTimer(url, projectId, rateId, type) {
             } else {
                 $('#timer-nav').hide();
             }     
-            $('#active-timers-table tr:last').after('<tr id="timer-' + timer.id + '-modal-row"><td><a href="' + timer.project_route + '">' + project.name + '</a></td><td>' + timer.rate.name + '</td><td><span id="timer-' + timer.id + '-display" class="timer-record" data-since="' + timer.since + '"></span></td><td><a href="#" class="btn btn-sm btn-danger" onclick="stopWorkTimer(\'' + timer.stop_route +'\', \'modal\', \'timers-preview-modal\')"><i class="fas fa-stop"></i></a></td></tr>');
+            $('#active-timers-table tr:last').after('<tr id="timer-' + timer.id + '-modal-row"><td><a href="' + timer.project_route + '">' + project.name + '</a></td><td>' + timer.rate.name + '</td><td><span id="timer-' + timer.id + '-display" class="timer-record" data-since_at="' + timer.since_at + '"></span></td><td><a href="#" class="btn btn-sm btn-danger" onclick="stopWorkTimer(\'' + timer.stop_route +'\', \'modal\', \'timers-preview-modal\')"><i class="fas fa-stop"></i></a></td></tr>');
             $('#timer-counter').html('<i class="fas fa-clock mr-1"></i>' + activeTimers.length);            
             // Send message about start timer
             toastr.info(data.message);
@@ -97,10 +97,10 @@ function stopWorkTimer(url, type, modalId) {
 
 function displayTimers () { 
     $('.timer-record').each(function(i, obj) {
-        const since = new Date(Date.parse($(obj).data('since')));
+        const since_at = new Date(Date.parse($(obj).data('since_at')));
         const now = new Date($.now());
-        // Diff between now and since
-        const diffMiliseconds = Math.abs(now - since);
+        // Diff between now and since_at
+        const diffMiliseconds = Math.abs(now - since_at);
         // Calculate the information that will be displayed to the user
         const miliseconds = diffMiliseconds % 1000;
         let s = (diffMiliseconds - miliseconds) / 1000;

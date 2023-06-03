@@ -12,7 +12,7 @@
                 <div class="info-box bg-light">
                     <div class="info-box-content">
                         <span class="info-box-text text-center text-muted">Due date</span>
-                        <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-{{ $ticket->overdue ? 'danger' : 'secondary' }}" id="ticket-{{ $ticket->id }}-due-date">{{ $ticket->due_date->format('d.m.Y') }}</span></span>
+                        <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-{{ $ticket->overdue ? 'danger' : 'secondary' }}" id="ticket-{{ $ticket->id }}-due-date">{{ $ticket->due_at->format('d.m.Y') }}</span></span>
                     </div>
                 </div>
             </div>

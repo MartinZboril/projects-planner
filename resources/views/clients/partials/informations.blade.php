@@ -22,7 +22,7 @@
             <li class="list-group-item"><i class="fas fa-envelope mr-2"></i>Email: <a href="mailto:{{ $client->email_label }}">{{ $client->email_label }}</a></li>
             <li class="list-group-item"><i class="fas fa-map mr-2"></i>Address: {{ $client->street_label }}; {{ $client->city_label }}; {{ $client->zip_code_label }}; {{ $client->country_label }}
         </ul>
-        @if ($client->facebook || $client->twitter || $client->instagram || $client->linekedin || $client->skype)
+        @if ($client->facebook || $client->twitter || $client->instagram || $client->linkedin || $client->skype)
             <hr>
             @if ($client->facebook)
                 <a href="{{ $client->facebook }}" class="btn bg-primary mr-1" target="_BLANK"><i class="fab fa-facebook"></i></a>
@@ -30,8 +30,8 @@
             @if ($client->instagram)
                 <a href="{{ $client->instagram }}" class="btn bg-fuchsia color-palette mr-1" target="_BLANK"><i class="fab fa-instagram"></i></a>
             @endif
-            @if ($client->linekedin)
-                <a href="{{ $client->linekedin }}" class="btn bg-lightblue color-palette mr-1" target="_BLANK"><i class="fab fa-linkedin"></i></a>
+            @if ($client->linkedin)
+                <a href="{{ $client->linkedin }}" class="btn bg-lightblue color-palette mr-1" target="_BLANK"><i class="fab fa-linkedin"></i></a>
             @endif
             @if ($client->skype)
                 <a href="{{ $client->skype }}" class="btn bg-cyan color-palette mr-1" target="_BLANK"><i class="fab fa-skype"></i></a>                                 

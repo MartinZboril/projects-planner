@@ -19,6 +19,7 @@ class AddColumnsToUsersTable extends Migration
             $table->string('job_title')->nullable();
             $table->string('mobile')->nullable();
             $table->string('phone')->nullable();
+            //TODO: remove into address
             $table->string('street')->nullable();
             $table->string('house_number')->nullable();
             $table->string('city')->nullable();

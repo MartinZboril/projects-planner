@@ -11,9 +11,9 @@
                     @enderror
                 </div>
                 <div class="form-group required">
-                    <label for="due_date" class="control-label">Deadline</label>
-                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', ($todo->due_date ?? false) ? $todo->due_date->format('Y-m-d') : now()->addDays(3)->format('Y-m-d')) }}" >
-                    @error('due_date')
+                    <label for="due_at" class="control-label">Deadline</label>
+                    <input type="date" name="due_at" id="due_at" class="form-control @error('due_at') is-invalid @enderror" placeholder="due date" value="{{ old('due_at', ($todo->due_at ?? false) ? $todo->due_at->format('Y-m-d') : now()->addDays(3)->format('Y-m-d')) }}" >
+                    @error('due_at')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>

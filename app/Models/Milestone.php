@@ -13,17 +13,20 @@ class Milestone extends Model
     use HasFactory, MarkedRecords, OverdueRecords;
 
     protected $fillable = [
-        'project_id', 'owner_id', 'name', 'start_date', 'due_date', 'colour', 'description', 'is_marked',
+        'project_id', 'owner_id', 'name', 'start_at', 'due_at', 'colour', 'description', 'is_marked',
     ]; 
 
-    protected $dates = ['start_date', 'due_date'];
+    protected $casts = [
+        'start_at' => 'date',
+        'due_at' => 'date',
+    ];
 
     public const VALIDATION_RULES = [
         'project_id' => ['required', 'integer', 'exists:projects,id'],
         'owner_id' => ['required', 'integer', 'exists:users,id'],
         'name' => ['required', 'string', 'max:255'],
-        'start_date' => ['required', 'date'],
-        'due_date' => ['required', 'date', 'after:start_date'],
+        'start_at' => ['required', 'date'],
+        'due_at' => ['required', 'date', 'after:start_at'],
         'colour' => ['required', 'string', 'max:255'],
         'description' => ['nullable', 'string', 'max:65553'],
     ];
@@ -60,7 +63,7 @@ class Milestone extends Model
 
     public function getOverdueAttribute(): bool
     {
-        return $this->due_date <= date('Y-m-d') && $this->progress < 1;
+        return $this->due_at <= date('Y-m-d') && $this->progress < 1;
     }
 
     public function getProgressAttribute(): float

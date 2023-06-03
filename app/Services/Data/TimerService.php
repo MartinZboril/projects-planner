@@ -29,8 +29,8 @@ class TimerService
             'project_id' => $projectId,
             'user_id' => Auth::id(),
             'rate_id' => $rateId,
-            'since' => now(),
-            'until' => null,
+            'since_at' => now(),
+            'until_at' => null,
         ]);
     }
 
@@ -39,6 +39,6 @@ class TimerService
      */
     public function handleStop(Timer $timer): void
     {
-        $timer->update(['until' => now()]);
+        $timer->update(['until_at' => now()]);
     }
 }

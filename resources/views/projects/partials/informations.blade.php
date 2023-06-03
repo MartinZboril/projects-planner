@@ -17,8 +17,8 @@
             </p>
             <hr>
             <p class="text-sm">Information
-                <span class="d-block ml-2">Start date: <b>{{ $project->start_date->format('d.m.Y') }}</b></span>
-                <span class="d-block ml-2">Due date: <b>{{ $project->due_date->format('d.m.Y') }}</b></span>
+                <span class="d-block ml-2">Start date: <b>{{ $project->start_at->format('d.m.Y') }}</b></span>
+                <span class="d-block ml-2">Due date: <b>{{ $project->due_at->format('d.m.Y') }}</b></span>
                 <span style="{{ $project->status === App\Enums\ProjectStatusEnum::active ? '' : 'display: none;' }}" id="project-{{ $project->id }}-deadline">
                     <span class="d-block ml-2">Deadline: <span class="badge badge-{{ $project->deadline >= 0 ? 'success' : 'danger' }}" id="project-{{ $project->id }}-deadline-badge">{{ $project->deadline }} day(s)</span>
                 </span>

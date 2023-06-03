@@ -56,16 +56,16 @@
                     @enderror
                 </div> 
                 <div class="form-group required">
-                    <label for="start_date" class="control-label">Start date</label>
-                    <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" placeholder="start date" value="{{ old('start_date', ($task->start_date ?? false) ? $task->start_date->format('Y-m-d') : now()->format('Y-m-d')) }}" >
-                    @error('start_date')
+                    <label for="start_at" class="control-label">Start date</label>
+                    <input type="date" name="start_at" id="start_at" class="form-control @error('start_at') is-invalid @enderror" placeholder="start date" value="{{ old('start_at', ($task->start_at ?? false) ? $task->start_at->format('Y-m-d') : now()->format('Y-m-d')) }}" >
+                    @error('start_at')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group required">
-                    <label for="due_date" class="control-label">Due date</label>
-                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', ($task->due_date ?? false) ? $task->due_date->format('Y-m-d') : now()->addDays(7)->format('Y-m-d')) }}" >
-                    @error('due_date')
+                    <label for="due_at" class="control-label">Due date</label>
+                    <input type="date" name="due_at" id="due_at" class="form-control @error('due_at') is-invalid @enderror" placeholder="due date" value="{{ old('due_at', ($task->due_at ?? false) ? $task->due_at->format('Y-m-d') : now()->addDays(7)->format('Y-m-d')) }}" >
+                    @error('due_at')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>

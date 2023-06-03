@@ -17,7 +17,7 @@ class CreateTodosTable extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('task_id');
-            $table->date('due_date');
+            $table->date('due_at');
             $table->text('description')->nullable();
             $table->boolean('is_finished')->default(0);
             $table->boolean('is_marked')->default(0);

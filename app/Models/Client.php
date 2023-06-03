@@ -41,7 +41,7 @@ class Client extends Model
         'zip_code' => ['nullable', 'string', 'max:255'],
         'website' => ['nullable', 'string'],
         'skype' => ['nullable', 'string'],
-        'linekedin' => ['nullable', 'string'],
+        'linkedin' => ['nullable', 'string'],
         'twitter' => ['nullable', 'string'],
         'facebook' => ['nullable', 'string'],
         'instagram' => ['nullable', 'string'],

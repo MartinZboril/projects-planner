@@ -26,17 +26,17 @@ class TimersDataTable extends DataTable
             ->editColumn('user.full_name', function(Timer $timer) {
                 return Blade::render('<x-site.ui.user-icon :user="$user" />', ['user' => $timer->user]);
             })      
-            ->editColumn('since', function(Timer $timer) {
-                return Carbon::createFromFormat('Y-m-d H:i:s', $timer->since)->format('d.m.Y H:i');
+            ->editColumn('since_at', function(Timer $timer) {
+                return Carbon::createFromFormat('Y-m-d H:i:s', $timer->since_at)->format('d.m.Y H:i');
             })
-            ->editColumn('until', function(Timer $timer) {
-                return $timer->until ? Carbon::createFromFormat('Y-m-d H:i:s', $timer->until)->format('d.m.Y H:i') : 'NaN';
+            ->editColumn('until_at', function(Timer $timer) {
+                return $timer->until_at ? Carbon::createFromFormat('Y-m-d H:i:s', $timer->until_at)->format('d.m.Y H:i') : 'NaN';
             })
             ->editColumn('created_at', function(Timer $timer) {
                 return Carbon::createFromFormat('Y-m-d H:i:s', $timer->created_at)->format('d.m.Y') . (($timer->note) ? ' <i class="fas fa-info-circle" data-toggle="tooltip" title="' . $timer->note . '"></i>' : '');
             })                     
             ->editColumn('buttons', function(Timer $timer) {
-                return $timer->until ? '<a href="' . route('projects.timers.edit', ['project' => $timer->project, 'timer' => $timer]) . '" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>' : 'NaN';
+                return $timer->until_at ? '<a href="' . route('projects.timers.edit', ['project' => $timer->project, 'timer' => $timer]) . '" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>' : 'NaN';
             })
             ->rawColumns(['created_at', 'project.name', 'rate.name', 'user.full_name', 'buttons']);
     }
@@ -77,8 +77,8 @@ class TimersDataTable extends DataTable
             Column::make('user.name')->data('user.full_name')->title('User'),
             Column::make('total_time')->orderable(false)->searchable(false),
             Column::make('amount')->orderable(false)->searchable(false),
-            Column::make('since'),
-            Column::make('until'),
+            Column::make('since_at'),
+            Column::make('until_at'),
             Column::make('created_at')->title('Date'),
             Column::make('buttons')->title('')->orderable(false)->searchable(false)->visible($this->view === 'analysis' ? false : true),
             Column::make('user.surname')->visible(false),

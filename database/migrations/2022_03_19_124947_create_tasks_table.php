@@ -19,9 +19,9 @@ class CreateTasksTable extends Migration
             $table->foreignId('project_id');
             $table->foreignId('author_id');
             $table->foreignId('user_id');
-            $table->integer('status');
-            $table->date('start_date')->nullable();
-            $table->date('due_date')->nullable();
+            $table->unsignedInteger('status')->default(1);
+            $table->date('start_at')->nullable();
+            $table->date('due_at')->nullable();
             $table->longText('description');
             $table->boolean('is_stopped')->default(0);
             $table->boolean('is_returned')->default(0);

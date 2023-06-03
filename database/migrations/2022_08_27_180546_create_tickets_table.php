@@ -19,12 +19,11 @@ class CreateTicketsTable extends Migration
             $table->foreignId('reporter_id');
             $table->foreignId('assignee_id')->nullable();
             $table->string('subject');
-            $table->integer('type');
-            $table->integer('priority');
-            $table->integer('status')->default(1);
+            $table->unsignedInteger('type');
+            $table->unsignedInteger('priority');
+            $table->unsignedInteger('status')->default(1);
             $table->text('message');
-            $table->date('due_date');
-            $table->boolean('is_convert')->default(0);
+            $table->date('due_at');
             $table->boolean('is_marked')->default(0);
             $table->timestamps();
         });

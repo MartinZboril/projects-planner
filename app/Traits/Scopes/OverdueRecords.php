@@ -10,6 +10,6 @@ trait OverdueRecords {
      */
     public function scopeOverdue(Builder $query): Builder
     {
-        return $query->where($this->getTable() . '.due_date', '<=', date('Y-m-d'));
+        return $query->where($this->getTable() . '.due_at', '<=', date('Y-m-d'));
     }
 }

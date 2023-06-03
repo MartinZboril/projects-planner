@@ -23,16 +23,16 @@
                     @enderror
                 </div> 
                 <div class="form-group required">
-                    <label for="start_date" class="control-label">Start date</label>
-                    <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" placeholder="start date" value="{{ old('start_date', ($milestone->start_date ?? false) ? $milestone->start_date->format('Y-m-d') : now()->format('Y-m-d')) }}" >
-                    @error('start_date')
+                    <label for="start_at" class="control-label">Start date</label>
+                    <input type="date" name="start_at" id="start_at" class="form-control @error('start_at') is-invalid @enderror" placeholder="start date" value="{{ old('start_at', ($milestone->start_at ?? false) ? $milestone->start_at->format('Y-m-d') : now()->format('Y-m-d')) }}" >
+                    @error('start_at')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group required">
-                    <label for="due_date" class="control-label">End date</label>
-                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', ($milestone->due_date ?? false) ? $milestone->due_date->format('Y-m-d') : now()->addDays(7)->format('Y-m-d')) }}" >
-                    @error('due_date')
+                    <label for="due_at" class="control-label">End date</label>
+                    <input type="date" name="due_at" id="due_at" class="form-control @error('due_at') is-invalid @enderror" placeholder="due date" value="{{ old('due_at', ($milestone->due_at ?? false) ? $milestone->due_at->format('Y-m-d') : now()->addDays(7)->format('Y-m-d')) }}" >
+                    @error('due_at')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>

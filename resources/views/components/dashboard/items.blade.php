@@ -20,7 +20,7 @@
                 <tr>
                     <td><a href="{{ $item->get('url') }}">{{ $item->get('name') }}</a></td>
                     <td><x-dashboard.type :type="$item->get('type')" /></td>
-                    <td>{{ $item->get('due_date') ? $item->get('due_date')->format('d.m.Y') : '-' }}</td>
+                    <td>{{ $item->get('due_at') ? $item->get('due_at')->format('d.m.Y') : '-' }}</td>
                     <td>
                         <a href="{{ $item->get('url') }}" class="text-muted"><i class="fas fa-eye"></i></a>
                     </td>            

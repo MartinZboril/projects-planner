@@ -156,9 +156,9 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="linekedin">LinekedIn</label>
-                            <input type="text" name="linekedin" id="linekedin" class="form-control @error('linekedin') is-invalid @enderror" placeholder="LinekedIn" value="{{ old('linekedin', $client->linekedin ?? null) }}" >
-                            @error('linekedin')
+                            <label for="linkedin">linkedin</label>
+                            <input type="text" name="linkedin" id="linkedin" class="form-control @error('linkedin') is-invalid @enderror" placeholder="linkedin" value="{{ old('linkedin', $client->linkedin ?? null) }}" >
+                            @error('linkedin')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>

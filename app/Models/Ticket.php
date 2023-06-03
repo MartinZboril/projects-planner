@@ -16,8 +16,6 @@ class Ticket extends Model
         'id', 'created_at', 'updated_at',
     ];
     
-    protected $dates = ['due_date'];
-
     protected $appends = [
         'overdue',
         'assigned',
@@ -28,6 +26,7 @@ class Ticket extends Model
         'priority' => TicketPriorityEnum::class,
         'type' => TicketTypeEnum::class,
         'status' => TicketStatusEnum::class,
+        'due_at' => 'date',
     ];
 
     public const VALIDATION_RULES = [
@@ -38,7 +37,7 @@ class Ticket extends Model
         'type' => ['required', 'integer'],
         'priority' => ['required', 'integer'],
         'status' => ['required', 'integer'],
-        'due_date' => ['required', 'date'],
+        'due_at' => ['required', 'date'],
         'message' => ['required', 'max:65553'],
     ];
 
@@ -99,7 +98,7 @@ class Ticket extends Model
 
     public function getOverdueAttribute(): bool
     {
-        return $this->due_date <= date('Y-m-d') && $this->status ===TicketStatusEnum::open;
+        return $this->due_at <= date('Y-m-d') && $this->status ===TicketStatusEnum::open;
     }
     
     public function getAssignedAttribute(): bool
