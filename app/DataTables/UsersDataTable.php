@@ -31,7 +31,7 @@ class UsersDataTable extends DataTable
                         return $user->mobile_label;
                     })
                     ->editColumn('city', function(User $user) {
-                        return $user->city_label;
+                        return $user->address->city;
                     })
                     ->editColumn('created_at', function(User $user) {
                         $formatedDate = Carbon::createFromFormat('Y-m-d H:i:s', $user->created_at)->format('d.m.Y');
@@ -47,7 +47,7 @@ class UsersDataTable extends DataTable
  
     public function query(User $model): QueryBuilder
     {
-        return $model->select('id', 'name', 'surname', 'email', 'job_title', 'mobile', 'city', 'created_at', 'avatar_id')->newQuery();
+        return $model->with('address')->select('id', 'address_id', 'name', 'surname', 'email', 'job_title', 'mobile', 'created_at', 'avatar_id')->newQuery();
     }
  
     public function html(): HtmlBuilder

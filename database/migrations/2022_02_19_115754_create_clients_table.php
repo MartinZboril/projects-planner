@@ -21,19 +21,6 @@ class CreateClientsTable extends Migration
             $table->string('contact_email')->nullable();
             $table->string('mobile')->nullable();
             $table->string('phone')->nullable();
-            //TODO: remove into address
-            $table->string('street')->nullable();
-            $table->string('house_number')->nullable();
-            $table->string('city')->nullable();
-            $table->string('country')->nullable();
-            $table->string('zip_code')->nullable();
-            //TODO: remove into socials
-            $table->text('website')->nullable();
-            $table->text('skype')->nullable();
-            $table->text('linkedin')->nullable();
-            $table->text('facebook')->nullable();
-            $table->text('twitter')->nullable();
-            $table->text('instagram')->nullable();
             $table->text('note')->nullable();
             $table->boolean('is_marked')->default(0);
             $table->timestamps();

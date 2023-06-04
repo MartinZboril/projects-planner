@@ -33,10 +33,6 @@ class User extends Authenticatable
         'job_title_label',
         'mobile_label',
         'phone_label',
-        'street_label',
-        'city_label',
-        'zip_code_label',
-        'country_label',
     ];
 
     public const VALIDATION_RULES = [
@@ -49,16 +45,16 @@ class User extends Authenticatable
         'job_title' => ['string', 'nullable', 'max:255'],
         'mobile' => ['string', 'nullable', 'max:255'],
         'phone' => ['string', 'nullable', 'max:255'],
-        'street' => ['string', 'nullable', 'max:255'],
-        'house_number' => ['string', 'nullable', 'max:255'],
-        'city' => ['string', 'nullable', 'max:255'],
-        'country' => ['string', 'nullable', 'max:255'],
-        'zip_code' => ['string', 'nullable', 'max:255'],
     ];
+
+    public function address(): BelongsTo
+    {
+        return $this->belongsTo(Address::class);
+    }
 
     public function avatar(): BelongsTo
     {
-        return $this->belongsTo(File::class, 'avatar_id');
+        return $this->belongsTo(File::class);
     }
 
     public function projects(): BelongsToMany
@@ -107,25 +103,5 @@ class User extends Authenticatable
     public function getPhoneLabelAttribute(): string
     {
         return $this->phone ?? 'NaN';
-    }
-
-    public function getStreetLabelAttribute(): string
-    {
-        return ($this->street ?? 'NaN') . ($this->house_number ? ' ' . $this->house_number : '');
-    }
-    
-    public function getCityLabelAttribute(): string
-    {
-        return $this->city ?? 'NaN';
-    }
-        
-    public function getZipCodeLabelAttribute(): string
-    {
-        return $this->zip_code ?? 'NaN';
-    }
-
-    public function getCountryLabelAttribute(): string
-    {
-        return $this->country ?? 'NaN';
     }
 }

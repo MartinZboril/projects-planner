@@ -23,16 +23,22 @@
                     <td class="text-muted">Phone</td><td class="text-right"><a href="tel:{{ $user->phone_label }}">{{ $user->phone_label }}</a></td>
                 </tr>
                 <tr>
-                    <td class="text-muted">Address</td><td class="text-right">{{ $user->street_label }}</td>
+                    <td class="text-muted">Address</td><td class="text-right">
+                        @if($user->address->street === 'NaN' && $user->address->house_number === 'NaN')
+                            NaN
+                        @else
+                            {{ $user->address->street }} {{ $user->address->house_number }}
+                        @endif
+                    </td>
                 </tr>
                 <tr>
-                    <td class="text-muted">City</td><td class="text-right">{{ $user->city_label }}</td>
+                    <td class="text-muted">City</td><td class="text-right">{{ $user->address->city }}</td>
                 </tr>
                 <tr>
-                    <td class="text-muted">ZIP code</td><td class="text-right">{{ $user->zip_code_label }}</td>
+                    <td class="text-muted">ZIP code</td><td class="text-right">{{ $user->address->zip_code }}</td>
                 </tr>
                 <tr>
-                    <td class="text-muted">Country</td><td class="text-right">{{ $user->country_label }}</td>
+                    <td class="text-muted">Country</td><td class="text-right">{{ $user->address->country }}</td>
                 </tr>
                 <tr>
                     <td class="text-muted">Verified At</td><td class="text-right">{{ $user->email_verified_at ? $user->email_verified_at->format('d.m.Y H:i') : 'Not verified' }}</td>

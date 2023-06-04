@@ -2,9 +2,9 @@
 
 namespace App\Services\Data;
 
-use Illuminate\Http\UploadedFile;
-use App\Models\{Client, Comment, Note};
 use App\Services\FileService;
+use Illuminate\Http\UploadedFile;
+use App\Models\{Address, Client, Comment, Note, SocialNetwork};
 
 class ClientService
 {
@@ -18,6 +18,23 @@ class ClientService
             $inputs['logo_id'] = ((new FileService)->handleUpload($uploadedFile, 'clients/logos'))->id;
             $oldLogoId = $client->logo_id ?? null;
         }
+        // Save clients address
+        $client->address_id = (new AddressService)->handleSave($client->address ?? new Address, [
+            'street' => $inputs['street'],
+            'house_number' => $inputs['house_number'],
+            'city' => $inputs['city'],
+            'country' => $inputs['country'],
+            'zip_code' => $inputs['zip_code'],
+        ]);
+        // Save clients social network
+        $client->social_network_id = (new SocialNetworkService)->handleSave($client->socialNetwork ?? new SocialNetwork, [
+            'website' => $inputs['website'],
+            'skype' => $inputs['skype'],
+            'linkedin' => $inputs['linkedin'],
+            'twitter' => $inputs['twitter'],
+            'facebook' => $inputs['facebook'],
+            'instagram' => $inputs['instagram'],
+        ]);
         // Store fields
         $client->fill($inputs)->save();
         // Upload files

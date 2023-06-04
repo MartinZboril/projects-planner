@@ -21,10 +21,6 @@ class Client extends Model
         'contact_email_label',
         'mobile_label',
         'phone_label',
-        'street_label',
-        'city_label',
-        'zip_code_label',
-        'country_label',
     ];
 
     public const VALIDATION_RULES = [
@@ -34,23 +30,22 @@ class Client extends Model
         'contact_email' => ['nullable', 'string', 'max:255'],
         'mobile' => ['nullable', 'string', 'max:255'],
         'phone' => ['nullable', 'string', 'max:255'],
-        'street' => ['nullable', 'string', 'max:255'],
-        'house_number' => ['nullable', 'string', 'max:255'],
-        'city' => ['nullable', 'string', 'max:255'],
-        'country' => ['nullable', 'string', 'max:255'],
-        'zip_code' => ['nullable', 'string', 'max:255'],
-        'website' => ['nullable', 'string'],
-        'skype' => ['nullable', 'string'],
-        'linkedin' => ['nullable', 'string'],
-        'twitter' => ['nullable', 'string'],
-        'facebook' => ['nullable', 'string'],
-        'instagram' => ['nullable', 'string'],
         'note' => ['nullable', 'string', 'max:65553'],
     ];
+
+    public function address(): BelongsTo
+    {
+        return $this->belongsTo(Address::class);
+    }
     
     public function logo(): BelongsTo
     {
         return $this->belongsTo(File::class, 'logo_id');
+    }
+
+    public function socialNetwork(): BelongsTo
+    {
+        return $this->belongsTo(SocialNetwork::class);
     }
 
     public function notes()
@@ -91,25 +86,5 @@ class Client extends Model
     public function getPhoneLabelAttribute(): string
     {
         return $this->phone ?? 'NaN';
-    }
-
-    public function getStreetLabelAttribute(): string
-    {
-        return ($this->street ?? 'NaN') . ($this->house_number ? ' ' . $this->house_number : '');
-    }
-    
-    public function getCityLabelAttribute(): string
-    {
-        return $this->city ?? 'NaN';
-    }
-        
-    public function getZipCodeLabelAttribute(): string
-    {
-        return $this->zip_code ?? 'NaN';
-    }
-
-    public function getCountryLabelAttribute(): string
-    {
-        return $this->country ?? 'NaN';
     }
 }

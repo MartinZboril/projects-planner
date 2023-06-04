@@ -81,7 +81,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="street">Street</label>
-                            <input type="text" name="street" id="street" class="form-control @error('street') is-invalid @enderror" placeholder="street" value="{{ old('street', $client->street ?? null) }}" >
+                            <input type="text" name="street" id="street" class="form-control @error('street') is-invalid @enderror" placeholder="street" value="{{ old('street', $client->address->street ?? null) }}" >
                             @error('street')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -90,7 +90,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="house_number">House number</label>
-                            <input type="text" name="house_number" id="house_number" class="form-control @error('house_number') is-invalid @enderror" placeholder="house number" value="{{ old('house_number', $client->house_number ?? null) }}" >
+                            <input type="text" name="house_number" id="house_number" class="form-control @error('house_number') is-invalid @enderror" placeholder="house number" value="{{ old('house_number', $client->address->house_number ?? null) }}" >
                             @error('house_number')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -101,7 +101,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="city">City</label>
-                            <input type="text" name="city" id="city" class="form-control @error('city') is-invalid @enderror" placeholder="city" value="{{ old('city', $client->city ?? null) }}" >
+                            <input type="text" name="city" id="city" class="form-control @error('city') is-invalid @enderror" placeholder="city" value="{{ old('city', $client->address->city ?? null) }}" >
                             @error('city')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -110,7 +110,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="zip_code">ZIP code</label>
-                            <input type="text" name="zip_code" id="zip_code" class="form-control @error('zip_code') is-invalid @enderror" placeholder="zip code" value="{{ old('zip_code', $client->zip_code ?? null) }}" >
+                            <input type="text" name="zip_code" id="zip_code" class="form-control @error('zip_code') is-invalid @enderror" placeholder="zip code" value="{{ old('zip_code', $client->address->zip_code ?? null) }}" >
                             @error('zip_code')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -119,7 +119,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="country">Country</label>
-                            <input type="text" name="country" id="country" class="form-control @error('country') is-invalid @enderror" placeholder="country" value="{{ old('country', $client->country ?? null) }}" >
+                            <input type="text" name="country" id="country" class="form-control @error('country') is-invalid @enderror" placeholder="country" value="{{ old('country', $client->address->country ?? null) }}" >
                             @error('country')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -137,7 +137,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="website">Website</label>
-                            <input type="text" name="website" id="website" class="form-control @error('website') is-invalid @enderror" placeholder="website" value="{{ old('website', $client->website ?? null) }}" >
+                            <input type="text" name="website" id="website" class="form-control @error('website') is-invalid @enderror" placeholder="website" value="{{ old('website', $client->socialNetwork->website ?? null) }}" >
                             @error('website')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -146,7 +146,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="skype">Skype</label>
-                            <input type="text" name="skype" id="skype" class="form-control @error('skype') is-invalid @enderror" placeholder="Skype" value="{{ old('skype', $client->skype ?? null) }}" >
+                            <input type="text" name="skype" id="skype" class="form-control @error('skype') is-invalid @enderror" placeholder="Skype" value="{{ old('skype', $client->socialNetwork->skype ?? null) }}" >
                             @error('skype')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -157,7 +157,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="linkedin">linkedin</label>
-                            <input type="text" name="linkedin" id="linkedin" class="form-control @error('linkedin') is-invalid @enderror" placeholder="linkedin" value="{{ old('linkedin', $client->linkedin ?? null) }}" >
+                            <input type="text" name="linkedin" id="linkedin" class="form-control @error('linkedin') is-invalid @enderror" placeholder="linkedin" value="{{ old('linkedin', $client->socialNetwork->linkedin ?? null) }}" >
                             @error('linkedin')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -166,7 +166,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="twitter">Twitter</label>
-                            <input type="text" name="twitter" id="twitter" class="form-control @error('twitter') is-invalid @enderror" placeholder="Twitter" value="{{ old('twitter', $client->twitter ?? null) }}" >
+                            <input type="text" name="twitter" id="twitter" class="form-control @error('twitter') is-invalid @enderror" placeholder="Twitter" value="{{ old('twitter', $client->socialNetwork->twitter ?? null) }}" >
                             @error('twitter')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -177,7 +177,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="facebook">Facebook</label>
-                            <input type="text" name="facebook" id="facebook" class="form-control @error('facebook') is-invalid @enderror" placeholder="Facebook" value="{{ old('facebook', $client->facebook ?? null) }}" >
+                            <input type="text" name="facebook" id="facebook" class="form-control @error('facebook') is-invalid @enderror" placeholder="Facebook" value="{{ old('facebook', $client->socialNetwork->facebook ?? null) }}" >
                             @error('facebook')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -186,7 +186,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="instagram">Instagram</label>
-                            <input type="text" name="instagram" id="instagram" class="form-control @error('instagram') is-invalid @enderror" placeholder="Instagram" value="{{ old('instagram', $client->instagram ?? null) }}" >
+                            <input type="text" name="instagram" id="instagram" class="form-control @error('instagram') is-invalid @enderror" placeholder="Instagram" value="{{ old('instagram', $client->socialNetwork->instagram ?? null) }}" >
                             @error('instagram')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
