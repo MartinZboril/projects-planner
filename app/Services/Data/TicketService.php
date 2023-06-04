@@ -4,19 +4,19 @@ namespace App\Services\Data;
 
 use Illuminate\Support\Facades\Auth;
 use App\Enums\TicketStatusEnum;
-use App\Models\{Comment, Ticket};
+use App\Models\Ticket;
 use App\Services\FileService;
 
 class TicketService
 {
-    public function __construct(private ProjectUserService $projectUserService)
+    public function __construct()
     {
     }
 
     /**
      * Save data for ticket.
      */
-    public function handleSave(Ticket $ticket, array $inputs): Ticket
+    public function handleSave(Ticket $ticket, array $inputs, ?Array $uploadedFiles=[]): Ticket
     {
         // Prepare fields
         $inputs['status'] = $ticket->status ?? TicketStatusEnum::open;
@@ -24,12 +24,10 @@ class TicketService
         $inputs['assignee_id'] = $inputs['assignee_id'] ?? null;
         // Save ticket
         $ticket->fill($inputs)->save();
-        // Store tickets projects users
-        $this->projectUserService->handleStoreUser($ticket->project, $ticket->reporter);
-        if($ticket->assignee_id) {
-            $this->projectUserService->handleStoreUser($ticket->project, $ticket->assignee);
-        }
-
+        // Upload files
+        if ($uploadedFiles) {
+            $this->handleUploadFiles($ticket, $uploadedFiles);
+        } 
         return $ticket;
     }
 
@@ -39,16 +37,8 @@ class TicketService
     public function handleUploadFiles(Ticket $ticket, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            $ticket->files()->save((new FileService)->handleUpload($uploadedFile, 'tasks/files'));
+            (new FileService)->handleUpload($uploadedFile, 'tickets/files', $ticket);
         }
-    }
-
-    /**
-     * Save tickets comments.
-     */
-    public function handleSaveComment(Ticket $ticket, Comment $comment): void
-    {
-        $ticket->comments()->save($comment);
     }
 
     /**
@@ -65,7 +55,7 @@ class TicketService
      */
     public function handleConvert(Ticket $ticket): void
     {
-        $ticket->update(['status' => TicketStatusEnum::archive, 'is_convert' => true]);
+        $ticket->update(['status' => TicketStatusEnum::convert]);
     }
 
     /**

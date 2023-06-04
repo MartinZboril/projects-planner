@@ -11,12 +11,16 @@ class ProjectService
     /**
      * Save data for project.
      */
-    public function handleSave(Project $project, array $inputs)
+    public function handleSave(Project $project, array $inputs, ?Array $uploadedFiles=[])
     {
         // Prepare fields
         $inputs['status'] = $project->status_id ?? ProjectStatusEnum::active;
         // Save note
         $project->fill($inputs)->save();
+        // Upload files
+        if ($uploadedFiles) {
+            $this->handleUploadFiles($project, $uploadedFiles);
+        }        
         // Store projects team
         ($project->team()->count() === 0) ? $project->team()->attach($inputs['team']) : $project->team()->sync($inputs['team']);
 
@@ -29,26 +33,10 @@ class ProjectService
     public function handleUploadFiles(Project $project, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            $project->files()->save((new FileService)->handleUpload($uploadedFile, 'projects/files'));
+            (new FileService)->handleUpload($uploadedFile, 'projects/files', $project);
         }
     }
-
-    /**
-     * Save projects comments.
-     */
-    public function handleSaveComment(Project $project, Comment $comment): void
-    {
-        $project->comments()->save($comment);
-    }
-
-    /**
-     * Save projects notes.
-     */
-    public function handleSaveNote(Project $project, Note $note): void
-    {
-        $project->notes()->save($note);
-    }
-
+    
     /**
      * Change working status of the project.
      */

@@ -13,17 +13,20 @@ class Milestone extends Model
     use HasFactory, MarkedRecords, OverdueRecords;
 
     protected $fillable = [
-        'project_id', 'owner_id', 'name', 'start_date', 'due_date', 'colour', 'description', 'is_marked',
+        'project_id', 'owner_id', 'name', 'started_at', 'dued_at', 'colour', 'description', 'is_marked',
     ]; 
 
-    protected $dates = ['start_date', 'due_date'];
+    protected $casts = [
+        'started_at' => 'date',
+        'dued_at' => 'date',
+    ];
 
     public const VALIDATION_RULES = [
         'project_id' => ['required', 'integer', 'exists:projects,id'],
         'owner_id' => ['required', 'integer', 'exists:users,id'],
         'name' => ['required', 'string', 'max:255'],
-        'start_date' => ['required', 'date'],
-        'due_date' => ['required', 'date', 'after:start_date'],
+        'started_at' => ['required', 'date'],
+        'dued_at' => ['required', 'date', 'after:started_at'],
         'colour' => ['required', 'string', 'max:255'],
         'description' => ['nullable', 'string', 'max:65553'],
     ];
@@ -38,14 +41,14 @@ class Milestone extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-    public function files(): BelongsToMany
+    public function files()
     {
-        return $this->belongsToMany(File::class, 'milestones_files', 'milestone_id', 'file_id')->orderByDesc('created_at');
+        return $this->morphMany(File::class, 'fileable');
     }
     
-    public function comments(): BelongsToMany
+    public function comments()
     {
-        return $this->belongsToMany(Comment::class, 'milestones_comments', 'milestone_id', 'comment_id')->orderByDesc('created_at');
+        return $this->morphMany(Comment::class, 'commentable');
     }
     
     public function tasks(): HasMany
@@ -60,7 +63,7 @@ class Milestone extends Model
 
     public function getOverdueAttribute(): bool
     {
-        return $this->due_date <= date('Y-m-d') && $this->progress < 1;
+        return $this->dued_at <= date('Y-m-d') && $this->progress < 1;
     }
 
     public function getProgressAttribute(): float

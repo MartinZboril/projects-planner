@@ -25,7 +25,7 @@ class StartTimerRequest extends FormRequest
             'rate_id' => [
                 'required', 'integer', 'exists:rates,id',
                 Rule::unique('timers')->where(function ($query) {
-                    return $query->where('project_id', $this->project_id)->where('rate_id', $this->rate_id)->whereNull('until');
+                    return $query->where('project_id', $this->project_id)->where('rate_id', $this->rate_id)->whereNull('until_at');
                 })
             ],
         ];

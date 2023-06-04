@@ -16,8 +16,6 @@ class Task extends Model
         'id', 'created_at', 'updated_at',
     ];
 
-    protected $dates = ['start_date', 'due_date'];
-
     protected $appends = [
         'milestone_label',
         'overdue',
@@ -27,6 +25,8 @@ class Task extends Model
 
     protected $casts = [
         'status' => TaskStatusEnum::class,
+        'started_at' => 'date',
+        'dued_at' => 'date',
     ];
 
     public const VALIDATION_RULES = [
@@ -34,10 +34,11 @@ class Task extends Model
         'author_id' => ['required', 'integer', 'exists:users,id'],
         'user_id' => ['required', 'integer', 'exists:users,id'],
         'milestone_id' => ['nullable', 'integer', 'exists:milestones,id'],
+        'ticket_id' => ['nullable', 'integer', 'exists:tickets,id'],
         'status' => ['required', 'integer'],
         'name' => ['required', 'string', 'max:255'],
-        'start_date' => ['required', 'date'],
-        'due_date' => ['required', 'date'],
+        'started_at' => ['required', 'date'],
+        'dued_at' => ['required', 'date'],
         'description' => ['required', 'string', 'max:65553'],
     ];
 
@@ -61,14 +62,19 @@ class Task extends Model
         return $this->belongsTo(Milestone::class, 'milestone_id');
     }
 
-    public function files(): BelongsToMany
+    public function ticket(): BelongsTo
     {
-        return $this->belongsToMany(File::class, 'tasks_files', 'task_id', 'file_id')->orderByDesc('created_at');
+        return $this->belongsTo(Ticket::class, 'ticket_id');
+    }
+
+    public function files()
+    {
+        return $this->morphMany(File::class, 'fileable');
     }
         
-    public function comments(): BelongsToMany
+    public function comments()
     {
-        return $this->belongsToMany(Comment::class, 'tasks_comments', 'task_id', 'comment_id')->orderByDesc('created_at');
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
     public function todos(): HasMany
@@ -98,7 +104,7 @@ class Task extends Model
 
     public function getOverdueAttribute(): bool
     {
-        return $this->due_date <= date('Y-m-d') && $this->status != TaskStatusEnum::complete;
+        return $this->dued_at <= date('Y-m-d') && $this->status != TaskStatusEnum::complete;
     }
 
     public function getMilestoneLabelAttribute(): string

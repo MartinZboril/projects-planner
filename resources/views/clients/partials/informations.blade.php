@@ -18,26 +18,26 @@
             <li class="list-group-item active"><i class="fas fa-address-card mr-2"></i>Contacts</li>
             <li class="list-group-item"><i class="fas fa-phone mr-2"></i>Phone: @if($client->phone)<a href="tel:{{ $client->phone }}">{{ $client->phone_label }}</a>@else{{ $client->phone_label }}@endif</li>
             <li class="list-group-item"><i class="fas fa-mobile-alt mr-2"></i>Mobile: @if($client->mobile)<a href="tel:{{ $client->mobile }}">{{ $client->mobile_label }}</a>@else{{ $client->mobile_label }}@endif</li>
-            <li class="list-group-item"><i class="fas fa-pager mr-2"></i></i>Website: @if ($client->website)<a href="{{ $client->website }}">{{ $client->website }}</a>@else{{ 'NaN' }}@endif</li>
+            <li class="list-group-item"><i class="fas fa-pager mr-2"></i></i>Website: @if ($client->socialNetwork->website)<a href="{{ $client->socialNetwork->website }}" target="_BLANK">{{ $client->socialNetwork->website }}</a>@else{{ 'NaN' }}@endif</li>
             <li class="list-group-item"><i class="fas fa-envelope mr-2"></i>Email: <a href="mailto:{{ $client->email_label }}">{{ $client->email_label }}</a></li>
-            <li class="list-group-item"><i class="fas fa-map mr-2"></i>Address: {{ $client->street_label }}; {{ $client->city_label }}; {{ $client->zip_code_label }}; {{ $client->country_label }}
+            <li class="list-group-item"><i class="fas fa-map mr-2"></i>Address: {{ $client->address->street }} {{ $client->address->house_number }}; {{ $client->address->city }}; {{ $client->address->zip_code }}; {{ $client->address->country }}
         </ul>
-        @if ($client->facebook || $client->twitter || $client->instagram || $client->linekedin || $client->skype)
+        @if ($client->socialNetwork->facebook || $client->socialNetwork->twitter || $client->socialNetwork->instagram || $client->socialNetwork->linkedin || $client->socialNetwork->skype)
             <hr>
-            @if ($client->facebook)
-                <a href="{{ $client->facebook }}" class="btn bg-primary mr-1" target="_BLANK"><i class="fab fa-facebook"></i></a>
+            @if ($client->socialNetwork->facebook)
+                <a href="{{ $client->socialNetwork->facebook }}" class="btn bg-primary mr-1" target="_BLANK"><i class="fab fa-facebook"></i></a>
             @endif
-            @if ($client->instagram)
-                <a href="{{ $client->instagram }}" class="btn bg-fuchsia color-palette mr-1" target="_BLANK"><i class="fab fa-instagram"></i></a>
+            @if ($client->socialNetwork->instagram)
+                <a href="{{ $client->socialNetwork->instagram }}" class="btn bg-fuchsia color-palette mr-1" target="_BLANK"><i class="fab fa-instagram"></i></a>
             @endif
-            @if ($client->linekedin)
-                <a href="{{ $client->linekedin }}" class="btn bg-lightblue color-palette mr-1" target="_BLANK"><i class="fab fa-linkedin"></i></a>
+            @if ($client->socialNetwork->linkedin)
+                <a href="{{ $client->socialNetwork->linkedin }}" class="btn bg-lightblue color-palette mr-1" target="_BLANK"><i class="fab fa-linkedin"></i></a>
             @endif
-            @if ($client->skype)
-                <a href="{{ $client->skype }}" class="btn bg-cyan color-palette mr-1" target="_BLANK"><i class="fab fa-skype"></i></a>                                 
+            @if ($client->socialNetwork->skype)
+                <a href="{{ $client->socialNetwork->skype }}" class="btn bg-cyan color-palette mr-1" target="_BLANK"><i class="fab fa-skype"></i></a>                                 
             @endif
-            @if ($client->twitter)
-                <a href="{{ $client->twitter }}" class="btn bg-info color-palette mr-1" target="_BLANK"><i class="fab fa-twitter"></i></a>
+            @if ($client->socialNetwork->twitter)
+                <a href="{{ $client->socialNetwork->twitter }}" class="btn bg-info color-palette mr-1" target="_BLANK"><i class="fab fa-twitter"></i></a>
             @endif
             <hr>                                
         @endif

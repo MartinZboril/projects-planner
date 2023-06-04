@@ -57,6 +57,7 @@ return [
     'update' => 'ToDo was updated!',
     'finish' => 'ToDo was finished!',
     'return' => 'ToDo was returned!',
+    'delete' => 'ToDo was deleted!',
   ],
   'user' => [
     'create' => 'User was created!',

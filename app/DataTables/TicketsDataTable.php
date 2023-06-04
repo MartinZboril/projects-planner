@@ -32,12 +32,22 @@ class TicketsDataTable extends DataTable
                     ->editColumn('created_at', function(Ticket $ticket) {
                         return Carbon::createFromFormat('Y-m-d H:i:s', $ticket->created_at)->format('d.m.Y');
                     })
-                    ->editColumn('due_date', function(Ticket $ticket) {
-                        return '<span class="text-' . ($ticket->overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $ticket->due_date)->format('d.m.Y') . '</span>';
+                    ->editColumn('dued_at', function(Ticket $ticket) {
+                        return '<span class="text-' . ($ticket->overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $ticket->dued_at)->format('d.m.Y') . '</span>';
                     })
                     ->editColumn('status', function(Ticket $ticket) {
                         return Blade::render('<x-ticket.ui.status-badge :text="true" :status="$status" />', ['status' => $ticket->status]);
                     })
+                    ->editColumn('task.name', function(Ticket $ticket) {
+                        if ($ticket->task ?? false) {
+                            if ($this->view === 'project') {
+                                return '<a href="' . route('projects.tasks.show', ['project' => $ticket->project, 'task' => $ticket->task]) . '">' . $ticket->task->name . '</a>';                
+                            } else {
+                                return '<a href="' . route('tasks.show', ['project' => $ticket->project, 'task' => $ticket->task]) . '">' . $ticket->task->name . '</a>';                
+                            }
+                        }
+                        return 'NaN';
+                    })                      
                     ->editColumn('type', function(Ticket $ticket) {
                         return Blade::render('<x-ticket.ui.type :type="$type" />', ['type' => $ticket->type]);
                     })
@@ -53,18 +63,18 @@ class TicketsDataTable extends DataTable
                     ->editColumn('assignee.surname', function(Ticket $ticket) {
                         return $ticket->assignee ?? false ? $ticket->assignee->surname : null;
                     })   
-                    ->rawColumns(['subject', 'project.name', 'reporter.full_name', 'assignee.full_name', 'created_at', 'priority', 'due_date', 'buttons']);
+                    ->rawColumns(['subject', 'project.name', 'reporter.full_name', 'assignee.full_name', 'created_at', 'priority', 'dued_at', 'buttons', 'task.name']);
     }
 
     public function query(Ticket $model): QueryBuilder
     {
         return $model->when(
             $this->project_id ?? false,
-            fn ($query, $value) => $query->where('project_id', $value)
+            fn ($query, $value) => $query->where('tickets.project_id', $value)
         )->when(
             $this->unassigned ?? false,
             fn ($query, $value) => $query->unassigned()->active()
-        )->with('project', 'reporter', 'assignee')->select('tickets.*')->newQuery();
+        )->with('project', 'reporter', 'assignee', 'task')->select('tickets.*')->newQuery();
     }
 
     public function html(): HtmlBuilder
@@ -73,7 +83,7 @@ class TicketsDataTable extends DataTable
                     ->setTableId($this->table_identifier ?? 'tickets-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
-                    ->orderBy(8)
+                    ->orderBy(9)
                     ->parameters([
                         'responsive' => true,
                         'autoWidth' => false,
@@ -96,9 +106,10 @@ class TicketsDataTable extends DataTable
             Column::make('assignee.name')->data('assignee.full_name')->title('Assignee'),
             Column::make('created_at'),
             Column::make('status')->orderable(false)->searchable(false),
+            Column::make('task.name')->data('task.name')->title('Converted Task'),
             Column::make('type')->orderable(false)->searchable(false),
             Column::make('priority')->orderable(false)->searchable(false),
-            Column::make('due_date'),
+            Column::make('dued_at'),
             Column::make('buttons')->title('')->orderable(false)->searchable(false)->visible($this->view === 'analysis' ? false : true),
             Column::make('reporter.surname')->visible(false),
             Column::make('assignee.surname')->visible(false),

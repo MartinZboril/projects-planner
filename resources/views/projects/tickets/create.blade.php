@@ -12,7 +12,7 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Form -->
-                <form action="{{ route('projects.tickets.store', $project) }}" method="post">
+                <form action="{{ route('projects.tickets.store', $project) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('POST')
                     <x-ticket.fields type="create" :$project />

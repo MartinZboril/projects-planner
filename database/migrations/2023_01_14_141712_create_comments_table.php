@@ -15,9 +15,15 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->unsignedBigInteger('commentable_id');
+            $table->string('commentable_type');            
+            $table->foreignIdFor(
+                \App\Models\User::class,
+                'user_id'
+            )->constrained('users');
             $table->text('content');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -16,7 +16,7 @@
                 <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
                 <div class="row">
                     <div class="col-md-5">
-                        @include('tasks.partials.informations')
+                        @include('tasks.partials.informations', ['project' => true])
                         <x-activity-feed.card />
                     </div>
                     <div class="col-md-7">

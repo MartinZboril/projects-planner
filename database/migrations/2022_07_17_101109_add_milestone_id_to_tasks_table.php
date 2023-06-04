@@ -14,7 +14,10 @@ class AddMilestoneIdToTasksTable extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->foreignId('milestone_id')->nullable();
+            $table->foreignIdFor(
+                \App\Models\Milestone::class,
+                'milestone_id'
+            )->nullable()->constrained('milestones');
         });
     }
 
@@ -26,7 +29,7 @@ class AddMilestoneIdToTasksTable extends Migration
     public function down()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->dropColumn('milestone_id');
+            $table->dropConstrainedForeignId('milestone_id');
         });
     }
 }

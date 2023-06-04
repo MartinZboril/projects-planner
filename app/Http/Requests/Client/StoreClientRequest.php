@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Client;
 
 use App\Models\Client;
+use App\Models\Address;
+use App\Models\SocialNetwork;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -21,7 +23,7 @@ class StoreClientRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules = Client::VALIDATION_RULES;
+        $rules = Client::VALIDATION_RULES + Address::VALIDATION_RULES + SocialNetwork::VALIDATION_RULES;
         $rules['logo'] = [
             'nullable',
             File::types(['png', 'jpg'])

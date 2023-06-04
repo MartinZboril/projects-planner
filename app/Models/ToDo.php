@@ -6,20 +6,22 @@ use App\Traits\Scopes\OverdueRecords;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\{Builder, Model};
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ToDo extends Model
 {
-    
-    use HasFactory, OverdueRecords;
+    use HasFactory, OverdueRecords, SoftDeletes;
 
     protected $table = 'todos';
     
     protected $fillable = [
-        'task_id', 'name', 'due_date', 'is_finished', 'description', 'is_finished',
+        'task_id', 'name', 'dued_at', 'is_finished', 'description', 'is_finished',
     ]; 
 
-    protected $dates = ['due_date'];
-
+    protected $casts = [
+        'dued_at' => 'date',
+    ];
+    
     protected $appends = [
         'overdue',
     ];
@@ -27,7 +29,7 @@ class ToDo extends Model
     public const VALIDATION_RULES = [
         'task_id' => ['required', 'integer', 'exists:tasks,id'],
         'name' => ['required', 'string', 'max:255'],
-        'due_date' => ['required', 'date'],
+        'dued_at' => ['required', 'date'],
         'is_finished' => ['boolean'],
         'description' => ['max:65553'],
     ];
@@ -47,7 +49,7 @@ class ToDo extends Model
 
     public function getOverdueAttribute(): bool
     {
-        return $this->due_date <= date('Y-m-d') && !$this->is_finished;
+        return $this->dued_at <= date('Y-m-d') && !$this->is_finished;
     }
 
 }

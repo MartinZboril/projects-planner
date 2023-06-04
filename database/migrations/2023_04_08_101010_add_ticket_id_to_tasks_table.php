@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class AddTicketIdToTasksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('tickets_comments', function (Blueprint $table) {
-            $table->id();
+        Schema::table('tasks', function (Blueprint $table) {
             $table->foreignIdFor(
                 \App\Models\Ticket::class,
                 'ticket_id'
-            )->constrained('tickets');
-            $table->foreignIdFor(
-                \App\Models\Comment::class,
-                'comment_id'
-            )->constrained('comments');
-            $table->timestamps();
+            )->nullable()->constrained('tickets');
         });
     }
 
@@ -34,6 +28,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tickets_comments');
+        Schema::table('tasks', function (Blueprint $table) {
+            $table->dropConstrainedForeignId('ticket_id');
+        });
     }
 };

@@ -32,10 +32,7 @@ class ProjectMilestoneCommentController extends Controller
     public function store(StoreCommentRequest $request, Project $project, Milestone $milestone)
     {
         try {
-            $this->milestoneService->handleSaveComment(
-                $milestone,
-                $this->commentService->handleSave(new Comment, $request->validated(), $request->file('files'))
-            );
+            $this->commentService->handleSave(new Comment, $request->validated(), $milestone, $request->file('files'));
             $this->flash(__('messages.comment.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
@@ -50,7 +47,7 @@ class ProjectMilestoneCommentController extends Controller
     public function update(UpdateCommentRequest $request, Project $project, Milestone $milestone, Comment $comment)
     {
         try {
-            $this->commentService->handleSave($comment, $request->validated(), $request->file('files'));
+            $this->commentService->handleSave($comment, $request->validated(), $milestone, $request->file('files'));
             $this->flash(__('messages.comment.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

@@ -36,7 +36,7 @@ class ClientsDataTable extends DataTable
 
     public function query(Client $model): QueryBuilder
     {
-        return $model->select('id', 'name', 'email', 'created_at', 'contact_person', 'is_marked')->newQuery();
+        return $model->with('logo')->select('id', 'name', 'email', 'created_at', 'contact_person', 'is_marked')->newQuery();
     }
 
     public function html(): HtmlBuilder

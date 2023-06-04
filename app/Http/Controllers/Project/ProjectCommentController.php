@@ -32,10 +32,7 @@ class ProjectCommentController extends Controller
     public function store(StoreCommentRequest $request, Project $project)
     {
         try {
-            $this->projectService->handleSaveComment(
-                $project,
-                $this->commentService->handleSave(new Comment, $request->validated(), $request->file('files'))
-            );
+            $this->commentService->handleSave(new Comment, $request->validated(), $project, $request->file('files'));
             $this->flash(__('messages.comment.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
@@ -50,7 +47,7 @@ class ProjectCommentController extends Controller
     public function update(UpdateCommentRequest $request, Project $project, Comment $comment)
     {
         try {
-            $this->commentService->handleSave($comment, $request->validated(), $request->file('files'));
+            $this->commentService->handleSave($comment, $request->validated(), $project, $request->file('files'));
             $this->flash(__('messages.comment.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

@@ -23,7 +23,7 @@
                                 <tr id="timer-{{ $timer->id }}-modal-row">
                                     <td><a href="{{ $timer->project_route }}">{{ $timer->project->name }}</a></td>
                                     <td>{{ $timer->rate->name }}</td>
-                                    <td><span id="timer-{{ $timer->id }}-display" class="timer-record" data-since="{{ $timer->since }}"></span></td>
+                                    <td><span id="timer-{{ $timer->id }}-display" class="timer-record" data-since_at="{{ $timer->since_at }}"></span></td>
                                     <td>
                                         <a href="#" class="btn btn-sm btn-danger" onclick="stopWorkTimer('{{ route('projects.timers.stop', ['project' => $timer->project, 'timer' => $timer]) }}', 'modal', '{{ $modalId }}')">
                                             <i class="fas fa-stop"></i>

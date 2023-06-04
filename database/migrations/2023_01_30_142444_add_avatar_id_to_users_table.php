@@ -14,7 +14,6 @@ return new class extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('avatar_path');
             $table->foreignIdFor(
                 \App\Models\File::class,
                 'avatar_id'
@@ -30,7 +29,6 @@ return new class extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('avatar_path')->nullable();
             $table->dropConstrainedForeignId('avatar_id');
         });
     }

@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\Task\ToDo;
 
 use Exception;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ToDo\{StoreToDoRequest, UpdateToDoRequest};
-use App\Models\{Task, ToDo};
 use App\Traits\FlashTrait;
+use App\Models\{Task, ToDo};
+use Illuminate\Http\JsonResponse;
 use App\Services\Data\ToDoService;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\ToDo\DestroyToDoRequest;
+use App\Http\Requests\ToDo\{StoreToDoRequest, UpdateToDoRequest};
 
 class TaskToDoController extends Controller
 {
@@ -40,9 +42,7 @@ class TaskToDoController extends Controller
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
-        return $request->has('save_and_close')
-            ? redirect()->route('tasks.index')
-            : redirect()->route('tasks.show', $task);
+        return redirect()->route('tasks.show', $task);
     }
 
     /**
@@ -65,8 +65,29 @@ class TaskToDoController extends Controller
             Log::error($exception);
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
-        return $request->has('save_and_close')
-            ? redirect()->route('tasks.index')
-            : redirect()->route('tasks.show', $task);
+        return redirect()->route('tasks.show', $task);
+    }
+
+    /**
+     * Remove the todo from storage.
+     */
+    public function destroy(DestroyToDoRequest $request,Task $task, ToDo $todo): JsonResponse|RedirectResponse
+    {
+        try {
+            $todo->delete();
+        } catch (Exception $exception) {
+            Log::error($exception);
+            return redirect()->back()->with(['error' => __('messages.error')]);
+        }
+
+        if ($request->redirect ?? false) {
+            $this->flash(__('messages.todo.delete'), 'danger');
+            return redirect()->route('tasks.show', $task);
+        }
+
+        return response()->json([
+            'message' => __('messages.todo.delete'),
+            'todo' => $todo,
+        ]);
     }
 }

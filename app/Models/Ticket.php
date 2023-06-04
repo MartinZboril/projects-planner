@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use Illuminate\Database\Eloquent\{Builder, Model};
+use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Enums\{TicketPriorityEnum, TicketTypeEnum, TicketStatusEnum};
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasOne};
 
 class Ticket extends Model
 {
@@ -16,8 +16,6 @@ class Ticket extends Model
         'id', 'created_at', 'updated_at',
     ];
     
-    protected $dates = ['due_date'];
-
     protected $appends = [
         'overdue',
         'assigned',
@@ -28,6 +26,7 @@ class Ticket extends Model
         'priority' => TicketPriorityEnum::class,
         'type' => TicketTypeEnum::class,
         'status' => TicketStatusEnum::class,
+        'dued_at' => 'date',
     ];
 
     public const VALIDATION_RULES = [
@@ -38,7 +37,7 @@ class Ticket extends Model
         'type' => ['required', 'integer'],
         'priority' => ['required', 'integer'],
         'status' => ['required', 'integer'],
-        'due_date' => ['required', 'date'],
+        'dued_at' => ['required', 'date'],
         'message' => ['required', 'max:65553'],
     ];
 
@@ -57,14 +56,19 @@ class Ticket extends Model
         return $this->belongsTo(User::class, 'assignee_id');
     }
 
-    public function files(): BelongsToMany
+    public function files()
     {
-        return $this->belongsToMany(File::class, 'tickets_files', 'ticket_id', 'file_id')->orderByDesc('created_at');
+        return $this->morphMany(File::class, 'fileable');
     }
         
-    public function comments(): BelongsToMany
+    public function comments()
     {
-        return $this->belongsToMany(Comment::class, 'tickets_comments', 'ticket_id', 'comment_id')->orderByDesc('created_at');
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function task(): HasOne
+    {
+        return $this->hasOne(Task::class, 'ticket_id');
     }
     
     public function scopeStatus(Builder $query, TicketStatusEnum $type): Builder
@@ -94,7 +98,7 @@ class Ticket extends Model
 
     public function getOverdueAttribute(): bool
     {
-        return $this->due_date <= date('Y-m-d') && $this->status ===TicketStatusEnum::open;
+        return $this->dued_at <= date('Y-m-d') && $this->status ===TicketStatusEnum::open;
     }
     
     public function getAssignedAttribute(): bool

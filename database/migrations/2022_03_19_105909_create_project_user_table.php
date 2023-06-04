@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateProjectUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('clients_files', function (Blueprint $table) {
+        Schema::create('project_user', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(
-                \App\Models\Client::class,
-                'client_id'
-            )->constrained('clients');
+                \App\Models\Project::class,
+                'project_id'
+            )->constrained('projects');
             $table->foreignIdFor(
-                \App\Models\File::class,
-                'file_id'
-            )->constrained('files');
-            $table->timestamps();
+                \App\Models\User::class,
+                'user_id'
+            )->constrained('users');
         });
     }
 
@@ -34,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clients_files');
+        Schema::dropIfExists('project_user');
     }
-};
+}

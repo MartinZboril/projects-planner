@@ -8,25 +8,24 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('avatar_path')->nullable();
+            $table->foreignIdFor(
+                \App\Models\Address::class,
+                'address_id'
+            )->constrained('addresses');
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('avatar_path');
+            $table->dropConstrainedForeignId('address_id');
         });
     }
 };

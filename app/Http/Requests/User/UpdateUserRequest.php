@@ -3,8 +3,9 @@
 namespace App\Http\Requests\User;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Address;
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -21,7 +22,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules = User::VALIDATION_RULES;
+        $rules = User::VALIDATION_RULES + Address::VALIDATION_RULES;
         $rules['email'] = [
             'required', 'string', 'email', 'max:255',
             Rule::unique('users')->ignoreModel($this->user)

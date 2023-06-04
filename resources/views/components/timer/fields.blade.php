@@ -4,25 +4,25 @@
             <div class="card-header">{{ $type === 'edit' ? 'Edit' : 'Create' }} Timer</div>
             <div class="card-body">
                 <div class="form-group required">
-                    <label for="since-datetimepicker" class="control-label">Since</label>
-                    <div class="input-group date" id="since-datetimepicker" data-target-input="nearest">
-                        <input type="text" name="since" class="form-control datetimepicker-input @error('since') is-invalid @enderror" data-target="#since-datetimepicker" value="{{ old('since', ($timer->since ?? false) ? $timer->since->format('Y-m-d H:i') : null) }}" autocomplete="off"/>
-                        <div class="input-group-append" data-target="#since-datetimepicker" data-toggle="datetimepicker">
+                    <label for="since_at-datetimepicker" class="control-label">since_at</label>
+                    <div class="input-group date" id="since_at-datetimepicker" data-target-input="nearest">
+                        <input type="text" name="since_at" class="form-control datetimepicker-input @error('since_at') is-invalid @enderror" data-target="#since_at-datetimepicker" value="{{ old('since_at', ($timer->since_at ?? false) ? $timer->since_at->format('Y-m-d H:i') : null) }}" autocomplete="off"/>
+                        <div class="input-group-append" data-target="#since_at-datetimepicker" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>
-                        @error('since')
+                        @error('since_at')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
                 <div class="form-group required">
-                    <label for="until-datetimepicker" class="control-label">Until</label>
-                    <div class="input-group date" id="until-datetimepicker" data-target-input="nearest">
-                        <input type="text" name="until" class="form-control datetimepicker-input @error('until') is-invalid @enderror" data-target="#until-datetimepicker" value="{{ old('until', ($timer->until ?? false) ? $timer->until->format('Y-m-d H:i') : null) }}" autocomplete="off"/>
-                        <div class="input-group-append" data-target="#until-datetimepicker" data-toggle="datetimepicker">
+                    <label for="until_at-datetimepicker" class="control-label">until_at</label>
+                    <div class="input-group date" id="until_at-datetimepicker" data-target-input="nearest">
+                        <input type="text" name="until_at" class="form-control datetimepicker-input @error('until_at') is-invalid @enderror" data-target="#until_at-datetimepicker" value="{{ old('until_at', ($timer->until_at ?? false) ? $timer->until_at->format('Y-m-d H:i') : null) }}" autocomplete="off"/>
+                        <div class="input-group-append" data-target="#until_at-datetimepicker" data-toggle="datetimepicker">
                             <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                         </div>
-                        @error('until')
+                        @error('until_at')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -66,7 +66,7 @@
 @push('scripts')
     <script type="text/javascript">
         $(document).ready(function(){
-            $('#since-datetimepicker').datetimepicker({
+            $('#since_at-datetimepicker').datetimepicker({
                 locale: 'cs',
                 format: 'YYYY-MM-DD HH:mm',
                 icons: {
@@ -77,7 +77,7 @@
                 }
             });
 
-            $('#until-datetimepicker').datetimepicker({
+            $('#until_at-datetimepicker').datetimepicker({
                 locale: 'cs',
                 format: 'YYYY-MM-DD HH:mm',
                 useCurrent: false,
@@ -89,12 +89,12 @@
                 }
             });
 
-            $("#since-datetimepicker").on("change.datetimepicker", function (e) {
-                $('#until-datetimepicker').datetimepicker('minDate', e.date);
+            $("#since_at-datetimepicker").on("change.datetimepicker", function (e) {
+                $('#until_at-datetimepicker').datetimepicker('minDate', e.date);
             });
 
-            $("#until-datetimepicker").on("change.datetimepicker", function (e) {
-                $('#since-datetimepicker').datetimepicker('maxDate', e.date);
+            $("#until_at-datetimepicker").on("change.datetimepicker", function (e) {
+                $('#since_at-datetimepicker').datetimepicker('maxDate', e.date);
             });
 
             $('#rate-id').select2({

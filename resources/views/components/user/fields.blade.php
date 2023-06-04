@@ -125,7 +125,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="street">Street</label>
-                            <input type="text" name="street" id="street" class="form-control @error('street') is-invalid @enderror" placeholder="street" value="{{ old('street', $user->street ?? null) }}" >
+                            <input type="text" name="street" id="street" class="form-control @error('street') is-invalid @enderror" placeholder="street" value="{{ old('street', $user->address->street ?? null) }}" >
                             @error('street')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -134,7 +134,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="house_number">House number</label>
-                            <input type="text" name="house_number" id="house_number" class="form-control @error('house_number') is-invalid @enderror" placeholder="house number" value="{{ old('house_number', $user->house_number ?? null) }}" >
+                            <input type="text" name="house_number" id="house_number" class="form-control @error('house_number') is-invalid @enderror" placeholder="house number" value="{{ old('house_number', $user->address->house_number ?? null) }}" >
                             @error('house_number')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -145,7 +145,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="city">City</label>
-                            <input type="text" name="city" id="city" class="form-control @error('city') is-invalid @enderror" placeholder="city" value="{{ old('city', $user->city ?? null) }}" >
+                            <input type="text" name="city" id="city" class="form-control @error('city') is-invalid @enderror" placeholder="city" value="{{ old('city', $user->address->city ?? null) }}" >
                             @error('city')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -154,7 +154,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="zip_code">ZIP code</label>
-                            <input type="text" name="zip_code" id="zip_code" class="form-control @error('zip_code') is-invalid @enderror" placeholder="zip code" value="{{ old('zip_code', $user->zip_code ?? null) }}" >
+                            <input type="text" name="zip_code" id="zip_code" class="form-control @error('zip_code') is-invalid @enderror" placeholder="zip code" value="{{ old('zip_code', $user->address->zip_code ?? null) }}" >
                             @error('zip_code')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -163,7 +163,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="country">Country</label>
-                            <input type="text" name="country" id="country" class="form-control @error('country') is-invalid @enderror" placeholder="country" value="{{ old('country', $user->country ?? null) }}" >
+                            <input type="text" name="country" id="country" class="form-control @error('country') is-invalid @enderror" placeholder="country" value="{{ old('country', $user->address->country ?? null) }}" >
                             @error('country')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

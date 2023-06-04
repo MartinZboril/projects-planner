@@ -66,9 +66,9 @@
                     @enderror
                 </div> 
                 <div class="form-group required">
-                    <label for="due_date" class="control-label">Due date</label>
-                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', ($ticket->due_date ?? false) ? $ticket->due_date->format('Y-m-d') : now()->addDays(3)->format('Y-m-d')) }}" >
-                    @error('due_date')
+                    <label for="dued_at" class="control-label">Due date</label>
+                    <input type="date" name="dued_at" id="dued_at" class="form-control @error('dued_at') is-invalid @enderror" placeholder="due date" value="{{ old('dued_at', ($ticket->dued_at ?? false) ? $ticket->dued_at->format('Y-m-d') : now()->addDays(3)->format('Y-m-d')) }}" >
+                    @error('dued_at')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -88,6 +88,17 @@
             <div class="card-body">
             </div>
         </div>
+        @if ($type === 'create')
+            <div class="card card-primary card-outline">
+                <div class="card-header">Files</div>
+                <div class="card-body">
+                    <input type="file" name="files[]" multiple class="@error('files'){{ 'is-invalid' }}@enderror"> 
+                    @error('files')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>            
+        @endif          
         <div class="card">
             <div class="card-body">
                 <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $closeRoute }}" class="cancel-btn">Close</a></span>
@@ -128,6 +139,28 @@
                 theme: 'bootstrap4',
                 placeholder: 'select priority'
             });
+
+            $('#project-id').on('change', function () {
+                const projectId = this.value;
+                $("#assignee-id").html('');
+                $.ajax({
+                    url: "{{ route('users.load') }}",
+                    type: "POST",
+                    data: {
+                        project_id: projectId,
+                        _token: '{{csrf_token()}}'
+                    },
+                    dataType: 'json',
+                    success: function (result) {
+                        $('#assignee-id').html('<option value="">select assignee</option>');
+                        $.each(result.users, function (key, value) {
+                            $("#assignee-id").append('<option value="' + value
+                                .id + '">' + value.fullname + '</option>');
+                        });
+                    }
+                });                
+            });            
+
 
             $('#message').summernote();
         });

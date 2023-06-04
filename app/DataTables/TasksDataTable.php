@@ -33,33 +33,43 @@ class TasksDataTable extends DataTable
                     ->editColumn('user.full_name', function(Task $task) {
                         return Blade::render('<x-site.ui.user-icon :user="$user" />', ['user' => $task->user]);
                     })  
-                    ->editColumn('due_date', function(Task $task) {
-                        return '<span class="text-' . ($task->overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $task->due_date)->format('d.m.Y') . '</span>';
+                    ->editColumn('dued_at', function(Task $task) {
+                        return '<span class="text-' . ($task->overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $task->dued_at)->format('d.m.Y') . '</span>';
                     })
                     ->editColumn('status', function(Task $task) {
                         return Blade::render('<x-task.ui.status-badge :text="true" :task="$task" />', ['task' => $task]);
-                    })                    
+                    })    
+                    ->editColumn('ticket.subject', function(Task $task) {
+                        if ($task->ticket ?? false) {
+                            if ($this->view === 'project') {
+                                return '<a href="' . route('projects.tickets.show', ['project' => $task->project, 'ticket' => $task->ticket]) . '">' . $task->ticket->subject . '</a>';                
+                            } else {
+                                return '<a href="' . route('tickets.show', ['project' => $task->project, 'ticket' => $task->ticket]) . '">' . $task->ticket->subject . '</a>';                
+                            }
+                        }
+                        return 'NaN';
+                    })                                    
                     ->editColumn('buttons', function(Task $task) {
                         $buttons = '<a href="' . ($this->view === 'project' ? route('projects.tasks.edit', ['project' => $task->project, 'task' => $task]) : route('tasks.edit', $task)) . '" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a> ';
                         $buttons .= '<a href="' . ($this->view === 'project' ? route('projects.tasks.show', ['project' => $task->project, 'task' => $task]) : route('tasks.show', $task)) . '" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a> ';
                         $buttons .= view('tasks.partials.buttons', ['task' => $task, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#' . ($this->table_identifier ?? 'tasks-table')]);
                         return $buttons;
                     })
-                    ->rawColumns(['name', 'project.name', 'milestone.name', 'user.full_name', 'status', 'due_date', 'buttons']);
+                    ->rawColumns(['name', 'project.name', 'milestone.name', 'user.full_name', 'status', 'dued_at', 'buttons', 'ticket.subject']);
     }
 
     public function query(Task $model): QueryBuilder
     {
         return $model->when(
             $this->project_id ?? false,
-            fn ($query, $value) => $query->where('project_id', $value)
+            fn ($query, $value) => $query->where('tasks.project_id', $value)
         )->when(
             $this->milestone_id ?? false,
-            fn ($query, $value) => $query->where('milestone_id', $value)
+            fn ($query, $value) => $query->where('tasks.milestone_id', $value)
         )->when(
             $this->newed ?? false,
-            fn ($query, $value) => $query->where('status', TaskStatusEnum::new)
-        )->with('project', 'milestone', 'user')->select('tasks.*')->newQuery();
+            fn ($query, $value) => $query->where('tasks.status', TaskStatusEnum::new)
+        )->with('project', 'milestone', 'user', 'ticket')->select('tasks.*')->newQuery();
     }
 
     public function html(): HtmlBuilder
@@ -89,8 +99,9 @@ class TasksDataTable extends DataTable
             Column::make('project.name')->data('project.name')->title('Project')->visible($this->view === 'project' ? false : true),
             Column::make('milestone.name')->data('milestone.name')->title('Milestone')->visible($this->view === 'milestone' ? false : true),
             Column::make('user.name')->data('user.full_name')->title('User'),
-            Column::make('due_date'),
+            Column::make('dued_at'),
             Column::make('status')->orderable(false)->searchable(false),
+            Column::make('ticket.subject')->data('ticket.subject')->title('From Ticket'),
             Column::make('buttons')->title('')->orderable(false)->searchable(false)->visible(in_array($this->view, ['analysis', 'milestone']) ? false : true),
             Column::make('user.surname')->visible(false),
         ];

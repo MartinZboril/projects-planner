@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Client;
 
 use App\Models\Client;
+use App\Models\Address;
+use App\Models\SocialNetwork;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Foundation\Http\FormRequest;
@@ -22,7 +24,7 @@ class UpdateClientRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules = Client::VALIDATION_RULES;
+        $rules = Client::VALIDATION_RULES + Address::VALIDATION_RULES + SocialNetwork::VALIDATION_RULES;
         $rules['name'] = ['required', 'string', 'max:255',
             Rule::unique('clients')->ignore($this->client),
         ];

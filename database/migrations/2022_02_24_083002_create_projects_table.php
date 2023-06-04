@@ -16,15 +16,19 @@ class CreateProjectsTable extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('client_id');
-            $table->date('start_date');
-            $table->date('due_date');
-            $table->integer('estimated_hours')->nullable();
-            $table->integer('budget')->nullable();
+            $table->foreignIdFor(
+                \App\Models\Client::class,
+                'client_id'
+            )->constrained('clients');
+            $table->date('started_at');
+            $table->date('dued_at');
+            $table->unsignedInteger('estimated_hours')->nullable();
+            $table->unsignedInteger('budget')->nullable();
             $table->longText('description');
-            $table->integer('status')->default(1);
+            $table->unsignedInteger('status')->default(1);
             $table->boolean('is_marked')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

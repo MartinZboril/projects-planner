@@ -1103,7 +1103,7 @@ function singleChildAncestor(node, pred) {
   return null;
 }
 /**
- * returns new array of ancestor nodes (until predicate hit).
+ * returns new array of ancestor nodes ( predicate hit).
  *
  * @param {Node} node
  * @param {Function} [optional] pred - predicate function
@@ -1149,7 +1149,7 @@ function commonAncestor(nodeA, nodeB) {
   return null; // difference document area
 }
 /**
- * listing all previous siblings (until predicate hit).
+ * listing all previous siblings ( predicate hit).
  *
  * @param {Node} node
  * @param {Function} [optional] pred - predicate function
@@ -1172,7 +1172,7 @@ function listPrev(node, pred) {
   return nodes;
 }
 /**
- * listing next siblings (until predicate hit).
+ * listing next siblings ( predicate hit).
  *
  * @param {Node} node
  * @param {Function} [pred] - predicate function

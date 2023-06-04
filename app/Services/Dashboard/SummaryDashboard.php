@@ -20,7 +20,7 @@ class SummaryDashboard
             'active_projects_count' => Project::active()->count(),
             'active_tasks_count' => Task::active()->stopped(false)->count(),
             'active_tickets_count' => Ticket::active()->count(),
-            'today_summary' => $this->getTodaySummary()->sortByDesc('due_date'),
+            'today_summary' => $this->getTodaySummary()->sortByDesc('dued_at'),
             'marked_items' => $this->getMarkedItems(),
         ]);
 
@@ -36,7 +36,7 @@ class SummaryDashboard
         $summary = $this->pushItemsToSummary($summary, 'ticket', Ticket::marked()->get());
         $summary = $this->pushItemsToSummary($summary, 'task', Task::marked()->get());
 
-        return $summary->sortByDesc('due_date');
+        return $summary->sortByDesc('dued_at');
     }
     
     protected function getTodaySummary(): Collection
@@ -58,7 +58,7 @@ class SummaryDashboard
                 'id' => $item->id,
                 'name' => $type ==='ticket' ? $item->subject : $item->name,
                 'type' => $type,
-                'due_date' => (in_array($type, ['client'])) ? null : $item->due_date,
+                'dued_at' => (in_array($type, ['client'])) ? null : $item->dued_at,
                 'overdue' => false,
                 'url' => ($type === 'milestone')
                             ? route('projects.milestones.show', ['project' => $item->project, 'milestone' => $item])

@@ -17,13 +17,20 @@ class CreateMilestonesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('colour');
-            $table->foreignId('project_id');
-            $table->foreignId('owner_id');
-            $table->date('start_date')->nullable();
-            $table->date('due_date')->nullable();
+            $table->foreignIdFor(
+                \App\Models\Project::class,
+                'project_id'
+            )->constrained('projects');
+            $table->foreignIdFor(
+                \App\Models\User::class,
+                'owner_id'
+            )->constrained('users');
+            $table->date('started_at')->nullable();
+            $table->date('dued_at')->nullable();
             $table->longText('description')->nullable();
             $table->boolean('is_marked')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

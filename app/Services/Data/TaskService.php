@@ -9,14 +9,14 @@ use App\Services\FileService;
 
 class TaskService
 {
-    public function __construct(private ProjectUserService $projectUserService)
+    public function __construct()
     {
     }
 
     /**
      * Save data for task.
      */
-    public function handleSave(Task $task, array $inputs): Task
+    public function handleSave(Task $task, array $inputs, ?Array $uploadedFiles=[]): Task
     {
         // Prepare fields
         $inputs['status'] = $task->status ?? TaskStatusEnum::new;
@@ -24,10 +24,10 @@ class TaskService
         $inputs['milestone_id'] = $inputs['milestone_id'] ?? null;
         // Save task
         $task->fill($inputs)->save();
-        // Store tasks projects users
-        $this->projectUserService->handleStoreUser($task->project, $task->author);
-        $this->projectUserService->handleStoreUser($task->project, $task->user);
-
+        // Upload files
+        if ($uploadedFiles) {
+            $this->handleUploadFiles($task, $uploadedFiles);
+        } 
         return $task;
     }
     
@@ -37,16 +37,8 @@ class TaskService
     public function handleUploadFiles(Task $task, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            $task->files()->save((new FileService)->handleUpload($uploadedFile, 'tasks/files'));
+            (new FileService)->handleUpload($uploadedFile, 'tasks/files', $task);
         }
-    }
-
-    /**
-     * Save tasks comments.
-     */
-    public function handleSaveComment(Task $task, Comment $comment): void
-    {
-        $task->comments()->save($comment);
     }
 
     /**

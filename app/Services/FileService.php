@@ -5,13 +5,14 @@ namespace App\Services;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use App\Models\File;
+use Illuminate\Database\Eloquent\Model;
 
 class FileService
 {
     /**
      * Upload file to storage and database.
      */
-    public function handleUpload(UploadedFile $uploadedFile, String $collection): File
+    public function handleUpload(UploadedFile $uploadedFile, String $collection, Model $model=null): File
     {
         $name = $uploadedFile->hashName();
         $path = $collection . '/' . $name;
@@ -19,6 +20,12 @@ class FileService
         Storage::disk(config('app.uploads.disk'))->put($collection, $uploadedFile);
 
         $file = new File;
+        
+        if ($model ?? false) {
+            $file->fileable_id = $model->id;
+            $file->fileable_type = $model::class;                
+        }
+
         $file->name = $name;
         $file->file_name = $uploadedFile->getClientOriginalName();
         $file->mime_type = $uploadedFile->getClientMimeType();

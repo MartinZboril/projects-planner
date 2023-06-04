@@ -29,6 +29,11 @@ class StatusBadge extends Component
                 $this->title = __('pages.content.tickets.statuses.archive');
                 $this->background = 'primary';
                 break;
+
+            case(TicketStatusEnum::convert):
+                $this->title = __('pages.content.tickets.statuses.convert');
+                $this->background = 'info';
+                break;
     
             default:
                 $this->title = 'NaN';

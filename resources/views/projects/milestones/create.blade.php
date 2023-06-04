@@ -12,7 +12,7 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Form -->
-                <form action="{{ route('projects.milestones.store', $project) }}" method="post">
+                <form action="{{ route('projects.milestones.store', $project) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('POST')
                     <x-milestone.fields :$project type="create" />                                                                                       

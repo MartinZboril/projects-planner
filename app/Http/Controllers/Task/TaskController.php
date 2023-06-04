@@ -45,7 +45,7 @@ class TaskController extends Controller
     public function store(StoreTaskRequest $request): RedirectResponse
     {
         try {
-            $task = $this->taskService->handleSave(new Task, $request->validated());
+            $task = $this->taskService->handleSave(new Task, $request->validated(), $request->file('files'));
             $this->flash(__('messages.task.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

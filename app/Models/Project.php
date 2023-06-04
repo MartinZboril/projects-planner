@@ -13,17 +13,15 @@ class Project extends Model
     use HasFactory, MarkedRecords, OverdueRecords;
 
     protected $fillable = [
-        'status', 'client_id', 'name', 'start_date', 'due_date', 'estimated_hours', 'budget', 'description', 'is_marked',
+        'status', 'client_id', 'name', 'started_at', 'dued_at', 'estimated_hours', 'budget', 'description', 'is_marked',
     ]; 
-
-    protected $dates = ['start_date', 'due_date'];
 
     public const VALIDATION_RULES = [
         'client_id' => ['required', 'integer', 'exists:clients,id'],
         'name' => ['required', 'string', 'max:255'],
         'team' => ['required', 'array'],
-        'start_date' => ['required', 'date'],
-        'due_date' => ['required', 'date'],
+        'started_at' => ['required', 'date'],
+        'dued_at' => ['required', 'date'],
         'estimated_hours' => ['required', 'date'],
         'estimated_hours' => ['required', 'integer', 'min:0'],
         'budget' => ['required', 'integer', 'min:0'],
@@ -47,6 +45,8 @@ class Project extends Model
 
     protected $casts = [
         'status' => ProjectStatusEnum::class,
+        'started_at' => 'date',
+        'dued_at' => 'date',
     ];
 
     public function client(): BelongsTo
@@ -56,17 +56,17 @@ class Project extends Model
 
     public function team(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'projects_users', 'project_id', 'user_id');
+        return $this->belongsToMany(User::class, 'project_user', 'project_id', 'user_id');
     }
 
-    public function files(): BelongsToMany
+    public function files()
     {
-        return $this->belongsToMany(File::class, 'projects_files', 'project_id', 'file_id')->orderByDesc('created_at');
+        return $this->morphMany(File::class, 'fileable');
     }
 
-    public function comments(): BelongsToMany
+    public function comments()
     {
-        return $this->belongsToMany(Comment::class, 'projects_comments', 'project_id', 'comment_id')->orderByDesc('created_at');
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
     public function tasks(): HasMany
@@ -104,9 +104,9 @@ class Project extends Model
         return $this->hasMany(Ticket::class, 'project_id');
     }
 
-    public function notes(): BelongsToMany
+    public function notes()
     {
-        return $this->belongsToMany(Note::class, 'projects_notes', 'project_id', 'note_id')->visible()->orderByDesc('is_marked');
+        return $this->morphMany(Note::class, 'noteable');
     }
 
     public function scopeStatus(Builder $query, ProjectStatusEnum $type): Builder
@@ -126,12 +126,12 @@ class Project extends Model
 
     public function getOverdueAttribute(): bool
     {
-        return $this->due_date <= date('Y-m-d') && $this->status === ProjectStatusEnum::active;
+        return $this->dued_at <= date('Y-m-d') && $this->status === ProjectStatusEnum::active;
     }
 
     public function getDeadlineAttribute(): int
     {
-        return $this->status === ProjectStatusEnum::finish ? 0 : (($this->overdue ? -1 : 1) * abs($this->due_date->diffInDays(now()->format('Y-m-d'))));
+        return $this->status === ProjectStatusEnum::finish ? 0 : (($this->overdue ? -1 : 1) * abs($this->dued_at->diffInDays(now()->format('Y-m-d'))));
     }
        
     public function getTotalTimeAttribute(): float

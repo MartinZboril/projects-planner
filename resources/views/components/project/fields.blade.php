@@ -43,16 +43,16 @@
                     @enderror
                 </div>                                
                 <div class="form-group required">
-                    <label for="start_date" class="control-label">Start date</label>
-                    <input type="date" name="start_date" id="start_date" class="form-control @error('start_date') is-invalid @enderror" placeholder="start date" value="{{ old('start_date', ($project->start_date ?? false) ? $project->start_date->format('Y-m-d') : now()->format('Y-m-d')) }}" >
-                    @error('start_date')
+                    <label for="started_at" class="control-label">Start date</label>
+                    <input type="date" name="started_at" id="started_at" class="form-control @error('started_at') is-invalid @enderror" placeholder="start date" value="{{ old('started_at', ($project->started_at ?? false) ? $project->started_at->format('Y-m-d') : now()->format('Y-m-d')) }}" >
+                    @error('started_at')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group required">
-                    <label for="due_date" class="control-label">Due date</label>
-                    <input type="date" name="due_date" id="due_date" class="form-control @error('due_date') is-invalid @enderror" placeholder="due date" value="{{ old('due_date', ($project->due_date ?? false) ? $project->due_date->format('Y-m-d') : now()->addMonths(1)->format('Y-m-d')) }}" >
-                    @error('due_date')
+                    <label for="dued_at" class="control-label">Due date</label>
+                    <input type="date" name="dued_at" id="dued_at" class="form-control @error('dued_at') is-invalid @enderror" placeholder="due date" value="{{ old('dued_at', ($project->dued_at ?? false) ? $project->dued_at->format('Y-m-d') : now()->addMonths(1)->format('Y-m-d')) }}" >
+                    @error('dued_at')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -80,12 +80,23 @@
             </div>
         </div>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-5">          
         <div class="card card-primary card-outline">
             <div class="card-header">Settings</div>
             <div class="card-body">
             </div>
         </div>
+        @if ($type === 'create')
+            <div class="card card-primary card-outline">
+                <div class="card-header">Files</div>
+                <div class="card-body">
+                    <input type="file" name="files[]" multiple class="@error('files'){{ 'is-invalid' }}@enderror"> 
+                    @error('files')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>            
+        @endif         
         <div class="card">
             <div class="card-body">
                 <input type="submit" name="save" class="btn btn-sm btn-primary mr-1" value="Save"><input type="submit" name="save_and_close" class="btn btn-sm btn-secondary" value="Save and close"> or <a href="{{ $closeRoute }}" class="cancel-btn">Close</a></span>

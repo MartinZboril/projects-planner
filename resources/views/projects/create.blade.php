@@ -12,7 +12,7 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Form -->
-                <form action="{{ route('projects.store') }}" method="post">
+                <form action="{{ route('projects.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('POST')
                     <x-project.fields type="create" />

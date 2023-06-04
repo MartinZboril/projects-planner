@@ -27,11 +27,12 @@ class TicketConvertTicketToTaskController extends Controller
                 'author_id' => $ticket->reporter_id,
                 'user_id' => $ticket->assignee_id,
                 'name' => $ticket->subject,
-                'start_date' => $ticket->due_date,
-                'due_date' => $ticket->due_date,
+                'started_at' => $ticket->dued_at,
+                'dued_at' => $ticket->dued_at,
                 'description' => $ticket->message,
                 'is_stopped' => 0,
                 'is_returned' => 0,
+                'ticket_id' => $ticket->id,
             ]);
             $this->ticketService->handleConvert($ticket);  
         } catch (Exception $exception) {

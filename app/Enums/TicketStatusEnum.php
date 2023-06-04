@@ -11,4 +11,5 @@ enum TicketStatusEnum: int
     case open = 1;
     case close = 2;
     case archive = 3;
+    case convert = 4;
 }

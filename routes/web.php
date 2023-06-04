@@ -40,6 +40,8 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/tickets', App\Http\Controllers\Dashboard\TicketDashboardController::class)->name('tickets');
         });
     });
+    // Milestones
+    Route::post('/milestones/load', App\Http\Controllers\MilestoneLoadByProjectController::class)->name('milestones.load');
     // Notes
     Route::patch('notes/{note}/mark', App\Http\Controllers\Note\NoteMarkController::class)->name('notes.mark');
     Route::resource('notes', App\Http\Controllers\Note\NoteController::class)
@@ -71,7 +73,7 @@ Route::middleware(['auth'])->group(function () {
         // ToDos
         Route::patch('/todos/{todo}/check', App\Http\Controllers\Task\ToDo\TaskToDoCheckController::class)->name('todos.check');
         Route::resource('todos', App\Http\Controllers\Task\ToDo\TaskToDoController::class)
-            ->except(['index', 'show', 'destroy']);
+            ->except(['index', 'show']);
     });
     Route::resource('tasks', App\Http\Controllers\Task\TaskController::class)
         ->except(['destroy']);
@@ -90,6 +92,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('tickets', App\Http\Controllers\Ticket\TicketController::class)
         ->except(['destroy']);
     // Users
+    Route::post('/users/load', App\Http\Controllers\UserLoadByProjectController::class)->name('users.load');
     Route::group(['prefix' => 'users/{user}', 'as' => 'users.'], function () {
         // Rates
         Route::resource('rates', App\Http\Controllers\User\Rate\UserRateController::class)
@@ -135,7 +138,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::post('/files/upload', App\Http\Controllers\Project\Task\ProjectTaskFileUploaderController::class)->name('files.upload');
                 // ToDos
                 Route::resource('todos', App\Http\Controllers\Project\Task\ToDo\ProjectTaskToDoController::class)
-                    ->except(['index', 'show', 'destroy']);
+                    ->except(['index', 'show']);
             });
         });
         Route::resource('tasks', App\Http\Controllers\Project\Task\ProjectTaskController::class)

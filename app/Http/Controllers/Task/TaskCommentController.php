@@ -24,10 +24,7 @@ class TaskCommentController extends Controller
     public function store(StoreCommentRequest $request, Task $task)
     {
         try {
-            $this->taskService->handleSaveComment(
-                $task,
-                $this->commentService->handleSave(new Comment, $request->validated(), $request->file('files'))
-            );
+            $this->commentService->handleSave(new Comment, $request->validated(), $task, $request->file('files'));
             $this->flash(__('messages.comment.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
@@ -42,7 +39,7 @@ class TaskCommentController extends Controller
     public function update(UpdateCommentRequest $request, Task $task, Comment $comment)
     {
         try {
-            $comment = $this->commentService->handleSave($comment, $request->validated(), $request->file('files'));
+            $comment = $this->commentService->handleSave($comment, $request->validated(), $task, $request->file('files'));
             $this->flash(__('messages.comment.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
