@@ -16,17 +16,27 @@ class CreateTasksTable extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('project_id');
-            $table->foreignId('author_id');
-            $table->foreignId('user_id');
+            $table->foreignIdFor(
+                \App\Models\Project::class,
+                'project_id'
+            )->constrained('projects');
+            $table->foreignIdFor(
+                \App\Models\User::class,
+                'author_id'
+            )->constrained('users');
+            $table->foreignIdFor(
+                \App\Models\User::class,
+                'user_id'
+            )->constrained('users');
             $table->unsignedInteger('status')->default(1);
-            $table->date('start_at')->nullable();
-            $table->date('due_at')->nullable();
+            $table->date('started_at')->nullable();
+            $table->date('dued_at')->nullable();
             $table->longText('description');
             $table->boolean('is_stopped')->default(0);
             $table->boolean('is_returned')->default(0);
             $table->boolean('is_marked')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

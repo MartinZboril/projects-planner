@@ -6,7 +6,7 @@
                 <label for="todo-check-{{ $todo->id }}"></label>
             </div>
             <span class="text">{{ $todo->name }}</span>
-            <small class="badge badge-{{ $todo->overdue ? 'danger' : 'secondary' }}" id="todo-{{ $todo->id }}-due-date"><i class="far fa-clock mr-1"></i>{{ $todo->due_at->format('d.m.Y') }}</small>
+            <small class="badge badge-{{ $todo->overdue ? 'danger' : 'secondary' }}" id="todo-{{ $todo->id }}-due-date"><i class="far fa-clock mr-1"></i>{{ $todo->dued_at->format('d.m.Y') }}</small>
             @if($todo->description)
                 <small class="ml-1">{{ $todo->description }}</small>
             @endif

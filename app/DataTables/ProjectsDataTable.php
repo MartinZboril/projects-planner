@@ -46,8 +46,8 @@ class ProjectsDataTable extends DataTable
                     ->editColumn('budget_plan', function(Project $project) {
                         return '<span class="text-' . ($project->overdue ? 'danger' : 'body') . '">' . $project->budget_plan . ' %' . '</span>';
                     })
-                    ->editColumn('due_at', function(Project $project) {
-                        return '<span class="text-' . ($project->overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $project->due_at)->format('d.m.Y') . '</span>';
+                    ->editColumn('dued_at', function(Project $project) {
+                        return '<span class="text-' . ($project->overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $project->dued_at)->format('d.m.Y') . '</span>';
                     })       
                     ->editColumn('buttons', function(Project $project) {
                         $buttons = '<a href="' . route('projects.edit', $project) . '" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a> ';
@@ -55,7 +55,7 @@ class ProjectsDataTable extends DataTable
                         $buttons .= view('projects.partials.buttons', ['project' => $project, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#' . ($this->table_identifier ?? 'projects-table')]);
                         return $buttons;
                     })                                 
-                    ->rawColumns(['name', 'client.name', 'status', 'team', 'buttons', 'due_at', 'time_plan', 'budget_plan']);                    
+                    ->rawColumns(['name', 'client.name', 'status', 'team', 'buttons', 'dued_at', 'time_plan', 'budget_plan']);                    
     }
 
     public function query(Project $model): QueryBuilder
@@ -90,7 +90,7 @@ class ProjectsDataTable extends DataTable
             Column::make('client.name')->data('client.name')->title('Client'),
             Column::make('status')->orderable(false)->searchable(false),
             Column::make('team')->orderable(false)->searchable(false),
-            Column::make('due_at'),
+            Column::make('dued_at'),
             Column::make('time_plan')->orderable(false)->searchable(false),
             Column::make('total_time')->orderable(false)->searchable(false),
             Column::make('budget_plan')->orderable(false)->searchable(false),

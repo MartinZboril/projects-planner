@@ -24,6 +24,7 @@ class CreateClientsTable extends Migration
             $table->text('note')->nullable();
             $table->boolean('is_marked')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

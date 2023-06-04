@@ -13,15 +13,15 @@ class Project extends Model
     use HasFactory, MarkedRecords, OverdueRecords;
 
     protected $fillable = [
-        'status', 'client_id', 'name', 'start_at', 'due_at', 'estimated_hours', 'budget', 'description', 'is_marked',
+        'status', 'client_id', 'name', 'started_at', 'dued_at', 'estimated_hours', 'budget', 'description', 'is_marked',
     ]; 
 
     public const VALIDATION_RULES = [
         'client_id' => ['required', 'integer', 'exists:clients,id'],
         'name' => ['required', 'string', 'max:255'],
         'team' => ['required', 'array'],
-        'start_at' => ['required', 'date'],
-        'due_at' => ['required', 'date'],
+        'started_at' => ['required', 'date'],
+        'dued_at' => ['required', 'date'],
         'estimated_hours' => ['required', 'date'],
         'estimated_hours' => ['required', 'integer', 'min:0'],
         'budget' => ['required', 'integer', 'min:0'],
@@ -45,8 +45,8 @@ class Project extends Model
 
     protected $casts = [
         'status' => ProjectStatusEnum::class,
-        'start_at' => 'date',
-        'due_at' => 'date',
+        'started_at' => 'date',
+        'dued_at' => 'date',
     ];
 
     public function client(): BelongsTo
@@ -126,12 +126,12 @@ class Project extends Model
 
     public function getOverdueAttribute(): bool
     {
-        return $this->due_at <= date('Y-m-d') && $this->status === ProjectStatusEnum::active;
+        return $this->dued_at <= date('Y-m-d') && $this->status === ProjectStatusEnum::active;
     }
 
     public function getDeadlineAttribute(): int
     {
-        return $this->status === ProjectStatusEnum::finish ? 0 : (($this->overdue ? -1 : 1) * abs($this->due_at->diffInDays(now()->format('Y-m-d'))));
+        return $this->status === ProjectStatusEnum::finish ? 0 : (($this->overdue ? -1 : 1) * abs($this->dued_at->diffInDays(now()->format('Y-m-d'))));
     }
        
     public function getTotalTimeAttribute(): float

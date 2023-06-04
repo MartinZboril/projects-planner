@@ -17,9 +17,13 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('commentable_id');
             $table->string('commentable_type');            
-            $table->foreignId('user_id');
+            $table->foreignIdFor(
+                \App\Models\User::class,
+                'user_id'
+            )->constrained('users');
             $table->text('content');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

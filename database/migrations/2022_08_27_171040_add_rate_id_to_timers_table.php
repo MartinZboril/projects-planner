@@ -14,7 +14,10 @@ class AddRateIdToTimersTable extends Migration
     public function up()
     {
         Schema::table('timers', function (Blueprint $table) {
-            $table->foreignId('rate_id')->nullable();
+            $table->foreignIdFor(
+                \App\Models\Rate::class,
+                'rate_id'
+            )->nullable()->constrained('rates');
         });
     }
 
@@ -26,7 +29,7 @@ class AddRateIdToTimersTable extends Migration
     public function down()
     {
         Schema::table('timers', function (Blueprint $table) {
-            $table->dropColumn('rate_id');
+            $table->dropConstrainedForeignId('rate_id');
         });
     }
 }

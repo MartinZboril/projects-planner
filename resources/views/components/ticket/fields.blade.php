@@ -66,9 +66,9 @@
                     @enderror
                 </div> 
                 <div class="form-group required">
-                    <label for="due_at" class="control-label">Due date</label>
-                    <input type="date" name="due_at" id="due_at" class="form-control @error('due_at') is-invalid @enderror" placeholder="due date" value="{{ old('due_at', ($ticket->due_at ?? false) ? $ticket->due_at->format('Y-m-d') : now()->addDays(3)->format('Y-m-d')) }}" >
-                    @error('due_at')
+                    <label for="dued_at" class="control-label">Due date</label>
+                    <input type="date" name="dued_at" id="dued_at" class="form-control @error('dued_at') is-invalid @enderror" placeholder="due date" value="{{ old('dued_at', ($ticket->dued_at ?? false) ? $ticket->dued_at->format('Y-m-d') : now()->addDays(3)->format('Y-m-d')) }}" >
+                    @error('dued_at')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>

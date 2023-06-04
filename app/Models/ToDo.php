@@ -15,11 +15,11 @@ class ToDo extends Model
     protected $table = 'todos';
     
     protected $fillable = [
-        'task_id', 'name', 'due_at', 'is_finished', 'description', 'is_finished',
+        'task_id', 'name', 'dued_at', 'is_finished', 'description', 'is_finished',
     ]; 
 
     protected $casts = [
-        'due_at' => 'date',
+        'dued_at' => 'date',
     ];
     
     protected $appends = [
@@ -29,7 +29,7 @@ class ToDo extends Model
     public const VALIDATION_RULES = [
         'task_id' => ['required', 'integer', 'exists:tasks,id'],
         'name' => ['required', 'string', 'max:255'],
-        'due_at' => ['required', 'date'],
+        'dued_at' => ['required', 'date'],
         'is_finished' => ['boolean'],
         'description' => ['max:65553'],
     ];
@@ -49,7 +49,7 @@ class ToDo extends Model
 
     public function getOverdueAttribute(): bool
     {
-        return $this->due_at <= date('Y-m-d') && !$this->is_finished;
+        return $this->dued_at <= date('Y-m-d') && !$this->is_finished;
     }
 
 }

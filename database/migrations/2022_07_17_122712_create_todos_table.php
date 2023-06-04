@@ -16,8 +16,11 @@ class CreateTodosTable extends Migration
         Schema::create('todos', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('task_id');
-            $table->date('due_at');
+            $table->foreignIdFor(
+                \App\Models\Task::class,
+                'task_id'
+            )->constrained('tasks');
+            $table->date('dued_at');
             $table->text('description')->nullable();
             $table->boolean('is_finished')->default(0);
             $table->boolean('is_marked')->default(0);

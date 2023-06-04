@@ -15,12 +15,19 @@ class CreateTimersTable extends Migration
     {
         Schema::create('timers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id');
-            $table->foreignId('user_id');
+            $table->foreignIdFor(
+                \App\Models\Project::class,
+                'project_id'
+            )->constrained('projects');
+            $table->foreignIdFor(
+                \App\Models\User::class,
+                'user_id'
+            )->constrained('users');
             $table->dateTime('since_at');
             $table->dateTime('until_at')->nullable();
             $table->text('note')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

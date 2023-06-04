@@ -15,17 +15,27 @@ class CreateTicketsTable extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id');
-            $table->foreignId('reporter_id');
-            $table->foreignId('assignee_id')->nullable();
+            $table->foreignIdFor(
+                \App\Models\Project::class,
+                'project_id'
+            )->constrained('projects');
+            $table->foreignIdFor(
+                \App\Models\User::class,
+                'reporter_id'
+            )->constrained('users');
+            $table->foreignIdFor(
+                \App\Models\User::class,
+                'assignee_id'
+            )->nullable()->constrained('users');          
             $table->string('subject');
             $table->unsignedInteger('type');
             $table->unsignedInteger('priority');
             $table->unsignedInteger('status')->default(1);
             $table->text('message');
-            $table->date('due_at');
+            $table->date('dued_at');
             $table->boolean('is_marked')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

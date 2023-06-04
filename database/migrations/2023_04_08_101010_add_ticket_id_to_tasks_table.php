@@ -14,7 +14,10 @@ class AddTicketIdToTasksTable extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->foreignId('ticket_id')->nullable();
+            $table->foreignIdFor(
+                \App\Models\Ticket::class,
+                'ticket_id'
+            )->nullable()->constrained('tickets');
         });
     }
 
@@ -26,7 +29,7 @@ class AddTicketIdToTasksTable extends Migration
     public function down()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->dropColumn('ticket_id');
+            $table->dropConstrainedForeignId('ticket_id');
         });
     }
 };

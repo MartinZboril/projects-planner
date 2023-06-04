@@ -33,8 +33,8 @@ class TasksDataTable extends DataTable
                     ->editColumn('user.full_name', function(Task $task) {
                         return Blade::render('<x-site.ui.user-icon :user="$user" />', ['user' => $task->user]);
                     })  
-                    ->editColumn('due_at', function(Task $task) {
-                        return '<span class="text-' . ($task->overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $task->due_at)->format('d.m.Y') . '</span>';
+                    ->editColumn('dued_at', function(Task $task) {
+                        return '<span class="text-' . ($task->overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $task->dued_at)->format('d.m.Y') . '</span>';
                     })
                     ->editColumn('status', function(Task $task) {
                         return Blade::render('<x-task.ui.status-badge :text="true" :task="$task" />', ['task' => $task]);
@@ -55,7 +55,7 @@ class TasksDataTable extends DataTable
                         $buttons .= view('tasks.partials.buttons', ['task' => $task, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#' . ($this->table_identifier ?? 'tasks-table')]);
                         return $buttons;
                     })
-                    ->rawColumns(['name', 'project.name', 'milestone.name', 'user.full_name', 'status', 'due_at', 'buttons', 'ticket.subject']);
+                    ->rawColumns(['name', 'project.name', 'milestone.name', 'user.full_name', 'status', 'dued_at', 'buttons', 'ticket.subject']);
     }
 
     public function query(Task $model): QueryBuilder
@@ -99,7 +99,7 @@ class TasksDataTable extends DataTable
             Column::make('project.name')->data('project.name')->title('Project')->visible($this->view === 'project' ? false : true),
             Column::make('milestone.name')->data('milestone.name')->title('Milestone')->visible($this->view === 'milestone' ? false : true),
             Column::make('user.name')->data('user.full_name')->title('User'),
-            Column::make('due_at'),
+            Column::make('dued_at'),
             Column::make('status')->orderable(false)->searchable(false),
             Column::make('ticket.subject')->data('ticket.subject')->title('From Ticket'),
             Column::make('buttons')->title('')->orderable(false)->searchable(false)->visible(in_array($this->view, ['analysis', 'milestone']) ? false : true),

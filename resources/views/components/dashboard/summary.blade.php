@@ -14,7 +14,7 @@
                         </div>                        
                     @endif
                     <span class="text">{{ $item['name'] }} | <small class="text-muted"><x-dashboard.type :type="$item->get('type')" :display-icon="false" /></small></span>
-                    <small class="badge badge-{{ $item['item']['overdue'] ? 'danger' : 'secondary' }}" id="{{ $type }}-{{ $item['id'] }}-due-date"><i class="far fa-clock mr-1"></i>{{ $item['due_at']->format('d.m.Y') }}</small>
+                    <small class="badge badge-{{ $item['item']['overdue'] ? 'danger' : 'secondary' }}" id="{{ $type }}-{{ $item['id'] }}-due-date"><i class="far fa-clock mr-1"></i>{{ $item['dued_at']->format('d.m.Y') }}</small>
                     <div class="tools">
                         <a href="{{ $item['edit_route'] }}"><i class="fas fa-edit"></i></a>
                     </div>

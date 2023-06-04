@@ -40,13 +40,13 @@ class MilestonesDataTable extends DataTable
                         $buttons .= view('projects.milestones.partials.buttons', ['milestone' => $milestone, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#' . ($this->table_identifier ?? 'milestones-table')]);
                         return $buttons;
                     })
-                    ->editColumn('start_at', function(Milestone $milestone) {
-                        return Carbon::createFromFormat('Y-m-d H:i:s', $milestone->start_at)->format('d.m.Y');
+                    ->editColumn('started_at', function(Milestone $milestone) {
+                        return Carbon::createFromFormat('Y-m-d H:i:s', $milestone->started_at)->format('d.m.Y');
                     })
-                    ->editColumn('due_at', function(Milestone $milestone) {
-                        return '<span class="text-' . ($milestone->overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $milestone->due_at)->format('d.m.Y') . '</span>';
+                    ->editColumn('dued_at', function(Milestone $milestone) {
+                        return '<span class="text-' . ($milestone->overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $milestone->dued_at)->format('d.m.Y') . '</span>';
                     })
-                    ->rawColumns(['name', 'project.name', 'owner.full_name', 'progress', 'due_at', 'buttons']);
+                    ->rawColumns(['name', 'project.name', 'owner.full_name', 'progress', 'dued_at', 'buttons']);
     }
 
     public function query(Milestone $model): QueryBuilder
@@ -56,9 +56,9 @@ class MilestonesDataTable extends DataTable
             fn ($query, $value) => $query->where('milestones.project_id', $value)
         )->when(
             $this->overdue ?? false,
-            fn ($query, $value) => $query->where('milestones.due_at', '<=', date('Y-m-d'))->whereHas('tasks', function (QueryBuilder $query) {
+            fn ($query, $value) => $query->where('milestones.dued_at', '<=', date('Y-m-d'))->whereHas('tasks', function (QueryBuilder $query) {
                 $query->where('status', '!=', TaskStatusEnum::complete->value);
-            })->orWhere('milestones.due_at', '<=', date('Y-m-d'))->has('tasks', '=', 0)
+            })->orWhere('milestones.dued_at', '<=', date('Y-m-d'))->has('tasks', '=', 0)
         )->with('owner', 'project')->select('milestones.*')->newQuery();
     }
 
@@ -89,8 +89,8 @@ class MilestonesDataTable extends DataTable
             Column::make('project.name')->data('project.name')->title('Project')->visible($this->view === 'project' ? false : true),
             Column::make('owner.name')->data('owner.full_name')->title('Owner'),
             Column::make('progress')->orderable(false)->searchable(false),
-            Column::make('start_at'),
-            Column::make('due_at'),
+            Column::make('started_at'),
+            Column::make('dued_at'),
             Column::make('buttons')->title('')->orderable(false)->searchable(false)->visible($this->view === 'analysis' ? false : true),
             Column::make('owner.surname')->visible(false),
         ];

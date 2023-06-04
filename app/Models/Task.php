@@ -25,8 +25,8 @@ class Task extends Model
 
     protected $casts = [
         'status' => TaskStatusEnum::class,
-        'start_at' => 'date',
-        'due_at' => 'date',
+        'started_at' => 'date',
+        'dued_at' => 'date',
     ];
 
     public const VALIDATION_RULES = [
@@ -37,8 +37,8 @@ class Task extends Model
         'ticket_id' => ['nullable', 'integer', 'exists:tickets,id'],
         'status' => ['required', 'integer'],
         'name' => ['required', 'string', 'max:255'],
-        'start_at' => ['required', 'date'],
-        'due_at' => ['required', 'date'],
+        'started_at' => ['required', 'date'],
+        'dued_at' => ['required', 'date'],
         'description' => ['required', 'string', 'max:65553'],
     ];
 
@@ -104,7 +104,7 @@ class Task extends Model
 
     public function getOverdueAttribute(): bool
     {
-        return $this->due_at <= date('Y-m-d') && $this->status != TaskStatusEnum::complete;
+        return $this->dued_at <= date('Y-m-d') && $this->status != TaskStatusEnum::complete;
     }
 
     public function getMilestoneLabelAttribute(): string

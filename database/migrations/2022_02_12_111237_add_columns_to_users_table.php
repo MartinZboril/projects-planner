@@ -19,6 +19,7 @@ class AddColumnsToUsersTable extends Migration
             $table->string('job_title')->nullable();
             $table->string('mobile')->nullable();
             $table->string('phone')->nullable();
+            $table->softDeletes()->after('updated_at');
         });
     }
 
@@ -35,6 +36,7 @@ class AddColumnsToUsersTable extends Migration
             $table->dropColumn('job_title');
             $table->dropColumn('mobile');
             $table->dropColumn('phone');
+            $table->dropSoftDeletes();
         });
     }
 }

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('twitter')->nullable();
             $table->text('instagram')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

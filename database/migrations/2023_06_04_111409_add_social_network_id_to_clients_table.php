@@ -12,7 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('clients', function (Blueprint $table) {
-            $table->foreignId('social_network_id');
+            $table->foreignIdFor(
+                \App\Models\SocialNetwork::class,
+                'social_network_id'
+            )->constrained('social_networks');
         });
     }
 
@@ -22,7 +25,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('clients', function (Blueprint $table) {
-            $table->dropColumn('social_network_id');
+            $table->dropConstrainedForeignId('social_network_id');
         });
     }
 };

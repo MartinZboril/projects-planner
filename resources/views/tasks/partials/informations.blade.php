@@ -17,7 +17,7 @@
                 <div class="info-box bg-light">
                     <div class="info-box-content">
                         <span class="info-box-text text-center text-muted">Due date</span>
-                        <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-{{ $task->overdue ? 'danger' : 'secondary' }}" id="task-{{ $task->id }}-due-date">{{ $task->due_at->format('d.m.Y') }}</span></span>
+                        <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-{{ $task->overdue ? 'danger' : 'secondary' }}" id="task-{{ $task->id }}-due-date">{{ $task->dued_at->format('d.m.Y') }}</span></span>
                     </div>
                 </div>
             </div>
@@ -25,7 +25,7 @@
                 <div class="info-box bg-light">
                     <div class="info-box-content">
                         <span class="info-box-text text-center text-muted">Start date</span>
-                        <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-success">{{ $task->start_at->format('d.m.Y') }}</span></span>
+                        <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-success">{{ $task->started_at->format('d.m.Y') }}</span></span>
                     </div>
                 </div>
             </div>
