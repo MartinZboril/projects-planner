@@ -17,9 +17,9 @@ class ProjectTicketController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private TicketService $ticketService)
-    {
-    }
+    public function __construct(
+        private TicketService $ticketService
+    ) {}
 
     /**
      * Display the tickets of project.

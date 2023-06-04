@@ -11,9 +11,9 @@ use App\Services\Data\ProjectService;
 
 class ProjectMarkController extends Controller
 {
-    public function __construct(private ProjectService $projectService)
-    {
-    }
+    public function __construct(
+        private ProjectService $projectService
+    ) {}
 
     /**
      * Mark selected project.

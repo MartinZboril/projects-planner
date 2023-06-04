@@ -11,9 +11,9 @@ use App\Services\Data\ClientService;
 
 class ClientMarkController extends Controller
 {
-    public function __construct(private ClientService $clientService)
-    {  
-    }
+    public function __construct(
+        private ClientService $clientService
+    ) {}
 
     /**
      * Mark selected client.

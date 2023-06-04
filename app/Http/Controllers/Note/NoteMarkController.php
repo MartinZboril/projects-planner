@@ -12,9 +12,9 @@ use App\Services\Data\NoteService;
 
 class NoteMarkController extends Controller
 {
-    public function __construct(private NoteService $noteService)
-    {  
-    }
+    public function __construct(
+        private NoteService $noteService
+    ) {}
 
     /**
      * Mark selected note.

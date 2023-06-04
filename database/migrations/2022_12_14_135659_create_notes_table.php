@@ -24,7 +24,6 @@ return new class extends Migration
             $table->string('name');
             $table->text('content');
             $table->boolean('is_private')->default(0);
-            $table->boolean('is_basic')->default(1);
             $table->boolean('is_marked')->default(0);
             $table->timestamps();
             $table->softDeletes();

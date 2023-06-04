@@ -15,9 +15,9 @@ class ProjectTicketFileUploaderController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private TicketService $ticketService)
-    {
-    }
+    public function __construct(
+        private TicketService $ticketService
+    ) {}
 
     /**
      * Upload a newly created file in storage.

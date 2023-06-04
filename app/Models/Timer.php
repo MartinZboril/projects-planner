@@ -16,8 +16,8 @@ class Timer extends Model
     ]; 
 
     protected $casts = [
-        'since_at' => 'date',
-        'until_at' => 'date',
+        'since_at' => 'datetime',
+        'until_at' => 'datetime',
     ];
 
     public const VALIDATION_RULES = [

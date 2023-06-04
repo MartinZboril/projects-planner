@@ -15,9 +15,9 @@ class ClientFileUploaderController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private ClientService $clientService)
-    {
-    }
+    public function __construct(
+        private ClientService $clientService
+    ) {}
 
     /**
      * Upload a newly created file in storage.

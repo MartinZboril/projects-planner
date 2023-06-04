@@ -9,9 +9,9 @@ use App\Services\FileService;
 
 class TaskService
 {
-    public function __construct()
-    {
-    }
+    public function __construct(
+        private FileService $fileService,
+    ) {}
 
     /**
      * Save data for task.
@@ -37,7 +37,7 @@ class TaskService
     public function handleUploadFiles(Task $task, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            (new FileService)->handleUpload($uploadedFile, 'tasks/files', $task);
+            $this->fileService->handleUpload($uploadedFile, 'tasks/files', $task);
         }
     }
 

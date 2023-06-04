@@ -16,9 +16,10 @@ class ClientNoteController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private ClientService $clientService, private NoteService $noteService)
-    {        
-    }
+    public function __construct(
+        private ClientService $clientService,
+        private NoteService $noteService
+    ) {}
 
     /**
      * Display the notes of client.

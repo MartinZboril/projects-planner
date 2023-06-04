@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class CommentService
 {
+    public function __construct(
+        private FileService $fileService,
+    ) {}
+
     /**
      * Save data for comment.
      */
@@ -34,7 +38,7 @@ class CommentService
     private function storeFiles(Comment $comment, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            (new FileService)->handleUpload($uploadedFile, 'comments', $comment);
+            $this->fileService->handleUpload($uploadedFile, 'comments', $comment);
         }
     }
 }

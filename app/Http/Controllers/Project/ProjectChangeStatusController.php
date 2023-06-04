@@ -12,9 +12,9 @@ use App\Services\Data\ProjectService;
 
 class ProjectChangeStatusController extends Controller
 {
-    public function __construct(private ProjectService $projectService)
-    {
-    }
+    public function __construct(
+        private ProjectService $projectService
+    ) {}
 
     /**
      * Change working status of the project.

@@ -9,6 +9,11 @@ use App\Services\FileService;
 
 class UserService
 {
+    public function __construct(
+        private FileService $fileService,
+        private AddressService $addressService,
+    ) {}
+    
     /**
      * Save data for user.
      */
@@ -16,11 +21,11 @@ class UserService
     {
         // Upload avatar
         if ($avatar) {
-            $inputs['avatar_id'] = ((new FileService)->handleUpload($avatar, 'users/avatars'))->id;
+            $inputs['avatar_id'] = ($this->fileService->handleUpload($avatar, 'users/avatars'))->id;
             $oldAvatarId = $user->avatar_id ?? null;
         }
         // Save users address
-        $user->address_id = (new AddressService)->handleSave($user->address ?? new Address, [
+        $user->address_id = $this->addressService->handleSave($user->address ?? new Address, [
             'street' => $inputs['street'],
             'house_number' => $inputs['house_number'],
             'city' => $inputs['city'],
@@ -32,7 +37,7 @@ class UserService
         $user->fill($inputs)->save();
         // Remove old avatar
         if ($oldAvatarId ?? false) {
-            (new FileService)->handleRemoveFile($oldAvatarId);
+            $this->fileService->handleRemoveFile($oldAvatarId);
         }
         // Creare user first rate
         if ($user->rates()->count() === 0) {

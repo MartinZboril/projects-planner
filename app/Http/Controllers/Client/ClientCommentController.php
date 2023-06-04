@@ -14,9 +14,10 @@ class ClientCommentController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private ClientService $clientService, private CommentService $commentService)
-    {
-    }
+    public function __construct(
+        private ClientService $clientService,
+        private CommentService $commentService
+    ) {}
     
     /**
      * Display the comments of client.

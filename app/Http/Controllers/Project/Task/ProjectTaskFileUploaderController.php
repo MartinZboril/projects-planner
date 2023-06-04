@@ -15,9 +15,9 @@ class ProjectTaskFileUploaderController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private TaskService $taskService)
-    {
-    }
+    public function __construct(
+        private TaskService $taskService
+    ) {}
 
     /**
      * Upload a newly created file in storage.

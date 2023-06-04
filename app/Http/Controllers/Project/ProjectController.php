@@ -17,9 +17,9 @@ class ProjectController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private ProjectService $projectService)
-    {        
-    }
+    public function __construct(
+        private ProjectService $projectService
+    ) {}
 
     /**
      * Display a listing of the projects.

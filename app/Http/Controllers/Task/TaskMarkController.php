@@ -11,10 +11,10 @@ use App\Services\Data\TaskService;
 
 class TaskMarkController extends Controller
 {
-    public function __construct(private TaskService $taskService)
-    {        
-    }
-
+    public function __construct(
+        private TaskService $taskService
+    ) {}
+    
     /**
      * Mark selected task.
      */

@@ -11,13 +11,12 @@ class NoteService
     /**
      * Save data for note.
      */
-    public function handleSave(Note $note, array $inputs, Model $model=null, bool $basic = false): Note
+    public function handleSave(Note $note, array $inputs, Model $model=null): Note
     {
         // Prepare fields
         $inputs['user_id'] = $note->user_id ?? Auth::id();
         $inputs['is_private'] = $inputs['is_private'] ?? false;
         $inputs['is_marked'] = $inputs['is_marked'] ?? false;
-        $inputs['is_basic'] = $basic;
 
         if ($model ?? false) {
             $inputs['noteable_id'] = $model->id;

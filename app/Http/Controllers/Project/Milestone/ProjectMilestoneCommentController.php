@@ -14,9 +14,10 @@ class ProjectMilestoneCommentController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private MilestoneService $milestoneService, private CommentService $commentService)
-    {
-    }
+    public function __construct(
+        private MilestoneService $milestoneService,
+        private CommentService $commentService
+    ) {}
     
     /**
      * Display the comments of project.

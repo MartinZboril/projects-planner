@@ -17,9 +17,9 @@ class ClientController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private ClientService $clientService)
-    {
-    }
+    public function __construct(
+        private ClientService $clientService
+    ) {}
 
     /**
      * Display a listing of the clients.

@@ -7,9 +7,9 @@ use Illuminate\View\View;
 
 class ReleaseController extends Controller
 {
-    public function __construct(private IndexRelease $indexRelease)
-    {  
-    }
+    public function __construct(
+        private IndexRelease $indexRelease
+    ) {}
 
     /**
      * Show the application releases.

@@ -12,7 +12,7 @@ class Note extends Model
     use HasFactory;
 
     protected $fillable = [
-        'noteable_id', 'noteable_type', 'user_id', 'name', 'content', 'is_private', 'is_basic', 'is_marked',
+        'noteable_id', 'noteable_type', 'user_id', 'name', 'content', 'is_private', 'is_marked',
     ];
 
     public const VALIDATION_RULES = [
@@ -20,7 +20,6 @@ class Note extends Model
         'name' => ['required', 'max:255'],
         'content' => ['required', 'max:65553'],
         'is_private' => ['boolean'],
-        'is_basic' => ['boolean'],
         'is_marked' => ['boolean']
     ];
 
@@ -41,6 +40,6 @@ class Note extends Model
     
     public function scopeBasic(Builder $query): Builder
     {
-        return $query->where('is_basic', true);
+        return $query->where('noteable_id', null)->where('noteable_type', null);
     }
 }
