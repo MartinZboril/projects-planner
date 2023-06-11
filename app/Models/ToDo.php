@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use App\Traits\Scopes\OverdueRecords;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\{Builder, Model};
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ToDo extends Model
 {
@@ -20,10 +21,6 @@ class ToDo extends Model
 
     protected $casts = [
         'dued_at' => 'date',
-    ];
-    
-    protected $appends = [
-        'overdue',
     ];
 
     public const VALIDATION_RULES = [
@@ -47,9 +44,10 @@ class ToDo extends Model
         return $query->where('is_finished', $type);
     }
 
-    public function getOverdueAttribute(): bool
+    protected function overdue(): Attribute
     {
-        return $this->dued_at <= date('Y-m-d') && !$this->is_finished;
+        return Attribute::make(
+            get: fn () => $this->dued_at <= date('Y-m-d') && !$this->is_finished,
+        );
     }
-
 }

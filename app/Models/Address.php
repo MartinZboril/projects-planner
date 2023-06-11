@@ -22,38 +22,38 @@ class Address extends Model
         'zip_code' => ['nullable', 'string', 'max:255'],
     ];
 
-    protected function street(): Attribute
+    protected function streetLabel(): Attribute
     {
         return Attribute::make(
-            get: fn (string|null $value) => $value ?? 'NaN',
+            get: fn () => $this->street ?? 'NaN',
         );
     }
 
-    protected function houseNumber(): Attribute
+    protected function houseNumberLabel(): Attribute
     {
         return Attribute::make(
-            get: fn (string|null $value) => $value ?? 'NaN',
+            get: fn () => $this->house_number ?? 'NaN',
         );
     }
     
-    protected function city(): Attribute
+    protected function cityLabel(): Attribute
     {
         return Attribute::make(
-            get: fn (string|null $value) => $value ?? 'NaN',
+            get: fn () => $this->city ?? 'NaN',
         );
     }
 
-    protected function country(): Attribute
+    protected function countryLabel(): Attribute
     {
         return Attribute::make(
-            get: fn (string|null $value) => $value ?? 'NaN',
+            get: fn () => $this->country ?? 'NaN',
         );
     }
 
-    protected function zipCode(): Attribute
+    protected function zipCodeLabel(): Attribute
     {
         return Attribute::make(
-            get: fn (string|null $value) => $value ?? 'NaN',
+            get: fn () => $this->zip_code ?? 'NaN',
         );
     }
 }

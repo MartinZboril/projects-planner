@@ -2,16 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class File extends Model
 {
     use HasFactory;
-
-    protected $appends = [
-        'kilobytes_size',
-    ];
 
     protected $fillable = [
         'name', 'file_path',
@@ -27,8 +24,10 @@ class File extends Model
         return $this->morphTo();
     }
 
-    public function getKilobytesSizeAttribute(): string
+    protected function kilobytesSize(): Attribute
     {
-        return round($this->size / 1000, 2);
+        return Attribute::make(
+            get: fn () => round($this->size / 1000, 2),
+        );
     }
 }

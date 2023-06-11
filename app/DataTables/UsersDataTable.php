@@ -31,7 +31,7 @@ class UsersDataTable extends DataTable
                         return $user->mobile_label;
                     })
                     ->editColumn('city', function(User $user) {
-                        return $user->address->city;
+                        return $user->address->city_label;
                     })
                     ->editColumn('created_at', function(User $user) {
                         $formatedDate = Carbon::createFromFormat('Y-m-d H:i:s', $user->created_at)->format('d.m.Y');

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\Scopes\MarkedRecords;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany};
 
@@ -13,14 +14,6 @@ class Client extends Model
 
     protected $guarded = [
         'id', 'created_at', 'updated_at',
-    ];
-
-    protected $appends = [
-        'email_label',
-        'contact_person_label',
-        'contact_email_label',
-        'mobile_label',
-        'phone_label',
     ];
 
     public const VALIDATION_RULES = [
@@ -63,28 +56,31 @@ class Client extends Model
         return $this->morphMany(File::class, 'fileable');
     }
 
-    public function getEmailLabelAttribute(): string
+    protected function contactPersonLabel(): Attribute
     {
-        return $this->email ?? 'NaN';
+        return Attribute::make(
+            get: fn () => $this->contact_person ?? 'NaN',
+        );
     }
 
-    public function getContactPersonLabelAttribute(): string
+    protected function contactEmailLabel(): Attribute
     {
-        return $this->contact_person ?? 'NaN';
+        return Attribute::make(
+            get: fn () => $this->contact_email ?? 'NaN',
+        );
     }
 
-    public function getContactEmailLabelAttribute(): string
+    protected function mobileLabel(): Attribute
     {
-        return $this->contact_email ?? 'NaN';
+        return Attribute::make(
+            get: fn () => $this->mobile ?? 'NaN',
+        );
     }
 
-    public function getMobileLabelAttribute(): string
+    protected function phoneLabel(): Attribute
     {
-        return $this->mobile ?? 'NaN';
-    }
-
-    public function getPhoneLabelAttribute(): string
-    {
-        return $this->phone ?? 'NaN';
+        return Attribute::make(
+            get: fn () => $this->phone ?? 'NaN',
+        );
     }
 }

@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use App\Enums\TaskStatusEnum;
-use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany};
 
@@ -61,13 +62,17 @@ class Milestone extends Model
         return $this->tasks()->status(TaskStatusEnum::complete);
     }
 
-    public function getOverdueAttribute(): bool
+    protected function overdue(): Attribute
     {
-        return $this->dued_at <= date('Y-m-d') && $this->progress < 1;
+        return Attribute::make(
+            get: fn () => $this->dued_at <= date('Y-m-d') && $this->progress < 1,
+        );
     }
 
-    public function getProgressAttribute(): float
+    protected function progress(): Attribute
     {
-        return ($this->tasks->count() > 0) ? round($this->tasksCompleted->count() / $this->tasks->count(), 2) : 0;
+        return Attribute::make(
+            get: fn () => ($this->tasks->count() > 0) ? round($this->tasksCompleted->count() / $this->tasks->count(), 2) : 0,
+        );
     }
 }
