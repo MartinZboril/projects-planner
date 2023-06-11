@@ -18,9 +18,9 @@ class ProjectTaskToDoController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private ToDoService $toDoService)
-    {
-    }
+    public function __construct(
+        private ToDoService $toDoService
+    ) {}
 
     /**
      * Show the form for creating a new todo.

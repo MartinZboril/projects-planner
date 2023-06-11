@@ -7,9 +7,9 @@ use Illuminate\Support\Collection;
 
 class TicketReport
 {
-    public function __construct(public BuilderReport $builderReport=new BuilderReport)
-    {
-    }
+    public function __construct(
+        public BuilderReport $builderReport=new BuilderReport
+    ) {}
 
     /**
      * Get report for tickets by year.

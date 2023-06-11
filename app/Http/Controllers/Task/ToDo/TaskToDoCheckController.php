@@ -11,9 +11,9 @@ use App\Http\Controllers\Controller;
 
 class TaskToDoCheckController extends Controller
 {
-    public function __construct(private ToDoService $toDoService)
-    {
-    }
+    public function __construct(
+        private ToDoService $toDoService
+    ) {}
 
     /**
      * Check the todo in storage.

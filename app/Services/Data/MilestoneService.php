@@ -7,6 +7,10 @@ use App\Services\FileService;
 
 class MilestoneService
 {
+    public function __construct(
+        private FileService $fileService,
+    ) {}
+    
     /**
      * Save data for milestone.
      */
@@ -30,7 +34,7 @@ class MilestoneService
     public function handleUploadFiles(Milestone $milestone, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            (new FileService)->handleUpload($uploadedFile, 'milestones/files', $milestone);
+            $this->fileService->handleUpload($uploadedFile, 'milestones/files', $milestone);
         }
     }
 

@@ -16,9 +16,10 @@ class ProjectNoteController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private ProjectService $projectService, private NoteService $noteService)
-    {        
-    }
+    public function __construct(
+        private ProjectService $projectService,
+        private NoteService $noteService
+    ) {}
 
     /**
      * Display the notes of project.

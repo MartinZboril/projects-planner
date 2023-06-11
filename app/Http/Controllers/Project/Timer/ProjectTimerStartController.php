@@ -12,9 +12,9 @@ use App\Services\Data\TimerService;
 
 class ProjectTimerStartController extends Controller
 {
-    public function __construct(private TimerService $timerService)
-    {
-    }
+    public function __construct(
+        private TimerService $timerService
+    ) {}
 
     /**
      * Start working on new timer.

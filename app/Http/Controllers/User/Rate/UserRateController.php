@@ -16,9 +16,9 @@ class UserRateController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private RateService $rateService)
-    {
-    }
+    public function __construct(
+        private RateService $rateService
+    ) {}
 
     /**
      * Show the form for creating a new rate.

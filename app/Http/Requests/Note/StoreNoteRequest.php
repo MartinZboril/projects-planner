@@ -21,10 +21,7 @@ class StoreNoteRequest extends FormRequest
     public function rules(): array
     {
         $rules = Note::VALIDATION_RULES;
-        unset(
-            $rules['user_id'],
-            $rules['is_basic']
-        );
+        unset($rules['user_id']);
 
         return $rules;
     }

@@ -32,7 +32,6 @@ class User extends Authenticatable
         'full_name',
         'job_title_label',
         'mobile_label',
-        'phone_label',
     ];
 
     public const VALIDATION_RULES = [
@@ -85,23 +84,31 @@ class User extends Authenticatable
         );
     }
 
-    public function getFullNameAttribute(): string
+    protected function fullName(): Attribute
     {
-        return $this->name . ' ' . $this->surname;
-    }
-    
-    public function getJobTitleLabelAttribute(): string
-    {
-        return $this->job_title ?? 'NaN';
+        return Attribute::make(
+            get: fn () => $this->name . ' ' . $this->surname,
+        );
     }
 
-    public function getMobileLabelAttribute(): string
+    protected function jobTitleLabel(): Attribute
     {
-        return $this->mobile ?? 'NaN';
+        return Attribute::make(
+            get: fn () => $this->job_title ?? 'NaN',
+        );
     }
 
-    public function getPhoneLabelAttribute(): string
+    protected function mobileLabel(): Attribute
     {
-        return $this->phone ?? 'NaN';
+        return Attribute::make(
+            get: fn () => $this->mobile ?? 'NaN',
+        );
+    }
+
+    protected function phoneLabel(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->phone ?? 'NaN',
+        );
     }
 }

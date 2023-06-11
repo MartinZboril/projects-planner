@@ -14,9 +14,10 @@ class ProjectTaskCommentController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private TaskService $taskService, private CommentService $commentService)
-    {
-    }
+    public function __construct(
+        private TaskService $taskService,
+        private CommentService $commentService
+    ) {}
 
     /**
      * Store a newly created tasks comment in storage.

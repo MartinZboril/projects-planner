@@ -7,9 +7,9 @@ use Illuminate\Support\Collection;
 
 class MilestoneReport
 {
-    public function __construct(public BuilderReport $builderReport=new BuilderReport)
-    {
-    }
+    public function __construct(
+        public BuilderReport $builderReport=new BuilderReport
+    ) {}
 
     /**
      * Get report for milestones by year.

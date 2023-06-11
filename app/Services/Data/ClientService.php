@@ -8,6 +8,12 @@ use App\Models\{Address, Client, Comment, Note, SocialNetwork};
 
 class ClientService
 {
+    public function __construct(
+        private FileService $fileService,
+        private AddressService $addressService,
+        private SocialNetworkService $socialNetworkService,
+    ) {}
+
     /**
      * Save data for client.
      */
@@ -15,11 +21,11 @@ class ClientService
     {
         // Upload logo
         if ($uploadedFile) {
-            $inputs['logo_id'] = ((new FileService)->handleUpload($uploadedFile, 'clients/logos'))->id;
+            $inputs['logo_id'] = ($this->fileService->handleUpload($uploadedFile, 'clients/logos'))->id;
             $oldLogoId = $client->logo_id ?? null;
         }
         // Save clients address
-        $client->address_id = (new AddressService)->handleSave($client->address ?? new Address, [
+        $client->address_id = $this->addressService->handleSave($client->address ?? new Address, [
             'street' => $inputs['street'],
             'house_number' => $inputs['house_number'],
             'city' => $inputs['city'],
@@ -27,7 +33,7 @@ class ClientService
             'zip_code' => $inputs['zip_code'],
         ]);
         // Save clients social network
-        $client->social_network_id = (new SocialNetworkService)->handleSave($client->socialNetwork ?? new SocialNetwork, [
+        $client->social_network_id = $this->socialNetworkService->handleSave($client->socialNetwork ?? new SocialNetwork, [
             'website' => $inputs['website'],
             'skype' => $inputs['skype'],
             'linkedin' => $inputs['linkedin'],
@@ -43,7 +49,7 @@ class ClientService
         }
         // Remove old logo
         if ($oldLogoId ?? false) {
-            (new FileService)->handleRemoveFile($oldLogoId);
+            $this->fileService->handleRemoveFile($oldLogoId);
         }
 
         return $client;
@@ -55,7 +61,7 @@ class ClientService
     public function handleUploadFiles(Client $client, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            (new FileService)->handleUpload($uploadedFile, 'clients/files', $client);
+            $this->fileService->handleUpload($uploadedFile, 'clients/files', $client);
         }
     }
 

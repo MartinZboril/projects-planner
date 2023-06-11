@@ -8,6 +8,10 @@ use App\Services\FileService;
 
 class ProjectService
 {
+    public function __construct(
+        private FileService $fileService,
+    ) {}
+    
     /**
      * Save data for project.
      */
@@ -33,7 +37,7 @@ class ProjectService
     public function handleUploadFiles(Project $project, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            (new FileService)->handleUpload($uploadedFile, 'projects/files', $project);
+            $this->fileService->handleUpload($uploadedFile, 'projects/files', $project);
         }
     }
     

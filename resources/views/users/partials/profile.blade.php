@@ -17,28 +17,28 @@
                     <td class="text-muted">Job title</td><td class="text-right">{{ $user->job_title_label }}</td>
                 </tr>
                 <tr>
-                    <td class="text-muted">Mobile</td><td class="text-right"><a href="tel:{{ $user->mobile_label }}">{{ $user->mobile_label }}</a></td>
-                </tr>
+                    <td class="text-muted">Phone</td><td class="text-right">@if($user->phone)<a href="tel:{{ $user->phone }}">{{ $user->phone_label }}</a>@else{{ $user->phone_label }}@endif</td>
+                </tr>                
                 <tr>
-                    <td class="text-muted">Phone</td><td class="text-right"><a href="tel:{{ $user->phone_label }}">{{ $user->phone_label }}</a></td>
+                    <td class="text-muted">Mobile</td><td class="text-right">@if($user->mobile)<a href="tel:{{ $user->mobile }}">{{ $user->mobile_label }}</a>@else{{ $user->mobile_label }}@endif</td>
                 </tr>
                 <tr>
                     <td class="text-muted">Address</td><td class="text-right">
-                        @if($user->address->street === 'NaN' && $user->address->house_number === 'NaN')
+                        @if($user->address->street_label === 'NaN' && $user->address->house_number_label === 'NaN')
                             NaN
                         @else
-                            {{ $user->address->street }} {{ $user->address->house_number }}
+                            {{ $user->address->street_label }} {{ $user->address->house_number_label }}
                         @endif
                     </td>
                 </tr>
                 <tr>
-                    <td class="text-muted">City</td><td class="text-right">{{ $user->address->city }}</td>
+                    <td class="text-muted">City</td><td class="text-right">{{ $user->address->city_label }}</td>
                 </tr>
                 <tr>
-                    <td class="text-muted">ZIP code</td><td class="text-right">{{ $user->address->zip_code }}</td>
+                    <td class="text-muted">ZIP code</td><td class="text-right">{{ $user->address->zip_code_label }}</td>
                 </tr>
                 <tr>
-                    <td class="text-muted">Country</td><td class="text-right">{{ $user->address->country }}</td>
+                    <td class="text-muted">Country</td><td class="text-right">{{ $user->address->country_label }}</td>
                 </tr>
                 <tr>
                     <td class="text-muted">Verified At</td><td class="text-right">{{ $user->email_verified_at ? $user->email_verified_at->format('d.m.Y H:i') : 'Not verified' }}</td>

@@ -38,16 +38,16 @@ class ProjectsDataTable extends DataTable
                         return number_format($project->amount, 2);
                     })
                     ->editColumn('time_plan', function(Project $project) {
-                        return '<span class="text-' . ($project->overdue ? 'danger' : 'body') . '">' . $project->time_plan . ' %' . '</span>';
+                        return '<span class="text-' . ($project->time_plan_overdue ? 'danger' : 'body') . '">' . $project->time_plan . ' %' . '</span>';
                     })
                     ->editColumn('total_time', function(Project $project) {
                         return $project->total_time . ' Hours';
                     })            
                     ->editColumn('budget_plan', function(Project $project) {
-                        return '<span class="text-' . ($project->overdue ? 'danger' : 'body') . '">' . $project->budget_plan . ' %' . '</span>';
+                        return '<span class="text-' . ($project->budget_overdue ? 'danger' : 'body') . '">' . $project->budget_plan . ' %' . '</span>';
                     })
                     ->editColumn('dued_at', function(Project $project) {
-                        return '<span class="text-' . ($project->overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $project->dued_at)->format('d.m.Y') . '</span>';
+                        return '<span class="text-' . ($project->deadline_overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $project->dued_at)->format('d.m.Y') . '</span>';
                     })       
                     ->editColumn('buttons', function(Project $project) {
                         $buttons = '<a href="' . route('projects.edit', $project) . '" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a> ';

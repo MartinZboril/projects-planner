@@ -17,9 +17,9 @@ class UserController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private UserService $userService)
-    {
-    }
+    public function __construct(
+        private UserService $userService
+    ) {}
     
     /**
      * Display a listing of the users.

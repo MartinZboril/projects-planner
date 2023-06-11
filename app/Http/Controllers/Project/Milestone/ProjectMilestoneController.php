@@ -17,9 +17,9 @@ class ProjectMilestoneController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private MilestoneService $milestoneService)
-    {
-    }
+    public function __construct(
+        private MilestoneService $milestoneService
+    ) {}
 
     /**
      * Display the milestones of project.

@@ -7,9 +7,9 @@ use Illuminate\Support\Collection;
 
 class TaskReport
 {
-    public function __construct(public BuilderReport $builderReport=new BuilderReport)
-    {
-    }
+    public function __construct(
+        public BuilderReport $builderReport=new BuilderReport
+    ) {}
 
     /**
      * Get report for tasks by year.

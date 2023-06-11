@@ -20,7 +20,7 @@ class ClientsDataTable extends DataTable
                         return '<a href="' . route('clients.show', $client) . '">' . $client->name . '</a>';
                     })
                     ->editColumn('email', function(Client $client) {
-                        return $client->email_label;
+                        return $client->email;
                     })
                     ->editColumn('created_at', function(Client $client) {
                         return Carbon::createFromFormat('Y-m-d H:i:s', $client->created_at)->format('d.m.Y');

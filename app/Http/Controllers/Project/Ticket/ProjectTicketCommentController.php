@@ -14,9 +14,10 @@ class ProjectTicketCommentController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private TicketService $ticketService, private CommentService $commentService)
-    {
-    }
+    public function __construct(
+        private TicketService $ticketService,
+        private CommentService $commentService
+    ) {}
 
     /**
      * Store a newly created tickets comment in storage.

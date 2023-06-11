@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Enums\TaskStatusEnum;
-use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
+use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\{Builder, Model};
+use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany};
 
@@ -14,13 +16,6 @@ class Task extends Model
 
     protected $guarded = [
         'id', 'created_at', 'updated_at',
-    ];
-
-    protected $appends = [
-        'milestone_label',
-        'overdue',
-        'paused',
-        'returned',
     ];
 
     protected $casts = [
@@ -102,28 +97,31 @@ class Task extends Model
         return $query->whereIn('status', [TaskStatusEnum::new, TaskStatusEnum::in_progress]);
     }
 
-    public function getOverdueAttribute(): bool
+    protected function overdue(): Attribute
     {
-        return $this->dued_at <= date('Y-m-d') && $this->status != TaskStatusEnum::complete;
+        return Attribute::make(
+            get: fn () => $this->dued_at <= date('Y-m-d') && $this->status != TaskStatusEnum::complete,
+        );
     }
 
-    public function getMilestoneLabelAttribute(): string
+    protected function milestoneLabel(): Attribute
     {
-        return $this->milestone ? $this->milestone->name : 'NaN';
+        return Attribute::make(
+            get: fn () => $this->milestone->name ?? 'NaN',
+        );
     }
 
-    public function getPausedAttribute(): bool
+    protected function paused(): Attribute
     {
-        return $this->is_stopped;
+        return Attribute::make(
+            get: fn () => $this->is_stopped,
+        );
     }
 
-    public function getReturnedAttribute(): bool
+    protected function returned(): Attribute
     {
-        return $this->is_returned;
-    }
-
-    public function isReturned(int $changedStatus): bool
-    {
-        return $this->status === TaskStatusEnum::complete && $changedStatus === TaskStatusEnum::new->value;
+        return Attribute::make(
+            get: fn () => $this->is_returned,
+        );
     }
 }

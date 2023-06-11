@@ -17,9 +17,9 @@ class ProjectTimerController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private TimerService $timerService)
-    {
-    }
+    public function __construct(
+        private TimerService $timerService
+    ) {}
 
     /**
      * Display the timers of project.

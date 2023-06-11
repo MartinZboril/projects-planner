@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Enums\{ProjectStatusEnum, TaskStatusEnum};
 use Illuminate\Database\Eloquent\{Builder, Model};
+use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany};
 
@@ -27,20 +28,6 @@ class Project extends Model
         'budget' => ['required', 'integer', 'min:0'],
         'description' => ['required', 'string', 'max:65553'],
         'status' => ['required', 'integer'],
-    ];
-
-    protected $appends = [
-        'overdue',
-        'deadline',
-        'remaining_hours',
-        'total_time',
-        'time_plan',
-        'amount',
-        'remaining_budget',
-        'budget_plan',
-        'pending_tasks_count',
-        'done_tasks_count',
-        'tasks_plan',
     ];
 
     protected $casts = [
@@ -124,58 +111,94 @@ class Project extends Model
         return $query->where('status', ProjectStatusEnum::active);
     }
 
-    public function getOverdueAttribute(): bool
+    protected function deadlineOverdue(): Attribute
     {
-        return $this->dued_at <= date('Y-m-d') && $this->status === ProjectStatusEnum::active;
+        return Attribute::make(
+            get: fn () => $this->dued_at <= date('Y-m-d') && $this->status === ProjectStatusEnum::active,
+        );
     }
 
-    public function getDeadlineAttribute(): int
+    protected function budgetOverdue(): Attribute
     {
-        return $this->status === ProjectStatusEnum::finish ? 0 : (($this->overdue ? -1 : 1) * abs($this->dued_at->diffInDays(now()->format('Y-m-d'))));
-    }
-       
-    public function getTotalTimeAttribute(): float
-    {
-        return round(Timer::where('project_id', $this->id)->get()->sum('total_time'), 2);
+        return Attribute::make(
+            get: fn () => $this->budget_plan > 100,
+        );
     }
 
-    public function getRemainingHoursAttribute(): float
+    protected function timePlanOverdue(): Attribute
     {
-        return round($this->estimated_hours - $this->total_time, 2);
+        return Attribute::make(
+            get: fn () => $this->time_plan > 100,
+        );
+    }
+
+    protected function deadline(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->status === ProjectStatusEnum::finish ? 0 : (($this->deadline_overdue ? -1 : 1) * abs($this->dued_at->diffInDays(now()->format('Y-m-d')))),
+        );
+    }
+
+    protected function totalTime(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => round(Timer::where('project_id', $this->id)->get()->sum('total_time'), 2),
+        );
+    }
+
+    protected function remainingHours(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => round($this->estimated_hours - $this->total_time, 2),
+        );
+    }
+
+    protected function timePlan(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => ($this->estimated_hours) ? round(($this->total_time / $this->estimated_hours), 2) * 100 : 0,
+        );
+    }
+
+    protected function remainingBudget(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => round($this->budget - $this->amount, 2),
+        );
     }
     
-    public function getTimePlanAttribute(): float
+    protected function amount(): Attribute
     {
-        return ($this->estimated_hours) ? round(($this->total_time / $this->estimated_hours), 2) * 100 : 0;
+        return Attribute::make(
+            get: fn () => round(Timer::where('project_id', $this->id)->get()->sum('amount'), 2),
+        );
     }
 
-    public function getRemainingBudgetAttribute(): float
+    protected function budgetPlan(): Attribute
     {
-        return round($this->budget - $this->amount, 2);
+        return Attribute::make(
+            get: fn () => ($this->budget) ? round(($this->amount / $this->budget), 2) * 100 : 0,
+        );
     }
 
-    public function getAmountAttribute(): float
+    protected function pendingTasksCount(): Attribute
     {
-        return round(Timer::where('project_id', $this->id)->get()->sum('amount'), 2);
-    }
-     
-    public function getBudgetPlanAttribute(): float
-    {
-        return ($this->budget) ? round(($this->amount / $this->budget), 2) * 100 : 0;
+        return Attribute::make(
+            get: fn () => $this->newTasks()->count() + $this->inProgressTasks()->count(),
+        );
     }
 
-    public function getPendingTasksCountAttribute(): int
+    protected function doneTasksCount(): Attribute
     {
-        return $this->newTasks()->count() + $this->inProgressTasks()->count();
+        return Attribute::make(
+            get: fn () => $this->completedTasks()->count(),
+        );
     }
 
-    public function getDoneTasksCountAttribute(): int
+    protected function tasksPlan(): Attribute
     {
-        return $this->completedTasks()->count();
-    }
-
-    public function getTasksPlanAttribute(): float
-    {
-        return ($this->tasks()->count()) ? round(($this->done_tasks_count / $this->tasks()->count()), 2) * 100 : 0;
+        return Attribute::make(
+            get: fn () => ($this->tasks()->count()) ? round(($this->done_tasks_count / $this->tasks()->count()), 2) * 100 : 0,
+        );
     }
 }

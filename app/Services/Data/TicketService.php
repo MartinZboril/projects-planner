@@ -9,9 +9,9 @@ use App\Services\FileService;
 
 class TicketService
 {
-    public function __construct()
-    {
-    }
+    public function __construct(
+        private FileService $fileService,
+    ) {}
 
     /**
      * Save data for ticket.
@@ -37,7 +37,7 @@ class TicketService
     public function handleUploadFiles(Ticket $ticket, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
-            (new FileService)->handleUpload($uploadedFile, 'tickets/files', $ticket);
+            $this->fileService->handleUpload($uploadedFile, 'tickets/files', $ticket);
         }
     }
 

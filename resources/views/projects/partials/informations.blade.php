@@ -4,7 +4,7 @@
         <span id="project-status-badge">
             <x-project.ui.status-badge :text="false" :status="$project->status" />
         </span>
-        <span style="{{ $project->overdue ? '' : 'display: none;' }}font-size:14px;" id="project-{{ $project->id }}-overdue-badge" class="badge badge-danger ml-1">Overdue</span>
+        <span style="{{ $project->deadline_overdue ? '' : 'display: none;' }}font-size:14px;" id="project-{{ $project->id }}-overdue-badge" class="badge badge-danger ml-1">Overdue</span>
     </div>
     <div class="card-body">
         <div class="text-muted">

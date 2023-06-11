@@ -15,9 +15,9 @@ class ProjectFileUploaderController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private ProjectService $projectService)
-    {
-    }
+    public function __construct(
+        private ProjectService $projectService
+    ) {}
 
     /**
      * Upload a newly created file in storage.

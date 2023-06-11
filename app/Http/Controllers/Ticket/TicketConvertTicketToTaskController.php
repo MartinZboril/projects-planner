@@ -12,9 +12,10 @@ use App\Services\Data\{TaskService, TicketService};
 
 class TicketConvertTicketToTaskController extends Controller
 {
-    public function __construct(private TicketService $ticketService, private TaskService $taskService)
-    {
-    }
+    public function __construct(
+        private TicketService $ticketService,
+        private TaskService $taskService
+    ) {}
 
     /**
      * Convert the ticket to new task.

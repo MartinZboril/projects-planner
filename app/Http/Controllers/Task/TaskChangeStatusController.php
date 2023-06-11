@@ -12,9 +12,9 @@ use App\Http\Requests\Task\ChangeTaskRequest;
 
 class TaskChangeStatusController extends Controller
 {
-    public function __construct(private TaskService $taskService)
-    {
-    }
+    public function __construct(
+        private TaskService $taskService
+    ) {}
 
     /**
      * Change working status on the task.

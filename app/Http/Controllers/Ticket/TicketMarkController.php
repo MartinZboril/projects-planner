@@ -11,9 +11,9 @@ use App\Services\Data\TicketService;
 
 class TicketMarkController extends Controller
 {
-    public function __construct(private TicketService $ticketService)
-    {
-    }
+    public function __construct(
+        private TicketService $ticketService
+    ) {}
 
     /**
      * Mark selected ticket.

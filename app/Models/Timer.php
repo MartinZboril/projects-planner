@@ -3,9 +3,10 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\{Builder, Model};
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Timer extends Model
 {
@@ -16,8 +17,8 @@ class Timer extends Model
     ]; 
 
     protected $casts = [
-        'since_at' => 'date',
-        'until_at' => 'date',
+        'since_at' => 'datetime',
+        'until_at' => 'datetime',
     ];
 
     public const VALIDATION_RULES = [
@@ -32,8 +33,6 @@ class Timer extends Model
     protected $appends = [
         'total_time',
         'amount',
-        'stop_route',
-        'project_route',
     ];
 
     public function project(): BelongsTo
@@ -56,28 +55,38 @@ class Timer extends Model
         return ($type) ? $query->whereNull('until_at') : $query->whereNotNull('until_at');
     }
 
-    public function getTotalTimeAttribute(): float
+    protected function totalTime(): Attribute
     {
-        $since_at = Carbon::parse($this->since_at);
-        $until_at = Carbon::parse($this->until_at);
-        
-        $diff = $since_at->diff($until_at);
-        
-        return round($diff->s / 3600 + $diff->i / 60 + $diff->h + $diff->days * 24, 2);
+        return Attribute::make(
+            get: function () {
+                $since_at = Carbon::parse($this->since_at);
+                $until_at = Carbon::parse($this->until_at);
+                
+                $diff = $since_at->diff($until_at);
+                
+                return round($diff->s / 3600 + $diff->i / 60 + $diff->h + $diff->days * 24, 2);                        
+            },
+        );
     }
 
-    public function getAmountAttribute(): float
+    protected function amount(): Attribute
     {
-        return round($this->totalTime * $this->rate->value, 2);
+        return Attribute::make(
+            get: fn () => round($this->total_time * $this->rate->value, 2),
+        );
     }
 
-    public function getStopRouteAttribute(): string
+    protected function stopRoute(): Attribute
     {
-        return (!$this->until_at) ? route('projects.timers.stop', ['project' => $this->project, 'timer' => $this]) : '';
+        return Attribute::make(
+            get: fn () => (!$this->until_at) ? route('projects.timers.stop', ['project' => $this->project, 'timer' => $this]) : '',
+        );
     }
 
-    public function getProjectRouteAttribute(): string
+    protected function projectRoute(): Attribute
     {
-        return route('projects.show', $this->project);
+        return Attribute::make(
+            get: fn () => route('projects.show', $this->project),
+        );
     }
 }

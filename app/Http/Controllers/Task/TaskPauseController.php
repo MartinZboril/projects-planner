@@ -11,9 +11,9 @@ use App\Services\Data\TaskService;
 
 class TaskPauseController extends Controller
 {
-    public function __construct(private TaskService $taskService)
-    {
-    }
+    public function __construct(
+        private TaskService $taskService
+    ) {}
 
     /**
      * Start/stop working on the task.

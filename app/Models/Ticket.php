@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\{Builder, Model};
 use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,12 +15,6 @@ class Ticket extends Model
 
     protected $guarded = [
         'id', 'created_at', 'updated_at',
-    ];
-    
-    protected $appends = [
-        'overdue',
-        'assigned',
-        'urgent',
     ];
 
     protected $casts = [
@@ -96,18 +91,24 @@ class Ticket extends Model
         return $query->whereNull('assignee_id');
     }
 
-    public function getOverdueAttribute(): bool
+    protected function overdue(): Attribute
     {
-        return $this->dued_at <= date('Y-m-d') && $this->status ===TicketStatusEnum::open;
-    }
-    
-    public function getAssignedAttribute(): bool
-    {
-        return $this->assignee ? true : false;
+        return Attribute::make(
+            get: fn () => $this->dued_at <= date('Y-m-d') && $this->status ===TicketStatusEnum::open,
+        );
     }
 
-    public function getUrgentAttribute(): bool
+    protected function assigned(): Attribute
     {
-        return $this->priority === TicketPriorityEnum::urgent;
+        return Attribute::make(
+            get: fn () => $this->assignee ? true : false,
+        );
+    }
+
+    protected function urgent(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->priority === TicketPriorityEnum::urgent,
+        );
     }
 }

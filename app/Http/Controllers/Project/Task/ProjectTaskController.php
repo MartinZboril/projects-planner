@@ -17,9 +17,9 @@ class ProjectTaskController extends Controller
 {
     use FlashTrait;
 
-    public function __construct(private TaskService $taskService)
-    {
-    }
+    public function __construct(
+        private TaskService $taskService
+    ) {}
 
     /**
      * Display the tasks of project.

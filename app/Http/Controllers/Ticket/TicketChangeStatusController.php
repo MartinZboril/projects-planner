@@ -12,9 +12,9 @@ use App\Services\Data\TicketService;
 
 class TicketChangeStatusController extends Controller
 {
-    public function __construct(private TicketService $ticketService)
-    {
-    }
+    public function __construct(
+        private TicketService $ticketService
+    ) {}
 
     /**
      * Change working status of the ticket.
