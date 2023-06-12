@@ -15,7 +15,8 @@
             @csrf
 
             <div class="input-group mb-3">
-                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autocomplete="email" autofocus placeholder="Email">
+                <input id="email" type="email" class="form-control bg-white @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="Email" autocomplete="off" readonly 
+                onfocus="this.removeAttribute('readonly');">
                 <div class="input-group-append">
                     <div class="input-group-text">
                         <span class="fas fa-envelope"></span>
@@ -30,7 +31,8 @@
             </div>
 
             <div class="input-group mb-3">
-                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" autocomplete="current-password" placeholder="Password">
+                <input id="password" type="password" class="form-control bg-white @error('password') is-invalid @enderror" name="password" placeholder="Password" autocomplete="off" readonly 
+                onfocus="this.removeAttribute('readonly');">
                 <div class="input-group-append">
                     <div class="input-group-text">
                         <span class="fas fa-lock"></span>
