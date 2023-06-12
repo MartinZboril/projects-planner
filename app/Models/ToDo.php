@@ -44,7 +44,7 @@ class ToDo extends Model
         return $query->where('is_finished', $type);
     }
 
-    protected function overdue(): Attribute
+    protected function deadlineOverdue(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->dued_at <= date('Y-m-d') && !$this->is_finished,

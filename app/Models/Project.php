@@ -142,7 +142,7 @@ class Project extends Model
     protected function totalTime(): Attribute
     {
         return Attribute::make(
-            get: fn () => round(Timer::where('project_id', $this->id)->get()->sum('total_time'), 2),
+            get: fn () => round($this->timers->sum('total_time'), 2),
         );
     }
 
@@ -170,7 +170,7 @@ class Project extends Model
     protected function amount(): Attribute
     {
         return Attribute::make(
-            get: fn () => round(Timer::where('project_id', $this->id)->get()->sum('amount'), 2),
+            get: fn () => round($this->timers->sum('amount'), 2),
         );
     }
 

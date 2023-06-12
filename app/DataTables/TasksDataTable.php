@@ -34,7 +34,7 @@ class TasksDataTable extends DataTable
                         return Blade::render('<x-site.ui.user-icon :user="$user" />', ['user' => $task->user]);
                     })  
                     ->editColumn('dued_at', function(Task $task) {
-                        return '<span class="text-' . ($task->overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $task->dued_at)->format('d.m.Y') . '</span>';
+                        return '<span class="text-' . ($task->deadline_overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $task->dued_at)->format('d.m.Y') . '</span>';
                     })
                     ->editColumn('status', function(Task $task) {
                         return Blade::render('<x-task.ui.status-badge :text="true" :task="$task" />', ['task' => $task]);
@@ -44,7 +44,7 @@ class TasksDataTable extends DataTable
                             if ($this->view === 'project') {
                                 return '<a href="' . route('projects.tickets.show', ['project' => $task->project, 'ticket' => $task->ticket]) . '">' . $task->ticket->subject . '</a>';                
                             } else {
-                                return '<a href="' . route('tickets.show', ['project' => $task->project, 'ticket' => $task->ticket]) . '">' . $task->ticket->subject . '</a>';                
+                                return '<a href="' . route('tickets.show', $task->ticket) . '">' . $task->ticket->subject . '</a>';                
                             }
                         }
                         return 'NaN';
@@ -69,7 +69,7 @@ class TasksDataTable extends DataTable
         )->when(
             $this->newed ?? false,
             fn ($query, $value) => $query->where('tasks.status', TaskStatusEnum::new)
-        )->with('project', 'milestone', 'user', 'ticket')->select('tasks.*')->newQuery();
+        )->with('project:id,name', 'milestone:id,name', 'user:id,avatar_id,name,surname', 'user.avatar:id,path', 'ticket:id,subject')->select('tasks.*')->newQuery();
     }
 
     public function html(): HtmlBuilder

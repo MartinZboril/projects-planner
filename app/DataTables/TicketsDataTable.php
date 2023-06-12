@@ -33,7 +33,7 @@ class TicketsDataTable extends DataTable
                         return Carbon::createFromFormat('Y-m-d H:i:s', $ticket->created_at)->format('d.m.Y');
                     })
                     ->editColumn('dued_at', function(Ticket $ticket) {
-                        return '<span class="text-' . ($ticket->overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $ticket->dued_at)->format('d.m.Y') . '</span>';
+                        return '<span class="text-' . ($ticket->deadline_overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $ticket->dued_at)->format('d.m.Y') . '</span>';
                     })
                     ->editColumn('status', function(Ticket $ticket) {
                         return Blade::render('<x-ticket.ui.status-badge :text="true" :status="$status" />', ['status' => $ticket->status]);
@@ -74,7 +74,7 @@ class TicketsDataTable extends DataTable
         )->when(
             $this->unassigned ?? false,
             fn ($query, $value) => $query->unassigned()->active()
-        )->with('project', 'reporter', 'assignee', 'task')->select('tickets.*')->newQuery();
+        )->with('project:id,name', 'reporter:id,avatar_id,name,surname', 'reporter.avatar:id,path', 'assignee:id,avatar_id,name,surname', 'assignee.avatar:id,path', 'task:id,name,ticket_id')->select('tickets.*')->newQuery();
     }
 
     public function html(): HtmlBuilder

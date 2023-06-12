@@ -16,19 +16,19 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-3">
-                                <x-report.ui.info-box title="Projects" :detail-route="route('reports.projects')" />               
+                                <x-report.ui.info-box title="Projects" icon="fas fa-clock" :detail-route="route('reports.projects')" />               
                             </div>
                             <div class="col-md-3">
-                                <x-report.ui.info-box title="Tasks" :detail-route="route('reports.tasks')" />              
+                                <x-report.ui.info-box title="Tasks" icon="fas fa-tasks" :detail-route="route('reports.tasks')" />              
                             </div>
                             <div class="col-md-3">
-                                <x-report.ui.info-box title="Tickets" :detail-route="route('reports.tickets')" />                
+                                <x-report.ui.info-box title="Tickets" icon="fas fa-life-ring" :detail-route="route('reports.tickets')" />                
                             </div>
                             <div class="col-md-3">
-                                <x-report.ui.info-box title="Milestones" :detail-route="route('reports.milestones')" />               
+                                <x-report.ui.info-box title="Milestones" icon="fas fa-calendar-alt" :detail-route="route('reports.milestones')" />               
                             </div>
                             <div class="col-md-3">
-                                <x-report.ui.info-box title="Timesheets" :detail-route="route('reports.timesheets')" />               
+                                <x-report.ui.info-box title="Timesheets" icon="fas fa-stopwatch" :detail-route="route('reports.timesheets')" />               
                             </div>
                         </div>
                     </div>

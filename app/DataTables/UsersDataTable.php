@@ -47,7 +47,7 @@ class UsersDataTable extends DataTable
  
     public function query(User $model): QueryBuilder
     {
-        return $model->with('address')->select('id', 'address_id', 'name', 'surname', 'email', 'job_title', 'mobile', 'created_at', 'avatar_id')->newQuery();
+        return $model->with('address:id,city', 'avatar:id,path')->select('id', 'address_id', 'name', 'surname', 'email', 'job_title', 'mobile', 'created_at', 'avatar_id')->newQuery();
     }
  
     public function html(): HtmlBuilder
