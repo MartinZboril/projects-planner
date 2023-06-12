@@ -4,7 +4,7 @@
         <span id="ticket-status-badge">
             <x-ticket.ui.status-badge :text="false" :status="$ticket->status" />
         </span>         
-        <span style="{{ $ticket->overdue ? '' : 'display: none;' }}font-size:14px;" id="ticket-{{ $ticket->id }}-overdue-badge" class="badge badge-danger ml-1">Overdue</span>
+        <span style="{{ $ticket->deadline_overdue ? '' : 'display: none;' }}font-size:14px;" id="ticket-{{ $ticket->id }}-overdue-badge" class="badge badge-danger ml-1">Overdue</span>
     </div>
     <div class="card-body">
         <div class="row">
@@ -12,7 +12,7 @@
                 <div class="info-box bg-light">
                     <div class="info-box-content">
                         <span class="info-box-text text-center text-muted">Due date</span>
-                        <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-{{ $ticket->overdue ? 'danger' : 'secondary' }}" id="ticket-{{ $ticket->id }}-due-date">{{ $ticket->dued_at->format('d.m.Y') }}</span></span>
+                        <span class="info-box-number text-center text-muted mb-0"><span class="badge badge-{{ $ticket->deadline_overdue ? 'danger' : 'secondary' }}" id="ticket-{{ $ticket->id }}-due-date">{{ $ticket->dued_at->format('d.m.Y') }}</span></span>
                     </div>
                 </div>
             </div>

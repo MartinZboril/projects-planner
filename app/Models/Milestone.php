@@ -62,7 +62,7 @@ class Milestone extends Model
         return $this->tasks()->status(TaskStatusEnum::complete);
     }
 
-    protected function overdue(): Attribute
+    protected function deadlineOverdue(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->dued_at <= date('Y-m-d') && $this->progress < 1,

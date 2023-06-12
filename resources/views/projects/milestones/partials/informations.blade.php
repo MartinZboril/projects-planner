@@ -2,7 +2,7 @@
     <div class="card-header">
         {{ $milestone->name }}
         <span class="badge badge-{{ $milestone->progress === 1 ? 'success' : 'warning' }} ml-1" style="font-size:14px;">{{ $milestone->progress === 1 ? 'Completed' : 'In progress' }}</span>
-        @if($milestone->overdue)<span class="badge badge-danger ml-1" style="font-size:14px;">Overdue</span>@endif
+        @if($milestone->deadline_overdue)<span class="badge badge-danger ml-1" style="font-size:14px;">Overdue</span>@endif
     </div>
     <div class="card-body">
         <span class="d-block">Project: <b><a href="{{ route('projects.show', $milestone->project->id) }}">{{ $milestone->project->name }}</a></b></span>

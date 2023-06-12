@@ -91,7 +91,7 @@ class Ticket extends Model
         return $query->whereNull('assignee_id');
     }
 
-    protected function overdue(): Attribute
+    protected function deadlineOverdue(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->dued_at <= date('Y-m-d') && $this->status ===TicketStatusEnum::open,

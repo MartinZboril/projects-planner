@@ -97,7 +97,7 @@ class Task extends Model
         return $query->whereIn('status', [TaskStatusEnum::new, TaskStatusEnum::in_progress]);
     }
 
-    protected function overdue(): Attribute
+    protected function deadlineOverdue(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->dued_at <= date('Y-m-d') && $this->status != TaskStatusEnum::complete,

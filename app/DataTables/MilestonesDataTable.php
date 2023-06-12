@@ -44,7 +44,7 @@ class MilestonesDataTable extends DataTable
                         return Carbon::createFromFormat('Y-m-d H:i:s', $milestone->started_at)->format('d.m.Y');
                     })
                     ->editColumn('dued_at', function(Milestone $milestone) {
-                        return '<span class="text-' . ($milestone->overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $milestone->dued_at)->format('d.m.Y') . '</span>';
+                        return '<span class="text-' . ($milestone->deadline_overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $milestone->dued_at)->format('d.m.Y') . '</span>';
                     })
                     ->rawColumns(['name', 'project.name', 'owner.full_name', 'progress', 'dued_at', 'buttons']);
     }
@@ -59,7 +59,7 @@ class MilestonesDataTable extends DataTable
             fn ($query, $value) => $query->where('milestones.dued_at', '<=', date('Y-m-d'))->whereHas('tasks', function (QueryBuilder $query) {
                 $query->where('status', '!=', TaskStatusEnum::complete->value);
             })->orWhere('milestones.dued_at', '<=', date('Y-m-d'))->has('tasks', '=', 0)
-        )->with('owner', 'project')->select('milestones.*')->newQuery();
+        )->with('owner:id,avatar_id,name,surname', 'owner.avatar:id,path', 'project:id,name')->select('milestones.*')->newQuery();
     }
 
     public function html(): HtmlBuilder

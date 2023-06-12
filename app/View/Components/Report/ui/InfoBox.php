@@ -6,7 +6,7 @@ use Illuminate\View\Component;
 
 class InfoBox extends Component
 {
-    public function __construct(public string $title, public string $detailRoute)
+    public function __construct(public string $title, public string $icon, public string $detailRoute)
     {
     }
 

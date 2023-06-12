@@ -16,7 +16,7 @@ class SummaryDashboard
     {
         $data = collect([
             'today_timers_total_time_sum' => round(Timer::whereDate('created_at', now()->format('Y-m-d'))->get()->sum('total_time'), 2),
-            'today_timers_amount_sum' => round(Timer::whereDate('created_at', now()->format('Y-m-d'))->get()->sum('amount'), 2),
+            'today_timers_amount_sum' => round(Timer::with('rate')->whereDate('created_at', now()->format('Y-m-d'))->get()->sum('amount'), 2),
             'active_projects_count' => Project::active()->count(),
             'active_tasks_count' => Task::active()->stopped(false)->count(),
             'active_tickets_count' => Ticket::active()->count(),
@@ -43,7 +43,7 @@ class SummaryDashboard
     {
         $summary = collect();
         $summary = $this->pushItemsToSummary($summary, 'project', Project::active()->overdue()->get());
-        $summary = $this->pushItemsToSummary($summary, 'milestone', Milestone::overdue()->get()->where('progress', '<', 1));
+        $summary = $this->pushItemsToSummary($summary, 'milestone', Milestone::with('tasks', 'tasksCompleted')->overdue()->get()->where('progress', '<', 1));
         $summary = $this->pushItemsToSummary($summary, 'task', Task::active()->overdue()->get());
         $summary = $this->pushItemsToSummary($summary, 'ticket', Ticket::active()->overdue()->get());
         $summary = $this->pushItemsToSummary($summary, 'todo', ToDo::finished(false)->overdue()->get());

@@ -9,7 +9,7 @@
             @if($task->paused || $task->returned)
                 <x-task.ui.status-badge :text="false" :$task />
             @endif
-            @if($task->overdue)<span class="badge badge-danger ml-1" style="font-size:14px;">Overdue</span>@endif            
+            @if($task->deadline_overdue)<span class="badge badge-danger ml-1" style="font-size:14px;">Overdue</span>@endif            
             @break
             
     @endswitch
@@ -17,7 +17,7 @@
 <div class="card-tools">
     @switch($task->status)
         @case(App\Enums\TaskStatusEnum::new)
-            @if($task->overdue)<span class="badge badge-danger ml-2" style="font-size:14px;">Overdue</span>@endif
+            @if($task->deadline_overdue)<span class="badge badge-danger ml-2" style="font-size:14px;">Overdue</span>@endif
             @break
     
         @case(App\Enums\TaskStatusEnum::in_progress)
