@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\{Builder, Model};
 use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany, MorphMany};
 
 class Task extends Model
 {
@@ -62,12 +62,12 @@ class Task extends Model
         return $this->belongsTo(Ticket::class, 'ticket_id');
     }
 
-    public function files()
+    public function files(): MorphMany
     {
         return $this->morphMany(File::class, 'fileable');
     }
         
-    public function comments()
+    public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable');
     }

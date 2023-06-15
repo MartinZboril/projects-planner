@@ -7,7 +7,7 @@ use App\Enums\{ProjectStatusEnum, TaskStatusEnum};
 use Illuminate\Database\Eloquent\{Builder, Model};
 use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany, MorphMany};
 
 class Project extends Model
 {
@@ -46,16 +46,6 @@ class Project extends Model
         return $this->belongsToMany(User::class, 'project_user', 'project_id', 'user_id');
     }
 
-    public function files()
-    {
-        return $this->morphMany(File::class, 'fileable');
-    }
-
-    public function comments()
-    {
-        return $this->morphMany(Comment::class, 'commentable');
-    }
-
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class, 'project_id');
@@ -91,7 +81,17 @@ class Project extends Model
         return $this->hasMany(Ticket::class, 'project_id');
     }
 
-    public function notes()
+    public function files(): MorphMany
+    {
+        return $this->morphMany(File::class, 'fileable');
+    }
+
+    public function comments(): MorphMany
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function notes(): MorphMany
     {
         return $this->morphMany(Note::class, 'noteable');
     }

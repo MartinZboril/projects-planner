@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\{Builder, Model};
 use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Enums\{TicketPriorityEnum, TicketTypeEnum, TicketStatusEnum};
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasOne};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasOne, MorphMany};
 
 class Ticket extends Model
 {
@@ -51,12 +51,12 @@ class Ticket extends Model
         return $this->belongsTo(User::class, 'assignee_id');
     }
 
-    public function files()
+    public function files(): MorphMany
     {
         return $this->morphMany(File::class, 'fileable');
     }
         
-    public function comments()
+    public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable');
     }

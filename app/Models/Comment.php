@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\{BelongsToMany, BelongsTo};
+use Illuminate\Database\Eloquent\Relations\{BelongsToMany, BelongsTo, MorphMany, MorphTo};
 
 class Comment extends Model
 {
@@ -24,12 +24,12 @@ class Comment extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function commentable()
+    public function commentable(): MorphTo
     {
         return $this->morphTo();
     }
 
-    public function files()
+    public function files(): MorphMany
     {
         return $this->morphMany(File::class, 'fileable');
     }
