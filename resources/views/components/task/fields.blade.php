@@ -21,7 +21,7 @@
                         <select class="form-control @error('project_id') is-invalid @enderror" name="project_id" id="project-id" style="width: 100%;">
                             <option disabled selected value>select project</option>
                             @foreach($projects as $project)
-                                <option value="{{ $project->id }}" @selected(old('project_id', $task->project->id ?? null) === $project->id)>{{ $project->name }}</option>
+                                <option value="{{ $project->id }}" @selected((int) old('project_id', $task->project->id ?? null) === $project->id)>{{ $project->name }}</option>
                             @endforeach
                         </select>
                         @error('project_id')
@@ -35,7 +35,7 @@
                         <option disabled selected value>select milestone</option>
                         @if ($milestones ?? false)
                             @foreach($milestones as $milestone)
-                                <option value="{{ $milestone->id }}" @selected(old('milestone_id', $task->milestone->id ?? null) === $milestone->id)>{{ $milestone->name }}</option>
+                                <option value="{{ $milestone->id }}" @selected((int) old('milestone_id', $task->milestone->id ?? null) === $milestone->id)>{{ $milestone->name }}</option>
                             @endforeach                    
                         @endif
                     </select>
@@ -48,7 +48,7 @@
                     <select class="form-control @error('user_id') is-invalid @enderror" name="user_id" id="user-id" style="width: 100%;">
                         <option disabled selected value>select user</option>
                         @foreach($users as $user)
-                            <option value="{{ $user->id }}" @selected(old('user_id', $task->user->id ?? null) === $user->id)>{{ $user->full_name }}</option>
+                            <option value="{{ $user->id }}" @selected((int) old('user_id', $task->user->id ?? null) === $user->id)>{{ $user->full_name }}</option>
                         @endforeach
                     </select>
                     @error('user_id')
