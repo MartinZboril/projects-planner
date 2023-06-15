@@ -4,8 +4,9 @@ namespace App\Services\Report;
 
 use App\Models\Ticket;
 use Illuminate\Support\Collection;
+use App\Interfaces\ReportInterface;
 
-class TicketReport
+class TicketReport implements ReportInterface
 {
     public function __construct(
         public BuilderReport $builderReport=new BuilderReport
@@ -16,7 +17,7 @@ class TicketReport
      */
     public function getReportPerYear(string $year): Collection
     {
-        $ticketsByMonths = $this->getTicketsByMonths($year);
+        $ticketsByMonths = $this->getRecordsByMonths($year);
         $data = collect([
             'year' => $year,
             'total_tickets_count' => Ticket::whereYear('created_at', '<=', $year)->count(),
@@ -34,7 +35,7 @@ class TicketReport
     /**
      * Get tickets count by year
      */
-    protected function getTicketsByMonths(string $year): Collection
+    public function getRecordsByMonths(string $year): Collection
     {
         $tickets = collect();
 

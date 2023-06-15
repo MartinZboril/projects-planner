@@ -5,9 +5,10 @@ namespace App\Services\Dashboard;
 use App\Models\Client;
 use App\Models\Milestone;
 use Illuminate\Support\Collection;
+use App\Interfaces\DashboardInterface;
 use App\Models\{Project, Timer, Task, ToDo, Ticket};
 
-class SummaryDashboard
+class SummaryDashboard implements DashboardInterface
 {
     /**
      * Get dashboard for index.

@@ -4,8 +4,9 @@ namespace App\Services\Report;
 
 use App\Models\Timer;
 use Illuminate\Support\Collection;
+use App\Interfaces\ReportInterface;
 
-class TimesheetReport
+class TimesheetReport implements ReportInterface
 {
     public function __construct(
         public BuilderReport $builderReport=new BuilderReport
@@ -16,7 +17,7 @@ class TimesheetReport
      */
     public function getReportPerYear(string $year): Collection
     {
-        $timersByMonths = $this->getTimersByMonths($year);
+        $timersByMonths = $this->getRecordsByMonths($year);
         $data = collect([
             'year' => $year,
             'total_timers_count' => Timer::whereYear('created_at', '<=', $year)->get()->sum('total_time'),
@@ -31,7 +32,7 @@ class TimesheetReport
     /**
      * Get timers count by year
      */
-    protected function getTimersByMonths(string $year): Collection
+    public function getRecordsByMonths(string $year): Collection
     {
         $timers = collect();
 

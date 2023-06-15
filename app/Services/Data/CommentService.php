@@ -24,18 +24,18 @@ class CommentService
         $inputs['commentable_type'] = $model::class;
         // Save note
         $comment->fill($inputs)->save();
-        // Store comments files
+        // Upload files
         if ($uploadedFiles) {
-            $this->storeFiles($comment, $uploadedFiles);
+            $this->handleUploadFiles($comment, $uploadedFiles);
         }
 
         return $comment;
     }
 
     /**
-     * Store comments files.
+     * Upload comments files.
      */
-    private function storeFiles(Comment $comment, Array $uploadedFiles): void
+    private function handleUploadFiles(Comment $comment, Array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
             $this->fileService->handleUpload($uploadedFile, 'comments', $comment);

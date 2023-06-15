@@ -2,12 +2,13 @@
 
 namespace App\Services\Dashboard;
 
-use App\Enums\TicketStatusEnum;
 use App\Models\Ticket;
-use App\Services\Report\TicketReport;
+use App\Enums\TicketStatusEnum;
 use Illuminate\Support\Collection;
+use App\Services\Report\TicketReport;
+use App\Interfaces\DashboardInterface;
 
-class TicketDashboard
+class TicketDashboard implements DashboardInterface
 {
     /**
      * Get dashboard for tickets.
