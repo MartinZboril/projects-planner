@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany, MorphMany};
 
 class Milestone extends Model
 {
@@ -42,12 +42,12 @@ class Milestone extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-    public function files()
+    public function files(): MorphMany
     {
         return $this->morphMany(File::class, 'fileable');
     }
     
-    public function comments()
+    public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable');
     }

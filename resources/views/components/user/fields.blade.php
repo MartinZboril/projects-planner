@@ -71,7 +71,8 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="password" value="{{ old('password') }}" >
+                            <input type="password" name="password" id="password" class="form-control bg-white @error('password') is-invalid @enderror" placeholder="password" autocomplete="off" readonly 
+                            onfocus="this.removeAttribute('readonly');">
                             @error('password')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

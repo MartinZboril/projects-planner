@@ -4,8 +4,9 @@ namespace App\Services\Report;
 
 use App\Models\Task;
 use Illuminate\Support\Collection;
+use App\Interfaces\ReportInterface;
 
-class TaskReport
+class TaskReport implements ReportInterface
 {
     public function __construct(
         public BuilderReport $builderReport=new BuilderReport
@@ -16,7 +17,7 @@ class TaskReport
      */
     public function getReportPerYear(string $year): Collection
     {
-        $tasksByMonths = $this->getTasksByMonths($year);
+        $tasksByMonths = $this->getRecordsByMonths($year);
         $data = collect([
             'year' => $year,
             'total_tasks_count' => Task::whereYear('created_at', '<=', $year)->count(),
@@ -34,7 +35,7 @@ class TaskReport
     /**
      * Get tasks count by year
      */
-    protected function getTasksByMonths(string $year): Collection
+    public function getRecordsByMonths(string $year): Collection
     {
         $tasks = collect();
 

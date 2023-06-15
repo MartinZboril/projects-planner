@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class File extends Model
@@ -19,7 +20,7 @@ class File extends Model
         'file_path' => ['required', 'max:255'],
     ];
 
-    public function fileable()
+    public function fileable(): MorphTo
     {
         return $this->morphTo();
     }

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\{Builder, Model};
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, MorphTo};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Note extends Model
@@ -28,7 +28,7 @@ class Note extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function fileable()
+    public function fileable(): MorphTo
     {
         return $this->morphTo();
     }

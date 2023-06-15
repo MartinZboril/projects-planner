@@ -15,7 +15,7 @@ class ProjectService
     /**
      * Save data for project.
      */
-    public function handleSave(Project $project, array $inputs, ?Array $uploadedFiles=[])
+    public function handleSave(Project $project, array $inputs, ?Array $uploadedFiles=[]): Project
     {
         // Prepare fields
         $inputs['status'] = $project->status_id ?? ProjectStatusEnum::active;

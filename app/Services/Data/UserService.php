@@ -2,10 +2,10 @@
 
 namespace App\Services\Data;
 
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
-use App\Models\{Address, User};
 use App\Services\FileService;
+use App\Models\{Address, User};
+use Illuminate\Http\UploadedFile;
 
 class UserService
 {
@@ -32,8 +32,13 @@ class UserService
             'country' => $inputs['country'],
             'zip_code' => $inputs['zip_code'],
         ]);
+        // Modify password fields
+        if ($inputs['password'] || ! $user->password) {
+            $inputs['password'] = $inputs['password'] ?? ($user->password ?? Str::random(8));
+        } else {
+            unset($inputs['password']);
+        }
         // Store fields
-        $inputs['password'] = $inputs['password'] ?? ($user->password ?? Str::random(8));
         $user->fill($inputs)->save();
         // Remove old avatar
         if ($oldAvatarId ?? false) {

@@ -6,9 +6,10 @@ use App\Models\Milestone;
 use App\Enums\ProjectStatusEnum;
 use App\Models\{Project, Timer};
 use Illuminate\Support\Collection;
+use App\Interfaces\DashboardInterface;
 use App\Services\Report\ProjectReport;
 
-class ProjectDashboard
+class ProjectDashboard implements DashboardInterface
 {
     /**
      * Get dashboard for projects.

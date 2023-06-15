@@ -2,12 +2,13 @@
 
 namespace App\Services\Dashboard;
 
-use App\Enums\TaskStatusEnum;
 use App\Models\{Task, ToDo};
-use App\Services\Report\TaskReport;
+use App\Enums\TaskStatusEnum;
 use Illuminate\Support\Collection;
+use App\Services\Report\TaskReport;
+use App\Interfaces\DashboardInterface;
 
-class TaskDashboard
+class TaskDashboard implements DashboardInterface
 {
     /**
      * Get dashboard for tasks.
