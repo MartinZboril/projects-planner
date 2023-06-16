@@ -12,6 +12,7 @@ class AddressService
     public function handleSave(Address $address, array $inputs): int
     {
         $address->fill($inputs)->save();
+
         return $address->id;
     }
 }

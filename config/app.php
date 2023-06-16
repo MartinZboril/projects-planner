@@ -236,7 +236,7 @@ return [
     ],
 
     'uploads' => [
-        'disk' => 'public'
-    ]
+        'disk' => 'public',
+    ],
 
 ];

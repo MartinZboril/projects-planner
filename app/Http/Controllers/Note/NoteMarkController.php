@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Note;
 
-use Exception;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Note\MarkNoteRequest;
 use App\Models\Note;
 use App\Services\Data\NoteService;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class NoteMarkController extends Controller
 {
     public function __construct(
         private NoteService $noteService
-    ) {}
+    ) {
+    }
 
     /**
      * Mark selected note.
@@ -26,6 +27,7 @@ class NoteMarkController extends Controller
         } catch (Exception $exception) {
             Log::error($exception);
         }
+
         return response()->json([
             'redirect' => $request->redirect,
         ]);

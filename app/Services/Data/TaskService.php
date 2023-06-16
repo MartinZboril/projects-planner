@@ -2,21 +2,22 @@
 
 namespace App\Services\Data;
 
-use Illuminate\Support\Facades\Auth;
 use App\Enums\TaskStatusEnum;
-use App\Models\{Comment, Task};
+use App\Models\Task;
 use App\Services\FileService;
+use Illuminate\Support\Facades\Auth;
 
 class TaskService
 {
     public function __construct(
         private FileService $fileService,
-    ) {}
+    ) {
+    }
 
     /**
      * Save data for task.
      */
-    public function handleSave(Task $task, array $inputs, ?Array $uploadedFiles=[]): Task
+    public function handleSave(Task $task, array $inputs, ?array $uploadedFiles = []): Task
     {
         // Prepare fields
         $inputs['status'] = $task->status ?? TaskStatusEnum::new;
@@ -27,14 +28,15 @@ class TaskService
         // Upload files
         if ($uploadedFiles) {
             $this->handleUploadFiles($task, $uploadedFiles);
-        } 
+        }
+
         return $task;
     }
-    
+
     /**
      * Upload tasks files.
      */
-    public function handleUploadFiles(Task $task, Array $uploadedFiles): void
+    public function handleUploadFiles(Task $task, array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
             $this->fileService->handleUpload($uploadedFile, 'tasks/files', $task);
@@ -50,15 +52,17 @@ class TaskService
             'is_returned' => ($task->status === TaskStatusEnum::complete && $changedStatus === TaskStatusEnum::new->value) ? true : false,
             'status' => $status,
         ]);
+
         return $task->fresh();
     }
-        
+
     /**
      * Pause work on the task.
      */
     public function handlePause(Task $task): Task
     {
-        $task->update(['is_stopped' => !$task->is_stopped]);
+        $task->update(['is_stopped' => ! $task->is_stopped]);
+
         return $task->fresh();
     }
 
@@ -67,7 +71,8 @@ class TaskService
      */
     public function handleMark(Task $task): Task
     {
-        $task->update(['is_marked' => !$task->is_marked]);
+        $task->update(['is_marked' => ! $task->is_marked]);
+
         return $task->fresh();
     }
 }

@@ -2,12 +2,18 @@
 
 namespace App\Models;
 
+use App\Enums\TicketPriorityEnum;
+use App\Enums\TicketStatusEnum;
+use App\Enums\TicketTypeEnum;
+use App\Traits\Scopes\MarkedRecords;
+use App\Traits\Scopes\OverdueRecords;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\{Builder, Model};
-use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Enums\{TicketPriorityEnum, TicketTypeEnum, TicketStatusEnum};
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasOne, MorphMany};
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Ticket extends Model
 {
@@ -55,7 +61,7 @@ class Ticket extends Model
     {
         return $this->morphMany(File::class, 'fileable');
     }
-        
+
     public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable');
@@ -65,7 +71,7 @@ class Ticket extends Model
     {
         return $this->hasOne(Task::class, 'ticket_id');
     }
-    
+
     public function scopeStatus(Builder $query, TicketStatusEnum $type): Builder
     {
         return $query->where('status', $type);
@@ -94,7 +100,7 @@ class Ticket extends Model
     protected function deadlineOverdue(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->dued_at <= date('Y-m-d') && $this->status ===TicketStatusEnum::open,
+            get: fn () => $this->dued_at <= date('Y-m-d') && $this->status === TicketStatusEnum::open,
         );
     }
 

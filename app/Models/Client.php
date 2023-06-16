@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use App\Traits\Scopes\MarkedRecords;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, MorphMany};
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Client extends Model
 {
@@ -30,7 +31,7 @@ class Client extends Model
     {
         return $this->belongsTo(Address::class);
     }
-    
+
     public function logo(): BelongsTo
     {
         return $this->belongsTo(File::class, 'logo_id');

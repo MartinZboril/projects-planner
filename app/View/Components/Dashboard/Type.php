@@ -7,39 +7,41 @@ use Illuminate\View\Component;
 class Type extends Component
 {
     public $type;
+
     public $displayIcon;
+
     public $icon;
-    
-    public function __construct(string $type, ?bool $displayIcon=true)
+
+    public function __construct(string $type, ?bool $displayIcon = true)
     {
-        $this->type = __('pages.title.' . $type);
+        $this->type = __('pages.title.'.$type);
         $this->displayIcon = $displayIcon;
-        
-        switch($type) {
-            case('client'):
+
+        switch ($type) {
+            case 'client':
                 $this->icon = 'fas fa-address-book';
                 break;
 
-            case('project'):
+            case 'project':
                 $this->icon = 'fas fa-clock';
                 break;
-                
-            case('milestone'):
+
+            case 'milestone':
                 $this->icon = 'far fa-calendar-times';
                 break;
 
-            case('task'):
+            case 'task':
                 $this->icon = 'fas fa-tasks';
                 break;
-                
-            case('ticket'):
+
+            case 'ticket':
                 $this->icon = 'fas fa-life-ring';
                 break;
-        
-            case('todo'):
+
+            case 'todo':
                 $this->icon = 'fas fa-check-square';
                 break;
-        
+
             default:
                 $this->icon = 'far fa-list';
         }

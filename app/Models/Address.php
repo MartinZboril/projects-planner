@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
 {
@@ -35,7 +35,7 @@ class Address extends Model
             get: fn () => $this->house_number ?? 'NaN',
         );
     }
-    
+
     protected function cityLabel(): Attribute
     {
         return Attribute::make(

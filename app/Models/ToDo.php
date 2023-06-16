@@ -3,21 +3,22 @@
 namespace App\Models;
 
 use App\Traits\Scopes\OverdueRecords;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\{Builder, Model};
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ToDo extends Model
 {
     use HasFactory, OverdueRecords, SoftDeletes;
 
     protected $table = 'todos';
-    
+
     protected $fillable = [
         'task_id', 'name', 'dued_at', 'is_finished', 'description', 'is_finished',
-    ]; 
+    ];
 
     protected $casts = [
         'dued_at' => 'date',
@@ -32,6 +33,7 @@ class ToDo extends Model
     ];
 
     public const FINISH = 'finish';
+
     public const RETURN = 'return';
 
     public function task(): BelongsTo
@@ -47,7 +49,7 @@ class ToDo extends Model
     protected function deadlineOverdue(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->dued_at <= date('Y-m-d') && !$this->is_finished,
+            get: fn () => $this->dued_at <= date('Y-m-d') && ! $this->is_finished,
         );
     }
 }

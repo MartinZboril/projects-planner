@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('house_number')->nullable();
             $table->string('city')->nullable();
             $table->string('country')->nullable();
-            $table->string('zip_code')->nullable();            
+            $table->string('zip_code')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

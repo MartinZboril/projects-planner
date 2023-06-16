@@ -2,14 +2,19 @@
 
 namespace App\View\Components\Task;
 
+use App\Models\Milestone;
+use App\Models\Project;
+use App\Models\Task;
 use Illuminate\View\Component;
-use App\Models\{Milestone, Project, Task, User};
 
 class Fields extends Component
 {
     public $task;
+
     public $type;
+
     public $project;
+
     public $closeRoute;
 
     public function __construct(?Task $task, string $type, ?Project $project)
@@ -35,11 +40,11 @@ class Fields extends Component
 
     public function render()
     {
-        $milestones = $this->project ?? false 
+        $milestones = $this->project ?? false
                             ? Milestone::where('project_id', $this->project->id)->get()
                             : Milestone::where('project_id', $this->task->project_id)->get();
 
-        $users = $this->project ?? false 
+        $users = $this->project ?? false
                             ? $this->project->team
                             : ($this->task->project ?? false ? $this->task->project->team : []);
 

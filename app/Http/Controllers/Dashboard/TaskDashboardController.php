@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 use App\DataTables\TasksDataTable;
 use App\Http\Controllers\Controller;
 use App\Services\Dashboard\TaskDashboard;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 class TaskDashboardController extends Controller
 {

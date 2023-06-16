@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Project;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Comment\StoreCommentRequest;
+use App\Http\Requests\Comment\UpdateCommentRequest;
+use App\Models\Comment;
+use App\Models\Project;
+use App\Services\Data\CommentService;
+use App\Services\Data\ProjectService;
+use App\Traits\FlashTrait;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Comment\{StoreCommentRequest, UpdateCommentRequest};
-use App\Models\{Comment, Project};
-use App\Traits\FlashTrait;
-use App\Services\Data\{ProjectService, CommentService};
 
 class ProjectCommentController extends Controller
 {
@@ -17,8 +20,9 @@ class ProjectCommentController extends Controller
     public function __construct(
         private ProjectService $projectService,
         private CommentService $commentService
-    ) {}
-    
+    ) {
+    }
+
     /**
      * Display the comments of project.
      */
@@ -37,8 +41,10 @@ class ProjectCommentController extends Controller
             $this->flash(__('messages.comment.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return redirect()->route('projects.comments.index', $project);
     }
 
@@ -52,8 +58,10 @@ class ProjectCommentController extends Controller
             $this->flash(__('messages.comment.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return redirect()->route('projects.comments.index', $project);
     }
 }

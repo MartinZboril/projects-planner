@@ -2,19 +2,20 @@
 
 namespace App\Services\Data;
 
-use App\Models\{Comment, Milestone};
+use App\Models\Milestone;
 use App\Services\FileService;
 
 class MilestoneService
 {
     public function __construct(
         private FileService $fileService,
-    ) {}
-    
+    ) {
+    }
+
     /**
      * Save data for milestone.
      */
-    public function handleSave(Milestone $milestone, array $inputs, ?Array $uploadedFiles=[]): Milestone
+    public function handleSave(Milestone $milestone, array $inputs, ?array $uploadedFiles = []): Milestone
     {
         // Prepare fields
         $inputs['project_id'] = $milestone->project_id ?? $inputs['project_id'];
@@ -24,14 +25,15 @@ class MilestoneService
         // Upload files
         if ($uploadedFiles) {
             $this->handleUploadFiles($milestone, $uploadedFiles);
-        }   
+        }
+
         return $milestone;
     }
 
     /**
      * Upload milestones files.
      */
-    public function handleUploadFiles(Milestone $milestone, Array $uploadedFiles): void
+    public function handleUploadFiles(Milestone $milestone, array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
             $this->fileService->handleUpload($uploadedFile, 'milestones/files', $milestone);
@@ -43,7 +45,8 @@ class MilestoneService
      */
     public function handleMark(Milestone $milestone): Milestone
     {
-        $milestone->update(['is_marked' => !$milestone->is_marked]);
+        $milestone->update(['is_marked' => ! $milestone->is_marked]);
+
         return $milestone->fresh();
     }
 }

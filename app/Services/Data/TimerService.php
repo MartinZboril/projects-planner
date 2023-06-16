@@ -2,8 +2,8 @@
 
 namespace App\Services\Data;
 
-use Illuminate\Support\Facades\Auth;
 use App\Models\Timer;
+use Illuminate\Support\Facades\Auth;
 
 class TimerService
 {
@@ -17,6 +17,7 @@ class TimerService
         $inputs['user_id'] = $timer->user_id ?? Auth::id();
         // Save timer
         $timer->fill($inputs)->save();
+
         return $timer;
     }
 

@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\{BelongsToMany, BelongsTo, MorphMany, MorphTo};
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Comment extends Model
 {
@@ -12,7 +14,7 @@ class Comment extends Model
 
     protected $fillable = [
         'commentable_id', 'commentable_type', 'user_id', 'content',
-    ]; 
+    ];
 
     public const VALIDATION_RULES = [
         'user_id' => ['required', 'integer', 'exists:users,id'],

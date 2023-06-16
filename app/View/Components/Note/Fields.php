@@ -2,8 +2,8 @@
 
 namespace App\View\Components\Note;
 
-use Illuminate\View\Component;
 use App\Models\Note;
+use Illuminate\View\Component;
 
 class Fields extends Component
 {

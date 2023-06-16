@@ -2,12 +2,13 @@
 
 namespace App\Services\Dashboard;
 
-use App\Models\Milestone;
 use App\Enums\ProjectStatusEnum;
-use App\Models\{Project, Timer};
-use Illuminate\Support\Collection;
 use App\Interfaces\DashboardInterface;
+use App\Models\Milestone;
+use App\Models\Project;
+use App\Models\Timer;
 use App\Services\Report\ProjectReport;
+use Illuminate\Support\Collection;
 
 class ProjectDashboard implements DashboardInterface
 {
@@ -21,7 +22,7 @@ class ProjectDashboard implements DashboardInterface
             'today_timers_total_time_sum' => round(Timer::whereDate('created_at', now()->format('Y-m-d'))->get()->sum('total_time'), 2),
             'this_week_timers_total_time_sum' => round(Timer::whereBetween('created_at', [
                 now()->startOfWeek()->format('Y-m-d'),
-                now()->endOfWeek()->format('Y-m-d')
+                now()->endOfWeek()->format('Y-m-d'),
             ])->get()->sum('total_time'), 2),
             'budget_avg' => round(Project::with('timers', 'timers.rate')->get()->avg('budget_plan'), 2),
             'spent_time_avg' => round(Project::with('timers')->get()->avg('total_time'), 2),

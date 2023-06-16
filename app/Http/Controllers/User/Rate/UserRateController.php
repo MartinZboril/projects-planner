@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\User\Rate;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Rate\StoreRateRequest;
+use App\Http\Requests\Rate\UpdateRateRequest;
+use App\Models\Rate;
+use App\Models\User;
+use App\Services\Data\RateService;
+use App\Traits\FlashTrait;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Rate\{StoreRateRequest, UpdateRateRequest};
-use App\Models\{Rate, User};
-use App\Traits\FlashTrait;
-use App\Services\Data\RateService;
 
 class UserRateController extends Controller
 {
@@ -18,7 +20,8 @@ class UserRateController extends Controller
 
     public function __construct(
         private RateService $rateService
-    ) {}
+    ) {
+    }
 
     /**
      * Show the form for creating a new rate.
@@ -35,13 +38,15 @@ class UserRateController extends Controller
     {
         try {
             $this->rateService->handleSave(new Rate, $request->validated() + [
-                'user_id' => $user->id
+                'user_id' => $user->id,
             ]);
             $this->flash(__('messages.rate.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return $request->has('save_and_close')
             ? redirect()->route('users.index')
             : redirect()->route('users.show', $user);
@@ -65,8 +70,10 @@ class UserRateController extends Controller
             $this->flash(__('messages.rate.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return $request->has('save_and_close')
             ? redirect()->route('users.index')
             : redirect()->route('users.show', $user);

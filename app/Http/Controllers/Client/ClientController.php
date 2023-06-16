@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Client;
 
-use Exception;
-use Illuminate\Http\{JsonResponse, RedirectResponse};
-use Illuminate\Support\Facades\Log;
-use Illuminate\View\View;
 use App\DataTables\ClientsDataTable;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Client\{StoreClientRequest, UpdateClientRequest};
+use App\Http\Requests\Client\StoreClientRequest;
+use App\Http\Requests\Client\UpdateClientRequest;
 use App\Models\Client;
-use App\Traits\FlashTrait;
 use App\Services\Data\ClientService;
+use App\Traits\FlashTrait;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
 class ClientController extends Controller
 {
@@ -19,7 +21,8 @@ class ClientController extends Controller
 
     public function __construct(
         private ClientService $clientService
-    ) {}
+    ) {
+    }
 
     /**
      * Display a listing of the clients.
@@ -47,8 +50,10 @@ class ClientController extends Controller
             $this->flash(__('messages.client.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
-        } 
+        }
+
         return $request->has('save_and_close')
                 ? redirect()->route('clients.index')
                 : redirect()->route('clients.show', $client);
@@ -79,9 +84,11 @@ class ClientController extends Controller
             $client = $this->clientService->handleSave($client, $request->validated(), $request->file('logo'));
             $this->flash(__('messages.client.update'), 'info');
         } catch (Exception $exception) {
-            Log::error($exception);            
+            Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return $request->has('save_and_close')
             ? redirect()->route('clients.index')
             : redirect()->route('clients.show', $client);

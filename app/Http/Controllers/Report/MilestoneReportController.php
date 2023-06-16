@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Report;
 
-use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Services\Report\MilestoneReport;
+use Illuminate\View\View;
 
 class MilestoneReportController extends Controller
 {

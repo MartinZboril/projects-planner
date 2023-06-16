@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 use App\DataTables\MilestonesDataTable;
 use App\Http\Controllers\Controller;
 use App\Services\Dashboard\ProjectDashboard;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 class ProjectDashboardController extends Controller
 {

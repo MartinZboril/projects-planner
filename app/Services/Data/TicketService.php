@@ -2,21 +2,22 @@
 
 namespace App\Services\Data;
 
-use Illuminate\Support\Facades\Auth;
 use App\Enums\TicketStatusEnum;
 use App\Models\Ticket;
 use App\Services\FileService;
+use Illuminate\Support\Facades\Auth;
 
 class TicketService
 {
     public function __construct(
         private FileService $fileService,
-    ) {}
+    ) {
+    }
 
     /**
      * Save data for ticket.
      */
-    public function handleSave(Ticket $ticket, array $inputs, ?Array $uploadedFiles=[]): Ticket
+    public function handleSave(Ticket $ticket, array $inputs, ?array $uploadedFiles = []): Ticket
     {
         // Prepare fields
         $inputs['status'] = $ticket->status ?? TicketStatusEnum::open;
@@ -27,14 +28,15 @@ class TicketService
         // Upload files
         if ($uploadedFiles) {
             $this->handleUploadFiles($ticket, $uploadedFiles);
-        } 
+        }
+
         return $ticket;
     }
 
     /**
      * Upload tickets files.
      */
-    public function handleUploadFiles(Ticket $ticket, Array $uploadedFiles): void
+    public function handleUploadFiles(Ticket $ticket, array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
             $this->fileService->handleUpload($uploadedFile, 'tickets/files', $ticket);
@@ -47,6 +49,7 @@ class TicketService
     public function handleChange(Ticket $ticket, int $status): Ticket
     {
         $ticket->update(['status' => $status]);
+
         return $ticket->fresh();
     }
 
@@ -63,7 +66,8 @@ class TicketService
      */
     public function handleMark(Ticket $ticket): Ticket
     {
-        $ticket->update(['is_marked' => !$ticket->is_marked]);
+        $ticket->update(['is_marked' => ! $ticket->is_marked]);
+
         return $ticket->fresh();
     }
 }

@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Task;
 
-use Exception;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\JsonResponse;
-use App\Models\Task;
 use App\Http\Controllers\Controller;
+use App\Models\Task;
 use App\Services\Data\TaskService;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class TaskPauseController extends Controller
 {
     public function __construct(
         private TaskService $taskService
-    ) {}
+    ) {
+    }
 
     /**
      * Start/stop working on the task.
@@ -25,8 +26,9 @@ class TaskPauseController extends Controller
         } catch (Exception $exception) {
             Log::error($exception);
         }
+
         return response()->json([
-            'message' => __('messages.task.' . ($task->paused ? 'stop' : 'resume')),
+            'message' => __('messages.task.'.($task->paused ? 'stop' : 'resume')),
             'task' => $task,
         ]);
     }

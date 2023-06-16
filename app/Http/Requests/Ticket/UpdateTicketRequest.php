@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Ticket;
 
-use App\Enums\TicketStatusEnum;
 use App\Enums\TicketPriorityEnum;
+use App\Enums\TicketStatusEnum;
 use App\Enums\TicketTypeEnum;
 use App\Models\Ticket;
 use Illuminate\Foundation\Http\FormRequest;

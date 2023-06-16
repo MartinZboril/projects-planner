@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\{Auth, Route};
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
@@ -11,7 +12,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/projects', App\Http\Controllers\Analysis\ProjectAnalysisController::class)->name('projects');
         Route::get('/tasks', App\Http\Controllers\Analysis\TaskAnalysisController::class)->name('tasks');
         Route::get('/tickets', App\Http\Controllers\Analysis\TicketAnalysisController::class)->name('tickets');
-        Route::get('/timesheets', App\Http\Controllers\Analysis\TimesheetAnalysisController::class)->name('timesheets');    
+        Route::get('/timesheets', App\Http\Controllers\Analysis\TimesheetAnalysisController::class)->name('timesheets');
     });
     // Clients
     Route::group(['prefix' => 'clients/{client}', 'as' => 'clients.'], function () {
@@ -21,7 +22,7 @@ Route::middleware(['auth'])->group(function () {
         // Files
         Route::group(['prefix' => '/files', 'as' => 'files.'], function () {
             Route::get('/', [App\Http\Controllers\Client\File\ClienFileController::class, 'index'])->name('index');
-            Route::post('/upload', App\Http\Controllers\Client\File\ClientFileUploaderController::class)->name('upload');    
+            Route::post('/upload', App\Http\Controllers\Client\File\ClientFileUploaderController::class)->name('upload');
         });
         // Notes
         Route::resource('notes', App\Http\Controllers\Client\Note\ClientNoteController::class)
@@ -56,7 +57,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/projects', App\Http\Controllers\Report\ProjectReportController::class)->name('projects');
             Route::get('/tasks', App\Http\Controllers\Report\TaskReportController::class)->name('tasks');
             Route::get('/tickets', App\Http\Controllers\Report\TicketReportController::class)->name('tickets');
-            Route::get('/timesheets', App\Http\Controllers\Report\TimesheetReportController::class)->name('timesheets');    
+            Route::get('/timesheets', App\Http\Controllers\Report\TimesheetReportController::class)->name('timesheets');
         });
     });
     // Tasks
@@ -122,7 +123,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/files/upload', App\Http\Controllers\Project\Milestone\ProjectMilestoneFileUploaderController::class)->name('files.upload');
         });
         Route::resource('milestones', App\Http\Controllers\Project\Milestone\ProjectMilestoneController::class)
-            ->except(['destroy']);     
+            ->except(['destroy']);
         // Notes
         Route::resource('notes', App\Http\Controllers\Project\Note\ProjectNoteController::class)
             ->except(['show', 'destroy']);
@@ -152,7 +153,7 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/files/upload', App\Http\Controllers\Project\Ticket\ProjectTicketFileUploaderController::class)->name('files.upload');
         });
         Route::resource('tickets', App\Http\Controllers\Project\Ticket\ProjectTicketController::class)
-            ->except(['destroy']);        
+            ->except(['destroy']);
         // Timers
         Route::group(['prefix' => '/timers', 'as' => 'timers.'], function () {
             Route::post('/start', App\Http\Controllers\Project\Timer\ProjectTimerStartController::class)->name('start');

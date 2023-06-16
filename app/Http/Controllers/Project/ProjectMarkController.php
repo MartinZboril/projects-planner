@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Project;
 
-use Exception;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Services\Data\ProjectService;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class ProjectMarkController extends Controller
 {
     public function __construct(
         private ProjectService $projectService
-    ) {}
+    ) {
+    }
 
     /**
      * Mark selected project.
@@ -25,9 +26,10 @@ class ProjectMarkController extends Controller
         } catch (Exception $exception) {
             Log::error($exception);
         }
+
         return response()->json([
-            'message' => __('messages.project.' . ($project->is_marked ? 'mark' : 'unmark')),
+            'message' => __('messages.project.'.($project->is_marked ? 'mark' : 'unmark')),
             'project' => $project,
-        ]);    
-    }   
+        ]);
+    }
 }

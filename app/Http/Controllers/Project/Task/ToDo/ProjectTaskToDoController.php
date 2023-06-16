@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers\Project\Task\ToDo;
 
-use Exception;
-use Illuminate\View\View;
-use App\Traits\FlashTrait;
-use Illuminate\Http\JsonResponse;
-use App\Services\Data\ToDoService;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Models\{Project, Task, ToDo};
-use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\ToDo\DestroyToDoRequest;
-use App\Http\Requests\ToDo\{StoreToDoRequest, UpdateToDoRequest};
+use App\Http\Requests\ToDo\StoreToDoRequest;
+use App\Http\Requests\ToDo\UpdateToDoRequest;
+use App\Models\Project;
+use App\Models\Task;
+use App\Models\ToDo;
+use App\Services\Data\ToDoService;
+use App\Traits\FlashTrait;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
 class ProjectTaskToDoController extends Controller
 {
@@ -20,7 +23,8 @@ class ProjectTaskToDoController extends Controller
 
     public function __construct(
         private ToDoService $toDoService
-    ) {}
+    ) {
+    }
 
     /**
      * Show the form for creating a new todo.
@@ -40,8 +44,10 @@ class ProjectTaskToDoController extends Controller
             $this->flash(__('messages.todo.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return redirect()->route('projects.tasks.show', ['project' => $project, 'task' => $task]);
     }
 
@@ -63,8 +69,10 @@ class ProjectTaskToDoController extends Controller
             $this->flash(__('messages.todo.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return redirect()->route('projects.tasks.show', ['project' => $project, 'task' => $task]);
     }
 
@@ -77,11 +85,13 @@ class ProjectTaskToDoController extends Controller
             $todo->delete();
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
 
         if ($request->redirect ?? false) {
             $this->flash(__('messages.todo.delete'), 'danger');
+
             return redirect()->route('projects.tasks.show', ['project' => $project, 'task' => $task]);
         }
 

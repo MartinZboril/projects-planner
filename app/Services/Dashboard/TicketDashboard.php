@@ -2,11 +2,11 @@
 
 namespace App\Services\Dashboard;
 
-use App\Models\Ticket;
 use App\Enums\TicketStatusEnum;
-use Illuminate\Support\Collection;
-use App\Services\Report\TicketReport;
 use App\Interfaces\DashboardInterface;
+use App\Models\Ticket;
+use App\Services\Report\TicketReport;
+use Illuminate\Support\Collection;
 
 class TicketDashboard implements DashboardInterface
 {
@@ -20,7 +20,7 @@ class TicketDashboard implements DashboardInterface
             'today_tickets_count' => Ticket::whereDate('created_at', now()->format('Y-m-d'))->count(),
             'this_week_tickets_count' => Ticket::whereBetween('created_at', [
                 now()->startOfWeek()->format('Y-m-d'),
-                now()->endOfWeek()->format('Y-m-d')
+                now()->endOfWeek()->format('Y-m-d'),
             ])->count(),
             'month_tickets_count' => Ticket::whereYear('created_at', '<=', $year)->whereMonth('created_at', now()->month)->count(),
             'last_month_tickets_count' => Ticket::whereYear('created_at', '<=', $year)->whereMonth('created_at', now()->subMonth()->month)->count(),

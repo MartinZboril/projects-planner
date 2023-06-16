@@ -26,7 +26,7 @@ class CreateTicketsTable extends Migration
             $table->foreignIdFor(
                 \App\Models\User::class,
                 'assignee_id'
-            )->nullable()->constrained('users');          
+            )->nullable()->constrained('users');
             $table->string('subject');
             $table->unsignedInteger('type');
             $table->unsignedInteger('priority');

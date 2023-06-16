@@ -2,8 +2,8 @@
 
 namespace App\View\Components\Comment;
 
-use Illuminate\View\Component;
 use App\Models\Comment;
+use Illuminate\View\Component;
 
 class Fields extends Component
 {

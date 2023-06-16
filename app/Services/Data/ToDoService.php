@@ -2,7 +2,8 @@
 
 namespace App\Services\Data;
 
-use App\Models\{Task, ToDo};
+use App\Models\Task;
+use App\Models\ToDo;
 
 class ToDoService
 {
@@ -22,7 +23,8 @@ class ToDoService
      */
     public function handleCheck(ToDo $todo): ToDo
     {
-        $todo->update(['is_finished' => !$todo->is_finished]);
+        $todo->update(['is_finished' => ! $todo->is_finished]);
+
         return $todo->fresh();
     }
 }

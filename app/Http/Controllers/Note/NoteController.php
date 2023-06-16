@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Note;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Note\StoreNoteRequest;
+use App\Http\Requests\Note\UpdateNoteRequest;
+use App\Models\Note;
+use App\Services\Data\NoteService;
+use App\Traits\FlashTrait;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Note\{StoreNoteRequest, UpdateNoteRequest};
-use App\Models\Note;
-use App\Traits\FlashTrait;
-use App\Services\Data\NoteService;
 
 class NoteController extends Controller
 {
@@ -18,7 +19,8 @@ class NoteController extends Controller
 
     public function __construct(
         private NoteService $noteService
-    ) {}
+    ) {
+    }
 
     /**
      * Display a listing of the notes.
@@ -46,8 +48,10 @@ class NoteController extends Controller
             $this->flash(__('messages.note.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return redirect()->route('notes.index');
     }
 
@@ -69,8 +73,10 @@ class NoteController extends Controller
             $this->flash(__('messages.note.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return redirect()->route('notes.index');
     }
 }

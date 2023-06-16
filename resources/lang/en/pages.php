@@ -72,10 +72,10 @@ return [
                 'october' => 'October',
                 'november' => 'November',
                 'december' => 'December',
-            ]
+            ],
         ],
         'labels' => [
             'total' => 'Total',
-        ]
+        ],
     ],
 ];

@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Ticket;
 
-use Exception;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\Ticket;
 use App\Services\Data\TicketService;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class TicketMarkController extends Controller
 {
     public function __construct(
         private TicketService $ticketService
-    ) {}
+    ) {
+    }
 
     /**
      * Mark selected ticket.
@@ -25,9 +26,10 @@ class TicketMarkController extends Controller
         } catch (Exception $exception) {
             Log::error($exception);
         }
+
         return response()->json([
-            'message' => __('messages.ticket.' . ($ticket->is_marked ? 'mark' : 'unmark')),
+            'message' => __('messages.ticket.'.($ticket->is_marked ? 'mark' : 'unmark')),
             'ticket' => $ticket,
         ]);
-    } 
+    }
 }

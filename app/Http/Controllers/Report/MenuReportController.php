@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Report;
 
-use Illuminate\View\View;
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 class MenuReportController extends Controller
 {

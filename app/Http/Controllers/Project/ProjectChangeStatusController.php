@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Project;
 
-use Exception;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Project\ChangeProjectRequest;
 use App\Models\Project;
 use App\Services\Data\ProjectService;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class ProjectChangeStatusController extends Controller
 {
     public function __construct(
         private ProjectService $projectService
-    ) {}
+    ) {
+    }
 
     /**
      * Change working status of the project.
@@ -26,8 +27,9 @@ class ProjectChangeStatusController extends Controller
         } catch (Exception $exception) {
             Log::error($exception);
         }
+
         return response()->json([
-            'message' => __('messages.project.' . $project->status->name),
+            'message' => __('messages.project.'.$project->status->name),
             'project' => $project,
         ]);
     }

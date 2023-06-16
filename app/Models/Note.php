@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\{Builder, Model};
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, MorphTo};
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Facades\Auth;
 
 class Note extends Model
 {
@@ -20,7 +22,7 @@ class Note extends Model
         'name' => ['required', 'max:255'],
         'content' => ['required', 'max:65553'],
         'is_private' => ['boolean'],
-        'is_marked' => ['boolean']
+        'is_marked' => ['boolean'],
     ];
 
     public function user(): BelongsTo
@@ -37,7 +39,7 @@ class Note extends Model
     {
         return $query->where('is_private', false)->orWhere('is_private', true)->where('user_id', Auth::id());
     }
-    
+
     public function scopeBasic(Builder $query): Builder
     {
         return $query->where('noteable_id', null)->where('noteable_type', null);

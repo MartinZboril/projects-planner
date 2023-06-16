@@ -12,14 +12,14 @@ class Rate extends Model
 
     protected $fillable = [
         'user_id', 'name', 'value', 'is_active', 'note',
-    ]; 
+    ];
 
     public const VALIDATION_RULES = [
         'user_id' => ['required', 'integer', 'exists:users,id'],
         'name' => ['required', 'max:255'],
         'value' => ['required', 'integer', 'min:0'],
         'is_active' => ['boolean'],
-        'note' => ['max:65553']
+        'note' => ['max:65553'],
     ];
 
     public function user(): BelongsTo

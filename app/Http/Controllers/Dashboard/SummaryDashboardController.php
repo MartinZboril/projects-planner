@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Services\Dashboard\SummaryDashboard;
+use Illuminate\View\View;
 
 class SummaryDashboardController extends Controller
 {

@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Project\Task;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Comment\StoreCommentRequest;
+use App\Http\Requests\Comment\UpdateCommentRequest;
+use App\Models\Comment;
+use App\Models\Project;
+use App\Models\Task;
+use App\Services\Data\CommentService;
+use App\Services\Data\TaskService;
+use App\Traits\FlashTrait;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Comment\{StoreCommentRequest, UpdateCommentRequest};
-use App\Models\{Comment, Project, Task};
-use App\Traits\FlashTrait;
-use App\Services\Data\{CommentService, TaskService};
 
 class ProjectTaskCommentController extends Controller
 {
@@ -17,7 +21,8 @@ class ProjectTaskCommentController extends Controller
     public function __construct(
         private TaskService $taskService,
         private CommentService $commentService
-    ) {}
+    ) {
+    }
 
     /**
      * Store a newly created tasks comment in storage.
@@ -29,8 +34,10 @@ class ProjectTaskCommentController extends Controller
             $this->flash(__('messages.comment.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return redirect()->route('projects.tasks.show', ['project' => $project, 'task' => $task]);
     }
 
@@ -44,8 +51,10 @@ class ProjectTaskCommentController extends Controller
             $this->flash(__('messages.comment.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return redirect()->route('projects.tasks.show', ['project' => $project, 'task' => $task]);
     }
 }

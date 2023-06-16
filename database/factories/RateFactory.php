@@ -19,8 +19,8 @@ class RateFactory extends Factory
         return [
             'name' => $this->faker->word(),
             'value' => $this->faker->numberBetween(100, 1000),
-            'is_active' => true,     
-            'note' => $this->faker->paragraph(),       
+            'is_active' => true,
+            'note' => $this->faker->paragraph(),
         ];
     }
 }

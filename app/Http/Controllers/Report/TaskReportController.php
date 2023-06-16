@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Report;
 
-use Illuminate\View\View;
-use App\Services\Report\TaskReport;
 use App\Http\Controllers\Controller;
+use App\Services\Report\TaskReport;
+use Illuminate\View\View;
 
 class TaskReportController extends Controller
 {
@@ -14,7 +14,7 @@ class TaskReportController extends Controller
     {
         $this->year = now()->format('Y');
     }
-    
+
     /**
      * Display a report for tasks.
      */

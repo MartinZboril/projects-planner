@@ -24,7 +24,7 @@ class MarkNoteRequest extends FormRequest
     public function rules()
     {
         return [
-            'redirect' => ['required', 'url']
+            'redirect' => ['required', 'url'],
         ];
     }
 }

@@ -2,13 +2,15 @@
 
 namespace App\View\Components\User;
 
-use Illuminate\View\Component;
 use App\Models\User;
+use Illuminate\View\Component;
 
 class Fields extends Component
 {
     public $user;
+
     public $type;
+
     public $closeRoute;
 
     public function __construct(?User $user, string $type)

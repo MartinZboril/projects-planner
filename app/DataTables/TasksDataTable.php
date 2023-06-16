@@ -2,6 +2,8 @@
 
 namespace App\DataTables;
 
+use App\Enums\TaskStatusEnum;
+use App\Models\Task;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Blade;
@@ -9,53 +11,54 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
-use App\Enums\TaskStatusEnum;
-use App\Models\Task;
 
 class TasksDataTable extends DataTable
 {
     public function dataTable($query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-                    ->setRowId('id')
-                    ->editColumn('name', function(Task $task) {
-                        return '<a href="' . ($this->view === 'project' ? route('projects.tasks.show', ['project' => $task->project, 'task' => $task]) : route('tasks.show', $task)) . '">' . $task->name . '</a>';
-                    })                    
-                    ->editColumn('project.name', function(Task $task) {
-                        return '<a href="' . route('projects.show', $task->project) . '">' . $task->project->name . '</a>';
-                    })
-                    ->editColumn('milestone.name', function(Task $task) {
-                        if ($task->milestone ?? false) {
-                            return '<a href="' . route('projects.milestones.show', ['project' => $task->project, 'milestone' => $task->milestone]) . '">' . $task->milestone->name . '</a>';                
-                        }
-                        return 'NaN';
-                    })
-                    ->editColumn('user.full_name', function(Task $task) {
-                        return Blade::render('<x-site.ui.user-icon :user="$user" />', ['user' => $task->user]);
-                    })  
-                    ->editColumn('dued_at', function(Task $task) {
-                        return '<span class="text-' . ($task->deadline_overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $task->dued_at)->format('d.m.Y') . '</span>';
-                    })
-                    ->editColumn('status', function(Task $task) {
-                        return Blade::render('<x-task.ui.status-badge :text="true" :task="$task" />', ['task' => $task]);
-                    })    
-                    ->editColumn('ticket.subject', function(Task $task) {
-                        if ($task->ticket ?? false) {
-                            if ($this->view === 'project') {
-                                return '<a href="' . route('projects.tickets.show', ['project' => $task->project, 'ticket' => $task->ticket]) . '">' . $task->ticket->subject . '</a>';                
-                            } else {
-                                return '<a href="' . route('tickets.show', $task->ticket) . '">' . $task->ticket->subject . '</a>';                
-                            }
-                        }
-                        return 'NaN';
-                    })                                    
-                    ->editColumn('buttons', function(Task $task) {
-                        $buttons = '<a href="' . ($this->view === 'project' ? route('projects.tasks.edit', ['project' => $task->project, 'task' => $task]) : route('tasks.edit', $task)) . '" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a> ';
-                        $buttons .= '<a href="' . ($this->view === 'project' ? route('projects.tasks.show', ['project' => $task->project, 'task' => $task]) : route('tasks.show', $task)) . '" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a> ';
-                        $buttons .= view('tasks.partials.buttons', ['task' => $task, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#' . ($this->table_identifier ?? 'tasks-table')]);
-                        return $buttons;
-                    })
-                    ->rawColumns(['name', 'project.name', 'milestone.name', 'user.full_name', 'status', 'dued_at', 'buttons', 'ticket.subject']);
+            ->setRowId('id')
+            ->editColumn('name', function (Task $task) {
+                return '<a href="'.($this->view === 'project' ? route('projects.tasks.show', ['project' => $task->project, 'task' => $task]) : route('tasks.show', $task)).'">'.$task->name.'</a>';
+            })
+            ->editColumn('project.name', function (Task $task) {
+                return '<a href="'.route('projects.show', $task->project).'">'.$task->project->name.'</a>';
+            })
+            ->editColumn('milestone.name', function (Task $task) {
+                if ($task->milestone ?? false) {
+                    return '<a href="'.route('projects.milestones.show', ['project' => $task->project, 'milestone' => $task->milestone]).'">'.$task->milestone->name.'</a>';
+                }
+
+                return 'NaN';
+            })
+            ->editColumn('user.full_name', function (Task $task) {
+                return Blade::render('<x-site.ui.user-icon :user="$user" />', ['user' => $task->user]);
+            })
+            ->editColumn('dued_at', function (Task $task) {
+                return '<span class="text-'.($task->deadline_overdue ? 'danger' : 'body').'">'.Carbon::createFromFormat('Y-m-d H:i:s', $task->dued_at)->format('d.m.Y').'</span>';
+            })
+            ->editColumn('status', function (Task $task) {
+                return Blade::render('<x-task.ui.status-badge :text="true" :task="$task" />', ['task' => $task]);
+            })
+            ->editColumn('ticket.subject', function (Task $task) {
+                if ($task->ticket ?? false) {
+                    if ($this->view === 'project') {
+                        return '<a href="'.route('projects.tickets.show', ['project' => $task->project, 'ticket' => $task->ticket]).'">'.$task->ticket->subject.'</a>';
+                    } else {
+                        return '<a href="'.route('tickets.show', $task->ticket).'">'.$task->ticket->subject.'</a>';
+                    }
+                }
+
+                return 'NaN';
+            })
+            ->editColumn('buttons', function (Task $task) {
+                $buttons = '<a href="'.($this->view === 'project' ? route('projects.tasks.edit', ['project' => $task->project, 'task' => $task]) : route('tasks.edit', $task)).'" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a> ';
+                $buttons .= '<a href="'.($this->view === 'project' ? route('projects.tasks.show', ['project' => $task->project, 'task' => $task]) : route('tasks.show', $task)).'" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a> ';
+                $buttons .= view('tasks.partials.buttons', ['task' => $task, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#'.($this->table_identifier ?? 'tasks-table')]);
+
+                return $buttons;
+            })
+            ->rawColumns(['name', 'project.name', 'milestone.name', 'user.full_name', 'status', 'dued_at', 'buttons', 'ticket.subject']);
     }
 
     public function query(Task $model): QueryBuilder
@@ -75,21 +78,21 @@ class TasksDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId($this->table_identifier ?? 'tasks-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->orderBy(4)
-                    ->parameters([
-                        'responsive' => true,
-                        'autoWidth' => false,
-                        'lengthMenu' => [
-                            [ 10, 25, 50, -1 ],
-                            [ '10 rows', '25 rows', '50 rows', 'Show all' ]
-                        ],  
-                        'buttons' => [
-                            'pageLength',
-                        ],
-                    ]);
+            ->setTableId($this->table_identifier ?? 'tasks-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->orderBy(4)
+            ->parameters([
+                'responsive' => true,
+                'autoWidth' => false,
+                'lengthMenu' => [
+                    [10, 25, 50, -1],
+                    ['10 rows', '25 rows', '50 rows', 'Show all'],
+                ],
+                'buttons' => [
+                    'pageLength',
+                ],
+            ]);
     }
 
     protected function getColumns(): array
@@ -109,6 +112,6 @@ class TasksDataTable extends DataTable
 
     protected function filename(): string
     {
-        return 'Task_' . date('YmdHis');
+        return 'Task_'.date('YmdHis');
     }
 }

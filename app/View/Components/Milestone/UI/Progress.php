@@ -2,8 +2,8 @@
 
 namespace App\View\Components\Milestone\UI;
 
-use Illuminate\View\Component;
 use App\Models\Milestone;
+use Illuminate\View\Component;
 
 class Progress extends Component
 {

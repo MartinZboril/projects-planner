@@ -2,28 +2,28 @@
 
 namespace App\Services;
 
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use App\Models\File;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class FileService
 {
     /**
      * Upload file to storage and database.
      */
-    public function handleUpload(UploadedFile $uploadedFile, String $collection, Model $model=null): File
+    public function handleUpload(UploadedFile $uploadedFile, string $collection, Model $model = null): File
     {
         $name = $uploadedFile->hashName();
-        $path = $collection . '/' . $name;
+        $path = $collection.'/'.$name;
 
         Storage::disk(config('app.uploads.disk'))->put($collection, $uploadedFile);
 
         $file = new File;
-        
+
         if ($model ?? false) {
             $file->fileable_id = $model->id;
-            $file->fileable_type = $model::class;                
+            $file->fileable_type = $model::class;
         }
 
         $file->name = $name;
@@ -32,10 +32,10 @@ class FileService
         $file->path = $path;
         $file->disk = config('app.uploads.disk');
         $file->file_hash = md5(
-                storage_path(
-                    path: $path,
-                ),
-            );
+            storage_path(
+                path: $path,
+            ),
+        );
         $file->collection = $collection;
         $file->size = $uploadedFile->getSize();
         $file->save();
@@ -48,7 +48,7 @@ class FileService
      */
     public function handleRemoveFile(int $fileId): void
     {
-        unlink(public_path('storage/' . File::find($fileId)->path));
-        File::destroy($fileId);   
+        unlink(public_path('storage/'.File::find($fileId)->path));
+        File::destroy($fileId);
     }
 }
