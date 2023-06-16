@@ -17,11 +17,11 @@ class AddressFactory extends Factory
     public function definition(): array
     {
         return [
-            'street' => $this->faker->streetName(),
-            'house_number' => $this->faker->buildingNumber(),
-            'city' => $this->faker->city(),
-            'country' => $this->faker->country(),
-            'zip_code' => $this->faker->postcode(),
+            'street' => fake()->streetName(),
+            'house_number' => fake()->buildingNumber(),
+            'city' => fake()->city(),
+            'country' => fake()->country(),
+            'zip_code' => fake()->postcode(),
         ];
     }
 }
