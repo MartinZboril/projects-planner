@@ -2,11 +2,12 @@
 
 namespace App\Services\Dashboard;
 
-use App\Models\{Task, ToDo};
 use App\Enums\TaskStatusEnum;
-use Illuminate\Support\Collection;
-use App\Services\Report\TaskReport;
 use App\Interfaces\DashboardInterface;
+use App\Models\Task;
+use App\Models\ToDo;
+use App\Services\Report\TaskReport;
+use Illuminate\Support\Collection;
 
 class TaskDashboard implements DashboardInterface
 {
@@ -20,7 +21,7 @@ class TaskDashboard implements DashboardInterface
             'today_tasks_count' => Task::whereDate('created_at', now()->format('Y-m-d'))->count(),
             'this_week_tasks_count' => Task::whereBetween('created_at', [
                 now()->startOfWeek()->format('Y-m-d'),
-                now()->endOfWeek()->format('Y-m-d')
+                now()->endOfWeek()->format('Y-m-d'),
             ])->count(),
             'month_tasks_count' => Task::whereYear('created_at', '<=', $year)->whereMonth('created_at', now()->month)->count(),
             'last_month_tasks_count' => Task::whereYear('created_at', '<=', $year)->whereMonth('created_at', now()->subMonth()->month)->count(),

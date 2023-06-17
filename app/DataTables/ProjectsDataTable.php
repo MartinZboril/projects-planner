@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Models\Project;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Blade;
@@ -9,53 +10,53 @@ use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
-use App\Models\Project;
-
 
 class ProjectsDataTable extends DataTable
 {
     public function dataTable($query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-                    ->setRowId('id')                                                       
-                    ->editColumn('name', function(Project $project) {
-                        return '<a href="' . route('projects.show', $project) . '">' . $project->name . '</a>';
-                    })
-                    ->editColumn('client.name', function(Project $project) {
-                        return '<a href="' . route('clients.show', $project->client) . '">' . $project->client->name . '</a>';
-                    })   
-                    ->editColumn('status', function(Project $project) {
-                        return Blade::render('<x-project.ui.status-badge :text="true" :status="$status" />', ['status' => $project->status]);
-                    })    
-                    ->editColumn('team', function(Project $project) {
-                        $team = '';
-                        foreach ($project->team as $key => $user) {
-                            $team .= Blade::render('<x-site.ui.user-icon :user="$user" />', ['user' => $user]);
-                        }
-                        return $team;
-                    })                                                     
-                    ->editColumn('amount', function(Project $project) {
-                        return number_format($project->amount, 2);
-                    })
-                    ->editColumn('time_plan', function(Project $project) {
-                        return '<span class="text-' . ($project->time_plan_overdue ? 'danger' : 'body') . '">' . $project->time_plan . ' %' . '</span>';
-                    })
-                    ->editColumn('total_time', function(Project $project) {
-                        return $project->total_time . ' Hours';
-                    })            
-                    ->editColumn('budget_plan', function(Project $project) {
-                        return '<span class="text-' . ($project->budget_overdue ? 'danger' : 'body') . '">' . $project->budget_plan . ' %' . '</span>';
-                    })
-                    ->editColumn('dued_at', function(Project $project) {
-                        return '<span class="text-' . ($project->deadline_overdue ? 'danger' : 'body') . '">' . Carbon::createFromFormat('Y-m-d H:i:s', $project->dued_at)->format('d.m.Y') . '</span>';
-                    })       
-                    ->editColumn('buttons', function(Project $project) {
-                        $buttons = '<a href="' . route('projects.edit', $project) . '" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a> ';
-                        $buttons .= '<a href="' . route('projects.show', $project) . '" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a> ';
-                        $buttons .= view('projects.partials.buttons', ['project' => $project, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#' . ($this->table_identifier ?? 'projects-table')]);
-                        return $buttons;
-                    })                                 
-                    ->rawColumns(['name', 'client.name', 'status', 'team', 'buttons', 'dued_at', 'time_plan', 'budget_plan']);                    
+            ->setRowId('id')
+            ->editColumn('name', function (Project $project) {
+                return '<a href="'.route('projects.show', $project).'">'.$project->name.'</a>';
+            })
+            ->editColumn('client.name', function (Project $project) {
+                return '<a href="'.route('clients.show', $project->client).'">'.$project->client->name.'</a>';
+            })
+            ->editColumn('status', function (Project $project) {
+                return Blade::render('<x-project.ui.status-badge :text="true" :status="$status" />', ['status' => $project->status]);
+            })
+            ->editColumn('team', function (Project $project) {
+                $team = '';
+                foreach ($project->team as $key => $user) {
+                    $team .= Blade::render('<x-site.ui.user-icon :user="$user" />', ['user' => $user]);
+                }
+
+                return $team;
+            })
+            ->editColumn('amount', function (Project $project) {
+                return number_format($project->amount, 2);
+            })
+            ->editColumn('time_plan', function (Project $project) {
+                return '<span class="text-'.($project->time_plan_overdue ? 'danger' : 'body').'">'.$project->time_plan.' %'.'</span>';
+            })
+            ->editColumn('total_time', function (Project $project) {
+                return $project->total_time.' Hours';
+            })
+            ->editColumn('budget_plan', function (Project $project) {
+                return '<span class="text-'.($project->budget_overdue ? 'danger' : 'body').'">'.$project->budget_plan.' %'.'</span>';
+            })
+            ->editColumn('dued_at', function (Project $project) {
+                return '<span class="text-'.($project->deadline_overdue ? 'danger' : 'body').'">'.Carbon::createFromFormat('Y-m-d H:i:s', $project->dued_at)->format('d.m.Y').'</span>';
+            })
+            ->editColumn('buttons', function (Project $project) {
+                $buttons = '<a href="'.route('projects.edit', $project).'" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a> ';
+                $buttons .= '<a href="'.route('projects.show', $project).'" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a> ';
+                $buttons .= view('projects.partials.buttons', ['project' => $project, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#'.($this->table_identifier ?? 'projects-table')]);
+
+                return $buttons;
+            })
+            ->rawColumns(['name', 'client.name', 'status', 'team', 'buttons', 'dued_at', 'time_plan', 'budget_plan']);
     }
 
     public function query(Project $model): QueryBuilder
@@ -66,21 +67,21 @@ class ProjectsDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId($this->table_identifier ?? 'projects-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->orderBy(4)
-                    ->parameters([
-                        'responsive' => true,
-                        'autoWidth' => false,
-                        'lengthMenu' => [
-                            [ 10, 25, 50, -1 ],
-                            [ '10 rows', '25 rows', '50 rows', 'Show all' ]
-                        ],  
-                        'buttons' => [
-                            'pageLength',
-                        ],
-                    ]);
+            ->setTableId($this->table_identifier ?? 'projects-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->orderBy(4)
+            ->parameters([
+                'responsive' => true,
+                'autoWidth' => false,
+                'lengthMenu' => [
+                    [10, 25, 50, -1],
+                    ['10 rows', '25 rows', '50 rows', 'Show all'],
+                ],
+                'buttons' => [
+                    'pageLength',
+                ],
+            ]);
     }
 
     protected function getColumns(): array
@@ -101,6 +102,6 @@ class ProjectsDataTable extends DataTable
 
     protected function filename(): string
     {
-        return 'Project_' . date('YmdHis');
+        return 'Project_'.date('YmdHis');
     }
 }

@@ -2,15 +2,16 @@
 
 namespace App\Services\Report;
 
+use App\Interfaces\ReportInterface;
 use App\Models\Milestone;
 use Illuminate\Support\Collection;
-use App\Interfaces\ReportInterface;
 
 class MilestoneReport implements ReportInterface
 {
     public function __construct(
-        public BuilderReport $builderReport=new BuilderReport
-    ) {}
+        public BuilderReport $builderReport = new BuilderReport
+    ) {
+    }
 
     /**
      * Get report for milestones by year.
@@ -38,7 +39,7 @@ class MilestoneReport implements ReportInterface
     {
         $milestones = collect();
 
-        $this->builderReport->reportMonthsFull->each(function ($month, $key) use($milestones, $year) {
+        $this->builderReport->reportMonthsFull->each(function ($month, $key) use ($milestones, $year) {
             $milestones->put($month['index'], Milestone::whereYear('created_at', $year)->whereMonth('created_at', $key + 1)->count());
         });
 

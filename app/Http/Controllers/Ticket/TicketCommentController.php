@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Ticket;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Comment\StoreCommentRequest;
+use App\Http\Requests\Comment\UpdateCommentRequest;
+use App\Models\Comment;
+use App\Models\Ticket;
+use App\Services\Data\CommentService;
+use App\Services\Data\TicketService;
+use App\Traits\FlashTrait;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Comment\{StoreCommentRequest, UpdateCommentRequest};
-use App\Models\{Comment, Ticket};
-use App\Traits\FlashTrait;
-use App\Services\Data\{CommentService, TicketService};
 
 class TicketCommentController extends Controller
 {
@@ -17,7 +20,8 @@ class TicketCommentController extends Controller
     public function __construct(
         private TicketService $ticketService,
         private CommentService $commentService
-    ) {}
+    ) {
+    }
 
     /**
      * Store a newly created tickets comment in storage.
@@ -29,8 +33,10 @@ class TicketCommentController extends Controller
             $this->flash(__('messages.comment.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return redirect()->route('tickets.show', $ticket);
     }
 
@@ -44,8 +50,10 @@ class TicketCommentController extends Controller
             $this->flash(__('messages.comment.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return redirect()->route('tickets.show', $ticket);
     }
 }

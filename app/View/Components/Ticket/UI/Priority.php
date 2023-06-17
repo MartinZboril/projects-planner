@@ -2,8 +2,8 @@
 
 namespace App\View\Components\Ticket\UI;
 
-use Illuminate\View\Component;
 use App\Enums\TicketPriorityEnum;
+use Illuminate\View\Component;
 
 class Priority extends Component
 {
@@ -18,7 +18,7 @@ class Priority extends Component
 
             case TicketPriorityEnum::medium:
                 $this->title = __('pages.content.tickets.priorities.medium');
-                break;                
+                break;
 
             case TicketPriorityEnum::high:
                 $this->title = __('pages.content.tickets.priorities.high');

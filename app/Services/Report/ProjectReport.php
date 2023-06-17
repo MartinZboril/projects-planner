@@ -2,17 +2,18 @@
 
 namespace App\Services\Report;
 
-use App\Models\Timer;
-use App\Models\Project;
-use Illuminate\Support\Collection;
 use App\Interfaces\ReportInterface;
+use App\Models\Project;
+use App\Models\Timer;
+use Illuminate\Support\Collection;
 
 class ProjectReport implements ReportInterface
 {
     public function __construct(
-        public BuilderReport $builderReport=new BuilderReport
-    ) {}
-    
+        public BuilderReport $builderReport = new BuilderReport
+    ) {
+    }
+
     /**
      * Get report for projects by year.
      */
@@ -34,7 +35,7 @@ class ProjectReport implements ReportInterface
 
         return $data;
     }
-    
+
     /**
      * Get projects count by year
      */
@@ -42,7 +43,7 @@ class ProjectReport implements ReportInterface
     {
         $projects = collect();
 
-        $this->builderReport->reportMonthsFull->each(function ($month, $key) use($projects, $year) {
+        $this->builderReport->reportMonthsFull->each(function ($month, $key) use ($projects, $year) {
             $projects->put($month['index'], Project::whereYear('created_at', $year)->whereMonth('created_at', $key + 1)->count());
         });
 

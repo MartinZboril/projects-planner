@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Project\Milestone;
 
+use App\Http\Controllers\Controller;
+use App\Models\Milestone;
+use App\Models\Project;
+use App\Services\Data\MilestoneService;
+use App\Traits\FlashTrait;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
-use App\Models\{Project, Milestone};
-use App\Traits\FlashTrait;
-use App\Services\Data\MilestoneService;
 
 class ProjectMilestoneMarkController extends Controller
 {
@@ -16,7 +17,8 @@ class ProjectMilestoneMarkController extends Controller
 
     public function __construct(
         private MilestoneService $milestoneService
-    ) {}
+    ) {
+    }
 
     /**
      * Mark selected milestone.
@@ -28,10 +30,11 @@ class ProjectMilestoneMarkController extends Controller
         } catch (Exception $exception) {
             Log::error($exception);
         }
+
         return response()->json([
-            'message' => __('messages.milestone.' . ($milestone->is_marked ? 'mark' : 'unmark')),
+            'message' => __('messages.milestone.'.($milestone->is_marked ? 'mark' : 'unmark')),
             'project' => $project,
-            'milestone' => $milestone
+            'milestone' => $milestone,
         ]);
     }
 }

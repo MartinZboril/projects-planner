@@ -9,7 +9,7 @@ class ActiveModal extends Component
 {
     public function __construct(public Collection $timers, public string $modalId)
     {
-    }    
+    }
 
     public function render()
     {

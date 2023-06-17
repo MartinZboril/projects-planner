@@ -7,7 +7,7 @@ use Illuminate\View\Component;
 
 class Card extends Component
 {
-    public function __construct(public Collection $files, public string $uploadFormRoute, public ?bool $displayHeader=true)
+    public function __construct(public Collection $files, public string $uploadFormRoute, public ?bool $displayHeader = true)
     {
     }
 

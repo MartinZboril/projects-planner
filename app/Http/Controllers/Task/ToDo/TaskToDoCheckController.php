@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers\Task\ToDo;
 
-use Exception;
-use App\Models\{Task, ToDo};
+use App\Http\Controllers\Controller;
+use App\Models\Task;
+use App\Models\ToDo;
 use App\Services\Data\ToDoService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
 
 class TaskToDoCheckController extends Controller
 {
     public function __construct(
         private ToDoService $toDoService
-    ) {}
+    ) {
+    }
 
     /**
      * Check the todo in storage.
@@ -25,8 +27,9 @@ class TaskToDoCheckController extends Controller
         } catch (Exception $exception) {
             Log::error($exception);
         }
+
         return response()->json([
-            'message' => __('messages.todo.' . ($todo->is_finished ? ToDo::FINISH : ToDo::RETURN)),
+            'message' => __('messages.todo.'.($todo->is_finished ? ToDo::FINISH : ToDo::RETURN)),
             'todo' => $todo,
         ]);
     }

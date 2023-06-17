@@ -2,8 +2,8 @@
 
 namespace App\View\Components\Ticket\UI;
 
-use Illuminate\View\Component;
 use App\Enums\TicketTypeEnum;
+use Illuminate\View\Component;
 
 class Type extends Component
 {
@@ -18,7 +18,7 @@ class Type extends Component
 
             case TicketTypeEnum::inovation:
                 $this->title = __('pages.content.tickets.types.inovation');
-                break;                
+                break;
 
             case TicketTypeEnum::help:
                 $this->title = __('pages.content.tickets.types.help');

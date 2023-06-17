@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 use App\DataTables\TicketsDataTable;
 use App\Http\Controllers\Controller;
 use App\Services\Dashboard\TicketDashboard;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 class TicketDashboardController extends Controller
 {

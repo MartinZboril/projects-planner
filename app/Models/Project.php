@@ -2,12 +2,18 @@
 
 namespace App\Models;
 
+use App\Enums\ProjectStatusEnum;
+use App\Enums\TaskStatusEnum;
+use App\Traits\Scopes\MarkedRecords;
+use App\Traits\Scopes\OverdueRecords;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use App\Enums\{ProjectStatusEnum, TaskStatusEnum};
-use Illuminate\Database\Eloquent\{Builder, Model};
-use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany, MorphMany};
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Project extends Model
 {
@@ -15,7 +21,7 @@ class Project extends Model
 
     protected $fillable = [
         'status', 'client_id', 'name', 'started_at', 'dued_at', 'estimated_hours', 'budget', 'description', 'is_marked',
-    ]; 
+    ];
 
     public const VALIDATION_RULES = [
         'client_id' => ['required', 'integer', 'exists:clients,id'],
@@ -75,7 +81,7 @@ class Project extends Model
     {
         return $this->hasMany(Timer::class, 'project_id');
     }
-    
+
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class, 'project_id');
@@ -166,7 +172,7 @@ class Project extends Model
             get: fn () => round($this->budget - $this->amount, 2),
         );
     }
-    
+
     protected function amount(): Attribute
     {
         return Attribute::make(

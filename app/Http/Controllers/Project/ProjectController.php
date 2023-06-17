@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Project;
 
-use Exception;
-use Illuminate\Http\{JsonResponse, RedirectResponse};
-use Illuminate\Support\Facades\Log;
-use Illuminate\View\View;
 use App\DataTables\ProjectsDataTable;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Project\{StoreProjectRequest, UpdateProjectRequest};
+use App\Http\Requests\Project\StoreProjectRequest;
+use App\Http\Requests\Project\UpdateProjectRequest;
 use App\Models\Project;
-use App\Traits\FlashTrait;
 use App\Services\Data\ProjectService;
+use App\Traits\FlashTrait;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
 class ProjectController extends Controller
 {
@@ -19,7 +21,8 @@ class ProjectController extends Controller
 
     public function __construct(
         private ProjectService $projectService
-    ) {}
+    ) {
+    }
 
     /**
      * Display a listing of the projects.
@@ -47,8 +50,10 @@ class ProjectController extends Controller
             $this->flash(__('messages.project.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return $request->has('save_and_close')
             ? redirect()->route('projects.index')
             : redirect()->route('projects.show', $project);
@@ -80,8 +85,10 @@ class ProjectController extends Controller
             $this->flash(__('messages.project.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return $request->has('save_and_close')
             ? redirect()->route('projects.index')
             : redirect()->route('projects.show', $project);

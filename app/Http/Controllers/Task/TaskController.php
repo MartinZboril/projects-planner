@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Task;
 
-use Exception;
-use Illuminate\Http\{JsonResponse, RedirectResponse};
-use Illuminate\Support\Facades\Log;
-use Illuminate\View\View;
 use App\DataTables\TasksDataTable;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Task\{StoreTaskRequest, UpdateTaskRequest};
+use App\Http\Requests\Task\StoreTaskRequest;
+use App\Http\Requests\Task\UpdateTaskRequest;
 use App\Models\Task;
-use App\Traits\FlashTrait;
 use App\Services\Data\TaskService;
+use App\Traits\FlashTrait;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
 class TaskController extends Controller
 {
@@ -19,7 +21,8 @@ class TaskController extends Controller
 
     public function __construct(
         private TaskService $taskService
-    ) {}
+    ) {
+    }
 
     /**
      * Display a listing of the tasks.
@@ -49,8 +52,10 @@ class TaskController extends Controller
             $this->flash(__('messages.task.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return $request->has('save_and_close')
             ? redirect()->route('tasks.index')
             : redirect()->route('tasks.show', $task);
@@ -82,8 +87,10 @@ class TaskController extends Controller
             $this->flash(__('messages.task.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return $request->has('save_and_close')
             ? redirect()->route('tasks.index')
             : redirect()->route('tasks.show', $task);

@@ -2,18 +2,20 @@
 
 namespace App\Services\Data;
 
-use Illuminate\Support\Str;
+use App\Models\Address;
+use App\Models\User;
 use App\Services\FileService;
-use App\Models\{Address, User};
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Str;
 
 class UserService
 {
     public function __construct(
         private FileService $fileService,
         private AddressService $addressService,
-    ) {}
-    
+    ) {
+    }
+
     /**
      * Save data for user.
      */
@@ -43,14 +45,6 @@ class UserService
         // Remove old avatar
         if ($oldAvatarId ?? false) {
             $this->fileService->handleRemoveFile($oldAvatarId);
-        }
-        // Creare user first rate
-        if ($user->rates()->count() === 0) {
-            $user->rates()->create([
-                'name' => $inputs['rate_name'],
-                'is_active' => true,
-                'value' => $inputs['rate_value'],
-            ]);
         }
 
         return $user;

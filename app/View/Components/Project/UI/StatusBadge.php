@@ -2,34 +2,36 @@
 
 namespace App\View\Components\Project\UI;
 
-use Illuminate\View\Component;
 use App\Enums\ProjectStatusEnum;
+use Illuminate\View\Component;
 
 class StatusBadge extends Component
 {
     public $title;
+
     public $background;
+
     public $text;
 
     public function __construct(ProjectStatusEnum $status, string $text)
     {
         $this->text = $text;
-        switch($status) {
-            case(ProjectStatusEnum::active):
+        switch ($status) {
+            case ProjectStatusEnum::active:
                 $this->title = __('pages.content.projects.statuses.active');
                 $this->background = 'info';
                 break;
-                
-            case(ProjectStatusEnum::finish):
+
+            case ProjectStatusEnum::finish:
                 $this->title = __('pages.content.projects.statuses.finish');
                 $this->background = 'success';
                 break;
-    
-            case(ProjectStatusEnum::archive):
+
+            case ProjectStatusEnum::archive:
                 $this->title = __('pages.content.projects.statuses.archive');
                 $this->background = 'primary';
                 break;
-    
+
             default:
                 $this->title = 'NaN';
                 $this->background = 'info';

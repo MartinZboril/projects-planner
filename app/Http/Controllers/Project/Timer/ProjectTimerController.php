@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\Project\Timer;
 
-use Exception;
-use Illuminate\Http\{JsonResponse, RedirectResponse};
-use Illuminate\Support\Facades\Log;
-use Illuminate\View\View;
 use App\DataTables\TimersDataTable;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Timer\{StoreTimerRequest, UpdateTimerRequest};
-use App\Models\{Project, Timer};
-use App\Traits\FlashTrait;
+use App\Http\Requests\Timer\StoreTimerRequest;
+use App\Http\Requests\Timer\UpdateTimerRequest;
+use App\Models\Project;
+use App\Models\Timer;
 use App\Services\Data\TimerService;
+use App\Traits\FlashTrait;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
 class ProjectTimerController extends Controller
 {
@@ -19,7 +22,8 @@ class ProjectTimerController extends Controller
 
     public function __construct(
         private TimerService $timerService
-    ) {}
+    ) {
+    }
 
     /**
      * Display the timers of project.
@@ -50,8 +54,10 @@ class ProjectTimerController extends Controller
             $this->flash(__('messages.timer.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return redirect()->route('projects.timers.index', ['project' => $project]);
     }
 
@@ -73,8 +79,10 @@ class ProjectTimerController extends Controller
             $this->flash(__('messages.timer.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return redirect()->route('projects.timers.index', ['project' => $project]);
     }
 }

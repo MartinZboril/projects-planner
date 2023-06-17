@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Project\Task;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\File\UploadFileRequest;
+use App\Models\Project;
+use App\Models\Task;
+use App\Services\Data\TaskService;
+use App\Traits\FlashTrait;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\File\UploadFileRequest;
-use App\Models\{Project, Task};
-use App\Traits\FlashTrait;
-use App\Services\Data\TaskService;
 
 class ProjectTaskFileUploaderController extends Controller
 {
@@ -17,7 +18,8 @@ class ProjectTaskFileUploaderController extends Controller
 
     public function __construct(
         private TaskService $taskService
-    ) {}
+    ) {
+    }
 
     /**
      * Upload a newly created file in storage.
@@ -29,8 +31,10 @@ class ProjectTaskFileUploaderController extends Controller
             $this->flash(__('messages.file.upload'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return redirect()->route('projects.tasks.show', ['project' => $project, 'task' => $task]);
     }
 }

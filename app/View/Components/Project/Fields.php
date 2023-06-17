@@ -2,13 +2,17 @@
 
 namespace App\View\Components\Project;
 
+use App\Models\Client;
+use App\Models\Project;
+use App\Models\User;
 use Illuminate\View\Component;
-use App\Models\{Client, Project, User};
 
 class Fields extends Component
 {
     public $project;
+
     public $type;
+
     public $closeRoute;
 
     public function __construct(?Project $project, string $type)

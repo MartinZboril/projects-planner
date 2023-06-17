@@ -51,14 +51,29 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ route('users.index') }}" class="nav-link @if(str_contains(url()->current(), 'users')){{ 'active' }}@endif">
+                <li class="nav-item @if(str_contains(url()->current(), 'users') || str_contains(url()->current(), 'rates')){{ 'menu-open' }}@endif">
+                    <a href="#" class="nav-link @if(str_contains(url()->current(), 'users') || str_contains(url()->current(), 'rates')){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-users"></i>
                         <p>
                             Users
+                            <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
-                </li>
+                    <ul class="nav nav-treeview" style="display: @if(str_contains(url()->current(), 'users') || str_contains(url()->current(), 'rates')){{ 'block' }}@else{{ 'none' }}@endif;">
+                        <li class="nav-item">
+                            <a href="{{ route('users.index') }}" class="nav-link @if(str_contains(url()->current(), 'users') && ! str_contains(url()->current(), 'rates')){{ 'active' }}@endif">
+                                <i class="fas fa-users nav-icon"></i>
+                                <p>Users</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('users.rates.index') }}" class="nav-link @if(str_contains(url()->current(), 'users') && str_contains(url()->current(), 'rates')){{ 'active' }}@endif">
+                                <i class="fas fa-list-alt nav-icon"></i>
+                                <p>Rates</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li> 
                 <li class="nav-item">
                     <a href="{{ route('reports.index') }}" class="nav-link @if(str_contains(url()->current(), 'report') || str_contains(url()->current(), 'analysis')){{ 'active' }}@endif">
                         <i class="nav-icon fas fa-chart-line"></i>
@@ -74,7 +89,7 @@
                             Notes
                         </p>
                     </a>
-                </li>
+                </li>               
             </ul>
         </nav>
     </div>

@@ -32,4 +32,4 @@ class AddTicketIdToTasksTable extends Migration
             $table->dropConstrainedForeignId('ticket_id');
         });
     }
-};
+}

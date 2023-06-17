@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Enums\TaskStatusEnum;
-use Illuminate\Database\Eloquent\Model;
+use App\Traits\Scopes\MarkedRecords;
+use App\Traits\Scopes\OverdueRecords;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany, MorphMany};
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Milestone extends Model
 {
@@ -15,7 +18,7 @@ class Milestone extends Model
 
     protected $fillable = [
         'project_id', 'owner_id', 'name', 'started_at', 'dued_at', 'colour', 'description', 'is_marked',
-    ]; 
+    ];
 
     protected $casts = [
         'started_at' => 'date',
@@ -46,12 +49,12 @@ class Milestone extends Model
     {
         return $this->morphMany(File::class, 'fileable');
     }
-    
+
     public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
-    
+
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class, 'milestone_id');

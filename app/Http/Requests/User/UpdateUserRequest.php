@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\User;
 
-use App\Models\User;
 use App\Models\Address;
-use Illuminate\Validation\Rule;
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -25,11 +25,11 @@ class UpdateUserRequest extends FormRequest
         $rules = User::VALIDATION_RULES + Address::VALIDATION_RULES;
         $rules['email'] = [
             'required', 'string', 'email', 'max:255',
-            Rule::unique('users')->ignoreModel($this->user)
+            Rule::unique('users')->ignoreModel($this->user),
         ];
         $rules['username'] = [
             'required', 'string', 'max:255',
-            Rule::unique('users')->ignoreModel($this->user)
+            Rule::unique('users')->ignoreModel($this->user),
         ];
 
         return $rules;

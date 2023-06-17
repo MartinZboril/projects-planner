@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests\Client;
 
-use App\Models\Client;
 use App\Models\Address;
+use App\Models\Client;
 use App\Models\SocialNetwork;
-use Illuminate\Validation\Rules\File;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\File;
 
 class StoreClientRequest extends FormRequest
 {

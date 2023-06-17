@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Project\Note;
 
-use Exception;
-use Illuminate\View\View;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Note\{StoreNoteRequest, UpdateNoteRequest};
-use App\Models\{Project, Note};
+use App\Http\Requests\Note\StoreNoteRequest;
+use App\Http\Requests\Note\UpdateNoteRequest;
+use App\Models\Note;
+use App\Models\Project;
+use App\Services\Data\NoteService;
+use App\Services\Data\ProjectService;
 use App\Traits\FlashTrait;
-use App\Services\Data\{ProjectService, NoteService};
+use Exception;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
 class ProjectNoteController extends Controller
 {
@@ -19,7 +22,8 @@ class ProjectNoteController extends Controller
     public function __construct(
         private ProjectService $projectService,
         private NoteService $noteService
-    ) {}
+    ) {
+    }
 
     /**
      * Display the notes of project.
@@ -47,8 +51,10 @@ class ProjectNoteController extends Controller
             $this->flash(__('messages.note.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return redirect()->route('projects.notes.index', $project);
     }
 
@@ -58,7 +64,7 @@ class ProjectNoteController extends Controller
     public function edit(Project $project, Note $note): View
     {
         return view('projects.notes.edit', ['project' => $project, 'note' => $note]);
-    }  
+    }
 
     /**
      * Update the note in storage.
@@ -70,8 +76,10 @@ class ProjectNoteController extends Controller
             $this->flash(__('messages.note.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return redirect()->route('projects.notes.index', $project);
     }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Report;
 
-use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Services\Report\ProjectReport;
+use Illuminate\View\View;
 
 class ProjectReportController extends Controller
 {

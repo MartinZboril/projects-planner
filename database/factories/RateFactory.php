@@ -17,10 +17,10 @@ class RateFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word(),
-            'value' => $this->faker->numberBetween(100, 1000),
-            'is_active' => true,     
-            'note' => $this->faker->paragraph(),       
+            'name' => fake()->word(),
+            'value' => fake()->numberBetween(100, 1000),
+            'is_active' => true,
+            'note' => fake()->paragraph(),
         ];
     }
 }

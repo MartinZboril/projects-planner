@@ -15,7 +15,7 @@
                     <select class="form-control @error('client_id') is-invalid @enderror" name="client_id" id="client-id" style="width: 100%;">
                         <option disabled selected value>select client</option>
                         @foreach($clients as $client)
-                            <option value="{{ $client->id }}" @selected(old('client_id', $project->client->id ?? null) === $client->id)>{{ $client->name }}</option>
+                            <option value="{{ $client->id }}" @selected((int) old('client_id', $project->client->id ?? null) === $client->id)>{{ $client->name }}</option>
                         @endforeach
                     </select>
                     @error('client_id')
@@ -29,7 +29,7 @@
                             <option value="{{ $user->id }}" 
                             @if(old('team')) 
                                 @foreach(old('team') as $formUser) 
-                                    @selected($formUser === $user->id)
+                                    @selected((int) $formUser === $user->id)
                                 @endforeach
                             @elseif ($project->team ?? false)
                                 @foreach($project->team as $projectUser)

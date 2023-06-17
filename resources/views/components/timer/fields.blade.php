@@ -32,7 +32,7 @@
                     <select class="form-control @error('rate_id') is-invalid @enderror" name="rate_id" id="rate-id" style="width: 100%;">
                         <option disabled selected value>Choose rate</option>
                         @foreach(Auth::User()->rates as $rate)
-                            <option value="{{ $rate->id }}" @selected(old('rate_id', $timer->rate_id ?? null) === $rate->id)>{{ $rate->name }} ({{ $rate->value }})</option>
+                            <option value="{{ $rate->id }}" @selected((int) old('rate_id', $timer->rate_id ?? null) === $rate->id)>{{ $rate->name }} ({{ $rate->value }})</option>
                         @endforeach
                     </select>
                     @error('rate_id')

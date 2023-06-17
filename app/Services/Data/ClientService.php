@@ -2,9 +2,11 @@
 
 namespace App\Services\Data;
 
+use App\Models\Address;
+use App\Models\Client;
+use App\Models\SocialNetwork;
 use App\Services\FileService;
 use Illuminate\Http\UploadedFile;
-use App\Models\{Address, Client, Comment, Note, SocialNetwork};
 
 class ClientService
 {
@@ -12,12 +14,13 @@ class ClientService
         private FileService $fileService,
         private AddressService $addressService,
         private SocialNetworkService $socialNetworkService,
-    ) {}
+    ) {
+    }
 
     /**
      * Save data for client.
      */
-    public function handleSave(Client $client, Array $inputs, ?UploadedFile $uploadedFile, ?Array $uploadedFiles=[])
+    public function handleSave(Client $client, array $inputs, ?UploadedFile $uploadedFile, ?array $uploadedFiles = [])
     {
         // Upload logo
         if ($uploadedFile) {
@@ -58,7 +61,7 @@ class ClientService
     /**
      * Upload clients files.
      */
-    public function handleUploadFiles(Client $client, Array $uploadedFiles): void
+    public function handleUploadFiles(Client $client, array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
             $this->fileService->handleUpload($uploadedFile, 'clients/files', $client);
@@ -70,7 +73,8 @@ class ClientService
      */
     public function handleMark(Client $client): Client
     {
-        $client->update(['is_marked' => !$client->is_marked]);
+        $client->update(['is_marked' => ! $client->is_marked]);
+
         return $client->fresh();
     }
 }

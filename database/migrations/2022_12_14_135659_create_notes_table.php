@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('notes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('noteable_id')->nullable();
-            $table->string('noteable_type')->nullable();   
+            $table->string('noteable_type')->nullable();
             $table->foreignIdFor(
                 \App\Models\User::class,
                 'user_id'

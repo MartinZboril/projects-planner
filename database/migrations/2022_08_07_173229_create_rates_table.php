@@ -15,10 +15,6 @@ class CreateRatesTable extends Migration
     {
         Schema::create('rates', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(
-                \App\Models\User::class,
-                'user_id'
-            )->constrained('users');
             $table->string('name');
             $table->unsignedInteger('value');
             $table->boolean('is_active')->default(0);

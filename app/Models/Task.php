@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use App\Enums\TaskStatusEnum;
-use Illuminate\Support\Facades\Log;
+use App\Traits\Scopes\MarkedRecords;
+use App\Traits\Scopes\OverdueRecords;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\{Builder, Model};
-use App\Traits\Scopes\{MarkedRecords, OverdueRecords};
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany, MorphMany};
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Task extends Model
 {
@@ -66,7 +69,7 @@ class Task extends Model
     {
         return $this->morphMany(File::class, 'fileable');
     }
-        
+
     public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable');
@@ -81,7 +84,7 @@ class Task extends Model
     {
         return $query->where('status', $type);
     }
-    
+
     public function scopeStopped(Builder $query, bool $type): Builder
     {
         return $query->where('is_stopped', $type);

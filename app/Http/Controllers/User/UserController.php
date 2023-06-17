@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\User;
 
+use App\DataTables\RatesDataTable;
+use App\DataTables\UsersDataTable;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
+use App\Models\User;
+use App\Services\Data\UserService;
+use App\Traits\FlashTrait;
 use Exception;
-use Illuminate\Http\{JsonResponse, RedirectResponse};
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
-use App\DataTables\{RatesDataTable, UsersDataTable};
-use App\Http\Controllers\Controller;
-use App\Http\Requests\User\{StoreUserRequest, UpdateUserRequest};
-use App\Models\User;
-use App\Traits\FlashTrait;
-use App\Services\Data\UserService;
 
 class UserController extends Controller
 {
@@ -19,12 +22,13 @@ class UserController extends Controller
 
     public function __construct(
         private UserService $userService
-    ) {}
-    
+    ) {
+    }
+
     /**
      * Display a listing of the users.
      */
-    public function index(UsersDataTable $usersDataTable): JsonResponse|View 
+    public function index(UsersDataTable $usersDataTable): JsonResponse|View
     {
         return $usersDataTable->render('users.index');
     }
@@ -47,8 +51,10 @@ class UserController extends Controller
             $this->flash(__('messages.user.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return $request->has('save_and_close')
             ? redirect()->route('users.index')
             : redirect()->route('users.show', $user);
@@ -82,8 +88,10 @@ class UserController extends Controller
             $this->flash(__('messages.user.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return $request->has('save_and_close')
             ? redirect()->route('users.index')
             : redirect()->route('users.show', $user);

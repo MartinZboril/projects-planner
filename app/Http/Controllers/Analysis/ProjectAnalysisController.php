@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Analysis;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 use App\DataTables\ProjectsDataTable;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 class ProjectAnalysisController extends Controller
 {

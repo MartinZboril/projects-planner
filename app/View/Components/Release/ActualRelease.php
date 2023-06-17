@@ -2,12 +2,13 @@
 
 namespace App\View\Components\Release;
 
-use Illuminate\View\Component;
 use App\Services\Release\IndexRelease;
+use Illuminate\View\Component;
 
 class ActualRelease extends Component
 {
     public $actualRelease;
+
     public $historyRoute;
 
     public function __construct()

@@ -2,21 +2,22 @@
 
 namespace App\Services\Data;
 
-use Illuminate\Support\Facades\Auth;
 use App\Models\Comment;
 use App\Services\FileService;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class CommentService
 {
     public function __construct(
         private FileService $fileService,
-    ) {}
+    ) {
+    }
 
     /**
      * Save data for comment.
      */
-    public function handleSave(Comment $comment, array $inputs, Model $model, ?Array $uploadedFiles): Comment
+    public function handleSave(Comment $comment, array $inputs, Model $model, ?array $uploadedFiles): Comment
     {
         // Prepare fields
         $inputs['user_id'] = $comment->user_id ?? Auth::id();
@@ -35,7 +36,7 @@ class CommentService
     /**
      * Upload comments files.
      */
-    private function handleUploadFiles(Comment $comment, Array $uploadedFiles): void
+    private function handleUploadFiles(Comment $comment, array $uploadedFiles): void
     {
         foreach ($uploadedFiles as $uploadedFile) {
             $this->fileService->handleUpload($uploadedFile, 'comments', $comment);

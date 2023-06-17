@@ -7,9 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateToDoRequest extends FormRequest
 {
-    /**
-     * @return bool
-     */
     public function authorize(): bool
     {
         return true;
@@ -22,7 +19,7 @@ class UpdateToDoRequest extends FormRequest
     {
         $rules = ToDo::VALIDATION_RULES;
         unset($rules['task_id']);
-        
+
         return $rules;
     }
 }

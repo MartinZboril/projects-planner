@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Analysis;
 
-use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 use App\DataTables\TimersDataTable;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 class TimesheetAnalysisController extends Controller
 {

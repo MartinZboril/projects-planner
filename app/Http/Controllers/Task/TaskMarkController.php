@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Task;
 
-use Exception;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Models\Task;
 use App\Services\Data\TaskService;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class TaskMarkController extends Controller
 {
     public function __construct(
         private TaskService $taskService
-    ) {}
-    
+    ) {
+    }
+
     /**
      * Mark selected task.
      */
@@ -25,9 +26,10 @@ class TaskMarkController extends Controller
         } catch (Exception $exception) {
             Log::error($exception);
         }
+
         return response()->json([
-            'message' => __('messages.task.' . ($task->is_marked ? 'mark' : 'unmark')),
+            'message' => __('messages.task.'.($task->is_marked ? 'mark' : 'unmark')),
             'task' => $task,
         ]);
-    } 
+    }
 }

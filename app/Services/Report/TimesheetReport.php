@@ -2,15 +2,16 @@
 
 namespace App\Services\Report;
 
+use App\Interfaces\ReportInterface;
 use App\Models\Timer;
 use Illuminate\Support\Collection;
-use App\Interfaces\ReportInterface;
 
 class TimesheetReport implements ReportInterface
 {
     public function __construct(
-        public BuilderReport $builderReport=new BuilderReport
-    ) {}
+        public BuilderReport $builderReport = new BuilderReport
+    ) {
+    }
 
     /**
      * Get report for timesheets by year.
@@ -36,7 +37,7 @@ class TimesheetReport implements ReportInterface
     {
         $timers = collect();
 
-        $this->builderReport->reportMonthsFull->each(function ($month, $key) use($timers, $year) {
+        $this->builderReport->reportMonthsFull->each(function ($month, $key) use ($timers, $year) {
             $timers->put($month['index'], Timer::whereYear('created_at', $year)->whereMonth('created_at', $key + 1)->get()->sum('total_time'));
         });
 

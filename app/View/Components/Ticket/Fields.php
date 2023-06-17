@@ -2,14 +2,18 @@
 
 namespace App\View\Components\Ticket;
 
+use App\Models\Project;
+use App\Models\Ticket;
 use Illuminate\View\Component;
-use App\Models\{Project, Ticket, User};
 
 class Fields extends Component
 {
     public $ticket;
+
     public $type;
+
     public $project;
+
     public $closeRoute;
 
     public function __construct(?Ticket $ticket, ?Project $project, string $type)
@@ -22,14 +26,13 @@ class Fields extends Component
 
     public function render()
     {
-        $users = $this->project ?? false 
+        $users = $this->project ?? false
                     ? $this->project->team
                     : ($this->ticket->project ?? false ? $this->ticket->project->team : []);
 
-
         return view('components.ticket.fields', ['projects' => Project::all(), 'users' => $users]);
     }
-    
+
     private function getCloseRoute(?Ticket $ticket, ?Project $project, string $type): string
     {
         if ($type === 'edit') {

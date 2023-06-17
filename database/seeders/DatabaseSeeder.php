@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Address;
 use App\Models\Rate;
 use App\Models\User;
-use App\Models\Address;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,6 +24,8 @@ class DatabaseSeeder extends Seeder
             'address_id' => Address::factory(1)->create()->first()->id,
         ]);
 
-        Rate::factory(1)->create(['user_id' => $user->id]);
+        $rate = Rate::factory(1)->create();
+
+        $user->rates()->attach($rate);
     }
 }

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Project\Task;
 
-use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use Illuminate\View\View;
 
 class ProjectTaskKanbanController extends Controller
 {

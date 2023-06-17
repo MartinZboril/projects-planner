@@ -21,7 +21,7 @@
                         <select class="form-control @error('project_id') is-invalid @enderror" name="project_id" id="project-id" style="width: 100%;">
                             <option disabled selected value>select project</option>
                             @foreach($projects as $project)
-                                <option value="{{ $project->id }}" @selected(old('project_id', $ticket->project->id ?? null) === $project->id)>{{ $project->name }}</option>
+                                <option value="{{ $project->id }}" @selected((int) old('project_id', $ticket->project->id ?? null) === $project->id)>{{ $project->name }}</option>
                             @endforeach
                         </select>
                         @error('project_id')
@@ -34,7 +34,7 @@
                     <select class="form-control @error('assignee_id') is-invalid @enderror" name="assignee_id" id="assignee-id" style="width: 100%;">
                         <option selected value>select assignee</option>
                         @foreach($users as $user)
-                            <option value="{{ $user->id }}" @selected(old('assignee_id', $ticket->assignee->id ?? null) === $user->id)>{{ $user->full_name }}</option>
+                            <option value="{{ $user->id }}" @selected((int) old('assignee_id', $ticket->assignee->id ?? null) === $user->id)>{{ $user->full_name }}</option>
                         @endforeach
                     </select>
                     @error('assignee_id')
@@ -46,7 +46,7 @@
                     <select class="form-control @error('type') is-invalid @enderror" name="type" id="type" style="width: 100%;">
                         <option selected value>select type</option>
                         @foreach(App\Enums\TicketTypeEnum::values() as $key => $value)
-                            <option value="{{ $key }}" @selected(old('type', $ticket->type->value ?? null) === $key)>{{ __('pages.content.tickets.types.' . $value) }}</option>
+                            <option value="{{ $key }}" @selected((int) old('type', $ticket->type->value ?? null) === $key)>{{ __('pages.content.tickets.types.' . $value) }}</option>
                         @endforeach
                     </select>
                     @error('type')
@@ -58,7 +58,7 @@
                     <select class="form-control @error('priority') is-invalid @enderror" name="priority" id="priority" style="width: 100%;">
                         <option selected value>select priority</option>
                         @foreach(App\Enums\TicketPriorityEnum::values() as $key => $value)
-                            <option value="{{ $key }}" @selected(old('priority', $ticket->priority->value ?? null) === $key)>{{ __('pages.content.tickets.priorities.' . $value) }}</option>
+                            <option value="{{ $key }}" @selected((int) old('priority', $ticket->priority->value ?? null) === $key)>{{ __('pages.content.tickets.priorities.' . $value) }}</option>
                         @endforeach
                     </select>
                     @error('priority')

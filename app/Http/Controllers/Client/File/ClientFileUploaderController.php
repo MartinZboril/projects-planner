@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Client\File;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\File\UploadFileRequest;
+use App\Models\Client;
+use App\Services\Data\ClientService;
+use App\Traits\FlashTrait;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
-use App\Models\Client;
-use App\Http\Requests\File\UploadFileRequest;
-use App\Http\Controllers\Controller;
-use App\Traits\FlashTrait;
-use App\Services\Data\ClientService;
 
 class ClientFileUploaderController extends Controller
 {
@@ -17,7 +17,8 @@ class ClientFileUploaderController extends Controller
 
     public function __construct(
         private ClientService $clientService
-    ) {}
+    ) {
+    }
 
     /**
      * Upload a newly created file in storage.
@@ -29,8 +30,10 @@ class ClientFileUploaderController extends Controller
             $this->flash(__('messages.file.upload'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return redirect()->route('clients.files.index', $client);
     }
 }

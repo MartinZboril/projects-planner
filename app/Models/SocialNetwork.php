@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SocialNetwork extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'website', 'skype', 'linkedin', 'twitter', 'facebook', 'instagram',
     ];

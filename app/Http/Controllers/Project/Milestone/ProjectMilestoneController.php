@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers\Project\Milestone;
 
-use Exception;
-use Illuminate\View\View;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\{JsonResponse, RedirectResponse};
-use App\DataTables\{MilestonesDataTable, TasksDataTable};
+use App\DataTables\MilestonesDataTable;
+use App\DataTables\TasksDataTable;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Milestone\{StoreMilestoneRequest, UpdateMilestoneRequest};
-use App\Models\{Milestone, Project};
-use App\Traits\FlashTrait;
+use App\Http\Requests\Milestone\StoreMilestoneRequest;
+use App\Http\Requests\Milestone\UpdateMilestoneRequest;
+use App\Models\Milestone;
+use App\Models\Project;
 use App\Services\Data\MilestoneService;
+use App\Traits\FlashTrait;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
 class ProjectMilestoneController extends Controller
 {
@@ -19,7 +23,8 @@ class ProjectMilestoneController extends Controller
 
     public function __construct(
         private MilestoneService $milestoneService
-    ) {}
+    ) {
+    }
 
     /**
      * Display the milestones of project.
@@ -50,8 +55,10 @@ class ProjectMilestoneController extends Controller
             $this->flash(__('messages.milestone.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
+
         return redirect()->route('projects.milestones.show', ['project' => $project, 'milestone' => $milestone]);
     }
 
@@ -84,8 +91,10 @@ class ProjectMilestoneController extends Controller
             $this->flash(__('messages.milestone.update'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
+
             return redirect()->back()->with(['error' => __('messages.error')]);
-        } 
+        }
+
         return redirect()->route('projects.milestones.show', ['project' => $project, 'milestone' => $milestone]);
     }
 }

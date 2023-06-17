@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -61,6 +61,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Project::class, 'project_user', 'user_id', 'project_id');
     }
 
+    public function rates(): BelongsToMany
+    {
+        return $this->belongsToMany(Rate::class, 'user_rate', 'user_id', 'rate_id');
+    }
+
     public function timers(): HasMany
     {
         return $this->hasMany(Timer::class, 'user_id');
@@ -69,11 +74,6 @@ class User extends Authenticatable
     public function activeTimers(): HasMany
     {
         return $this->hasMany(Timer::class, 'user_id')->active(true);
-    }
-
-    public function rates(): HasMany
-    {
-        return $this->hasMany(Rate::class, 'user_id');
     }
 
     protected function password(): Attribute
@@ -87,7 +87,7 @@ class User extends Authenticatable
     protected function fullName(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->name . ' ' . $this->surname,
+            get: fn () => $this->name.' '.$this->surname,
         );
     }
 

@@ -2,20 +2,23 @@
 
 namespace App\Http\Controllers\Ticket;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Ticket\ConvertTicketRequest;
+use App\Models\Task;
+use App\Models\Ticket;
+use App\Services\Data\TaskService;
+use App\Services\Data\TicketService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Ticket\ConvertTicketRequest;
-use App\Models\{Task, Ticket};
-use App\Services\Data\{TaskService, TicketService};
 
 class TicketConvertTicketToTaskController extends Controller
 {
     public function __construct(
         private TicketService $ticketService,
         private TaskService $taskService
-    ) {}
+    ) {
+    }
 
     /**
      * Convert the ticket to new task.
@@ -35,10 +38,11 @@ class TicketConvertTicketToTaskController extends Controller
                 'is_returned' => 0,
                 'ticket_id' => $ticket->id,
             ]);
-            $this->ticketService->handleConvert($ticket);  
+            $this->ticketService->handleConvert($ticket);
         } catch (Exception $exception) {
             Log::error($exception);
         }
+
         return response()->json([
             'redirect' => route('tasks.show', $task),
         ]);

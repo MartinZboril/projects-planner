@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Report;
 
-use Illuminate\View\View;
 use App\Http\Controllers\Controller;
 use App\Services\Report\TimesheetReport;
+use Illuminate\View\View;
 
 class TimesheetReportController extends Controller
 {

@@ -12,6 +12,7 @@ class SocialNetworkService
     public function handleSave(SocialNetwork $socialNetwork, array $inputs): int
     {
         $socialNetwork->fill($inputs)->save();
+
         return $socialNetwork->id;
     }
 }
