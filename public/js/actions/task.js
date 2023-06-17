@@ -11,6 +11,7 @@ function pauseTask(url, type, featureText, featureBadge, tableIdentifier = '#tas
             toastr.error('An error has occurred!');
         },
         success: function (data) {
+            console.log(data.task.paused);
             if (type === 'table') {
                 $(tableIdentifier).DataTable().ajax.reload(); 
             } else {

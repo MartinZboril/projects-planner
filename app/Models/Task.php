@@ -40,6 +40,10 @@ class Task extends Model
         'description' => ['required', 'string', 'max:65553'],
     ];
 
+    protected $appends = [
+        'paused',
+    ];
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');
