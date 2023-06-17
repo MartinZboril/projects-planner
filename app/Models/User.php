@@ -61,6 +61,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Project::class, 'project_user', 'user_id', 'project_id');
     }
 
+    public function rates(): BelongsToMany
+    {
+        return $this->belongsToMany(Rate::class, 'user_rate', 'user_id', 'rate_id');
+    }
+
     public function timers(): HasMany
     {
         return $this->hasMany(Timer::class, 'user_id');
@@ -69,11 +74,6 @@ class User extends Authenticatable
     public function activeTimers(): HasMany
     {
         return $this->hasMany(Timer::class, 'user_id')->active(true);
-    }
-
-    public function rates(): HasMany
-    {
-        return $this->hasMany(Rate::class, 'user_id');
     }
 
     protected function password(): Attribute

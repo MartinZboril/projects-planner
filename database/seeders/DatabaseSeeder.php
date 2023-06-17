@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
             'address_id' => Address::factory(1)->create()->first()->id,
         ]);
 
-        Rate::factory(1)->create(['user_id' => $user->id]);
+        $rate = Rate::factory(1)->create();
+
+        $user->rates()->attach($rate);
     }
 }

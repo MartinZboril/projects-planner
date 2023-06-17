@@ -25,6 +25,7 @@ return [
     'rate' => [
         'create' => 'Rate was created!',
         'update' => 'Rate was updated!',
+        'assign' => 'Rate assignment completed!',
     ],
     'task' => [
         'create' => 'Task was created!',

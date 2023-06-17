@@ -12,7 +12,6 @@ class RateService
     public function handleSave(Rate $rate, array $inputs): void
     {
         // Prepare fields
-        $inputs['user_id'] = $rate->user_id ?? $inputs['user_id'];
         $inputs['is_active'] = $inputs['is_active'] ?? false;
         // Save note
         $rate->fill($inputs)->save();

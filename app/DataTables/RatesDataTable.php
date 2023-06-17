@@ -3,6 +3,7 @@
 namespace App\DataTables;
 
 use App\Models\Rate;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -16,7 +17,7 @@ class RatesDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->setRowId('id')
             ->editColumn('name', function (Rate $rate) {
-                return '<a href="'.route('users.rates.edit', ['user' => $rate->user, 'rate' => $rate]).'">'.$rate->name.'</a>';
+                return '<a href="'.route('users.rates.edit', $rate).'">'.$rate->name.'</a>';
             })
             ->editColumn('is_active', function (Rate $rate) {
                 return $rate->is_active ? 'Yes' : 'No';
@@ -25,7 +26,7 @@ class RatesDataTable extends DataTable
                 return number_format($rate->value, 2);
             })
             ->editColumn('buttons', function (Rate $rate) {
-                return '<a href="'.route('users.rates.edit', ['user' => $rate->user, 'rate' => $rate]).'" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>';
+                return '<a href="'.route('users.rates.edit', $rate).'" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>';
             })
             ->rawColumns(['note_popover', 'name', 'buttons']);
     }
@@ -34,8 +35,10 @@ class RatesDataTable extends DataTable
     {
         return $model->when(
             $this->user_id ?? false,
-            fn ($query, $value) => $query->where('rates.user_id', $value)
-        )->with('user:id')->select('id', 'user_id', 'name', 'value', 'is_active')->newQuery();
+            fn ($query, $value) => $query->whereHas('users', function (Builder $query) use ($value) {
+                $query->where('user_id', $value);
+            })
+        )->with('users:id')->select('id', 'name', 'value', 'is_active')->newQuery();
     }
 
     public function html(): HtmlBuilder

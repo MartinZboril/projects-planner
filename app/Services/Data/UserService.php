@@ -46,14 +46,6 @@ class UserService
         if ($oldAvatarId ?? false) {
             $this->fileService->handleRemoveFile($oldAvatarId);
         }
-        // Creare user first rate
-        if ($user->rates()->count() === 0) {
-            $user->rates()->create([
-                'name' => $inputs['rate_name'],
-                'is_active' => true,
-                'value' => $inputs['rate_value'],
-            ]);
-        }
 
         return $user;
     }

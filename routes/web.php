@@ -94,10 +94,12 @@ Route::middleware(['auth'])->group(function () {
         ->except(['destroy']);
     // Users
     Route::post('/users/load', App\Http\Controllers\UserLoadByProjectController::class)->name('users.load');
-    Route::group(['prefix' => 'users/{user}', 'as' => 'users.'], function () {
+    Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
         // Rates
+        Route::get('/{user}/rates/assignment', App\Http\Controllers\User\Rate\UserRateAssignmentController::class)->name('rates.assignment');
+        Route::post('/{user}/rates/assign', App\Http\Controllers\User\Rate\UserRateAssignController::class)->name('rates.assign');
         Route::resource('rates', App\Http\Controllers\User\Rate\UserRateController::class)
-            ->except(['index', 'show', 'destroy']);
+            ->except(['show', 'destroy']);
     });
     Route::resource('users', App\Http\Controllers\User\UserController::class)
         ->except(['destroy']);

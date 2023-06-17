@@ -22,7 +22,7 @@
                             <div class="card-header">
                                 <div class="card-title">Rates</div>
                                 <div class="card-tools">
-                                    <a href="{{ route('users.rates.create', $user) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-plus mr-1"></i>Create</a>
+                                    <a href="{{ route('users.rates.assignment', $user) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-user-plus mr-1"></i>Assign</a>
                                 </div>                               
                             </div>
                             <div class="card-body">

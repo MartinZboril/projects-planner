@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\Rate;
 
-use App\Models\Address;
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreUserRequest extends FormRequest
+class AssignRate extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -18,9 +16,13 @@ class StoreUserRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
     public function rules(): array
     {
-        return User::VALIDATION_RULES + Address::VALIDATION_RULES;
+        return [
+            'rates' => 'required|array',
+        ];
     }
 }
