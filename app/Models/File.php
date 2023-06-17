@@ -28,7 +28,7 @@ class File extends Model
     protected function kilobytesSize(): Attribute
     {
         return Attribute::make(
-            get: fn () => round($this->size / 1000, 2),
+            get: fn ($value, $attributes) => round($attributes['size'] / 1000, 2),
         );
     }
 }

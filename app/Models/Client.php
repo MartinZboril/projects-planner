@@ -60,28 +60,28 @@ class Client extends Model
     protected function contactPersonLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->contact_person ?? 'NaN',
+            get: fn ($value, $attributes) => $attributes['contact_person'] ?? 'NaN',
         );
     }
 
     protected function contactEmailLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->contact_email ?? 'NaN',
+            get: fn ($value, $attributes) => $attributes['contact_email'] ?? 'NaN',
         );
     }
 
     protected function mobileLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->mobile ?? 'NaN',
+            get: fn ($value, $attributes) => $attributes['mobile'] ?? 'NaN',
         );
     }
 
     protected function phoneLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->phone ?? 'NaN',
+            get: fn ($value, $attributes) => $attributes['phone'] ?? 'NaN',
         );
     }
 }

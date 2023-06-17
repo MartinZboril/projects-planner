@@ -117,14 +117,14 @@ class Task extends Model
     protected function paused(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->is_stopped,
+            get: fn ($value, $attributes) => $attributes['is_stopped'],
         );
     }
 
     protected function returned(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->is_returned,
+            get: fn ($value, $attributes) => $attributes['is_returned'],
         );
     }
 }

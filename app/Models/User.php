@@ -87,28 +87,28 @@ class User extends Authenticatable
     protected function fullName(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->name.' '.$this->surname,
+            get: fn ($value, $attributes) => $attributes['name'].' '.$attributes['surname'],
         );
     }
 
     protected function jobTitleLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->job_title ?? 'NaN',
+            get: fn ($value, $attributes) => $attributes['job_title'] ?? 'NaN',
         );
     }
 
     protected function mobileLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->mobile ?? 'NaN',
+            get: fn ($value, $attributes) => $attributes['mobile'] ?? 'NaN',
         );
     }
 
     protected function phoneLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->phone ?? 'NaN',
+            get: fn ($value, $attributes) => $attributes['phone'] ?? 'NaN',
         );
     }
 }
