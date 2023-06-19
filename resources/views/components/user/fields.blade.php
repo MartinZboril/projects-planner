@@ -43,6 +43,18 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-group required">
+                    <label for="role-id" class="control-label">Role</label>
+                    <select class="form-control @error('role_id') is-invalid @enderror" name="role_id" id="role-id" style="width: 100%;">
+                        <option disabled selected value>select role</option>
+                        @foreach($roles as $role)
+                            <option value="{{ $role->id }}" @selected((int) old('role_id', $user->role->id ?? null) === $role->id)>{{ $role->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('role_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>                 
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -165,3 +177,14 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+    <script>
+        $(document).ready(function () {
+            $('#role-id').select2({
+                theme: 'bootstrap4',
+                placeholder: 'select role'
+            });
+        });
+    </script>
+@endpush

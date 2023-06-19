@@ -59,9 +59,9 @@
                             <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview" style="display: @if(str_contains(url()->current(), 'users') || str_contains(url()->current(), 'rates')){{ 'block' }}@else{{ 'none' }}@endif;">
+                    <ul class="nav nav-treeview" style="display: @if(str_contains(url()->current(), 'users') || str_contains(url()->current(), 'rates') || str_contains(url()->current(), 'roles')){{ 'block' }}@else{{ 'none' }}@endif;">
                         <li class="nav-item">
-                            <a href="{{ route('users.index') }}" class="nav-link @if(str_contains(url()->current(), 'users') && ! str_contains(url()->current(), 'rates')){{ 'active' }}@endif">
+                            <a href="{{ route('users.index') }}" class="nav-link @if(str_contains(url()->current(), 'users') && (! str_contains(url()->current(), 'rates') && ! str_contains(url()->current(), 'roles'))){{ 'active' }}@endif">
                                 <i class="fas fa-users nav-icon"></i>
                                 <p>Users</p>
                             </a>
@@ -70,6 +70,12 @@
                             <a href="{{ route('users.rates.index') }}" class="nav-link @if(str_contains(url()->current(), 'users') && str_contains(url()->current(), 'rates')){{ 'active' }}@endif">
                                 <i class="fas fa-list-alt nav-icon"></i>
                                 <p>Rates</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('users.roles.index') }}" class="nav-link @if(str_contains(url()->current(), 'users') && str_contains(url()->current(), 'roles')){{ 'active' }}@endif">
+                                <i class="fas fa-user-secret nav-icon"></i>
+                                <p>Roles</p>
                             </a>
                         </li>
                     </ul>

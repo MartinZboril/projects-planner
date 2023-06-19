@@ -49,4 +49,12 @@ class UserService
 
         return $user;
     }
+
+    /**
+     * Assign rates to user.
+     */
+    public function handleAssignRates(User $user, array $inputs): void
+    {
+        ($user->rates()->count() === 0) ? $user->rates()->attach($inputs['rates']) : $user->rates()->sync($inputs['rates']);
+    }
 }

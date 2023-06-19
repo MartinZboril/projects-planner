@@ -115,7 +115,7 @@ class RateTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect('/users/'.$this->user->id);
 
-        $this->assertDatabaseHas('user_rate', [
+        $this->assertDatabaseHas('rate_user', [
             'user_id' => $this->user->id,
             'rate_id' => $rate->id,
         ]);
@@ -132,7 +132,7 @@ class RateTest extends TestCase
         $response->assertStatus(302);
         $response->assertInvalid('rates');
 
-        $this->assertDatabaseCount('user_rate', 0);
+        $this->assertDatabaseCount('rate_user', 0);
     }
 
     private function createUser(): User

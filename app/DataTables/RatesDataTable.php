@@ -38,7 +38,7 @@ class RatesDataTable extends DataTable
             fn ($query, $value) => $query->whereHas('users', function (Builder $query) use ($value) {
                 $query->where('user_id', $value);
             })
-        )->with('users:id')->select('id', 'name', 'value', 'is_active')->newQuery();
+        )->with('users:id,name,surname')->select('id', 'name', 'value', 'is_active')->newQuery();
     }
 
     public function html(): HtmlBuilder
@@ -72,6 +72,6 @@ class RatesDataTable extends DataTable
 
     protected function filename(): string
     {
-        return 'Users_'.date('YmdHis');
+        return 'Rates_'.date('YmdHis');
     }
 }

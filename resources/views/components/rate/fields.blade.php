@@ -38,7 +38,7 @@
     </div>
     <div class="col-md-5">
         <div class="card card-primary card-outline">
-            <div class="card-header">Settings</div>
+            <div class="card-header">Users</div>
             <div class="card-body">
             </div>
         </div>

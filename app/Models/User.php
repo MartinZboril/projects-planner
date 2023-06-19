@@ -35,6 +35,7 @@ class User extends Authenticatable
     ];
 
     public const VALIDATION_RULES = [
+        'role_id' => ['required', 'integer', 'exists:roles,id'],
         'name' => ['required', 'string', 'max:255'],
         'surname' => ['required', 'string', 'max:255'],
         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -56,6 +57,11 @@ class User extends Authenticatable
         return $this->belongsTo(File::class);
     }
 
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
+
     public function projects(): BelongsToMany
     {
         return $this->belongsToMany(Project::class, 'project_user', 'user_id', 'project_id');
@@ -63,7 +69,7 @@ class User extends Authenticatable
 
     public function rates(): BelongsToMany
     {
-        return $this->belongsToMany(Rate::class, 'user_rate', 'user_id', 'rate_id');
+        return $this->belongsToMany(Rate::class, 'rate_user', 'user_id', 'rate_id');
     }
 
     public function timers(): HasMany

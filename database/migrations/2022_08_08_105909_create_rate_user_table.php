@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserRateTable extends Migration
+class CreateRateUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class CreateUserRateTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_rate', function (Blueprint $table) {
+        Schema::create('rate_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(
-                \App\Models\User::class,
-                'user_id'
-            )->constrained('users');
             $table->foreignIdFor(
                 \App\Models\Rate::class,
                 'rate_id'
             )->constrained('rates');
+            $table->foreignIdFor(
+                \App\Models\User::class,
+                'user_id'
+            )->constrained('users');
         });
     }
 
@@ -33,6 +33,6 @@ class CreateUserRateTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_rate');
+        Schema::dropIfExists('rate_user');
     }
 }

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Rate;
+namespace App\Http\Requests\Role;
 
+use App\Models\Role;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AssignRate extends FormRequest
+class UpdateRoleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,8 +22,11 @@ class AssignRate extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'rates' => 'array',
+        $rules = Role::VALIDATION_RULES;
+        unset($rules['is_primary']);
+
+        return $rules + [
+            'permissions' => 'array',
         ];
     }
 }
