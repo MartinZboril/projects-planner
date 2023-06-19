@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\RoleEnum;
 use App\Models\Address;
 use App\Models\Rate;
 use App\Models\User;
@@ -17,6 +18,8 @@ class RateTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+
+        $this->seed();
 
         $this->user = $this->createUser();
     }
@@ -123,8 +126,6 @@ class RateTest extends TestCase
 
     public function test_user_cannot_assign_nullable_rate(): void
     {
-        $rate = Rate::factory()->create();
-
         $response = $this->actingAs($this->user)->post('/users/'.$this->user->id.'/rates/assign', [
             'rates' => null,
         ]);
@@ -139,6 +140,7 @@ class RateTest extends TestCase
     {
         return User::factory()->create([
             'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::boss,
         ]);
     }
 }
