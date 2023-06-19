@@ -40,6 +40,19 @@
         <div class="card card-primary card-outline">
             <div class="card-header">Users</div>
             <div class="card-body">
+                <div class="form-group" style="column-count:4;">
+                    @forelse ($users as $user)
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="users[]" id="user-{{ $user->id }}-option" value="{{ $user->id }}" @checked(old('users.'.$loop->index, $rate->users->contains($user)))>
+                            <label class="form-check-label" for="user-{{ $user->id }}-option">{{ $user->full_name }}</label>
+                        </div>                
+                    @empty
+                        <p>No Users</p>
+                    @endforelse
+                </div>
+                @error('users')
+                    <div class="mt-1 text-danger">{{ $message }}</div>
+                @enderror                
             </div>
         </div>
         <div class="card">
