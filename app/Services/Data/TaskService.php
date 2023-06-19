@@ -49,7 +49,7 @@ class TaskService
     public function handleChangeStatus(Task $task, int $status): Task
     {
         $task->update([
-            'is_returned' => ($task->status === TaskStatusEnum::complete && $changedStatus === TaskStatusEnum::new->value) ? true : false,
+            'is_returned' => ($task->status === TaskStatusEnum::complete && $status === TaskStatusEnum::new->value) ? true : false,
             'status' => $status,
         ]);
 

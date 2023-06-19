@@ -24,6 +24,6 @@ class Rate extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'user_rate', 'rate_id', 'user_id');
+        return $this->belongsToMany(User::class, 'rate_user', 'rate_id', 'user_id');
     }
 }

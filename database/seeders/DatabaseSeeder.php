@@ -2,9 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Address;
-use App\Models\Rate;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,16 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::factory()->create([
-            'name' => 'Admin',
-            'surname' => 'User',
-            'email' => 'admin@example.com',
-            'username' => 'admin',
-            'address_id' => Address::factory(1)->create()->first()->id,
-        ]);
-
-        $rate = Rate::factory(1)->create();
-
-        $user->rates()->attach($rate);
+        $this->call(RoleSeeder::class);
+        $this->call(PermissionSeeder::class);
     }
 }

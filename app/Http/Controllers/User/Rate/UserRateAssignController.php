@@ -5,7 +5,7 @@ namespace App\Http\Controllers\User\Rate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Rate\AssignRate;
 use App\Models\User;
-use App\Services\Data\RateService;
+use App\Services\Data\UserService;
 use App\Traits\FlashTrait;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -16,7 +16,7 @@ class UserRateAssignController extends Controller
     use FlashTrait;
 
     public function __construct(
-        private RateService $rateService
+        private UserService $userService
     ) {
     }
 
@@ -26,7 +26,11 @@ class UserRateAssignController extends Controller
     public function __invoke(AssignRate $request, User $user): RedirectResponse
     {
         try {
-            ($user->rates()->count() === 0) ? $user->rates()->attach($request['rates']) : $user->rates()->sync($request['rates']);
+            // Prepare fields
+            $inputs = $request->validated();
+            $inputs['rates'] = $inputs['rates'] ?? [];
+            // Assign rates
+            $this->userService->handleAssignRates($user, $inputs);
             $this->flash(__('messages.rate.assign'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);

@@ -24,6 +24,9 @@ class UsersDataTable extends DataTable
             ->editColumn('name', function (User $user) {
                 return Blade::render('<x-site.ui.user-icon :user="$user" />', ['user' => $user]).'<a href="'.route('users.show', $user).'" class="ml-1">'.$user->name.' '.$user->surname.'</a>';
             })
+            ->editColumn('role', function (User $user) {
+                return $user->role->name;
+            })
             ->editColumn('job_title', function (User $user) {
                 return $user->job_title_label;
             })
@@ -49,7 +52,7 @@ class UsersDataTable extends DataTable
 
     public function query(User $model): QueryBuilder
     {
-        return $model->with('address:id,city', 'avatar:id,path')->select('id', 'address_id', 'name', 'surname', 'email', 'job_title', 'mobile', 'created_at', 'avatar_id')->newQuery();
+        return $model->with('address:id,city', 'avatar:id,path', 'role:id,name')->select('id', 'address_id', 'role_id', 'name', 'surname', 'email', 'job_title', 'mobile', 'created_at', 'avatar_id')->newQuery();
     }
 
     public function html(): HtmlBuilder
@@ -58,7 +61,7 @@ class UsersDataTable extends DataTable
             ->setTableId($this->table_identifier ?? 'users-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            ->orderBy(5)
+            ->orderBy(6)
             ->parameters([
                 'responsive' => true,
                 'autoWidth' => false,
@@ -77,6 +80,7 @@ class UsersDataTable extends DataTable
         return [
             Column::make('name')->title('User'),
             Column::make('email'),
+            Column::make('role'),
             Column::make('job_title'),
             Column::make('mobile'),
             Column::make('city'),

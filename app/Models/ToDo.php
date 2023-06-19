@@ -49,7 +49,7 @@ class ToDo extends Model
     protected function deadlineOverdue(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->dued_at <= date('Y-m-d') && ! $this->is_finished,
+            get: fn ($value, $attributes) => $this->dued_at <= date('Y-m-d') && ! $attributes['is_finished'],
         );
     }
 }

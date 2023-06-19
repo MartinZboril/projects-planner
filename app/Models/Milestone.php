@@ -68,7 +68,7 @@ class Milestone extends Model
     protected function deadlineOverdue(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->dued_at <= date('Y-m-d') && $this->progress < 1,
+            get: fn ($value, $attributes) => $attributes['dued_at'] <= date('Y-m-d') && $attributes['progress'] < 1,
         );
     }
 

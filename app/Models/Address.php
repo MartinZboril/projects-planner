@@ -25,35 +25,35 @@ class Address extends Model
     protected function streetLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->street ?? 'NaN',
+            get: fn ($value, $attributes) => $attributes['street'] ?? 'NaN',
         );
     }
 
     protected function houseNumberLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->house_number ?? 'NaN',
+            get: fn ($value, $attributes) => $attributes['house_number'] ?? 'NaN',
         );
     }
 
     protected function cityLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->city ?? 'NaN',
+            get: fn ($value, $attributes) => $attributes['city'] ?? 'NaN',
         );
     }
 
     protected function countryLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->country ?? 'NaN',
+            get: fn ($value, $attributes) => $attributes['country'] ?? 'NaN',
         );
     }
 
     protected function zipCodeLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->zip_code ?? 'NaN',
+            get: fn ($value, $attributes) => $attributes['zip_code'] ?? 'NaN',
         );
     }
 }

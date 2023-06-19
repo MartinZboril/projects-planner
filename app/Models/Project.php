@@ -120,7 +120,7 @@ class Project extends Model
     protected function deadlineOverdue(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->dued_at <= date('Y-m-d') && $this->status === ProjectStatusEnum::active,
+            get: fn ($value, $attributes) => $attributes['dued_at'] <= date('Y-m-d') && $this->status === ProjectStatusEnum::active,
         );
     }
 
@@ -155,21 +155,21 @@ class Project extends Model
     protected function remainingHours(): Attribute
     {
         return Attribute::make(
-            get: fn () => round($this->estimated_hours - $this->total_time, 2),
+            get: fn ($value, $attributes) => round($attributes['estimated_hours'] - $this->total_time, 2),
         );
     }
 
     protected function timePlan(): Attribute
     {
         return Attribute::make(
-            get: fn () => ($this->estimated_hours) ? round(($this->total_time / $this->estimated_hours), 2) * 100 : 0,
+            get: fn ($value, $attributes) => ($attributes['estimated_hours']) ? round(($this->total_time / $attributes['estimated_hours']), 2) * 100 : 0,
         );
     }
 
     protected function remainingBudget(): Attribute
     {
         return Attribute::make(
-            get: fn () => round($this->budget - $this->amount, 2),
+            get: fn ($value, $attributes) => round($attributes['budget'] - $this->amount, 2),
         );
     }
 
@@ -183,7 +183,7 @@ class Project extends Model
     protected function budgetPlan(): Attribute
     {
         return Attribute::make(
-            get: fn () => ($this->budget) ? round(($this->amount / $this->budget), 2) * 100 : 0,
+            get: fn ($value, $attributes) => ($attributes['budget']) ? round(($this->amount / $attributes['budget']), 2) * 100 : 0,
         );
     }
 

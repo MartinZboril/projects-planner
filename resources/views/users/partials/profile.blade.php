@@ -2,7 +2,8 @@
     <div class="card-header">Profile</div>
     <div class="card-body">
         <div class="text-center">
-            <h5>{{ $user->full_name }}</h5>
+            <h4>{{ $user->full_name }}</h4>
+            <h5>{{ $user->role->name }}</h5>
             <img src="{{ $user->avatar ? asset('storage/' . $user->avatar->path) : asset('dist/img/user.png') }}" class="img-circle mb-2" alt="User Image" style="width: 100px;height: 100px;">
         </div>
         <table class="table">

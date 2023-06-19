@@ -1,21 +1,21 @@
-@extends('layouts.master', ['select2' => true])
+@extends('layouts.master')
 
-@section('title', __('pages.title.user'))
+@section('title', __('pages.title.role'))
 
 @section('content')
     <div class="content-wrapper">
         <!-- Content Header -->
         <div class="p-3 mb-3" style="background-color:white;">
-            <a href="{{ route('users.show', $user) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
+            <a href="{{ route('users.roles.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
         </div>
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
                 <!-- Form -->
-                <form action="{{ route('users.update', $user) }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('users.roles.update', $role) }}" method="post">
                     @csrf
                     @method('PATCH')
-                    <x-user.fields :$user type="edit" />
+                    <x-role.fields :$role type="edit" />
                 </form>     
             </div>
         </section>

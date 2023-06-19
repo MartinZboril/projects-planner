@@ -2,6 +2,7 @@
 
 namespace App\View\Components\User;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\View\Component;
 
@@ -29,6 +30,6 @@ class Fields extends Component
 
     public function render()
     {
-        return view('components.user.fields');
+        return view('components.user.fields', ['roles' => Role::all()]);
     }
 }

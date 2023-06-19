@@ -77,6 +77,10 @@ return [
     'file' => [
         'upload' => 'Upload was completed!',
     ],
+    'role' => [
+        'create' => 'Role was created!',
+        'update' => 'Role was updated!',
+    ],
     'complete' => 'Action was completed!',
     'error' => 'An error has occurred!',
 ];
