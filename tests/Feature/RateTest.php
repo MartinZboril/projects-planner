@@ -63,6 +63,35 @@ class RateTest extends TestCase
         $this->assertEquals($rate['value'], $lastRate->value);
     }
 
+    public function test_user_can_store_rate_with_users(): void
+    {
+        $rate = [
+            'name' => 'Driving',
+            'is_active' => true,
+            'value' => '500',
+            'note' => null,
+            'users' => [$this->user->id],
+        ];
+
+        $response = $this->actingAs($this->user)->post('/users/rates', $rate);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('/users/rates');
+
+        unset($rate['users']);
+        $this->assertDatabaseHas('rates', $rate);
+
+        $lastRate = Rate::latest()->first();
+        $this->assertEquals($rate['name'], $lastRate->name);
+        $this->assertEquals($rate['value'], $lastRate->value);
+
+        $this->assertDatabaseCount('rate_user', 1);
+        $this->assertDatabaseHas('rate_user', [
+            'user_id' => $this->user->id,
+            'rate_id' => $lastRate->id,
+        ]);
+    }
+
     public function test_user_can_get_to_edit_rate_page(): void
     {
         $rate = Rate::factory()->create();
@@ -93,6 +122,32 @@ class RateTest extends TestCase
 
         $this->assertEquals($editedRate['name'], $updatedRate->name);
         $this->assertEquals($editedRate['value'], $updatedRate->value);
+    }
+
+    public function test_user_can_update_rate_with_users(): void
+    {
+        $rate = Rate::factory()->create();
+        $editedRate = [
+            'name' => 'Design',
+            'value' => '400',
+            'users' => [$this->user->id],
+        ];
+
+        $response = $this->actingAs($this->user)->put('/users/rates/'.$rate->id, $editedRate);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('/users/rates');
+
+        $updatedRate = Rate::find($rate->id);
+
+        $this->assertEquals($editedRate['name'], $updatedRate->name);
+        $this->assertEquals($editedRate['value'], $updatedRate->value);
+        
+        $this->assertDatabaseCount('rate_user', 1);
+        $this->assertDatabaseHas('rate_user', [
+            'user_id' => $this->user->id,
+            'rate_id' => $updatedRate->id,
+        ]);
     }
 
     public function test_user_can_get_to_rate_assignment_page(): void

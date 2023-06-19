@@ -21,8 +21,9 @@ class UpdateRateRequest extends FormRequest
     public function rules(): array
     {
         $rules = Rate::VALIDATION_RULES;
-        unset($rules['user_id']);
 
-        return $rules;
+        return $rules + [
+            'users' => 'array',
+        ];
     }
 }
