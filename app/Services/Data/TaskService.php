@@ -75,4 +75,9 @@ class TaskService
 
         return $task->fresh();
     }
+
+    public function handleDelete(Task $task): void
+    {
+        $task->delete();
+    }
 }

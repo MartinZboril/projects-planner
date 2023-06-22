@@ -2,15 +2,13 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\Role;
-use App\Models\User;
 use App\Enums\RoleEnum;
 use App\Models\Address;
 use App\Models\Permission;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class RoleTest extends TestCase
 {
@@ -89,7 +87,7 @@ class RoleTest extends TestCase
         $this->assertEquals($role['name'], $lastRole->name);
 
         $this->assertDatabaseCount('permission_role', 3);
-        $permissionsForRole->each(function (int $permissionId) use($lastRole) {
+        $permissionsForRole->each(function (int $permissionId) use ($lastRole) {
             $this->assertDatabaseHas('permission_role', [
                 'permission_id' => $permissionId,
                 'role_id' => $lastRole->id,
@@ -149,9 +147,9 @@ class RoleTest extends TestCase
 
         $this->assertEquals($editedRole['name'], $updatedRole->name);
         $this->assertEquals($editedRole['is_active'], $updatedRole->is_active);
-        
+
         $this->assertDatabaseCount('permission_role', 2);
-        $permissionsForRole->each(function (int $permissionId) use($updatedRole) {
+        $permissionsForRole->each(function (int $permissionId) use ($updatedRole) {
             $this->assertDatabaseHas('permission_role', [
                 'permission_id' => $permissionId,
                 'role_id' => $updatedRole->id,

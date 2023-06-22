@@ -17,7 +17,10 @@ class AddMilestoneIdToTasksTable extends Migration
             $table->foreignIdFor(
                 \App\Models\Milestone::class,
                 'milestone_id'
-            )->nullable()->constrained('milestones');
+            )
+                ->nullable()
+                ->constrained('milestones')
+                ->onDelete('set null');
         });
     }
 

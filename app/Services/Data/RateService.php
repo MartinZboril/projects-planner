@@ -17,9 +17,9 @@ class RateService
         $rate->fill($inputs)->save();
         // Assign users
         $inputs['users'] = $inputs['users'] ?? [];
-        $this->handleAssignUsers($rate, $inputs);        
+        $this->handleAssignUsers($rate, $inputs);
     }
-    
+
     /**
      * Assign users to rate.
      */

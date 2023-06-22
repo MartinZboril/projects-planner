@@ -19,7 +19,9 @@ class CreateProjectsTable extends Migration
             $table->foreignIdFor(
                 \App\Models\Client::class,
                 'client_id'
-            )->constrained('clients');
+            )
+                ->constrained('clients')
+                ->onDelete('cascade');
             $table->date('started_at');
             $table->date('dued_at');
             $table->unsignedInteger('estimated_hours')->nullable();

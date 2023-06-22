@@ -15,7 +15,9 @@ return new class extends Migration
             $table->foreignIdFor(
                 \App\Models\SocialNetwork::class,
                 'social_network_id'
-            )->constrained('social_networks');
+            )
+                ->constrained('social_networks')
+                ->onDelete('cascade');
         });
     }
 

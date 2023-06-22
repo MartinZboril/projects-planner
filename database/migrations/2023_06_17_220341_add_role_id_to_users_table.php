@@ -15,7 +15,9 @@ return new class extends Migration
             $table->foreignIdFor(
                 \App\Models\Role::class,
                 'role_id'
-            )->constrained('roles');
+            )
+                ->constrained('roles')
+                ->onDelete('cascade');
         });
     }
 

@@ -76,8 +76,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('todos', App\Http\Controllers\Task\ToDo\TaskToDoController::class)
             ->except(['index', 'show']);
     });
-    Route::resource('tasks', App\Http\Controllers\Task\TaskController::class)
-        ->except(['destroy']);
+    Route::resource('tasks', App\Http\Controllers\Task\TaskController::class);
     // Tickets
     Route::group(['prefix' => 'tickets/{ticket}', 'as' => 'tickets.'], function () {
         // Actions

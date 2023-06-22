@@ -17,7 +17,10 @@ return new class extends Migration
             $table->foreignIdFor(
                 \App\Models\File::class,
                 'avatar_id'
-            )->nullable()->constrained('files', 'id');
+            )
+                ->nullable()
+                ->constrained('files', 'id')
+                ->onDelete('set null');
         });
     }
 

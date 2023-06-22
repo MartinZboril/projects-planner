@@ -19,7 +19,9 @@ class CreateTodosTable extends Migration
             $table->foreignIdFor(
                 \App\Models\Task::class,
                 'task_id'
-            )->constrained('tasks');
+            )
+                ->constrained('tasks')
+                ->onDelete('cascade');
             $table->date('dued_at');
             $table->text('description')->nullable();
             $table->boolean('is_finished')->default(0);
