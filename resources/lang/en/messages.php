@@ -37,6 +37,7 @@ return [
         'resume' => 'Task was resumed!',
         'mark' => 'Task was marked!',
         'unmark' => 'Task was unmarked!',
+        'delete' => 'Task was deleted!',
     ],
     'ticket' => [
         'create' => 'Ticket was created!',

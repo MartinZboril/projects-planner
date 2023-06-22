@@ -8,7 +8,7 @@
         <div class="p-3 mb-3" style="background-color:white;">
             <a href="{{ route('tasks.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
             <a href="{{ route('tasks.edit', $task) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
-            @include('tasks.partials.buttons', ['buttonSize' => 'sm', 'type' => 'detail', 'tableIdentifier' => ''])
+            @include('tasks.partials.buttons', ['buttonSize' => 'sm', 'type' => 'detail', 'tableIdentifier' => '', 'redirect' => route('tasks.index')])
         </div>
         <!-- Main content -->
         <section class="content">
