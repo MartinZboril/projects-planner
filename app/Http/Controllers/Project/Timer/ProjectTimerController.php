@@ -85,4 +85,20 @@ class ProjectTimerController extends Controller
 
         return redirect()->route('projects.timers.index', ['project' => $project]);
     }
+
+    /**
+     * Remove the timer from storage.
+     */
+    public function destroy(Project $project, Timer $timer): JsonResponse
+    {
+        try {
+            $this->timerService->handleDelete($timer);
+        } catch (Exception $exception) {
+            Log::error($exception);
+        }
+
+        return response()->json([
+            'message' => __('messages.timer.delete'),
+        ]);
+    }
 }

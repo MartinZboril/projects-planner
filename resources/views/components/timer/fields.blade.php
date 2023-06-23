@@ -4,7 +4,7 @@
             <div class="card-header">{{ $type === 'edit' ? 'Edit' : 'Create' }} Timer</div>
             <div class="card-body">
                 <div class="form-group required">
-                    <label for="since_at-datetimepicker" class="control-label">since_at</label>
+                    <label for="since_at-datetimepicker" class="control-label">Since At</label>
                     <div class="input-group date" id="since_at-datetimepicker" data-target-input="nearest">
                         <input type="text" name="since_at" class="form-control datetimepicker-input @error('since_at') is-invalid @enderror" data-target="#since_at-datetimepicker" value="{{ old('since_at', ($timer->since_at ?? false) ? $timer->since_at->format('Y-m-d H:i') : null) }}" autocomplete="off"/>
                         <div class="input-group-append" data-target="#since_at-datetimepicker" data-toggle="datetimepicker">
@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="form-group required">
-                    <label for="until_at-datetimepicker" class="control-label">until_at</label>
+                    <label for="until_at-datetimepicker" class="control-label">Until At</label>
                     <div class="input-group date" id="until_at-datetimepicker" data-target-input="nearest">
                         <input type="text" name="until_at" class="form-control datetimepicker-input @error('until_at') is-invalid @enderror" data-target="#until_at-datetimepicker" value="{{ old('until_at', ($timer->until_at ?? false) ? $timer->until_at->format('Y-m-d H:i') : null) }}" autocomplete="off"/>
                         <div class="input-group-append" data-target="#until_at-datetimepicker" data-toggle="datetimepicker">

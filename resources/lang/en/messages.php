@@ -12,7 +12,7 @@ return [
         'update' => 'Milestone was updated!',
         'mark' => 'Milestone was marked!',
         'unmark' => 'Milestone was unmarked!',
-        'milestone' => 'Milestone was deleted!',
+        'delete' => 'Milestone was deleted!',
     ],
     'project' => [
         'create' => 'Project was created!',
@@ -55,6 +55,7 @@ return [
         'update' => 'Timer was updated!',
         'start' => 'Timer started succesfully!',
         'stop' => 'Timer stopped succesfully!',
+        'delete' => 'Timer was deleted!',
     ],
     'todo' => [
         'create' => 'ToDo was created!',

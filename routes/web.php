@@ -181,7 +181,7 @@ Route::middleware(['auth'])->group(function () {
             Route::patch('/{timer}/stop', App\Http\Controllers\Project\Timer\ProjectTimerStopController::class)->name('stop');
         });
         Route::resource('timers', App\Http\Controllers\Project\Timer\ProjectTimerController::class)
-            ->except(['show', 'destroy']);
+            ->except(['show']);
     });
     Route::resource('projects', App\Http\Controllers\Project\ProjectController::class)
         ->except(['destroy']);
