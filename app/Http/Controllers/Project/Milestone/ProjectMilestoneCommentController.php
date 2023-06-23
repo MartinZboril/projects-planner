@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Project\Milestone;
 
-use Exception;
-use App\Models\Comment;
-use App\Models\Project;
-use App\Models\Milestone;
-use App\Traits\FlashTrait;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Services\Data\CommentService;
-use App\Services\Data\MilestoneService;
 use App\Http\Requests\Comment\StoreCommentRequest;
 use App\Http\Requests\Comment\UpdateCommentRequest;
+use App\Models\Comment;
+use App\Models\Milestone;
+use App\Models\Project;
+use App\Services\Data\CommentService;
+use App\Services\Data\MilestoneService;
+use App\Traits\FlashTrait;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class ProjectMilestoneCommentController extends Controller
 {
@@ -58,7 +58,7 @@ class ProjectMilestoneCommentController extends Controller
 
         return redirect()->route('projects.milestones.show', ['project' => $project, 'milestone' => $milestone]);
     }
-            
+
     /**
      * Remove the milestones comment from storage.
      */
@@ -73,5 +73,5 @@ class ProjectMilestoneCommentController extends Controller
         return response()->json([
             'message' => __('messages.comment.delete'),
         ]);
-    }    
+    }
 }

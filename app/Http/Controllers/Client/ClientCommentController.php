@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Client;
 
-use Exception;
-use App\Models\Client;
-use App\Models\Comment;
-use App\Traits\FlashTrait;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Services\Data\ClientService;
-use App\Services\Data\CommentService;
 use App\Http\Requests\Comment\StoreCommentRequest;
 use App\Http\Requests\Comment\UpdateCommentRequest;
+use App\Models\Client;
+use App\Models\Comment;
+use App\Services\Data\ClientService;
+use App\Services\Data\CommentService;
+use App\Traits\FlashTrait;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class ClientCommentController extends Controller
 {
@@ -65,7 +65,7 @@ class ClientCommentController extends Controller
 
         return redirect()->route('clients.comments.index', $client);
     }
-    
+
     /**
      * Remove the clients comment from storage.
      */

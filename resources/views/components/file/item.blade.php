@@ -14,5 +14,8 @@
         <a href="{{ asset('storage/' . $file->path) }}" download="{{ $file->file_name }}">
             <i class="fas fa-download"></i>
         </a>
+        <a href="#" class="text-danger" onclick="deleteFile('{{ $file->destroy_route }}')">
+            <i class="fas fa-trash mr-1"></i>
+        </a>
     </span>
 </div>

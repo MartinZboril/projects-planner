@@ -95,7 +95,7 @@ class TicketController extends Controller
             ? redirect()->route('tickets.index')
             : redirect()->route('tickets.show', $ticket);
     }
-    
+
     /**
      * Remove the ticket from storage.
      */

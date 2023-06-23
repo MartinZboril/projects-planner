@@ -13,8 +13,8 @@ function deleteComment(url) {
             toastr.error('An error has occurred!');
         },
         success: function (data) {
-            sessionStorage .setItem('message', data.message)
-            sessionStorage .setItem('type', 'info')
+            sessionStorage.setItem('message', data.message)
+            sessionStorage.setItem('type', 'info')
             window.location.reload(); 
         }
     });

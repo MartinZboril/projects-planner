@@ -1,4 +1,4 @@
-@extends('layouts.master', ['toaster' => true, 'summernote' => true, 'ticket' => true, 'comment' => true])
+@extends('layouts.master', ['toaster' => true, 'summernote' => true, 'ticket' => true, 'comment' => true, 'file' => true])
 
 @section('title', __('pages.title.ticket'))
 
@@ -20,7 +20,7 @@
                         <x-activity-feed.card />
                     </div>
                     <div class="col-md-7">
-                        <x-file.card :upload-form-route="route('tickets.files.upload', $ticket)" :files="$ticket->files" />
+                        <x-file.card :upload-form-route="route('tickets.files.upload', $ticket)" :parent="[$ticket]" destroy-form-route-name="tickets.files.destroy" :files="$ticket->files" />
                         <x-comment.card :comments="$ticket->comments" :parent="[$ticket]" :store-form-route="route('tickets.comments.store', $ticket)" update-form-route-name="tickets.comments.update" destroy-form-route-name="tickets.comments.destroy" /> 
                     </div>
                 </div> 

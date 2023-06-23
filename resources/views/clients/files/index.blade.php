@@ -1,4 +1,4 @@
-@extends('layouts.master', ['toaster' => true, 'client' => true])
+@extends('layouts.master', ['toaster' => true, 'client' => true, 'file' => true])
 
 @section('title', __('pages.title.client'))
 
@@ -15,7 +15,7 @@
                     @include('clients.partials.header', ['active' => 'file'])
                 </div>          
                 <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                <x-file.card :upload-form-route="route('clients.files.upload', $client)" :files="$client->files" :display-header="false" />
+                <x-file.card :upload-form-route="route('clients.files.upload', $client)" :files="$client->files" :parent="[$client]" destroy-form-route-name="clients.files.destroy" :display-header="false" />
             </div>
         </section>
     </div>

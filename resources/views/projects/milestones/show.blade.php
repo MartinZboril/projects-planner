@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'summernote' => true, 'milestone' => true, 'comment' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'summernote' => true, 'milestone' => true, 'comment' => true, 'file' => true])
 
 @section('title', __('pages.title.milestone'))
 
@@ -15,7 +15,7 @@
                 <div class="row">
                     <div class="col-md-5">
                         @include('projects.milestones.partials.informations')
-                        <x-file.card :upload-form-route="route('projects.milestones.files.upload', ['project' => $milestone->project, 'milestone' => $milestone])" :files="$milestone->files" />
+                        <x-file.card :upload-form-route="route('projects.milestones.files.upload', ['project' => $milestone->project, 'milestone' => $milestone])" :parent="['project' => $milestone->project, 'milestone' => $milestone]" destroy-form-route-name="projects.milestones.files.destroy" :files="$milestone->files" />
                         <x-activity-feed.card />
                     </div>
                     <div class="col-md-7">

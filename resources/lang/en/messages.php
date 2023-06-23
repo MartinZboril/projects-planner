@@ -79,6 +79,7 @@ return [
     ],
     'file' => [
         'upload' => 'Upload was completed!',
+        'delete' => 'File was deleted!',
     ],
     'role' => [
         'create' => 'Role was created!',

@@ -21,8 +21,9 @@ Route::middleware(['auth'])->group(function () {
             ->only(['index', 'store', 'update', 'destroy']);
         // Files
         Route::group(['prefix' => '/files', 'as' => 'files.'], function () {
-            Route::get('/', [App\Http\Controllers\Client\File\ClienFileController::class, 'index'])->name('index');
             Route::post('/upload', App\Http\Controllers\Client\File\ClientFileUploaderController::class)->name('upload');
+            Route::delete('/{file}', App\Http\Controllers\Client\File\ClientFileDestroyController::class)->name('destroy');
+            Route::get('/', [App\Http\Controllers\Client\File\ClienFileController::class, 'index'])->name('index');
         });
         // Notes
         Route::resource('notes', App\Http\Controllers\Client\Note\ClientNoteController::class)
@@ -70,7 +71,10 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('comments', App\Http\Controllers\Task\TaskCommentController::class)
             ->only(['store', 'update', 'destroy']);
         // Files
-        Route::post('/files/upload', App\Http\Controllers\Task\TaskFileUploaderController::class)->name('files.upload');
+        Route::group(['prefix' => '/files', 'as' => 'files.'], function () {
+            Route::post('/upload', App\Http\Controllers\Task\TaskFileUploaderController::class)->name('upload');
+            Route::delete('/{file}', App\Http\Controllers\Task\TaskFileDestroyController::class)->name('destroy');
+        });
         // ToDos
         Route::patch('/todos/{todo}/check', App\Http\Controllers\Task\ToDo\TaskToDoCheckController::class)->name('todos.check');
         Route::resource('todos', App\Http\Controllers\Task\ToDo\TaskToDoController::class)
@@ -87,7 +91,10 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('comments', App\Http\Controllers\Ticket\TicketCommentController::class)
             ->only(['store', 'update', 'destroy']);
         // Files
-        Route::post('/files/upload', App\Http\Controllers\Ticket\TicketFileUploaderController::class)->name('files.upload');
+        Route::group(['prefix' => '/files', 'as' => 'files.'], function () {
+            Route::post('/upload', App\Http\Controllers\Ticket\TicketFileUploaderController::class)->name('upload');
+            Route::delete('/{file}', App\Http\Controllers\Ticket\TicketFileDestroyController::class)->name('destroy');
+        });
     });
     Route::resource('tickets', App\Http\Controllers\Ticket\TicketController::class);
     // Users
@@ -113,8 +120,11 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('comments', App\Http\Controllers\Project\ProjectCommentController::class)
             ->only(['index', 'store', 'update', 'destroy']);
         // Files
-        Route::get('/files', [App\Http\Controllers\Project\File\ProjectFileController::class, 'index'])->name('files.index');
-        Route::post('/files/upload', App\Http\Controllers\Project\File\ProjectFileUploaderController::class)->name('files.upload');
+        Route::group(['prefix' => '/files', 'as' => 'files.'], function () {
+            Route::post('/upload', App\Http\Controllers\Project\File\ProjectFileUploaderController::class)->name('upload');
+            Route::delete('/{file}', App\Http\Controllers\Project\File\ProjectFileDestroyController::class)->name('destroy');
+            Route::get('/', [App\Http\Controllers\Project\File\ProjectFileController::class, 'index'])->name('index');
+        });
         // Milestones
         Route::group(['prefix' => '/milestone/{milestone}', 'as' => 'milestones.'], function () {
             // Actions
@@ -123,7 +133,10 @@ Route::middleware(['auth'])->group(function () {
             Route::resource('comments', App\Http\Controllers\Project\Milestone\ProjectMilestoneCommentController::class)
                 ->only(['store', 'update', 'destroy']);
             // Files
-            Route::post('/files/upload', App\Http\Controllers\Project\Milestone\ProjectMilestoneFileUploaderController::class)->name('files.upload');
+            Route::group(['prefix' => '/files', 'as' => 'files.'], function () {
+                Route::post('/upload', App\Http\Controllers\Project\Milestone\ProjectMilestoneFileUploaderController::class)->name('upload');
+                Route::delete('/{file}', App\Http\Controllers\Project\Milestone\ProjectMilestoneFileDestroyController::class)->name('destroy');
+            });
         });
         Route::resource('milestones', App\Http\Controllers\Project\Milestone\ProjectMilestoneController::class)
             ->except(['destroy']);
@@ -139,7 +152,10 @@ Route::middleware(['auth'])->group(function () {
                 Route::resource('comments', App\Http\Controllers\Project\Task\ProjectTaskCommentController::class)
                     ->only(['store', 'update', 'destroy']);
                 // Files
-                Route::post('/files/upload', App\Http\Controllers\Project\Task\ProjectTaskFileUploaderController::class)->name('files.upload');
+                Route::group(['prefix' => '/files', 'as' => 'files.'], function () {
+                    Route::post('/upload', App\Http\Controllers\Project\Task\ProjectTaskFileUploaderController::class)->name('upload');
+                    Route::delete('/{file}', App\Http\Controllers\Project\Task\ProjectTaskFileDestroyController::class)->name('destroy');
+                });
                 // ToDos
                 Route::resource('todos', App\Http\Controllers\Project\Task\ToDo\ProjectTaskToDoController::class)
                     ->except(['index', 'show']);
@@ -153,7 +169,10 @@ Route::middleware(['auth'])->group(function () {
             Route::resource('comments', App\Http\Controllers\Project\Ticket\ProjectTicketCommentController::class)
                 ->only(['store', 'update', 'destroy']);
             // Files
-            Route::post('/files/upload', App\Http\Controllers\Project\Ticket\ProjectTicketFileUploaderController::class)->name('files.upload');
+            Route::group(['prefix' => '/files', 'as' => 'files.'], function () {
+                Route::post('/upload', App\Http\Controllers\Project\Ticket\ProjectTicketFileUploaderController::class)->name('upload');
+                Route::delete('/{file}', App\Http\Controllers\Project\Ticket\ProjectTicketFileDestroyController::class)->name('destroy');
+            });
         });
         Route::resource('tickets', App\Http\Controllers\Project\Ticket\ProjectTicketController::class)
             ->except(['destroy']);

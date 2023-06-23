@@ -51,4 +51,12 @@ class FileService
         unlink(public_path('storage/'.File::find($fileId)->path));
         File::destroy($fileId);
     }
+
+    /**
+     * Delete selected file.
+     */
+    public function handleDelete(File $file): void
+    {
+        $file->delete();
+    }
 }

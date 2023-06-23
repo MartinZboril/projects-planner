@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Project;
 
-use Exception;
-use App\Models\Comment;
-use App\Models\Project;
-use App\Traits\FlashTrait;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Services\Data\CommentService;
-use App\Services\Data\ProjectService;
 use App\Http\Requests\Comment\StoreCommentRequest;
 use App\Http\Requests\Comment\UpdateCommentRequest;
+use App\Models\Comment;
+use App\Models\Project;
+use App\Services\Data\CommentService;
+use App\Services\Data\ProjectService;
+use App\Traits\FlashTrait;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class ProjectCommentController extends Controller
 {
@@ -65,7 +65,7 @@ class ProjectCommentController extends Controller
 
         return redirect()->route('projects.comments.index', $project);
     }
-        
+
     /**
      * Remove the projects comment from storage.
      */
@@ -80,5 +80,5 @@ class ProjectCommentController extends Controller
         return response()->json([
             'message' => __('messages.comment.delete'),
         ]);
-    }      
+    }
 }

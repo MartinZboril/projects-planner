@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Project\Task;
 
-use Exception;
-use App\Models\Task;
-use App\Models\Comment;
-use App\Models\Project;
-use App\Traits\FlashTrait;
-use Illuminate\Http\JsonResponse;
-use App\Services\Data\TaskService;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use App\Services\Data\CommentService;
 use App\Http\Requests\Comment\StoreCommentRequest;
 use App\Http\Requests\Comment\UpdateCommentRequest;
+use App\Models\Comment;
+use App\Models\Project;
+use App\Models\Task;
+use App\Services\Data\CommentService;
+use App\Services\Data\TaskService;
+use App\Traits\FlashTrait;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class ProjectTaskCommentController extends Controller
 {
@@ -58,7 +58,7 @@ class ProjectTaskCommentController extends Controller
 
         return redirect()->route('projects.tasks.show', ['project' => $project, 'task' => $task]);
     }
-                
+
     /**
      * Remove the tasks comment from storage.
      */
@@ -73,5 +73,5 @@ class ProjectTaskCommentController extends Controller
         return response()->json([
             'message' => __('messages.comment.delete'),
         ]);
-    }    
+    }
 }

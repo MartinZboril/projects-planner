@@ -1,4 +1,4 @@
-@extends('layouts.master', ['summernote' => true, 'toaster' => true, 'ticket' => true, 'comment' => true])
+@extends('layouts.master', ['summernote' => true, 'toaster' => true, 'ticket' => true, 'comment' => true, 'file' => true])
 
 @section('title', __('pages.title.project'))
 
@@ -20,7 +20,7 @@
                         <x-activity-feed.card />
                     </div>
                     <div class="col-md-7">
-                        <x-file.card :upload-form-route="route('projects.tickets.files.upload', ['project' => $ticket->project, 'ticket' => $ticket])" :files="$ticket->files" />
+                        <x-file.card :upload-form-route="route('projects.tickets.files.upload', ['project' => $ticket->project, 'ticket' => $ticket])" :parent="['project' => $ticket->project, 'ticket' => $ticket]" destroy-form-route-name="tickets.files.destroy" :files="$ticket->files" />
                         <x-comment.card :comments="$ticket->comments" :parent="['project' => $ticket->project, 'ticket' => $ticket]" :store-form-route="route('projects.tickets.comments.store', ['project' => $ticket->project, 'ticket' => $ticket])" update-form-route-name="projects.tickets.comments.update" destroy-form-route-name="projects.tickets.comments.destroy" />     
                     </div>
                 </div> 
