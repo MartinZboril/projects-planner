@@ -1,3 +1,25 @@
+// Delete comment
+function deleteComment(url) {
+    if (!confirm('Do you really want to remove comment?')) return false;
+
+    const token = $('meta[name="csrf-token"]').attr('content');
+    $.ajax({
+        url: url,
+        type: 'DELETE',
+        data: {
+            "_token": token,
+        },
+        error: function() {
+            toastr.error('An error has occurred!');
+        },
+        success: function (data) {
+            sessionStorage .setItem('message', data.message)
+            sessionStorage .setItem('type', 'info')
+            window.location.reload(); 
+        }
+    });
+}
+// Update content view to show edit form
 function updateContentView(mode, id) {
     const commentContent = $('#content-comment-' + id);
     const commentEdit = $('#edit-form-comment-' + id);

@@ -108,7 +108,7 @@ class TaskController extends Controller
         }
 
         return response()->json([
-            'message' => __('messages.task.deleted'),
+            'message' => __('messages.task.delete'),
         ]);
     }
 }

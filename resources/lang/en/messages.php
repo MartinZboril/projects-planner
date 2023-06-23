@@ -75,6 +75,7 @@ return [
     'comment' => [
         'create' => 'Comment was created!',
         'update' => 'Comment was updated!',
+        'delete' => 'Comment was deleted!',
     ],
     'file' => [
         'upload' => 'Upload was completed!',

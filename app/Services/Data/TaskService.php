@@ -77,7 +77,7 @@ class TaskService
     }
 
     /**
-     * Delete selected task
+     * Delete selected task.
      */
     public function handleDelete(Task $task): void
     {

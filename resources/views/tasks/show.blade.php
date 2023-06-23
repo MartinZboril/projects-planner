@@ -22,7 +22,7 @@
                     <div class="col-md-7">
                         <x-todo.card :todos="$task->todos" :create-form-route="route('tasks.todos.create', $task)" />
                         <x-file.card :upload-form-route="route('tasks.files.upload', $task)" :files="$task->files" />
-                        <x-comment.card :comments="$task->comments" :parent="['task' => $task]" :store-form-route="route('tasks.comments.store', $task)" update-form-route-name="tasks.comments.update" /> 
+                        <x-comment.card :comments="$task->comments" :parent="['task' => $task]" :store-form-route="route('tasks.comments.store', $task)" update-form-route-name="tasks.comments.update" destroy-form-route-name="tasks.comments.destroy" /> 
                     </div>
                 </div> 
             </div>

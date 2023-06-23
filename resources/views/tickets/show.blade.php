@@ -21,7 +21,7 @@
                     </div>
                     <div class="col-md-7">
                         <x-file.card :upload-form-route="route('tickets.files.upload', $ticket)" :files="$ticket->files" />
-                        <x-comment.card :comments="$ticket->comments" :parent="[$ticket]" :store-form-route="route('tickets.comments.store', $ticket)" update-form-route-name="tickets.comments.update" /> 
+                        <x-comment.card :comments="$ticket->comments" :parent="[$ticket]" :store-form-route="route('tickets.comments.store', $ticket)" update-form-route-name="tickets.comments.update" destroy-form-route-name="tickets.comments.destroy" /> 
                     </div>
                 </div> 
             </div>

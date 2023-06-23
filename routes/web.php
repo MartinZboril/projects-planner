@@ -18,7 +18,7 @@ Route::middleware(['auth'])->group(function () {
     Route::group(['prefix' => 'clients/{client}', 'as' => 'clients.'], function () {
         // Comments
         Route::resource('comments', App\Http\Controllers\Client\ClientCommentController::class)
-            ->except(['create', 'show', 'edit', 'destroy']);
+            ->only(['index', 'store', 'update', 'destroy']);
         // Files
         Route::group(['prefix' => '/files', 'as' => 'files.'], function () {
             Route::get('/', [App\Http\Controllers\Client\File\ClienFileController::class, 'index'])->name('index');
@@ -68,7 +68,7 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/pause', App\Http\Controllers\Task\TaskPauseController::class)->name('pause');
         // Comments
         Route::resource('comments', App\Http\Controllers\Task\TaskCommentController::class)
-            ->only(['store', 'update']);
+            ->only(['store', 'update', 'destroy']);
         // Files
         Route::post('/files/upload', App\Http\Controllers\Task\TaskFileUploaderController::class)->name('files.upload');
         // ToDos
@@ -85,7 +85,7 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/mark', App\Http\Controllers\Ticket\TicketMarkController::class)->name('mark');
         // Comments
         Route::resource('comments', App\Http\Controllers\Ticket\TicketCommentController::class)
-            ->only(['store', 'update']);
+            ->only(['store', 'update', 'destroy']);
         // Files
         Route::post('/files/upload', App\Http\Controllers\Ticket\TicketFileUploaderController::class)->name('files.upload');
     });
@@ -111,7 +111,7 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/mark', App\Http\Controllers\Project\ProjectMarkController::class)->name('mark');
         // Comments
         Route::resource('comments', App\Http\Controllers\Project\ProjectCommentController::class)
-            ->except(['create', 'show', 'edit', 'destroy']);
+            ->only(['index', 'store', 'update', 'destroy']);
         // Files
         Route::get('/files', [App\Http\Controllers\Project\File\ProjectFileController::class, 'index'])->name('files.index');
         Route::post('/files/upload', App\Http\Controllers\Project\File\ProjectFileUploaderController::class)->name('files.upload');
@@ -121,7 +121,7 @@ Route::middleware(['auth'])->group(function () {
             Route::patch('/mark', App\Http\Controllers\Project\Milestone\ProjectMilestoneMarkController::class)->name('mark');
             // Comments
             Route::resource('comments', App\Http\Controllers\Project\Milestone\ProjectMilestoneCommentController::class)
-                ->only(['store', 'update']);
+                ->only(['store', 'update', 'destroy']);
             // Files
             Route::post('/files/upload', App\Http\Controllers\Project\Milestone\ProjectMilestoneFileUploaderController::class)->name('files.upload');
         });
@@ -137,7 +137,7 @@ Route::middleware(['auth'])->group(function () {
             Route::group(['prefix' => '{task}'], function () {
                 // Comments
                 Route::resource('comments', App\Http\Controllers\Project\Task\ProjectTaskCommentController::class)
-                    ->only(['store', 'update']);
+                    ->only(['store', 'update', 'destroy']);
                 // Files
                 Route::post('/files/upload', App\Http\Controllers\Project\Task\ProjectTaskFileUploaderController::class)->name('files.upload');
                 // ToDos
@@ -151,7 +151,7 @@ Route::middleware(['auth'])->group(function () {
         Route::group(['prefix' => 'tickets/{ticket}', 'as' => 'tickets.'], function () {
             // Comments
             Route::resource('comments', App\Http\Controllers\Project\Ticket\ProjectTicketCommentController::class)
-                ->only(['store', 'update']);
+                ->only(['store', 'update', 'destroy']);
             // Files
             Route::post('/files/upload', App\Http\Controllers\Project\Ticket\ProjectTicketFileUploaderController::class)->name('files.upload');
         });

@@ -72,7 +72,7 @@ class TicketService
     }
 
     /**
-     * Delete selected ticket
+     * Delete selected ticket.
      */
     public function handleDelete(Ticket $ticket): void
     {

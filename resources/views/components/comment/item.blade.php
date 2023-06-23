@@ -20,6 +20,7 @@
         </div>
         <div class="timeline-footer" id="footer-comment-{{ $comment->id }}">
             <a class="btn btn-primary btn-sm" onclick="updateContentView('edit', {{ $comment->id }})"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
+            <a href="#" class="btn btn-sm btn-danger" onclick="deleteComment('{{ $comment->destroy_route }}')"><i class="fas fa-trash mr-1"></i>Delete</a>
         </div>
     </div>
 </div>

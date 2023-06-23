@@ -14,10 +14,11 @@ class Card extends Component
 
     public $displayHeader;
 
-    public function __construct(Collection $comments, array $parent, string $storeFormRoute, string $updateFormRouteName, ?bool $displayHeader = true)
+    public function __construct(Collection $comments, array $parent, string $storeFormRoute, string $updateFormRouteName, string $destroyFormRouteName, ?bool $displayHeader = true)
     {
-        $this->comments = $comments->each(function (Comment $comment) use ($parent, $updateFormRouteName) {
+        $this->comments = $comments->each(function (Comment $comment) use ($parent, $updateFormRouteName, $destroyFormRouteName) {
             $comment->update_route = route($updateFormRouteName, $parent + ['comment' => $comment]);
+            $comment->destroy_route = route($destroyFormRouteName, $parent + ['comment' => $comment]);
         });
         $this->storeFormRoute = $storeFormRoute;
         $this->displayHeader = $displayHeader;

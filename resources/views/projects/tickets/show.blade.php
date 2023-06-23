@@ -8,7 +8,7 @@
         <div class="p-3 mb-3" style="background-color:white;">
             <a href="{{ route('projects.tickets.index', $ticket->project) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
             <a href="{{ route('projects.tickets.edit', ['project' => $ticket->project, 'ticket' => $ticket]) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
-            @include('tickets.partials.buttons', ['buttonSize' => 'sm', 'type' => 'detail', 'tableIdentifier' => '', 'redirect' => route('projects.tickets.index', $task->project)])
+            @include('tickets.partials.buttons', ['buttonSize' => 'sm', 'type' => 'detail', 'tableIdentifier' => '', 'redirect' => route('projects.tickets.index', $ticket->project)])
         </div>
         <!-- Main content -->
         <section class="content">
@@ -21,7 +21,7 @@
                     </div>
                     <div class="col-md-7">
                         <x-file.card :upload-form-route="route('projects.tickets.files.upload', ['project' => $ticket->project, 'ticket' => $ticket])" :files="$ticket->files" />
-                        <x-comment.card :comments="$ticket->comments" :parent="['project' => $ticket->project, 'ticket' => $ticket]" :store-form-route="route('projects.tickets.comments.store', ['project' => $ticket->project, 'ticket' => $ticket])" update-form-route-name="projects.tickets.comments.update" />     
+                        <x-comment.card :comments="$ticket->comments" :parent="['project' => $ticket->project, 'ticket' => $ticket]" :store-form-route="route('projects.tickets.comments.store', ['project' => $ticket->project, 'ticket' => $ticket])" update-form-route-name="projects.tickets.comments.update" destroy-form-route-name="projects.tickets.comments.destroy" />     
                     </div>
                 </div> 
             </div>

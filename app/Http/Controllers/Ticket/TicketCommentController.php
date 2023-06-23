@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Ticket;
 
+use Exception;
+use App\Models\Ticket;
+use App\Models\Comment;
+use App\Traits\FlashTrait;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Services\Data\TicketService;
+use App\Services\Data\CommentService;
 use App\Http\Requests\Comment\StoreCommentRequest;
 use App\Http\Requests\Comment\UpdateCommentRequest;
-use App\Models\Comment;
-use App\Models\Ticket;
-use App\Services\Data\CommentService;
-use App\Services\Data\TicketService;
-use App\Traits\FlashTrait;
-use Exception;
-use Illuminate\Support\Facades\Log;
 
 class TicketCommentController extends Controller
 {
@@ -56,4 +57,20 @@ class TicketCommentController extends Controller
 
         return redirect()->route('tickets.show', $ticket);
     }
+        
+    /**
+     * Remove the tickets comment from storage.
+     */
+    public function destroy(Ticket $ticket, Comment $comment): JsonResponse
+    {
+        try {
+            $this->commentService->handleDelete($comment);
+        } catch (Exception $exception) {
+            Log::error($exception);
+        }
+
+        return response()->json([
+            'message' => __('messages.comment.delete'),
+        ]);
+    }    
 }
