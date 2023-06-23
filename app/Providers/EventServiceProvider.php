@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Models\Comment;
+use App\Models\Milestone;
 use App\Models\Task;
 use App\Models\Ticket;
 use App\Observers\CommentObserver;
+use App\Observers\MilestoneObserver;
 use App\Observers\TaskObserver;
 use App\Observers\TicketObserver;
 use Illuminate\Auth\Events\Registered;
@@ -34,6 +36,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         Comment::observe(CommentObserver::class);
+        Milestone::observe(MilestoneObserver::class);
         Task::observe(TaskObserver::class);
         Ticket::observe(TicketObserver::class);
     }

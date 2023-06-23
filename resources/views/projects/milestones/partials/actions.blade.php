@@ -1,3 +1,3 @@
 <a href="{{ route('projects.milestones.index', $milestone->project) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
 <a href="{{ route('projects.milestones.edit', ['project' => $milestone->project, 'milestone' => $milestone->id]) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
-@include('projects.milestones.partials.buttons', ['buttonSize' => 'sm', 'type' => $type, 'tableIdentifier' => ''])
+@include('projects.milestones.partials.buttons', ['buttonSize' => 'sm', 'type' => $type, 'tableIdentifier' => '', 'redirect' => route('projects.milestones.index', $milestone->project)])

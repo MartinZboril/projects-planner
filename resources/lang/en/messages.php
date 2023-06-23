@@ -12,6 +12,7 @@ return [
         'update' => 'Milestone was updated!',
         'mark' => 'Milestone was marked!',
         'unmark' => 'Milestone was unmarked!',
+        'milestone' => 'Milestone was deleted!',
     ],
     'project' => [
         'create' => 'Project was created!',

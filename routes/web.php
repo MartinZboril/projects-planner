@@ -138,8 +138,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::delete('/{file}', App\Http\Controllers\Project\Milestone\ProjectMilestoneFileDestroyController::class)->name('destroy');
             });
         });
-        Route::resource('milestones', App\Http\Controllers\Project\Milestone\ProjectMilestoneController::class)
-            ->except(['destroy']);
+        Route::resource('milestones', App\Http\Controllers\Project\Milestone\ProjectMilestoneController::class);
         // Notes
         Route::resource('notes', App\Http\Controllers\Project\Note\ProjectNoteController::class)
             ->except(['show']);

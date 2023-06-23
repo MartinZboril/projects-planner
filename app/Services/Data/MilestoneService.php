@@ -49,4 +49,12 @@ class MilestoneService
 
         return $milestone->fresh();
     }
+
+    /**
+     * Delete selected milestone.
+     */
+    public function handleDelete(Milestone $milestone): void
+    {
+        $milestone->delete();
+    }
 }
