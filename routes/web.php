@@ -27,7 +27,7 @@ Route::middleware(['auth'])->group(function () {
         });
         // Notes
         Route::resource('notes', App\Http\Controllers\Client\Note\ClientNoteController::class)
-            ->except(['show', 'destroy']);
+            ->except(['show']);
         // Marking
         Route::patch('/mark', App\Http\Controllers\Client\ClientMarkController::class)->name('mark');
     });
@@ -47,7 +47,7 @@ Route::middleware(['auth'])->group(function () {
     // Notes
     Route::patch('notes/{note}/mark', App\Http\Controllers\Note\NoteMarkController::class)->name('notes.mark');
     Route::resource('notes', App\Http\Controllers\Note\NoteController::class)
-        ->except(['show', 'destroy']);
+        ->except(['show']);
     // Releases
     Route::get('/releases', App\Http\Controllers\ReleaseController::class)->name('releases');
     // Reporting
@@ -142,7 +142,7 @@ Route::middleware(['auth'])->group(function () {
             ->except(['destroy']);
         // Notes
         Route::resource('notes', App\Http\Controllers\Project\Note\ProjectNoteController::class)
-            ->except(['show', 'destroy']);
+            ->except(['show']);
         // Tasks
         Route::group(['prefix' => 'tasks', 'as' => 'tasks.'], function () {
             // Kanban

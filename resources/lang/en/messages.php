@@ -71,6 +71,7 @@ return [
         'update' => 'Note was updated!',
         'mark' => 'Note was marked!',
         'unmark' => 'Note was unmarked!',
+        'delete' => 'Note was deleted!',
     ],
     'comment' => [
         'create' => 'Comment was created!',

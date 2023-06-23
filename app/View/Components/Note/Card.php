@@ -12,10 +12,11 @@ class Card extends Component
 
     public $redirect;
 
-    public function __construct(Collection $notes, string $editFormRouteName, ?array $parent = [], ?string $type = 'note')
+    public function __construct(Collection $notes, string $editFormRouteName, string $destroyFormRouteName, ?array $parent = [], ?string $type = 'note')
     {
-        $this->notes = $notes->each(function (Note $note) use ($editFormRouteName, $parent) {
+        $this->notes = $notes->each(function (Note $note) use ($editFormRouteName, $destroyFormRouteName, $parent) {
             $note->edit_route = route($editFormRouteName, $parent + ['note' => $note]);
+            $note->destroy_route = route($destroyFormRouteName, $parent + ['note' => $note]);
         });
         switch ($type) {
             case 'client':

@@ -8,6 +8,7 @@
             <a href="#" class="btn btn-tool" onclick="markNote('{{ route('notes.mark', $note) }}', '{{ $redirect }}')">
                 <i class="{{ ($note->is_marked ? 'fas' : 'far') }} fa-bookmark"></i>
             </a>
+            <a href="#" class="btn btn-tool" onclick="deleteNote('{{ $note->destroy_route }}')"><i class="fas fa-trash mr-1"></i></a>
         </div>
     </div>
     <div class="card-body">
