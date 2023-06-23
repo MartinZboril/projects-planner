@@ -19,8 +19,7 @@ class AddTicketIdToTasksTable extends Migration
                 'ticket_id'
             )
                 ->nullable()
-                ->constrained('tickets')
-                ->onDelete('set null');
+                ->constrained('tickets');
         });
     }
 

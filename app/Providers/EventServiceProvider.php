@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Models\Comment;
 use App\Models\Task;
+use App\Models\Ticket;
 use App\Observers\CommentObserver;
 use App\Observers\TaskObserver;
+use App\Observers\TicketObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -33,5 +35,6 @@ class EventServiceProvider extends ServiceProvider
     {
         Comment::observe(CommentObserver::class);
         Task::observe(TaskObserver::class);
+        Ticket::observe(TicketObserver::class);
     }
 }

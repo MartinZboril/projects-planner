@@ -70,4 +70,12 @@ class TicketService
 
         return $ticket->fresh();
     }
+
+    /**
+     * Delete selected ticket
+     */
+    public function handleDelete(Ticket $ticket): void
+    {
+        $ticket->delete();
+    }
 }

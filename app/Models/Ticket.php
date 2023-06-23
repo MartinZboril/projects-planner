@@ -2,22 +2,24 @@
 
 namespace App\Models;
 
-use App\Enums\TicketPriorityEnum;
-use App\Enums\TicketStatusEnum;
 use App\Enums\TicketTypeEnum;
+use App\Enums\TicketStatusEnum;
+use App\Enums\TicketPriorityEnum;
 use App\Traits\Scopes\MarkedRecords;
 use App\Traits\Scopes\OverdueRecords;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Ticket extends Model
 {
-    use HasFactory, MarkedRecords, OverdueRecords;
+    use HasFactory, MarkedRecords, OverdueRecords, SoftDeletes;
 
     protected $guarded = [
         'id', 'created_at', 'updated_at',

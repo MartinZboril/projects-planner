@@ -47,6 +47,7 @@ return [
         'archive' => 'Ticket has been archived!',
         'mark' => 'Ticket was marked!',
         'unmark' => 'Ticket was unmarked!',
+        'delete' => 'Ticket was deleted!',
     ],
     'timer' => [
         'create' => 'Timer was created!',

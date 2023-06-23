@@ -89,8 +89,7 @@ Route::middleware(['auth'])->group(function () {
         // Files
         Route::post('/files/upload', App\Http\Controllers\Ticket\TicketFileUploaderController::class)->name('files.upload');
     });
-    Route::resource('tickets', App\Http\Controllers\Ticket\TicketController::class)
-        ->except(['destroy']);
+    Route::resource('tickets', App\Http\Controllers\Ticket\TicketController::class);
     // Users
     Route::post('/users/load', App\Http\Controllers\UserLoadByProjectController::class)->name('users.load');
     Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
