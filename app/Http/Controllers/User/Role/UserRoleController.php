@@ -81,4 +81,20 @@ class UserRoleController extends Controller
 
         return redirect()->route('users.roles.index');
     }
+
+    /**
+     * Remove the role from storage.
+     */
+    public function destroy(Role $role): JsonResponse
+    {
+        try {
+            $this->roleService->handleDelete($role);
+        } catch (Exception $exception) {
+            Log::error($exception);
+        }
+
+        return response()->json([
+            'message' => __('messages.role.delete'),
+        ]);
+    }
 }

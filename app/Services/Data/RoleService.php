@@ -27,4 +27,12 @@ class RoleService
     {
         ($role->permissions()->count() === 0) ? $role->permissions()->attach($inputs['permissions']) : $role->permissions()->sync($inputs['permissions']);
     }
+
+    /**
+     * Delete selected role.
+     */
+    public function handleDelete(Role $role): void
+    {
+        $role->delete();
+    }
 }

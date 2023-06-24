@@ -28,7 +28,7 @@ class CreateRateUserTable extends Migration
                 ->constrained('users')
                 ->onDelete('cascade');
             $table->timestamps();
-            $table->softDeletes();    
+            $table->softDeletes();
         });
     }
 

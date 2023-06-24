@@ -88,6 +88,7 @@ return [
     'role' => [
         'create' => 'Role was created!',
         'update' => 'Role was updated!',
+        'delete' => 'Role was deleted!',
     ],
     'complete' => 'Action was completed!',
     'error' => 'An error has occurred!',

@@ -22,7 +22,7 @@ class RolesDataTable extends DataTable
                 return $role->is_active ? 'Yes' : 'No';
             })
             ->editColumn('buttons', function (Role $role) {
-                return '<a href="'.route('users.roles.edit', $role).'" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>';
+                return '<a href="'.route('users.roles.edit', $role).'" class="btn btn-xs btn-dark mr-1"><i class="fas fa-pencil-alt"></i></a><a href="#" class="btn btn-xs btn-danger" onclick="deleteRole(\''.route('users.roles.destroy', $role).'\', \'table\', \'#roles-table\', null)"><i class="fas fa-trash"></i></a>';
             })
             ->rawColumns(['name', 'buttons']);
     }

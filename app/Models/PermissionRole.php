@@ -7,19 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class RateUser extends Model
+class PermissionRole extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'rate_user';
+    protected $table = 'permission_role';
 
-    public function rate(): BelongsTo
+    public function permission(): BelongsTo
     {
-        return $this->belongsTo(Rate::class);
+        return $this->belongsTo(Permission::class);
     }
 
-    public function user(): BelongsTo
+    public function role(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Role::class);
     }
 }

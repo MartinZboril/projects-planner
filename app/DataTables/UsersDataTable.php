@@ -25,7 +25,7 @@ class UsersDataTable extends DataTable
                 return Blade::render('<x-site.ui.user-icon :user="$user" />', ['user' => $user]).'<a href="'.route('users.show', $user).'" class="ml-1">'.$user->name.' '.$user->surname.'</a>';
             })
             ->editColumn('role', function (User $user) {
-                return $user->role->name;
+                return $user->role_label;
             })
             ->editColumn('job_title', function (User $user) {
                 return $user->job_title_label;

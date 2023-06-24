@@ -142,7 +142,10 @@
     @endif    
     @if(!empty($rate))
       <script src="{{ asset('js/actions/rate.js') }}"></script>  
-    @endif                                
+    @endif         
+    @if(!empty($role))
+      <script src="{{ asset('js/actions/role.js') }}"></script>  
+    @endif                             
     <script src="{{ asset('js/timer.js') }}" defer></script>
     <script src="{{ mix('js/app.js') }}"></script>
     @stack('scripts')

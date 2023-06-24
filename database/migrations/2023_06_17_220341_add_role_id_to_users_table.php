@@ -16,6 +16,7 @@ return new class extends Migration
                 \App\Models\Role::class,
                 'role_id'
             )
+                ->nullable()
                 ->constrained('roles')
                 ->onDelete('cascade');
         });

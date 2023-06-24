@@ -107,7 +107,7 @@ Route::middleware(['auth'])->group(function () {
             ->except(['show']);
         // Roles
         Route::resource('roles', App\Http\Controllers\User\Role\UserRoleController::class)
-            ->except(['show', 'destroy']);
+            ->except(['show']);
     });
     Route::resource('users', App\Http\Controllers\User\UserController::class)
         ->except(['destroy']);

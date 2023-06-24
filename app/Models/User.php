@@ -117,4 +117,11 @@ class User extends Authenticatable
             get: fn ($value, $attributes) => $attributes['phone'] ?? 'NaN',
         );
     }
+
+    protected function roleLabel(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->role->name ?? 'NaN',
+        );
+    }
 }

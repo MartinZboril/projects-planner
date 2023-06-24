@@ -21,6 +21,8 @@ return new class extends Migration
                 \App\Models\Role::class,
                 'role_id'
             )->constrained('roles');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
