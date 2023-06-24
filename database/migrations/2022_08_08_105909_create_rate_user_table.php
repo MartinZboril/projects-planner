@@ -18,11 +18,17 @@ class CreateRateUserTable extends Migration
             $table->foreignIdFor(
                 \App\Models\Rate::class,
                 'rate_id'
-            )->constrained('rates');
+            )
+                ->constrained('rates')
+                ->onDelete('cascade');
             $table->foreignIdFor(
                 \App\Models\User::class,
                 'user_id'
-            )->constrained('users');
+            )
+                ->constrained('users')
+                ->onDelete('cascade');
+            $table->timestamps();
+            $table->softDeletes();    
         });
     }
 

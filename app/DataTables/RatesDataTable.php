@@ -26,7 +26,7 @@ class RatesDataTable extends DataTable
                 return number_format($rate->value, 2);
             })
             ->editColumn('buttons', function (Rate $rate) {
-                return '<a href="'.route('users.rates.edit', $rate).'" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>';
+                return '<a href="'.route('users.rates.edit', $rate).'" class="btn btn-xs btn-dark mr-1"><i class="fas fa-pencil-alt"></i></a><a href="#" class="btn btn-xs btn-danger" onclick="deleteRate(\''.route('users.rates.destroy', $rate).'\', \'table\', \'#rates-table\', null)"><i class="fas fa-trash"></i></a>';
             })
             ->rawColumns(['note_popover', 'name', 'buttons']);
     }

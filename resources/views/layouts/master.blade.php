@@ -139,7 +139,10 @@
     @endif    
     @if(!empty($file))
       <script src="{{ asset('js/actions/file.js') }}"></script>  
-    @endif                            
+    @endif    
+    @if(!empty($rate))
+      <script src="{{ asset('js/actions/rate.js') }}"></script>  
+    @endif                                
     <script src="{{ asset('js/timer.js') }}" defer></script>
     <script src="{{ mix('js/app.js') }}"></script>
     @stack('scripts')

@@ -69,7 +69,7 @@ class User extends Authenticatable
 
     public function rates(): BelongsToMany
     {
-        return $this->belongsToMany(Rate::class, 'rate_user', 'user_id', 'rate_id');
+        return $this->belongsToMany(Rate::class, 'rate_user', 'user_id', 'rate_id')->withTimestamps();
     }
 
     public function timers(): HasMany

@@ -104,7 +104,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{user}/rates/assignment', App\Http\Controllers\User\Rate\UserRateAssignmentController::class)->name('rates.assignment');
         Route::post('/{user}/rates/assign', App\Http\Controllers\User\Rate\UserRateAssignController::class)->name('rates.assign');
         Route::resource('rates', App\Http\Controllers\User\Rate\UserRateController::class)
-            ->except(['show', 'destroy']);
+            ->except(['show']);
         // Roles
         Route::resource('roles', App\Http\Controllers\User\Role\UserRoleController::class)
             ->except(['show', 'destroy']);

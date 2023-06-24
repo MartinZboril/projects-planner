@@ -27,4 +27,12 @@ class RateService
     {
         ($rate->users()->count() === 0) ? $rate->users()->attach($inputs['users']) : $rate->users()->sync($inputs['users']);
     }
+
+    /**
+     * Delete selected rate.
+     */
+    public function handleDelete(Rate $rate): void
+    {
+        $rate->delete();
+    }
 }
