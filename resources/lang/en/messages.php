@@ -6,6 +6,7 @@ return [
         'update' => 'Client was updated!',
         'mark' => 'Client was marked!',
         'unmark' => 'Client was unmarked!',
+        'delete' => 'Client was deleted!',
     ],
     'milestone' => [
         'create' => 'Milestone was created!',
@@ -22,6 +23,7 @@ return [
         'archive' => 'Project has been archived!',
         'mark' => 'Project was marked!',
         'unmark' => 'Project was unmarked!',
+        'delete' => 'Project was deleted!',
     ],
     'rate' => [
         'create' => 'Rate was created!',

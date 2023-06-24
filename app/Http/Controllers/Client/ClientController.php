@@ -93,4 +93,20 @@ class ClientController extends Controller
             ? redirect()->route('clients.index')
             : redirect()->route('clients.show', $client);
     }
+    
+    /**
+     * Remove the client from storage.
+     */
+    public function destroy(Client $client): JsonResponse
+    {
+        try {
+            $this->clientService->handleDelete($client);
+        } catch (Exception $exception) {
+            Log::error($exception);
+        }
+
+        return response()->json([
+            'message' => __('messages.client.delete'),
+        ]);
+    }
 }

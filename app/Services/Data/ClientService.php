@@ -77,4 +77,12 @@ class ClientService
 
         return $client->fresh();
     }
+    
+    /**
+     * Delete selected client.
+     */
+    public function handleDelete(Client $client): void
+    {
+        $client->delete();
+    }
 }

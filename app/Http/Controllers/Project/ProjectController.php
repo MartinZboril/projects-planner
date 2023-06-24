@@ -106,7 +106,7 @@ class ProjectController extends Controller
         }
 
         return response()->json([
-            'message' => __('messages.role.delete'),
+            'message' => __('messages.project.delete'),
         ]);
     }
 }
