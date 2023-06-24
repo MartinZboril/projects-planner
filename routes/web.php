@@ -183,6 +183,5 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('timers', App\Http\Controllers\Project\Timer\ProjectTimerController::class)
             ->except(['show']);
     });
-    Route::resource('projects', App\Http\Controllers\Project\ProjectController::class)
-        ->except(['destroy']);
+    Route::resource('projects', App\Http\Controllers\Project\ProjectController::class);
 });

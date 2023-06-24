@@ -52,7 +52,7 @@ class ProjectsDataTable extends DataTable
             ->editColumn('buttons', function (Project $project) {
                 $buttons = '<a href="'.route('projects.edit', $project).'" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a> ';
                 $buttons .= '<a href="'.route('projects.show', $project).'" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a> ';
-                $buttons .= view('projects.partials.buttons', ['project' => $project, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#'.($this->table_identifier ?? 'projects-table')]);
+                $buttons .= view('projects.partials.buttons', ['project' => $project, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#'.($this->table_identifier ?? 'projects-table'), 'redirect' => null]);
 
                 return $buttons;
             })

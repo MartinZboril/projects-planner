@@ -27,3 +27,6 @@
 <a href="#" class="btn btn-{{ $buttonSize }} btn-primary" onclick="markProject('{{ route('projects.mark', $project) }}', '{{ $type }}', '{{ $tableIdentifier }}')">
     <i class="{{ ($project->is_marked ? 'fas' : 'far') }} fa-bookmark" id="project-{{ $project->id }}-marked"></i>
 </a>
+<a href="#" class="btn btn-{{ $buttonSize }} btn-danger" onclick="deleteProject('{{ route('projects.destroy', $project) }}', '{{ $type }}', '{{ $tableIdentifier }}', '{{ $redirect }}')">
+    <x-site.ui.icon icon="fas fa-trash" :text="$hideButtonText ?? 'Delete'" />
+</a>

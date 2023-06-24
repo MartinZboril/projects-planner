@@ -6,6 +6,7 @@ use App\Enums\ProjectStatusEnum;
 use App\Enums\TaskStatusEnum;
 use App\Traits\Scopes\MarkedRecords;
 use App\Traits\Scopes\OverdueRecords;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,14 +15,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model
 {
-    use HasFactory, MarkedRecords, OverdueRecords;
+    use HasFactory, MarkedRecords, OverdueRecords, SoftDeletes, CascadeSoftDeletes;
 
     protected $fillable = [
         'status', 'client_id', 'name', 'started_at', 'dued_at', 'estimated_hours', 'budget', 'description', 'is_marked',
     ];
+
+    protected $cascadeDeletes = ['tasks', 'milestones', 'tickets', 'timers'];
 
     public const VALIDATION_RULES = [
         'client_id' => ['required', 'integer', 'exists:clients,id'],
@@ -49,7 +53,7 @@ class Project extends Model
 
     public function team(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'project_user', 'project_id', 'user_id');
+        return $this->belongsToMany(User::class, 'project_user', 'project_id', 'user_id')->withTimestamps();
     }
 
     public function tasks(): HasMany

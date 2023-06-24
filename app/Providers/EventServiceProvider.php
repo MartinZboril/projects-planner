@@ -4,12 +4,14 @@ namespace App\Providers;
 
 use App\Models\Comment;
 use App\Models\Milestone;
+use App\Models\Project;
 use App\Models\Rate;
 use App\Models\Role;
 use App\Models\Task;
 use App\Models\Ticket;
 use App\Observers\CommentObserver;
 use App\Observers\MilestoneObserver;
+use App\Observers\ProjectObserver;
 use App\Observers\RateObserver;
 use App\Observers\RoleObserver;
 use App\Observers\TaskObserver;
@@ -40,6 +42,7 @@ class EventServiceProvider extends ServiceProvider
     {
         Comment::observe(CommentObserver::class);
         Milestone::observe(MilestoneObserver::class);
+        Project::observe(ProjectObserver::class);
         Rate::observe(RateObserver::class);
         Role::observe(RoleObserver::class);
         Task::observe(TaskObserver::class);
