@@ -66,7 +66,14 @@
                         </div>
                     </div>
                     <div class="col-md-6 text-center">
-                        <img src="{{ ($user->avatar->id ?? false) ? asset('storage/' . $user->avatar->path) : asset('dist/img/user.png') }}" class="img-circle" alt="User Image" style="width: 80px;height: 80px;">
+                        <img id="user-avatar-image" src="{{ ($user->avatar->id ?? false) ? asset('storage/' . $user->avatar->path) : asset('dist/img/user.png') }}" class="img-circle" alt="User Image" style="width: 80px;height: 80px;">
+                        @if ($user->avatar->id ?? false)
+                            <div id="remove-user-avatar">
+                                <a href="#" class="text-danger" onclick="removeUserAvatar('{{ route('users.avatar.remove', $user) }}', '{{ asset('dist/img/user.png') }}')">
+                                    <i class="fas fa-unlink"></i> Remove
+                                </a>
+                            </div>                            
+                        @endif
                     </div>
                 </div>
                 <hr>

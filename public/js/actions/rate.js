@@ -13,7 +13,6 @@ function deleteRate(url, type, tableIdentifier = '#rates-table', redirect) {
             toastr.error('An error has occurred!');
         },
         success: function (data) {
-            console.log(redirect);
             if (type === 'table') {
                 $(tableIdentifier).DataTable().ajax.reload(); 
             } else {

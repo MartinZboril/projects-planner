@@ -49,7 +49,7 @@ class FileService
     public function handleRemoveFile(int $fileId): void
     {
         unlink(public_path('storage/'.File::find($fileId)->path));
-        File::destroy($fileId);
+        File::find($fileId)->forceDelete();
     }
 
     /**

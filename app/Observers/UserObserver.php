@@ -11,6 +11,7 @@ class UserObserver
      */
     public function deleted(User $user): void
     {
+        $user->avatar()->delete();
         $user->address()->delete();
         $user->notes()->where('is_private', true)->delete();
     }

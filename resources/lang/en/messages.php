@@ -71,6 +71,9 @@ return [
         'create' => 'User was created!',
         'update' => 'User was updated!',
         'delete' => 'User was deleted!',
+        'avatar' => [
+            'remove' => 'Avatar was removed!',
+        ],
     ],
     'note' => [
         'create' => 'Note was created!',

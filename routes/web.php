@@ -16,6 +16,9 @@ Route::middleware(['auth'])->group(function () {
     });
     // Clients
     Route::group(['prefix' => 'clients/{client}', 'as' => 'clients.'], function () {
+        // Actions
+        Route::patch('/mark', App\Http\Controllers\Client\ClientMarkController::class)->name('mark');
+        Route::delete('/logo/remove', App\Http\Controllers\Client\ClientLogoRemoveController::class)->name('logo.remove');
         // Comments
         Route::resource('comments', App\Http\Controllers\Client\ClientCommentController::class)
             ->only(['index', 'store', 'update', 'destroy']);
@@ -28,8 +31,6 @@ Route::middleware(['auth'])->group(function () {
         // Notes
         Route::resource('notes', App\Http\Controllers\Client\Note\ClientNoteController::class)
             ->except(['show']);
-        // Marking
-        Route::patch('/mark', App\Http\Controllers\Client\ClientMarkController::class)->name('mark');
     });
     Route::resource('clients', App\Http\Controllers\Client\ClientController::class);
     // Dashboard
@@ -99,6 +100,8 @@ Route::middleware(['auth'])->group(function () {
     // Users
     Route::post('/users/load', App\Http\Controllers\UserLoadByProjectController::class)->name('users.load');
     Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
+        // Actions
+        Route::delete('/{user}/avatar/remove', App\Http\Controllers\User\UserAvatarRemoveController::class)->name('avatar.remove');
         // Rates
         Route::get('/{user}/rates/assignment', App\Http\Controllers\User\Rate\UserRateAssignmentController::class)->name('rates.assignment');
         Route::post('/{user}/rates/assign', App\Http\Controllers\User\Rate\UserRateAssignController::class)->name('rates.assign');

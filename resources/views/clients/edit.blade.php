@@ -1,4 +1,4 @@
-@extends('layouts.master')
+@extends('layouts.master', ['client' => true])
 
 @section('title', __('pages.title.client'))
 

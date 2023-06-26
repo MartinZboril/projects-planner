@@ -65,4 +65,17 @@ class UserService
     {
         $user->delete();
     }
+    
+    /**
+     * Remove selected users avatar.
+     */
+    public function handleRemoveAvatar(User $user): void
+    {
+        if ($oldAvatarId=($user->avatar_id ?? null)) {
+            $user->avatar_id = null;
+            $user->save();
+
+            $this->fileService->handleRemoveFile($oldAvatarId);
+        }
+    }    
 }
