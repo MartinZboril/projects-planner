@@ -58,7 +58,7 @@ class TicketsDataTable extends DataTable
             ->editColumn('buttons', function (Ticket $ticket) {
                 $buttons = '<a href="'.($this->view === 'project' ? route('projects.tickets.edit', ['project' => $ticket->project, 'ticket' => $ticket]) : route('tickets.edit', $ticket)).'" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a> ';
                 $buttons .= '<a href="'.($this->view === 'project' ? route('projects.tickets.show', ['project' => $ticket->project, 'ticket' => $ticket]) : route('tickets.show', $ticket)).'" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a> ';
-                $buttons .= view('tickets.partials.buttons', ['ticket' => $ticket, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#'.($this->table_identifier ?? 'tickets-table')]);
+                $buttons .= view('tickets.partials.buttons', ['ticket' => $ticket, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#'.($this->table_identifier ?? 'tickets-table'), 'redirect' => null]);
 
                 return $buttons;
             })
@@ -76,7 +76,7 @@ class TicketsDataTable extends DataTable
         )->when(
             $this->unassigned ?? false,
             fn ($query, $value) => $query->unassigned()->active()
-        )->with('project:id,name', 'reporter:id,avatar_id,name,surname', 'reporter.avatar:id,path', 'assignee:id,avatar_id,name,surname', 'assignee.avatar:id,path', 'task:id,name,ticket_id')->select('tickets.*')->newQuery();
+        )->with('project:id,name', 'reporter:id,avatar_id,name,surname,deleted_at', 'reporter.avatar:id,path', 'assignee:id,avatar_id,name,surname,deleted_at', 'assignee.avatar:id,path', 'task:id,name,ticket_id,is_stopped')->select('tickets.*')->newQuery();
     }
 
     public function html(): HtmlBuilder

@@ -17,14 +17,22 @@ class RateService
         $rate->fill($inputs)->save();
         // Assign users
         $inputs['users'] = $inputs['users'] ?? [];
-        $this->handleAssignUsers($rate, $inputs);        
+        $this->handleAssignUsers($rate, $inputs);
     }
-    
+
     /**
      * Assign users to rate.
      */
     public function handleAssignUsers(Rate $rate, array $inputs): void
     {
         ($rate->users()->count() === 0) ? $rate->users()->attach($inputs['users']) : $rate->users()->sync($inputs['users']);
+    }
+
+    /**
+     * Delete selected rate.
+     */
+    public function handleDelete(Rate $rate): void
+    {
+        $rate->delete();
     }
 }

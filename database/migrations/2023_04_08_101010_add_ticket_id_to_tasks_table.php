@@ -17,7 +17,9 @@ class AddTicketIdToTasksTable extends Migration
             $table->foreignIdFor(
                 \App\Models\Ticket::class,
                 'ticket_id'
-            )->nullable()->constrained('tickets');
+            )
+                ->nullable()
+                ->constrained('tickets');
         });
     }
 

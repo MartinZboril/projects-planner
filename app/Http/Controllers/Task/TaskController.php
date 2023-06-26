@@ -95,4 +95,20 @@ class TaskController extends Controller
             ? redirect()->route('tasks.index')
             : redirect()->route('tasks.show', $task);
     }
+
+    /**
+     * Remove the task from storage.
+     */
+    public function destroy(Task $task): JsonResponse
+    {
+        try {
+            $this->taskService->handleDelete($task);
+        } catch (Exception $exception) {
+            Log::error($exception);
+        }
+
+        return response()->json([
+            'message' => __('messages.task.delete'),
+        ]);
+    }
 }

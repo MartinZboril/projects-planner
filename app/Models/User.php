@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +16,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     protected $guarded = [
         'id', 'email_verified_at', 'remember_token', 'created_at', 'updated_at',
@@ -77,6 +79,11 @@ class User extends Authenticatable
         return $this->hasMany(Timer::class, 'user_id');
     }
 
+    public function notes(): HasMany
+    {
+        return $this->hasMany(Note::class, 'user_id');
+    }
+
     public function activeTimers(): HasMany
     {
         return $this->hasMany(Timer::class, 'user_id')->active(true);
@@ -93,7 +100,7 @@ class User extends Authenticatable
     protected function fullName(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, $attributes) => $attributes['name'].' '.$attributes['surname'],
+            get: fn () => $this->name.' '.$this->surname,
         );
     }
 
@@ -115,6 +122,13 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: fn ($value, $attributes) => $attributes['phone'] ?? 'NaN',
+        );
+    }
+
+    protected function roleLabel(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->role->name ?? '<span class="font-weight-bold text-danger">Without role!</span>',
         );
     }
 }

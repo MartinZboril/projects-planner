@@ -42,4 +42,12 @@ class CommentService
             $this->fileService->handleUpload($uploadedFile, 'comments', $comment);
         }
     }
+
+    /**
+     * Delete selected comment.
+     */
+    public function handleDelete(Comment $comment): void
+    {
+        $comment->delete();
+    }
 }

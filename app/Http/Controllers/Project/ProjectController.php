@@ -93,4 +93,20 @@ class ProjectController extends Controller
             ? redirect()->route('projects.index')
             : redirect()->route('projects.show', $project);
     }
+
+    /**
+     * Remove the project from storage.
+     */
+    public function destroy(Project $project): JsonResponse
+    {
+        try {
+            $this->projectService->handleDelete($project);
+        } catch (Exception $exception) {
+            Log::error($exception);
+        }
+
+        return response()->json([
+            'message' => __('messages.project.delete'),
+        ]);
+    }
 }

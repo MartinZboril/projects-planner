@@ -20,7 +20,9 @@ class CreateMilestonesTable extends Migration
             $table->foreignIdFor(
                 \App\Models\Project::class,
                 'project_id'
-            )->constrained('projects');
+            )
+                ->constrained('projects')
+                ->onDelete('cascade');
             $table->foreignIdFor(
                 \App\Models\User::class,
                 'owner_id'

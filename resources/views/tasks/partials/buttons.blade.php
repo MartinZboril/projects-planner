@@ -18,3 +18,6 @@
 <a href="#" class="btn btn-{{ $buttonSize }} btn-primary" onclick="markTask('{{ route('tasks.mark', $task) }}', '{{ $tableIdentifier }}')">
     <i class="{{ ($task->is_marked ? 'fas' : 'far') }} fa-bookmark" id="task-{{ $task->id }}-marked"></i>
 </a>
+<a href="#" class="btn btn-{{ $buttonSize }} btn-danger" onclick="deleteTask('{{ route('tasks.destroy', $task) }}', '{{ $type }}', '{{ $tableIdentifier }}', '{{ $redirect }}')">
+    <x-site.ui.icon icon="fas fa-trash" :text="$hideButtonText ?? 'Delete'" />
+</a>

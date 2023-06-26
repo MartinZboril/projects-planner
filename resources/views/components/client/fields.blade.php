@@ -48,7 +48,14 @@
                         </div>
                     </div>
                     <div class="col-md-6 text-center">
-                        <img src="{{ ($client->logo ?? false) ? asset('storage/' . $client->logo->path) : asset('dist/img/user.png') }}" class="img-circle" alt="User Image" style="width: 80px;height: 80px;">
+                        <img id="client-logo-image" src="{{ ($client->logo->id ?? false) ? asset('storage/' . $client->logo->path) : asset('dist/img/user.png') }}" class="img-circle" alt="Client Logo" style="width: 80px;height: 80px;">
+                        @if ($client->logo->id ?? false)
+                            <div id="remove-client-logo">
+                                <a href="#" class="text-danger" onclick="removeClientLogo('{{ route('clients.logo.remove', $client) }}', '{{ asset('dist/img/user.png') }}')">
+                                    <i class="fas fa-unlink"></i> Remove
+                                </a>
+                            </div>                            
+                        @endif                        
                     </div>
                 </div>
             </div>

@@ -52,7 +52,7 @@ class ProjectsDataTable extends DataTable
             ->editColumn('buttons', function (Project $project) {
                 $buttons = '<a href="'.route('projects.edit', $project).'" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a> ';
                 $buttons .= '<a href="'.route('projects.show', $project).'" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a> ';
-                $buttons .= view('projects.partials.buttons', ['project' => $project, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#'.($this->table_identifier ?? 'projects-table')]);
+                $buttons .= view('projects.partials.buttons', ['project' => $project, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#'.($this->table_identifier ?? 'projects-table'), 'redirect' => null]);
 
                 return $buttons;
             })
@@ -61,7 +61,7 @@ class ProjectsDataTable extends DataTable
 
     public function query(Project $model): QueryBuilder
     {
-        return $model->with('client:id,name', 'team:id,avatar_id,name,surname', 'team.avatar:id,path', 'timers:id,project_id,rate_id,since_at,until_at', 'timers.rate:id,value')->select('projects.*')->newQuery();
+        return $model->with('client:id,name', 'team:id,avatar_id,name,surname,deleted_at', 'team.avatar:id,path', 'timers:id,project_id,rate_id,since_at,until_at', 'timers.rate:id,value')->select('projects.*')->newQuery();
     }
 
     public function html(): HtmlBuilder

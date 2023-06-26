@@ -62,4 +62,12 @@ class ProjectService
 
         return $project->fresh();
     }
+
+    /**
+     * Delete selected project.
+     */
+    public function handleDelete(Project $project): void
+    {
+        $project->delete();
+    }
 }

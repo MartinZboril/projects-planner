@@ -38,4 +38,12 @@ class NoteService
 
         return $note->fresh();
     }
+
+    /**
+     * Delete selected note.
+     */
+    public function handleDelete(Note $note): void
+    {
+        $note->delete();
+    }
 }

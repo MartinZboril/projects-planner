@@ -15,7 +15,9 @@
         <x-site.ui.icon icon="fas fa-archive" text="" />
     </a>
 @endif
-
 <a href="#" class="btn btn-{{ $buttonSize }} btn-primary ticket-mark-button" onclick="markTicket('{{ route('tickets.mark', $ticket) }}', '{{ $type }}', '{{ $tableIdentifier }}')">
     <i class="{{ ($ticket->is_marked ? 'fas' : 'far') }} fa-bookmark" id="ticket-{{ $ticket->id }}-marked"></i>
+</a>
+<a href="#" class="btn btn-{{ $buttonSize }} btn-danger" onclick="deleteTicket('{{ route('tickets.destroy', $ticket) }}', '{{ $type }}', '{{ $tableIdentifier }}', '{{ $redirect }}')">
+    <x-site.ui.icon icon="fas fa-trash" :text="$hideButtonText ?? 'Delete'" />
 </a>

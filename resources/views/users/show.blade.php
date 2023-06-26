@@ -1,4 +1,4 @@
-@extends('layouts.master', ['datatables' => true, 'toaster' => true])
+@extends('layouts.master', ['datatables' => true, 'toaster' => true, 'user' => true])
 
 @section('title', __('pages.title.user'))
 
@@ -8,6 +8,7 @@
         <div class="p-3 mb-3" style="background-color:white;">
             <a href="{{ route('users.index') }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-caret-left mr-1"></i>Back</a>
             <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-pencil-alt mr-1"></i>Edit</a>
+            @include('users.partials.buttons', ['buttonSize' => 'sm', 'type' => 'detail', 'tableIdentifier' => '', 'redirect' => route('users.index')])
         </div>
         <!-- Main content -->
         <section class="content">

@@ -1,4 +1,4 @@
-@extends('layouts.master', ['select2' => true])
+@extends('layouts.master', ['select2' => true, 'user' => true])
 
 @section('title', __('pages.title.user'))
 

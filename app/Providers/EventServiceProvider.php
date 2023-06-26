@@ -2,10 +2,26 @@
 
 namespace App\Providers;
 
+use App\Models\Client;
+use App\Models\Comment;
+use App\Models\Milestone;
+use App\Models\Project;
+use App\Models\Rate;
+use App\Models\Role;
+use App\Models\Task;
+use App\Models\Ticket;
+use App\Models\User;
+use App\Observers\ClientObserver;
+use App\Observers\CommentObserver;
+use App\Observers\MilestoneObserver;
+use App\Observers\ProjectObserver;
+use App\Observers\RoleObserver;
+use App\Observers\TaskObserver;
+use App\Observers\TicketObserver;
+use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -27,6 +43,13 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Client::observe(ClientObserver::class);
+        Comment::observe(CommentObserver::class);
+        Milestone::observe(MilestoneObserver::class);
+        Project::observe(ProjectObserver::class);
+        Role::observe(RoleObserver::class);
+        Task::observe(TaskObserver::class);
+        Ticket::observe(TicketObserver::class);
+        User::observe(UserObserver::class);
     }
 }

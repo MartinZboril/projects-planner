@@ -129,14 +129,26 @@
       <script src="{{ asset('js/actions/todo.js') }}"></script>  
     @endif   
     @if(!empty($comment))
-      <script src="{{ asset('js/helpers/comment.js') }}"></script>  
+      <script src="{{ asset('js/actions/comment.js') }}"></script>  
     @endif 
     @if(!empty($note))
       <script src="{{ asset('js/actions/note.js') }}"></script>  
     @endif       
     @if(!empty($kanban))
       <script src="{{ asset('js/actions/kanban.js') }}"></script>  
-    @endif                          
+    @endif    
+    @if(!empty($file))
+      <script src="{{ asset('js/actions/file.js') }}"></script>  
+    @endif    
+    @if(!empty($rate))
+      <script src="{{ asset('js/actions/rate.js') }}"></script>  
+    @endif         
+    @if(!empty($role))
+      <script src="{{ asset('js/actions/role.js') }}"></script>  
+    @endif
+    @if(!empty($user))
+      <script src="{{ asset('js/actions/user.js') }}"></script>  
+    @endif                                   
     <script src="{{ asset('js/timer.js') }}" defer></script>
     <script src="{{ mix('js/app.js') }}"></script>
     @stack('scripts')

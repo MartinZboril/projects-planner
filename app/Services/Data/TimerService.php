@@ -42,4 +42,12 @@ class TimerService
     {
         $timer->update(['until_at' => now()]);
     }
+
+    /**
+     * Delete selected timer.
+     */
+    public function handleDelete(Timer $timer): void
+    {
+        $timer->delete();
+    }
 }

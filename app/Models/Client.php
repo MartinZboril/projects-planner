@@ -3,19 +3,24 @@
 namespace App\Models;
 
 use App\Traits\Scopes\MarkedRecords;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Client extends Model
 {
-    use HasFactory, MarkedRecords;
+    use HasFactory, MarkedRecords, SoftDeletes, CascadeSoftDeletes;
 
     protected $guarded = [
         'id', 'created_at', 'updated_at',
     ];
+
+    protected $cascadeDeletes = ['projects'];
 
     public const VALIDATION_RULES = [
         'name' => ['required', 'string', 'max:255', 'unique:clients'],
@@ -40,6 +45,11 @@ class Client extends Model
     public function socialNetwork(): BelongsTo
     {
         return $this->belongsTo(SocialNetwork::class);
+    }
+
+    public function projects(): HasMany
+    {
+        return $this->hasMany(Project::class, 'client_id');
     }
 
     public function notes(): MorphMany

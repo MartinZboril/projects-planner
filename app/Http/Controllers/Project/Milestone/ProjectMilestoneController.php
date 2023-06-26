@@ -97,4 +97,20 @@ class ProjectMilestoneController extends Controller
 
         return redirect()->route('projects.milestones.show', ['project' => $project, 'milestone' => $milestone]);
     }
+
+    /**
+     * Remove the milestone from storage.
+     */
+    public function destroy(Project $project, Milestone $milestone): JsonResponse
+    {
+        try {
+            $this->milestoneService->handleDelete($milestone);
+        } catch (Exception $exception) {
+            Log::error($exception);
+        }
+
+        return response()->json([
+            'message' => __('messages.milestone.delete'),
+        ]);
+    }
 }

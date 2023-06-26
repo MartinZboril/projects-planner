@@ -25,7 +25,7 @@ class UsersDataTable extends DataTable
                 return Blade::render('<x-site.ui.user-icon :user="$user" />', ['user' => $user]).'<a href="'.route('users.show', $user).'" class="ml-1">'.$user->name.' '.$user->surname.'</a>';
             })
             ->editColumn('role', function (User $user) {
-                return $user->role->name;
+                return $user->role_label;
             })
             ->editColumn('job_title', function (User $user) {
                 return $user->job_title_label;
@@ -43,11 +43,12 @@ class UsersDataTable extends DataTable
             })
             ->editColumn('buttons', function (User $user) {
                 $buttons = '<a href="'.route('users.edit', $user).'" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a> ';
-                $buttons .= '<a href="'.route('users.show', $user).'" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>';
+                $buttons .= '<a href="'.route('users.show', $user).'" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a> ';
+                $buttons .= view('users.partials.buttons', ['user' => $user, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#'.($this->table_identifier ?? 'users-table'), 'redirect' => null]);
 
                 return $buttons;
             })
-            ->rawColumns(['name', 'buttons']);
+            ->rawColumns(['name', 'role', 'buttons']);
     }
 
     public function query(User $model): QueryBuilder

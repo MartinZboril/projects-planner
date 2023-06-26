@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\TaskStatusEnum;
 use App\Traits\Scopes\MarkedRecords;
 use App\Traits\Scopes\OverdueRecords;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,14 +13,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Task extends Model
 {
-    use HasFactory, MarkedRecords, OverdueRecords;
+    use HasFactory, MarkedRecords, OverdueRecords, SoftDeletes, CascadeSoftDeletes;
 
     protected $guarded = [
         'id', 'created_at', 'updated_at',
     ];
+
+    protected $cascadeDeletes = ['todos'];
 
     protected $casts = [
         'status' => TaskStatusEnum::class,
@@ -51,12 +55,12 @@ class Task extends Model
 
     public function author(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'author_id');
+        return $this->belongsTo(User::class, 'author_id')->withTrashed();
     }
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id')->withTrashed();
     }
 
     public function milestone(): BelongsTo
@@ -66,7 +70,7 @@ class Task extends Model
 
     public function ticket(): BelongsTo
     {
-        return $this->belongsTo(Ticket::class, 'ticket_id');
+        return $this->belongsTo(Ticket::class, 'ticket_id')->withTrashed();
     }
 
     public function files(): MorphMany

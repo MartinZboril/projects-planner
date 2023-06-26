@@ -15,7 +15,7 @@
                     @include('clients.partials.header', ['active' => 'comment'])
                 </div>          
                 <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                <x-comment.card :comments="$client->comments" :parent="[$client]" :store-form-route="route('clients.comments.store', $client)" update-form-route-name="clients.comments.update" :display-header="false" /> 
+                <x-comment.card :comments="$client->comments" :parent="[$client]" :store-form-route="route('clients.comments.store', $client)" update-form-route-name="clients.comments.update" destroy-form-route-name="clients.comments.destroy" :display-header="false" /> 
             </div>
         </section>
     </div>

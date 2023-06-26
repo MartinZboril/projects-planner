@@ -17,7 +17,10 @@ class AddRateIdToTimersTable extends Migration
             $table->foreignIdFor(
                 \App\Models\Rate::class,
                 'rate_id'
-            )->nullable()->constrained('rates');
+            )
+                ->nullable()
+                ->constrained('rates')
+                ->onDelete('cascade');
         });
     }
 

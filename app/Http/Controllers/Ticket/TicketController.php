@@ -95,4 +95,20 @@ class TicketController extends Controller
             ? redirect()->route('tickets.index')
             : redirect()->route('tickets.show', $ticket);
     }
+
+    /**
+     * Remove the ticket from storage.
+     */
+    public function destroy(Ticket $ticket): JsonResponse
+    {
+        try {
+            $this->ticketService->handleDelete($ticket);
+        } catch (Exception $exception) {
+            Log::error($exception);
+        }
+
+        return response()->json([
+            'message' => __('messages.ticket.delete'),
+        ]);
+    }
 }

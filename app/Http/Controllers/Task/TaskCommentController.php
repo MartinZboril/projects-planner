@@ -11,6 +11,7 @@ use App\Services\Data\CommentService;
 use App\Services\Data\TaskService;
 use App\Traits\FlashTrait;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
 class TaskCommentController extends Controller
@@ -55,5 +56,21 @@ class TaskCommentController extends Controller
         }
 
         return redirect()->route('tasks.show', $task);
+    }
+
+    /**
+     * Remove the tasks comment from storage.
+     */
+    public function destroy(Task $task, Comment $comment): JsonResponse
+    {
+        try {
+            $this->commentService->handleDelete($comment);
+        } catch (Exception $exception) {
+            Log::error($exception);
+        }
+
+        return response()->json([
+            'message' => __('messages.comment.delete'),
+        ]);
     }
 }

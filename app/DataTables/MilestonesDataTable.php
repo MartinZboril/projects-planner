@@ -37,7 +37,7 @@ class MilestonesDataTable extends DataTable
             ->editColumn('buttons', function (Milestone $milestone) {
                 $buttons = '<a href="'.route('projects.milestones.edit', ['project' => $milestone->project, 'milestone' => $milestone]).'" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt pt-1 pb-1"></i></a> ';
                 $buttons .= '<a href="'.route('projects.milestones.show', ['project' => $milestone->project, 'milestone' => $milestone]).'" class="btn btn-xs btn-info"><i class="fas fa-eye pt-1 pb-1"></i></a> ';
-                $buttons .= view('projects.milestones.partials.buttons', ['milestone' => $milestone, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#'.($this->table_identifier ?? 'milestones-table')]);
+                $buttons .= view('projects.milestones.partials.buttons', ['milestone' => $milestone, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#'.($this->table_identifier ?? 'milestones-table'), 'redirect' => null]);
 
                 return $buttons;
             })
@@ -60,7 +60,7 @@ class MilestonesDataTable extends DataTable
             fn ($query, $value) => $query->where('milestones.dued_at', '<=', date('Y-m-d'))->whereHas('tasks', function (QueryBuilder $query) {
                 $query->where('status', '!=', TaskStatusEnum::complete->value);
             })->orWhere('milestones.dued_at', '<=', date('Y-m-d'))->has('tasks', '=', 0)
-        )->with('owner:id,avatar_id,name,surname', 'owner.avatar:id,path', 'project:id,name')->select('milestones.*')->newQuery();
+        )->with('owner:id,avatar_id,name,surname,deleted_at', 'owner.avatar:id,path', 'project:id,name')->select('milestones.*')->newQuery();
     }
 
     public function html(): HtmlBuilder

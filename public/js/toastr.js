@@ -1,8 +1,18 @@
 $(function () {
-    var content = $('#message-content').val();
-    var type = $('#message-type').val();
+    let content, type;
 
-    if(content) {
+    if (sessionStorage.getItem('message') && sessionStorage.getItem('type')) {
+        content = sessionStorage.getItem('message');
+        type = sessionStorage.getItem('type');  
+
+        sessionStorage.removeItem('message');
+        sessionStorage.removeItem('type');
+    } else {
+        content = $('#message-content').val();
+        type = $('#message-type').val();    
+    }
+
+    if(content && type) {
         switch (type) { 
             case 'success': 
                 toastr.success(content);

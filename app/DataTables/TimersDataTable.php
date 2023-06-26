@@ -36,7 +36,7 @@ class TimersDataTable extends DataTable
                 return Carbon::createFromFormat('Y-m-d H:i:s', $timer->created_at)->format('d.m.Y').(($timer->note) ? ' <i class="fas fa-info-circle" data-toggle="tooltip" title="'.$timer->note.'"></i>' : '');
             })
             ->editColumn('buttons', function (Timer $timer) {
-                return $timer->until_at ? '<a href="'.route('projects.timers.edit', ['project' => $timer->project, 'timer' => $timer]).'" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a>' : 'NaN';
+                return $timer->until_at ? '<a href="'.route('projects.timers.edit', ['project' => $timer->project, 'timer' => $timer]).'" class="btn btn-xs btn-dark mr-1"><i class="fas fa-pencil-alt"></i></a><a href="#" class="btn btn-xs btn-danger" onclick="deleteTimer(\''.route('projects.timers.destroy', ['project' => $timer->project, 'timer' => $timer]).'\', \'table\', \'#timers-table\', null)"><i class="fas fa-trash"></i></a>' : 'NaN';
             })
             ->rawColumns(['created_at', 'project.name', 'rate.name', 'user.full_name', 'buttons']);
     }
@@ -46,7 +46,7 @@ class TimersDataTable extends DataTable
         return $model->when(
             $this->project_id ?? false,
             fn ($query, $value) => $query->where('timers.project_id', $value)
-        )->with('project:id,name', 'rate:id,name,value', 'user:id,avatar_id,name,surname', 'user.avatar:id,path')->select('timers.*')->newQuery();
+        )->with('project:id,name', 'rate:id,name,value', 'user:id,avatar_id,name,surname,deleted_at', 'user.avatar:id,path')->select('timers.*')->newQuery();
     }
 
     public function html(): HtmlBuilder

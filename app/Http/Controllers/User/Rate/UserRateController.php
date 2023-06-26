@@ -81,4 +81,20 @@ class UserRateController extends Controller
 
         return redirect()->route('users.rates.index');
     }
+
+    /**
+     * Remove the rate from storage.
+     */
+    public function destroy(Rate $rate): JsonResponse
+    {
+        try {
+            $this->rateService->handleDelete($rate);
+        } catch (Exception $exception) {
+            Log::error($exception);
+        }
+
+        return response()->json([
+            'message' => __('messages.rate.delete'),
+        ]);
+    }
 }

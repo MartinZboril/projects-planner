@@ -9,6 +9,7 @@ use App\Models\Note;
 use App\Services\Data\NoteService;
 use App\Traits\FlashTrait;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
@@ -78,5 +79,21 @@ class NoteController extends Controller
         }
 
         return redirect()->route('notes.index');
+    }
+
+    /**
+     * Remove the note from storage.
+     */
+    public function destroy(Note $note): JsonResponse
+    {
+        try {
+            $this->noteService->handleDelete($note);
+        } catch (Exception $exception) {
+            Log::error($exception);
+        }
+
+        return response()->json([
+            'message' => __('messages.note.delete'),
+        ]);
     }
 }

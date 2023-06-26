@@ -15,7 +15,8 @@ return new class extends Migration
             $table->foreignIdFor(
                 \App\Models\Address::class,
                 'address_id'
-            )->constrained('addresses');
+            )
+                ->constrained('addresses');
         });
     }
 

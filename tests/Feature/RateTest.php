@@ -142,7 +142,7 @@ class RateTest extends TestCase
 
         $this->assertEquals($editedRate['name'], $updatedRate->name);
         $this->assertEquals($editedRate['value'], $updatedRate->value);
-        
+
         $this->assertDatabaseCount('rate_user', 1);
         $this->assertDatabaseHas('rate_user', [
             'user_id' => $this->user->id,
