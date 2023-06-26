@@ -70,7 +70,7 @@ class Task extends Model
 
     public function ticket(): BelongsTo
     {
-        return $this->belongsTo(Ticket::class, 'ticket_id');
+        return $this->belongsTo(Ticket::class, 'ticket_id')->withTrashed();
     }
 
     public function files(): MorphMany

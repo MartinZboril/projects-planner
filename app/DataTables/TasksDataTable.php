@@ -42,6 +42,10 @@ class TasksDataTable extends DataTable
             })
             ->editColumn('ticket.subject', function (Task $task) {
                 if ($task->ticket ?? false) {
+                    if ($task->ticket->trashed()) {
+                        return $task->ticket->subject.' (deleted)';
+                    } 
+
                     if ($this->view === 'project') {
                         return '<a href="'.route('projects.tickets.show', ['project' => $task->project, 'ticket' => $task->ticket]).'">'.$task->ticket->subject.'</a>';
                     } else {
@@ -72,7 +76,7 @@ class TasksDataTable extends DataTable
         )->when(
             $this->newed ?? false,
             fn ($query, $value) => $query->where('tasks.status', TaskStatusEnum::new)
-        )->with('project:id,name', 'milestone:id,name', 'user:id,avatar_id,name,surname,deleted_at', 'user.avatar:id,path', 'ticket:id,subject')->select('tasks.*')->newQuery();
+        )->with('project:id,name', 'milestone:id,name', 'user:id,avatar_id,name,surname,deleted_at', 'user.avatar:id,path', 'ticket:id,subject,deleted_at')->select('tasks.*')->newQuery();
     }
 
     public function html(): HtmlBuilder

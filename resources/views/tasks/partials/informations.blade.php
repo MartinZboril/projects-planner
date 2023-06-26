@@ -43,7 +43,7 @@
         @if($task->milestone)
             <span class="d-block">Milestone: <b><a href="{{ route('projects.milestones.show', ['project' => $task->milestone->project, 'milestone' => $task->milestone]) }}">{{ $task->milestone_label }}</a></b></span>
         @endif
-        @if($task->ticket_id)<span class="d-block">From Ticket: <b><a href="{{ route(($project ?? false) ? 'projects.tickets.show' : 'tickets.show', ($project ?? false) ? ['project' => $task->project, 'ticket' => $task->ticket] : $task->ticket) }}">{{ $task->ticket->subject }}</a></b></span>@endif
+        @if($task->ticket_id)<span class="d-block">From Ticket: <b>@if ($task->ticket->trashed()){{ $task->ticket->subject.' (deleted)' }}@else<a href="{{ route(($project ?? false) ? 'projects.tickets.show' : 'tickets.show', ($project ?? false) ? ['project' => $task->project, 'ticket' => $task->ticket] : $task->ticket) }}">{{ $task->ticket->subject }}</a>@endif</b></span>@endif
         <span class="d-block">User: <b>@if ($task->user->trashed()){{ $task->user->full_name.' (deleted)' }}@else<a href="{{ route('users.show', $task->user) }}">{{ $task->user->full_name }}</a>@endif</b></span>
         <span class="d-block">Author: <b>@if ($task->author->trashed()){{ $task->author->full_name.' (deleted)' }}@else<a href="{{ route('users.show', $task->author) }}">{{ $task->author->full_name }}</a>@endif</b></span>
         <span class="d-block">Status: <b id="task-status-text"><x-task.ui.status-badge :text="true" :$task /></b></span>

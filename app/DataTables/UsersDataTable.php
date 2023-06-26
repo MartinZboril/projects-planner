@@ -48,7 +48,7 @@ class UsersDataTable extends DataTable
 
                 return $buttons;
             })
-            ->rawColumns(['name', 'buttons']);
+            ->rawColumns(['name', 'role', 'buttons']);
     }
 
     public function query(User $model): QueryBuilder

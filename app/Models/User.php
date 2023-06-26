@@ -128,7 +128,7 @@ class User extends Authenticatable
     protected function roleLabel(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->role->name ?? 'NaN',
+            get: fn () => $this->role->name ?? '<span class="font-weight-bold text-danger">Without role!</span>',
         );
     }
 }
