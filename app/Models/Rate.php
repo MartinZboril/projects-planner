@@ -28,7 +28,7 @@ class Rate extends Model
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'rate_user', 'rate_id', 'user_id')->withTimestamps();
+        return $this->belongsToMany(User::class, 'rate_user', 'rate_id', 'user_id');
     }
 
     public function timers(): HasMany

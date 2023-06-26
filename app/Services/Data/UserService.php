@@ -57,4 +57,12 @@ class UserService
     {
         ($user->rates()->count() === 0) ? $user->rates()->attach($inputs['rates']) : $user->rates()->sync($inputs['rates']);
     }
+    
+    /**
+     * Delete selected user.
+     */
+    public function handleDelete(User $user): void
+    {
+        $user->delete();
+    }
 }

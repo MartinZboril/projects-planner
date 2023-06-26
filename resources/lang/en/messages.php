@@ -70,6 +70,7 @@ return [
     'user' => [
         'create' => 'User was created!',
         'update' => 'User was updated!',
+        'delete' => 'User was deleted!',
     ],
     'note' => [
         'create' => 'Note was created!',

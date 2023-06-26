@@ -76,7 +76,7 @@ class TicketsDataTable extends DataTable
         )->when(
             $this->unassigned ?? false,
             fn ($query, $value) => $query->unassigned()->active()
-        )->with('project:id,name', 'reporter:id,avatar_id,name,surname', 'reporter.avatar:id,path', 'assignee:id,avatar_id,name,surname', 'assignee.avatar:id,path', 'task:id,name,ticket_id,is_stopped')->select('tickets.*')->newQuery();
+        )->with('project:id,name', 'reporter:id,avatar_id,name,surname,deleted_at', 'reporter.avatar:id,path', 'assignee:id,avatar_id,name,surname,deleted_at', 'assignee.avatar:id,path', 'task:id,name,ticket_id,is_stopped')->select('tickets.*')->newQuery();
     }
 
     public function html(): HtmlBuilder

@@ -10,14 +10,15 @@ use App\Models\Rate;
 use App\Models\Role;
 use App\Models\Task;
 use App\Models\Ticket;
+use App\Models\User;
 use App\Observers\ClientObserver;
 use App\Observers\CommentObserver;
 use App\Observers\MilestoneObserver;
 use App\Observers\ProjectObserver;
-use App\Observers\RateObserver;
 use App\Observers\RoleObserver;
 use App\Observers\TaskObserver;
 use App\Observers\TicketObserver;
+use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -46,9 +47,9 @@ class EventServiceProvider extends ServiceProvider
         Comment::observe(CommentObserver::class);
         Milestone::observe(MilestoneObserver::class);
         Project::observe(ProjectObserver::class);
-        Rate::observe(RateObserver::class);
         Role::observe(RoleObserver::class);
         Task::observe(TaskObserver::class);
         Ticket::observe(TicketObserver::class);
+        User::observe(UserObserver::class);
     }
 }

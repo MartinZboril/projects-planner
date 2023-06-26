@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +16,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     protected $guarded = [
         'id', 'email_verified_at', 'remember_token', 'created_at', 'updated_at',
@@ -69,12 +71,17 @@ class User extends Authenticatable
 
     public function rates(): BelongsToMany
     {
-        return $this->belongsToMany(Rate::class, 'rate_user', 'user_id', 'rate_id')->withTimestamps();
+        return $this->belongsToMany(Rate::class, 'rate_user', 'user_id', 'rate_id');
     }
 
     public function timers(): HasMany
     {
         return $this->hasMany(Timer::class, 'user_id');
+    }
+
+    public function notes(): HasMany
+    {
+        return $this->hasMany(Note::class, 'user_id');
     }
 
     public function activeTimers(): HasMany

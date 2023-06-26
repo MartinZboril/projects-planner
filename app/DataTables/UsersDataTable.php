@@ -43,7 +43,8 @@ class UsersDataTable extends DataTable
             })
             ->editColumn('buttons', function (User $user) {
                 $buttons = '<a href="'.route('users.edit', $user).'" class="btn btn-xs btn-dark"><i class="fas fa-pencil-alt"></i></a> ';
-                $buttons .= '<a href="'.route('users.show', $user).'" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a>';
+                $buttons .= '<a href="'.route('users.show', $user).'" class="btn btn-xs btn-info"><i class="fas fa-eye"></i></a> ';
+                $buttons .= view('users.partials.buttons', ['user' => $user, 'buttonSize' => 'xs', 'hideButtonText' => '', 'type' => 'table', 'tableIdentifier' => '#'.($this->table_identifier ?? 'users-table'), 'redirect' => null]);
 
                 return $buttons;
             })

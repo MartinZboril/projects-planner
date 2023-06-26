@@ -96,4 +96,20 @@ class UserController extends Controller
             ? redirect()->route('users.index')
             : redirect()->route('users.show', $user);
     }
+    
+    /**
+     * Remove the user from storage.
+     */
+    public function destroy(User $user): JsonResponse
+    {
+        try {
+            $this->userService->handleDelete($user);
+        } catch (Exception $exception) {
+            Log::error($exception);
+        }
+
+        return response()->json([
+            'message' => __('messages.user.delete'),
+        ]);
+    }
 }

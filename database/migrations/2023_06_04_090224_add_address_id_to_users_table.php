@@ -16,8 +16,7 @@ return new class extends Migration
                 \App\Models\Address::class,
                 'address_id'
             )
-                ->constrained('addresses')
-                ->onDelete('cascade');
+                ->constrained('addresses');
         });
     }
 

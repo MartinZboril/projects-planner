@@ -36,8 +36,8 @@
         <span class="d-block">Project: <b><a href="{{ route('projects.show', $ticket->project) }}">{{ $ticket->project->name }}</a></b></span>
         <span class="d-block">Client: <b><a href="{{ route('clients.show', $ticket->project->client) }}">{{ $ticket->project->client->name }}</a></b></span>
         @if($ticket->task)<span class="d-block">Converted Task: <b><a href="{{ route(($project ?? false) ? 'projects.tasks.show' : 'tasks.show', ($project ?? false) ? ['project' => $ticket->project, 'task' => $ticket->task] : $ticket->task) }}">{{ $ticket->task->name }}</a></b></span>@endif
-        <span class="d-block">Reporter: <b><a href="{{ route('users.show', $ticket->reporter) }}">{{ $ticket->reporter->full_name }}</a></b></span>
-        @if($ticket->assignee_id)<span class="d-block">Assigned: <b><a href="{{ route('users.show', $ticket->assignee) }}">{{ $ticket->assignee->full_name }}</a></b></span>@endif
+        <span class="d-block">Reporter: <b>@if ($ticket->reporter->trashed()){{ $ticket->reporter->full_name.' (deleted)' }}@else<a href="{{ route('users.show', $ticket->reporter) }}">{{ $ticket->reporter->full_name }}</a>@endif</b></span>
+        @if($ticket->assignee_id)<span class="d-block">Assigned: <b>@if ($ticket->assignee->trashed()){{ $ticket->assignee->full_name.' (deleted)' }}@else<a href="{{ route('users.show', $ticket->assignee) }}">{{ $ticket->assignee->full_name }}</a>@endif</b></span>@endif
         <span class="d-block">Status: <b id="ticket-status-text"><x-ticket.ui.status-badge :text="true" :status="$ticket->status" /></b></span>
         <span class="d-block">Priority: <b class="text-{{ $ticket->urgent ? 'danger' : 'body' }}"><x-ticket.ui.priority :priority="$ticket->priority" /></b></span>
         <span class="d-block">Type: <b><x-ticket.ui.type :type="$ticket->type" /></b></span>

@@ -23,8 +23,6 @@ class CreateProjectUserTable extends Migration
                 \App\Models\User::class,
                 'user_id'
             )->constrained('users');
-            $table->timestamps();
-            $table->softDeletes();
         });
     }
 

@@ -108,8 +108,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('roles', App\Http\Controllers\User\Role\UserRoleController::class)
             ->except(['show']);
     });
-    Route::resource('users', App\Http\Controllers\User\UserController::class)
-        ->except(['destroy']);
+    Route::resource('users', App\Http\Controllers\User\UserController::class);
     // Projects
     Route::group(['prefix' => 'projects/{project}', 'as' => 'projects.'], function () {
         // Actions

@@ -50,12 +50,12 @@ class Ticket extends Model
 
     public function reporter(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'reporter_id');
+        return $this->belongsTo(User::class, 'reporter_id')->withTrashed();
     }
 
     public function assignee(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'assignee_id');
+        return $this->belongsTo(User::class, 'assignee_id')->withTrashed();
     }
 
     public function files(): MorphMany

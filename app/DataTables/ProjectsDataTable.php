@@ -61,7 +61,7 @@ class ProjectsDataTable extends DataTable
 
     public function query(Project $model): QueryBuilder
     {
-        return $model->with('client:id,name', 'team:id,avatar_id,name,surname', 'team.avatar:id,path', 'timers:id,project_id,rate_id,since_at,until_at', 'timers.rate:id,value')->select('projects.*')->newQuery();
+        return $model->with('client:id,name', 'team:id,avatar_id,name,surname,deleted_at', 'team.avatar:id,path', 'timers:id,project_id,rate_id,since_at,until_at', 'timers.rate:id,value')->select('projects.*')->newQuery();
     }
 
     public function html(): HtmlBuilder

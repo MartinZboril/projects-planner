@@ -2,7 +2,6 @@
 
 namespace App\Observers;
 
-use App\Models\PermissionRole;
 use App\Models\Role;
 
 class RoleObserver
@@ -15,6 +14,5 @@ class RoleObserver
         $role->users()->update([
             'role_id' => null,
         ]);
-        PermissionRole::where('role_id', $role->id)->delete();
     }
 }

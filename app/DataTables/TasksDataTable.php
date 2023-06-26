@@ -72,7 +72,7 @@ class TasksDataTable extends DataTable
         )->when(
             $this->newed ?? false,
             fn ($query, $value) => $query->where('tasks.status', TaskStatusEnum::new)
-        )->with('project:id,name', 'milestone:id,name', 'user:id,avatar_id,name,surname', 'user.avatar:id,path', 'ticket:id,subject')->select('tasks.*')->newQuery();
+        )->with('project:id,name', 'milestone:id,name', 'user:id,avatar_id,name,surname,deleted_at', 'user.avatar:id,path', 'ticket:id,subject')->select('tasks.*')->newQuery();
     }
 
     public function html(): HtmlBuilder
