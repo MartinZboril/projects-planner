@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Notifications\User;
+namespace App\Notifications\Ticket;
 
-use App\Models\User;
+use App\Models\Ticket;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class UserCreatedNotification extends Notification
+class UserAssignedNotification extends Notification
 {
     use Queueable;
 
@@ -15,8 +15,7 @@ class UserCreatedNotification extends Notification
      * Create a new notification instance.
      */
     public function __construct(
-        private User $user,
-        private string $password
+        private Ticket $ticket
     ) {
     }
 
@@ -27,7 +26,7 @@ class UserCreatedNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -37,13 +36,10 @@ class UserCreatedNotification extends Notification
     {
         return (new MailMessage)
             ->from(config('mail.from.address'), config('mail.from.name'))
-            ->subject('Account has been created for you')
+            ->subject('Assigned to a new ticket')
             ->greeting('Hello '.$notifiable->name)
-            ->line('A user account has been created for you. Please use the following login and password to sign in:')
-            ->line('Email: '.$notifiable->email)
-            ->line('Password: '.$this->password)
-            ->action('Login', route('login'))
-            ->line('After signing in you should change your password as soon as possible.');
+            ->line('You have been assigned to the ticket '.$this->ticket->subject)
+            ->action('Detail', route('tickets.show', $this->ticket));
     }
 
     /**
@@ -54,7 +50,8 @@ class UserCreatedNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'content' => 'You have been assigned to the ticket '.$this->ticket->name,
+            'link' => route('tickets.show', $this->ticket),
         ];
     }
 }

@@ -4,6 +4,7 @@ namespace App\Services\Data;
 
 use App\Enums\TicketStatusEnum;
 use App\Models\Ticket;
+use App\Notifications\Ticket\UserAssignedNotification;
 use App\Services\FileService;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,6 +20,7 @@ class TicketService
      */
     public function handleSave(Ticket $ticket, array $inputs, ?array $uploadedFiles = []): Ticket
     {
+        $oldAssigneeId = $ticket->assignee_id;
         // Prepare fields
         $inputs['status'] = $ticket->status ?? TicketStatusEnum::open;
         $inputs['reporter_id'] = $ticket->reporter_id ?? Auth::id();
@@ -28,6 +30,10 @@ class TicketService
         // Upload files
         if ($uploadedFiles) {
             $this->handleUploadFiles($ticket, $uploadedFiles);
+        }
+
+        if (($ticket->assignee ?? false) && ((int) $oldAssigneeId !== (int) $ticket->assignee_id)) {
+            $ticket->assignee->notify(new UserAssignedNotification($ticket));
         }
 
         return $ticket;

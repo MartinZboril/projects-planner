@@ -2,10 +2,13 @@
 
 namespace App\Services\Data;
 
-use App\Enums\ProjectStatusEnum;
-use App\Models\Note;
 use App\Models\Project;
 use App\Services\FileService;
+use App\Enums\ProjectStatusEnum;
+use App\Models\ProjectUser;
+use App\Notifications\Project\UserAssignedNotification;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ProjectService
 {
@@ -27,8 +30,17 @@ class ProjectService
         if ($uploadedFiles) {
             $this->handleUploadFiles($project, $uploadedFiles);
         }
+        $oldTeam = ProjectUser::where('project_id', $project->id)->pluck('user_id');
         // Store projects team
         ($project->team()->count() === 0) ? $project->team()->attach($inputs['team']) : $project->team()->sync($inputs['team']);
+        // Notify newly added users
+        foreach ($project->team as $user) {
+            if (!in_array($user->id, $oldTeam->toArray())) {
+                $user->notify(new UserAssignedNotification($project));
+            } else {
+                //Todo: User unassigned from the project
+            }
+        }
 
         return $project;
     }

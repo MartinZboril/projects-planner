@@ -4,6 +4,7 @@ namespace App\Services\Data;
 
 use App\Enums\TaskStatusEnum;
 use App\Models\Task;
+use App\Notifications\Task\UserAssignedNotification;
 use App\Services\FileService;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,6 +20,7 @@ class TaskService
      */
     public function handleSave(Task $task, array $inputs, ?array $uploadedFiles = []): Task
     {
+        $oldUserId = $task->user_id;
         // Prepare fields
         $inputs['status'] = $task->status ?? TaskStatusEnum::new;
         $inputs['author_id'] = $inputs['author_id'] ?? ($task->author_id ?? Auth::id());
@@ -28,6 +30,10 @@ class TaskService
         // Upload files
         if ($uploadedFiles) {
             $this->handleUploadFiles($task, $uploadedFiles);
+        }
+
+        if ((int) $oldUserId !== (int) $task->user_id) {
+            $task->user->notify(new UserAssignedNotification($task));
         }
 
         return $task;
