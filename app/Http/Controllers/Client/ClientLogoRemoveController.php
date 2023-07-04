@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Client;
 
-use Exception;
+use App\Http\Controllers\Controller;
 use App\Models\Client;
+use App\Services\Data\ClientService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
-use App\Services\Data\ClientService;
 
 class ClientLogoRemoveController extends Controller
 {

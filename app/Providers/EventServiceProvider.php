@@ -6,7 +6,6 @@ use App\Models\Client;
 use App\Models\Comment;
 use App\Models\Milestone;
 use App\Models\Project;
-use App\Models\Rate;
 use App\Models\Role;
 use App\Models\Task;
 use App\Models\Ticket;

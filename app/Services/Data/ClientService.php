@@ -77,7 +77,7 @@ class ClientService
 
         return $client->fresh();
     }
-    
+
     /**
      * Delete selected client.
      */
@@ -85,17 +85,17 @@ class ClientService
     {
         $client->delete();
     }
-        
+
     /**
      * Remove selected clients logo.
      */
     public function handleRemoveAvatar(Client $client): void
     {
-        if ($oldLogoId=($client->logo_id ?? null)) {
+        if ($oldLogoId = ($client->logo_id ?? null)) {
             $client->logo_id = null;
             $client->save();
 
             $this->fileService->handleRemoveFile($oldLogoId);
         }
-    }    
+    }
 }

@@ -93,7 +93,7 @@ class ClientController extends Controller
             ? redirect()->route('clients.index')
             : redirect()->route('clients.show', $client);
     }
-    
+
     /**
      * Remove the client from storage.
      */

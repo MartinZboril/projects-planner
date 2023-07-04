@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\User;
 
-use Exception;
-use App\Models\User;
-use Illuminate\Http\JsonResponse;
-use App\Services\Data\UserService;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Services\Data\UserService;
+use Exception;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class UserAvatarRemoveController extends Controller
 {

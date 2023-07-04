@@ -96,7 +96,7 @@ class UserController extends Controller
             ? redirect()->route('users.index')
             : redirect()->route('users.show', $user);
     }
-    
+
     /**
      * Remove the user from storage.
      */

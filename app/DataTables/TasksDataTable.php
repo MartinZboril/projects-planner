@@ -44,7 +44,7 @@ class TasksDataTable extends DataTable
                 if ($task->ticket ?? false) {
                     if ($task->ticket->trashed()) {
                         return $task->ticket->subject.' (deleted)';
-                    } 
+                    }
 
                     if ($this->view === 'project') {
                         return '<a href="'.route('projects.tickets.show', ['project' => $task->project, 'ticket' => $task->ticket]).'">'.$task->ticket->subject.'</a>';
