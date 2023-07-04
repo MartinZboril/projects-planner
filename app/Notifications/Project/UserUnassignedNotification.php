@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Notifications\User;
+namespace App\Notifications\Project;
 
-use App\Models\User;
+use App\Models\Project;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Log;
 
-class UserDeletedNotification extends Notification
+class UserUnassignedNotification extends Notification
 {
     use Queueable;
 
@@ -16,7 +15,7 @@ class UserDeletedNotification extends Notification
      * Create a new notification instance.
      */
     public function __construct(
-        private User $user
+        private Project $project
     ) {
     }
 
@@ -27,7 +26,7 @@ class UserDeletedNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -35,14 +34,12 @@ class UserDeletedNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        Log::info($notifiable);
-
         return (new MailMessage)
                     ->from(config('mail.from.address'), config('mail.from.name'))
-                    ->subject('You have been removed from the system')
+                    ->subject('Removed from the project')
                     ->greeting('Hello '.$notifiable->name)
-                    ->line('The system administrator has removed you from the system.')
-                    ->line('Your work on projects has been cancelled!');
+                    ->line('You have been removed from the project '.$this->project->name)
+                    ->action('Detail', route('projects.show', $this->project));
     }
 
     /**
@@ -53,7 +50,8 @@ class UserDeletedNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'content' => 'You have been removed from the project '.$this->project->name,
+            'link' => route('projects.show', $this->project),
         ];
     }
 }

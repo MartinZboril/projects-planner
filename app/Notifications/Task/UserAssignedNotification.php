@@ -35,11 +35,11 @@ class UserAssignedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->from(config('mail.from.address'), config('mail.from.name'))
-            ->subject('Assigned to a new task')
-            ->greeting('Hello '.$notifiable->name)
-            ->line('You have been assigned to the task '.$this->task->name)
-            ->action('Detail', route('tasks.show', $this->task));
+                    ->from(config('mail.from.address'), config('mail.from.name'))
+                    ->subject('Assigned to a new task')
+                    ->greeting('Hello '.$notifiable->name)
+                    ->line('You have been assigned to the task '.$this->task->name)
+                    ->action('Detail', route('tasks.show', $this->task));
     }
 
     /**

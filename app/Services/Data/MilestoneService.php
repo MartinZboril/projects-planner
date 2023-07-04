@@ -2,9 +2,11 @@
 
 namespace App\Services\Data;
 
+use App\Models\User;
 use App\Models\Milestone;
-use App\Notifications\Milestone\OwnerAssignedNotification;
 use App\Services\FileService;
+use App\Notifications\Milestone\OwnerAssignedNotification;
+use App\Notifications\Milestone\OwnerUnassignedNotification;
 
 class MilestoneService
 {
@@ -29,8 +31,12 @@ class MilestoneService
             $this->handleUploadFiles($milestone, $uploadedFiles);
         }
         // Notify owner about assigning to the milestone
-        if (($milestone->owner ?? false) && ((int) $oldOwnerId !== (int) $milestone->owner_id)) {
+        if ((int) $oldOwnerId !== (int) $milestone->owner_id) {
             $milestone->owner->notify(new OwnerAssignedNotification($milestone));
+
+            if ($oldOwnerId) {
+                User::find($oldOwnerId)->notify(new OwnerUnassignedNotification($milestone));
+            }
         }
 
         return $milestone;

@@ -6,6 +6,7 @@ use App\Enums\ProjectStatusEnum;
 use App\Models\Project;
 use App\Models\ProjectUser;
 use App\Notifications\Project\UserAssignedNotification;
+use App\Notifications\Project\UserUnassignedNotification;
 use App\Services\FileService;
 
 class ProjectService
@@ -35,8 +36,13 @@ class ProjectService
         foreach ($project->team as $user) {
             if (! in_array($user->id, $oldTeam->toArray())) {
                 $user->notify(new UserAssignedNotification($project));
-            } else {
-                //Todo: User unassigned from the project
+            }
+        }
+        // Notify removed users from the project
+        $newTeam = ProjectUser::where('project_id', $project->id)->pluck('user_id');
+        foreach ($oldTeam as $userId) {
+            if (! in_array($userId, $newTeam->toArray())) {
+                $user->notify(new UserUnassignedNotification($project));
             }
         }
 

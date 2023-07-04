@@ -2,11 +2,13 @@
 
 namespace App\Services\Data;
 
-use App\Enums\TicketStatusEnum;
+use App\Models\User;
 use App\Models\Ticket;
-use App\Notifications\Ticket\AssigneeAssignedNotification;
 use App\Services\FileService;
+use App\Enums\TicketStatusEnum;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\Ticket\AssigneeAssignedNotification;
+use App\Notifications\Ticket\AssigneeUnassignedNotification;
 
 class TicketService
 {
@@ -34,6 +36,10 @@ class TicketService
         // Notify assignee about assigning to the ticket
         if (($ticket->assignee ?? false) && ((int) $oldAssigneeId !== (int) $ticket->assignee_id)) {
             $ticket->assignee->notify(new AssigneeAssignedNotification($ticket));
+            
+            if ($oldAssigneeId) {
+                User::find($oldAssigneeId)->notify(new AssigneeUnassignedNotification($ticket));
+            }
         }
 
         return $ticket;

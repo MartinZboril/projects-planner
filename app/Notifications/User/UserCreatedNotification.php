@@ -36,14 +36,14 @@ class UserCreatedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->from(config('mail.from.address'), config('mail.from.name'))
-            ->subject('Account has been created for you')
-            ->greeting('Hello '.$notifiable->name)
-            ->line('A user account has been created for you. Please use the following login and password to sign in:')
-            ->line('Email: '.$notifiable->email)
-            ->line('Password: '.$this->password)
-            ->action('Login', route('login'))
-            ->line('After signing in you should change your password as soon as possible.');
+                    ->from(config('mail.from.address'), config('mail.from.name'))
+                    ->subject('Account has been created for you')
+                    ->greeting('Hello '.$notifiable->name)
+                    ->line('A user account has been created for you. Please use the following login and password to sign in:')
+                    ->line('Email: '.$notifiable->email)
+                    ->line('Password: '.$this->password)
+                    ->action('Login', route('login'))
+                    ->line('After signing in you should change your password as soon as possible.');
     }
 
     /**

@@ -2,11 +2,13 @@
 
 namespace App\Services\Data;
 
-use App\Enums\TaskStatusEnum;
 use App\Models\Task;
-use App\Notifications\Task\UserAssignedNotification;
+use App\Models\User;
+use App\Enums\TaskStatusEnum;
 use App\Services\FileService;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\Task\UserAssignedNotification;
+use App\Notifications\Task\UserUnassignedNotification;
 
 class TaskService
 {
@@ -31,9 +33,13 @@ class TaskService
         if ($uploadedFiles) {
             $this->handleUploadFiles($task, $uploadedFiles);
         }
-        // Notify user about assigning to the task
+        // Notify users about assignment to the task
         if ((int) $oldUserId !== (int) $task->user_id) {
             $task->user->notify(new UserAssignedNotification($task));
+
+            if ($oldUserId) {
+                User::find($oldUserId)->notify(new UserUnassignedNotification($task));
+            }
         }
 
         return $task;

@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Notifications\User;
+namespace App\Notifications\Ticket;
 
-use App\Models\User;
+use App\Models\Ticket;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\MailMessage;
 
-class UserDeletedNotification extends Notification
+class AssigneeUnassignedNotification extends Notification
 {
     use Queueable;
 
@@ -16,7 +16,7 @@ class UserDeletedNotification extends Notification
      * Create a new notification instance.
      */
     public function __construct(
-        private User $user
+        private Ticket $ticket
     ) {
     }
 
@@ -27,22 +27,20 @@ class UserDeletedNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['database', 'mail'];
     }
-
+    
     /**
      * Get the mail representation of the notification.
      */
     public function toMail(object $notifiable): MailMessage
     {
-        Log::info($notifiable);
-
         return (new MailMessage)
                     ->from(config('mail.from.address'), config('mail.from.name'))
-                    ->subject('You have been removed from the system')
+                    ->subject('unassigned from the ticket')
                     ->greeting('Hello '.$notifiable->name)
-                    ->line('The system administrator has removed you from the system.')
-                    ->line('Your work on projects has been cancelled!');
+                    ->line('You have been unassigned from the ticket '.$this->ticket->subject)
+                    ->action('Detail', route('tickets.show', $this->ticket));
     }
 
     /**
@@ -53,7 +51,8 @@ class UserDeletedNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'content' => 'You have been unassigned from the ticket '.$this->ticket->name,
+            'link' => route('tickets.show', $this->ticket),
         ];
     }
 }

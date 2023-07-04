@@ -35,11 +35,11 @@ class UserAssignedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->from(config('mail.from.address'), config('mail.from.name'))
-            ->subject('Added to a new project')
-            ->greeting('Hello '.$notifiable->name)
-            ->line('You have been added to the project '.$this->project->name)
-            ->action('Detail', route('projects.show', $this->project));
+                    ->from(config('mail.from.address'), config('mail.from.name'))
+                    ->subject('Added to a new project')
+                    ->greeting('Hello '.$notifiable->name)
+                    ->line('You have been added to the project '.$this->project->name)
+                    ->action('Detail', route('projects.show', $this->project));
     }
 
     /**
