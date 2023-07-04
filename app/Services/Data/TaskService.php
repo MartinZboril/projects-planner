@@ -31,7 +31,7 @@ class TaskService
         if ($uploadedFiles) {
             $this->handleUploadFiles($task, $uploadedFiles);
         }
-
+        // Notify user about assigning to the task
         if ((int) $oldUserId !== (int) $task->user_id) {
             $task->user->notify(new UserAssignedNotification($task));
         }

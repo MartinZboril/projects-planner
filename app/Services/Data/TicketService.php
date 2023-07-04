@@ -4,7 +4,7 @@ namespace App\Services\Data;
 
 use App\Enums\TicketStatusEnum;
 use App\Models\Ticket;
-use App\Notifications\Ticket\UserAssignedNotification;
+use App\Notifications\Ticket\AssigneeAssignedNotification;
 use App\Services\FileService;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,9 +31,9 @@ class TicketService
         if ($uploadedFiles) {
             $this->handleUploadFiles($ticket, $uploadedFiles);
         }
-
+        // Notify assignee about assigning to the ticket
         if (($ticket->assignee ?? false) && ((int) $oldAssigneeId !== (int) $ticket->assignee_id)) {
-            $ticket->assignee->notify(new UserAssignedNotification($ticket));
+            $ticket->assignee->notify(new AssigneeAssignedNotification($ticket));
         }
 
         return $ticket;
