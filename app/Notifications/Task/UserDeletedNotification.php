@@ -26,7 +26,7 @@ class UserDeletedNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     /**
