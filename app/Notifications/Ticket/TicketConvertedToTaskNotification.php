@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class AssigneeUnassignedNotification extends Notification
+class TicketConvertedToTaskNotification extends Notification
 {
     use Queueable;
 
@@ -37,10 +37,10 @@ class AssigneeUnassignedNotification extends Notification
     {
         return (new MailMessage)
                     ->from(config('mail.from.address'), config('mail.from.name'))
-                    ->subject('unassigned from the ticket')
+                    ->subject('The ticket has been converted to a task')
                     ->greeting('Hello '.$notifiable->name)
-                    ->line('You have been unassigned from the ticket '.$this->ticket->subject)
-                    ->action('Detail', route('tickets.show', $this->ticket));
+                    ->line('The ticket '.$this->ticket->subject.' was converted to a task by the author.')
+                    ->action('Detail', route('tasks.show', $this->ticket->task->id));
     }
 
     /**
@@ -51,8 +51,8 @@ class AssigneeUnassignedNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'content' => 'You have been unassigned from the ticket '.$this->ticket->name,
-            'link' => route('tickets.show', $this->ticket),
+            'content' => 'The ticket '.$this->ticket->subject.' was converted to a task by the author.',
+            'link' => route('tasks.show', $this->ticket->task->id),
         ];
     }
 }

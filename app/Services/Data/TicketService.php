@@ -9,6 +9,7 @@ use App\Enums\TicketStatusEnum;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\Ticket\AssigneeAssignedNotification;
 use App\Notifications\Ticket\AssigneeUnassignedNotification;
+use App\Notifications\Ticket\TicketConvertedToTaskNotification;
 
 class TicketService
 {
@@ -36,7 +37,7 @@ class TicketService
         // Notify assignee about assigning to the ticket
         if (($ticket->assignee ?? false) && ((int) $oldAssigneeId !== (int) $ticket->assignee_id)) {
             $ticket->assignee->notify(new AssigneeAssignedNotification($ticket));
-            
+
             if ($oldAssigneeId) {
                 User::find($oldAssigneeId)->notify(new AssigneeUnassignedNotification($ticket));
             }
@@ -71,6 +72,7 @@ class TicketService
     public function handleConvert(Ticket $ticket): void
     {
         $ticket->update(['status' => TicketStatusEnum::convert]);
+        $ticket->task->user->notify(new TicketConvertedToTaskNotification($ticket));
     }
 
     /**
