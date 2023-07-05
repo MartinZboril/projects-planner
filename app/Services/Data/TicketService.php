@@ -7,9 +7,13 @@ use App\Models\Ticket;
 use App\Models\User;
 use App\Notifications\Ticket\AssigneeAssignedNotification;
 use App\Notifications\Ticket\AssigneeUnassignedNotification;
+use App\Notifications\Ticket\Status\ArchivedTicketNotification;
+use App\Notifications\Ticket\Status\ClosedTicketNotification;
+use App\Notifications\Ticket\Status\ReopenedTicketNotification;
 use App\Notifications\Ticket\TicketConvertedToTaskNotification;
 use App\Services\FileService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class TicketService
 {
@@ -62,6 +66,20 @@ class TicketService
     public function handleChange(Ticket $ticket, int $status): Ticket
     {
         $ticket->update(['status' => $status]);
+
+        switch ($ticket->status) {
+            case TicketStatusEnum::open:
+                $ticket->assignee->notify(new ReopenedTicketNotification($ticket));
+                break;
+
+            case TicketStatusEnum::close:
+                $ticket->reporter->notify(new ClosedTicketNotification($ticket));
+                break;
+
+            case TicketStatusEnum::archive:
+                $ticket->assignee->notify(new ArchivedTicketNotification($ticket));
+                break;
+        }
 
         return $ticket->fresh();
     }
