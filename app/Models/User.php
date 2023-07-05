@@ -88,6 +88,16 @@ class User extends Authenticatable
         return $this->hasMany(Timer::class, 'user_id')->active(true);
     }
 
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class, 'assignee_id');
+    }
+
     protected function password(): Attribute
     {
         return Attribute::make(

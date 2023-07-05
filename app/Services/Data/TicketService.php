@@ -2,14 +2,14 @@
 
 namespace App\Services\Data;
 
-use App\Models\User;
-use App\Models\Ticket;
-use App\Services\FileService;
 use App\Enums\TicketStatusEnum;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Ticket;
+use App\Models\User;
 use App\Notifications\Ticket\AssigneeAssignedNotification;
 use App\Notifications\Ticket\AssigneeUnassignedNotification;
 use App\Notifications\Ticket\TicketConvertedToTaskNotification;
+use App\Services\FileService;
+use Illuminate\Support\Facades\Auth;
 
 class TicketService
 {

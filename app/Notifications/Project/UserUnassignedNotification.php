@@ -35,11 +35,11 @@ class UserUnassignedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->from(config('mail.from.address'), config('mail.from.name'))
-                    ->subject('Removed from the project')
-                    ->greeting('Hello '.$notifiable->name)
-                    ->line('You have been removed from the project '.$this->project->name)
-                    ->action('Detail', route('projects.show', $this->project));
+            ->from(config('mail.from.address'), config('mail.from.name'))
+            ->subject('Removed from the project')
+            ->greeting('Hello '.$notifiable->name)
+            ->line('You have been removed from the project '.$this->project->name)
+            ->action('Detail', route('projects.show', $this->project));
     }
 
     /**

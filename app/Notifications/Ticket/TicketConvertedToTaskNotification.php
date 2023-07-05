@@ -4,9 +4,8 @@ namespace App\Notifications\Ticket;
 
 use App\Models\Ticket;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class TicketConvertedToTaskNotification extends Notification
 {
@@ -36,11 +35,11 @@ class TicketConvertedToTaskNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->from(config('mail.from.address'), config('mail.from.name'))
-                    ->subject('The ticket has been converted to a task')
-                    ->greeting('Hello '.$notifiable->name)
-                    ->line('The ticket '.$this->ticket->subject.' was converted to a task by the author.')
-                    ->action('Detail', route('tasks.show', $this->ticket->task->id));
+            ->from(config('mail.from.address'), config('mail.from.name'))
+            ->subject('The ticket has been converted to a task')
+            ->greeting('Hello '.$notifiable->name)
+            ->line('The ticket '.$this->ticket->subject.' was converted to a task by the author.')
+            ->action('Detail', route('tasks.show', $this->ticket->task->id));
     }
 
     /**

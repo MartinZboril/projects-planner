@@ -2,13 +2,13 @@
 
 namespace App\Services\Data;
 
+use App\Enums\TaskStatusEnum;
 use App\Models\Task;
 use App\Models\User;
-use App\Enums\TaskStatusEnum;
-use App\Services\FileService;
-use Illuminate\Support\Facades\Auth;
 use App\Notifications\Task\UserAssignedNotification;
 use App\Notifications\Task\UserUnassignedNotification;
+use App\Services\FileService;
+use Illuminate\Support\Facades\Auth;
 
 class TaskService
 {

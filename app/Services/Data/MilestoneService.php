@@ -2,11 +2,11 @@
 
 namespace App\Services\Data;
 
-use App\Models\User;
 use App\Models\Milestone;
-use App\Services\FileService;
+use App\Models\User;
 use App\Notifications\Milestone\OwnerAssignedNotification;
 use App\Notifications\Milestone\OwnerUnassignedNotification;
+use App\Services\FileService;
 
 class MilestoneService
 {

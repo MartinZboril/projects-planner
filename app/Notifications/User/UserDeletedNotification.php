@@ -38,11 +38,11 @@ class UserDeletedNotification extends Notification
         Log::info($notifiable);
 
         return (new MailMessage)
-                    ->from(config('mail.from.address'), config('mail.from.name'))
-                    ->subject('You have been removed from the system')
-                    ->greeting('Hello '.$notifiable->name)
-                    ->line('The system administrator has removed you from the system.')
-                    ->line('Your work on projects has been cancelled!');
+            ->from(config('mail.from.address'), config('mail.from.name'))
+            ->subject('You have been removed from the system')
+            ->greeting('Hello '.$notifiable->name)
+            ->line('The system administrator has removed you from the system.')
+            ->line('Your work on projects has been cancelled!');
     }
 
     /**

@@ -7,7 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class UserUnassignedNotification extends Notification
+class UserDeletedNotification extends Notification
 {
     use Queueable;
 
@@ -26,7 +26,7 @@ class UserUnassignedNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database', 'mail'];
+        return ['database'];
     }
 
     /**
@@ -36,9 +36,9 @@ class UserUnassignedNotification extends Notification
     {
         return (new MailMessage)
             ->from(config('mail.from.address'), config('mail.from.name'))
-            ->subject('Unassigned from the task')
+            ->subject('Task without an assigned user')
             ->greeting('Hello '.$notifiable->name)
-            ->line('You have been unassigned from the task '.$this->task->name)
+            ->line('The '.$this->task->name.' task does not have a user assigned.')
             ->action('Detail', route('tasks.show', $this->task));
     }
 
@@ -50,7 +50,7 @@ class UserUnassignedNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'content' => 'You have been unassigned from the task '.$this->task->name,
+            'content' => 'The '.$this->task->name.' task does not have a user assigned.',
             'link' => route('tasks.show', $this->task),
         ];
     }

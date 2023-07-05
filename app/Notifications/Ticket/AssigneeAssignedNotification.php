@@ -35,11 +35,11 @@ class AssigneeAssignedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->from(config('mail.from.address'), config('mail.from.name'))
-                    ->subject('Assigned to a new ticket')
-                    ->greeting('Hello '.$notifiable->name)
-                    ->line('You have been assigned to the ticket '.$this->ticket->subject)
-                    ->action('Detail', route('tickets.show', $this->ticket));
+            ->from(config('mail.from.address'), config('mail.from.name'))
+            ->subject('Assigned to a new ticket')
+            ->greeting('Hello '.$notifiable->name)
+            ->line('You have been assigned to the ticket '.$this->ticket->subject)
+            ->action('Detail', route('tickets.show', $this->ticket));
     }
 
     /**

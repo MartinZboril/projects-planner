@@ -4,9 +4,8 @@ namespace App\Notifications\Milestone;
 
 use App\Models\Milestone;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class OwnerUnassignedNotification extends Notification
 {
@@ -36,11 +35,11 @@ class OwnerUnassignedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->from(config('mail.from.address'), config('mail.from.name'))
-                    ->subject('Unassigned from the milestone')
-                    ->greeting('Hello '.$notifiable->name)
-                    ->line('You have been unassigned from the milestone '.$this->milestone->name)
-                    ->action('Detail', route('projects.milestones.show', ['project' => $this->milestone->project, 'milestone' => $this->milestone]));
+            ->from(config('mail.from.address'), config('mail.from.name'))
+            ->subject('Unassigned from the milestone')
+            ->greeting('Hello '.$notifiable->name)
+            ->line('You have been unassigned from the milestone '.$this->milestone->name)
+            ->action('Detail', route('projects.milestones.show', ['project' => $this->milestone->project, 'milestone' => $this->milestone]));
     }
 
     /**

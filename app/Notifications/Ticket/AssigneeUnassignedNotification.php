@@ -4,9 +4,8 @@ namespace App\Notifications\Ticket;
 
 use App\Models\Ticket;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class AssigneeUnassignedNotification extends Notification
 {
@@ -36,11 +35,11 @@ class AssigneeUnassignedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->from(config('mail.from.address'), config('mail.from.name'))
-                    ->subject('unassigned from the ticket')
-                    ->greeting('Hello '.$notifiable->name)
-                    ->line('You have been unassigned from the ticket '.$this->ticket->subject)
-                    ->action('Detail', route('tickets.show', $this->ticket));
+            ->from(config('mail.from.address'), config('mail.from.name'))
+            ->subject('unassigned from the ticket')
+            ->greeting('Hello '.$notifiable->name)
+            ->line('You have been unassigned from the ticket '.$this->ticket->subject)
+            ->action('Detail', route('tickets.show', $this->ticket));
     }
 
     /**

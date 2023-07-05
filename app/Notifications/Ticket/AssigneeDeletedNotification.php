@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Notifications\Task;
+namespace App\Notifications\Ticket;
 
-use App\Models\Task;
+use App\Models\Ticket;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class UserUnassignedNotification extends Notification
+class AssigneeDeletedNotification extends Notification
 {
     use Queueable;
 
@@ -15,7 +16,7 @@ class UserUnassignedNotification extends Notification
      * Create a new notification instance.
      */
     public function __construct(
-        private Task $task
+        private Ticket $ticket
     ) {
     }
 
@@ -26,7 +27,7 @@ class UserUnassignedNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database', 'mail'];
+        return ['database'];
     }
 
     /**
@@ -35,11 +36,11 @@ class UserUnassignedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->from(config('mail.from.address'), config('mail.from.name'))
-            ->subject('Unassigned from the task')
-            ->greeting('Hello '.$notifiable->name)
-            ->line('You have been unassigned from the task '.$this->task->name)
-            ->action('Detail', route('tasks.show', $this->task));
+                    ->from(config('mail.from.address'), config('mail.from.name'))
+                    ->subject('Ticket without an assigned user')
+                    ->greeting('Hello '.$notifiable->name)
+                    ->line('The '.$this->ticket->name.' ticket does not have a user assigned.')
+                    ->action('Detail', route('tickets.show', $this->ticket));
     }
 
     /**
@@ -50,8 +51,8 @@ class UserUnassignedNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'content' => 'You have been unassigned from the task '.$this->task->name,
-            'link' => route('tasks.show', $this->task),
+            'content' => 'The '.$this->ticket->subject.' ticket does not have a user assigned.',
+            'link' => route('tickets.show', $this->ticket),
         ];
     }
 }

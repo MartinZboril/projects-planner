@@ -1,6 +1,6 @@
 @if ($ticket->status != App\Enums\TicketStatusEnum::convert)
     <a href="#" style="{{ $ticket->assignee_id && $ticket->status != App\Enums\TicketStatusEnum::close && $ticket->status != App\Enums\TicketStatusEnum::archive ? '' : 'display: none;' }}" id="ticket-{{ $ticket->id }}-convert-to-task" class="btn btn-{{ $buttonSize }} btn-primary" onclick="convertTicket('{{ route('tickets.convert_to_task', $ticket) }}')">
-        <x-site.ui.icon icon="fas fa-tasks" :text="$hideButtonText ?? 'Convert to task'" />{{ $ticket->status }}
+        <x-site.ui.icon icon="fas fa-tasks" :text="$hideButtonText ?? 'Convert to task'" />
     </a>
 
     <a href="#" style="{{ $ticket->status === App\Enums\TicketStatusEnum::open ? '' : 'display: none;' }}" id="ticket-{{ $ticket->id }}-close-status" class="btn btn-{{ $buttonSize }} btn-success" onclick="changeTicketStatus('{{ route('tickets.change_status', $ticket) }}', {{ App\Enums\TicketStatusEnum::close }}, '{{ $type }}', '{{ __('pages.content.tickets.statuses.close') }}', 'success', '{{ $tableIdentifier }}')">
