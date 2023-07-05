@@ -4,7 +4,6 @@ namespace App\Notifications\Ticket;
 
 use App\Models\Ticket;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -36,11 +35,11 @@ class AssigneeDeletedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->from(config('mail.from.address'), config('mail.from.name'))
-                    ->subject('Ticket without an assigned user')
-                    ->greeting('Hello '.$notifiable->name)
-                    ->line('The '.$this->ticket->name.' ticket does not have a user assigned.')
-                    ->action('Detail', route('tickets.show', $this->ticket));
+            ->from(config('mail.from.address'), config('mail.from.name'))
+            ->subject('Ticket without an assigned user')
+            ->greeting('Hello '.$notifiable->name)
+            ->line('The '.$this->ticket->subject.' ticket does not have a user assigned.')
+            ->action('Detail', route('tickets.show', $this->ticket));
     }
 
     /**

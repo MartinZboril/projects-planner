@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Notifications\Ticket;
+namespace App\Notifications\Task;
 
-use App\Models\Ticket;
+use App\Models\Task;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class AssigneeAssignedNotification extends Notification
+class TaskDeletedNotification extends Notification
 {
     use Queueable;
 
@@ -15,7 +15,7 @@ class AssigneeAssignedNotification extends Notification
      * Create a new notification instance.
      */
     public function __construct(
-        private Ticket $ticket
+        private Task $task
     ) {
     }
 
@@ -36,10 +36,9 @@ class AssigneeAssignedNotification extends Notification
     {
         return (new MailMessage)
             ->from(config('mail.from.address'), config('mail.from.name'))
-            ->subject('Assigned to a new ticket')
+            ->subject('Task has been deleted')
             ->greeting('Hello '.$notifiable->name)
-            ->line('You have been assigned to the ticket '.$this->ticket->subject)
-            ->action('Detail', route('tickets.show', $this->ticket));
+            ->line('The '.$this->task->name.' task has been deleted and work on it is finished.');
     }
 
     /**
@@ -50,8 +49,7 @@ class AssigneeAssignedNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'content' => 'You have been assigned to the ticket '.$this->ticket->subject,
-            'link' => route('tickets.show', $this->ticket),
+            'content' => 'The '.$this->task->name.' task has been deleted and work on it is finished.',
         ];
     }
 }

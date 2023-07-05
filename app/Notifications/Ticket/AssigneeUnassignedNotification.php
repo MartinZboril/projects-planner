@@ -50,7 +50,7 @@ class AssigneeUnassignedNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'content' => 'You have been unassigned from the ticket '.$this->ticket->name,
+            'content' => 'You have been unassigned from the ticket '.$this->ticket->subject,
             'link' => route('tickets.show', $this->ticket),
         ];
     }
