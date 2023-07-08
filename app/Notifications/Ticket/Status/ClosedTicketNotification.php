@@ -5,6 +5,7 @@ namespace App\Notifications\Ticket\Status;
 use App\Models\Ticket;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Data\NotificationService;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 
@@ -16,7 +17,8 @@ class ClosedTicketNotification extends Notification
      * Create a new notification instance.
      */
     public function __construct(
-        private Ticket $ticket
+        private Ticket $ticket,
+        private NotificationService $notificationService=new NotificationService,
     ) {
     }
 
@@ -27,21 +29,7 @@ class ClosedTicketNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        $viaOptions = [];
-
-        if ($notifiable->trashed() || $notifiable->id === Auth::id()) {
-            return $viaOptions;
-        }
-
-        if ($notifiable->settings['notifications']['ticket']['closed']['mail'] ?? false) {
-            array_push($viaOptions, 'mail');
-        }
-
-        if ($notifiable->settings['notifications']['ticket']['closed']['database'] ?? false) {
-            array_push($viaOptions, 'database');
-        }
-
-        return $viaOptions;
+        return $this->notificationService->handleGetDeliveryChannels($notifiable, 'ticket', 'closed');
     }
 
     /**

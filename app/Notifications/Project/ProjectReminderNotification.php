@@ -5,6 +5,7 @@ namespace App\Notifications\Project;
 use App\Models\Project;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Data\NotificationService;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 
@@ -16,7 +17,8 @@ class ProjectReminderNotification extends Notification
      * Create a new notification instance.
      */
     public function __construct(
-        private Project $project
+        private Project $project,
+        private NotificationService $notificationService=new NotificationService,
     ) {
     }
 
@@ -27,21 +29,7 @@ class ProjectReminderNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        $viaOptions = [];
-
-        if ($notifiable->trashed() || $notifiable->id === Auth::id()) {
-            return $viaOptions;
-        }
-
-        if ($notifiable->settings['notifications']['project']['reminder']['mail'] ?? false) {
-            array_push($viaOptions, 'mail');
-        }
-
-        if ($notifiable->settings['notifications']['project']['reminder']['database'] ?? false) {
-            array_push($viaOptions, 'database');
-        }
-
-        return $viaOptions;
+        return $this->notificationService->handleGetDeliveryChannels($notifiable, 'project', 'reminder');
     }
 
     /**

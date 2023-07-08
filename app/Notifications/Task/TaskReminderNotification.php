@@ -5,6 +5,7 @@ namespace App\Notifications\Task;
 use App\Models\Task;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Data\NotificationService;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 
@@ -16,7 +17,8 @@ class ReminderTaskNotification extends Notification
      * Create a new notification instance.
      */
     public function __construct(
-        private Task $task
+        private Task $task,
+        private NotificationService $notificationService=new NotificationService,
     ) {
     }
 
@@ -27,21 +29,7 @@ class ReminderTaskNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        $viaOptions = [];
-
-        if ($notifiable->trashed() || $notifiable->id === Auth::id()) {
-            return $viaOptions;
-        }
-
-        if ($notifiable->settings['notifications']['task']['reminder']['mail'] ?? false) {
-            array_push($viaOptions, 'mail');
-        }
-
-        if ($notifiable->settings['notifications']['task']['reminder']['database'] ?? false) {
-            array_push($viaOptions, 'database');
-        }
-
-        return $viaOptions;
+        return $this->notificationService->handleGetDeliveryChannels($notifiable, 'task', 'reminder');
     }
 
     /**

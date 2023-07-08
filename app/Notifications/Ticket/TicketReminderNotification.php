@@ -3,6 +3,7 @@
 namespace App\Notifications\Ticket;
 
 use App\Models\Ticket;
+use App\Services\Data\NotificationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notification;
@@ -17,6 +18,7 @@ class TicketReminderNotification extends Notification
      */
     public function __construct(
         private Ticket $ticket,
+        private NotificationService $notificationService=new NotificationService,
     ) {
     }
 
@@ -27,21 +29,7 @@ class TicketReminderNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        $viaOptions = [];
-
-        if ($notifiable->trashed() || $notifiable->id === Auth::id()) {
-            return $viaOptions;
-        }
-
-        if ($notifiable->settings['notifications']['ticket']['reminder']['mail'] ?? false) {
-            array_push($viaOptions, 'mail');
-        }
-
-        if ($notifiable->settings['notifications']['ticket']['reminder']['database'] ?? false) {
-            array_push($viaOptions, 'database');
-        }
-
-        return $viaOptions;
+        return $this->notificationService->handleGetDeliveryChannels($notifiable, 'ticket', 'reminder');
     }
 
     /**
