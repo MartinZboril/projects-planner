@@ -2,16 +2,16 @@
 
 namespace App\Services\Data;
 
+use App\Enums\ProjectStatusEnum;
 use App\Models\Project;
 use App\Models\ProjectUser;
-use App\Services\FileService;
-use App\Enums\ProjectStatusEnum;
 use App\Models\User;
 use App\Notifications\Project\Status\ArchivedProjectNotification;
 use App\Notifications\Project\Status\FinishedProjectNotification;
+use App\Notifications\Project\Status\ReactivedProjectNotification;
 use App\Notifications\Project\UserAssignedNotification;
 use App\Notifications\Project\UserUnassignedNotification;
-use App\Notifications\Project\Status\ReactivedProjectNotification;
+use App\Services\FileService;
 
 class ProjectService
 {

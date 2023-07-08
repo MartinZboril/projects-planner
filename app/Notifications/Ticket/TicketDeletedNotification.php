@@ -4,8 +4,8 @@ namespace App\Notifications\Ticket;
 
 use App\Models\Ticket;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class TicketDeletedNotification extends Notification
 {

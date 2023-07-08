@@ -5,6 +5,11 @@ namespace App\Services\Data;
 use App\Enums\TaskStatusEnum;
 use App\Models\Task;
 use App\Models\User;
+use App\Notifications\Task\Status\CompletedTaskNotification;
+use App\Notifications\Task\Status\InProgressedTaskNotification;
+use App\Notifications\Task\Status\PausedTaskNotification;
+use App\Notifications\Task\Status\ResumedTaskNotification;
+use App\Notifications\Task\Status\ReturnedTaskNotification;
 use App\Notifications\Task\UserAssignedNotification;
 use App\Notifications\Task\UserUnassignedNotification;
 use App\Services\FileService;
@@ -60,10 +65,26 @@ class TaskService
      */
     public function handleChangeStatus(Task $task, int $status): Task
     {
+        $isReturned = ($task->status === TaskStatusEnum::complete && $status === TaskStatusEnum::new->value) ? true : false;
+
         $task->update([
-            'is_returned' => ($task->status === TaskStatusEnum::complete && $status === TaskStatusEnum::new->value) ? true : false,
+            'is_returned' => $isReturned,
             'status' => $status,
         ]);
+
+        switch ($task->status) {
+            case TaskStatusEnum::new:
+                $isReturned ? $task->user->notify(new ReturnedTaskNotification($task)) : null;
+                break;
+
+            case TaskStatusEnum::in_progress:
+                $task->author->notify(new InProgressedTaskNotification($task));
+                break;
+
+            case TaskStatusEnum::complete:
+                $task->author->notify(new CompletedTaskNotification($task));
+                break;
+        }
 
         return $task->fresh();
     }
@@ -74,6 +95,8 @@ class TaskService
     public function handlePause(Task $task): Task
     {
         $task->update(['is_stopped' => ! $task->is_stopped]);
+
+        $task->author->notify($task->is_stopped ? new PausedTaskNotification($task) : new ResumedTaskNotification($task));
 
         return $task->fresh();
     }

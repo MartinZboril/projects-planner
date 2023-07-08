@@ -4,9 +4,8 @@ namespace App\Notifications\Project\Status;
 
 use App\Models\Project;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class FinishedProjectNotification extends Notification
 {
@@ -27,7 +26,7 @@ class FinishedProjectNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -36,11 +35,11 @@ class FinishedProjectNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-        ->from(config('mail.from.address'), config('mail.from.name'))
-        ->subject('The project has been finished')
-        ->greeting('Hello '.$notifiable->name)
-        ->line('The project '.$this->project->name.' has been finished by the founder.')
-        ->action('Detail', route('projects.show', $this->project));
+            ->from(config('mail.from.address'), config('mail.from.name'))
+            ->subject('The project has been finished')
+            ->greeting('Hello '.$notifiable->name)
+            ->line('The project '.$this->project->name.' has been finished by the founder.')
+            ->action('Detail', route('projects.show', $this->project));
     }
 
     /**

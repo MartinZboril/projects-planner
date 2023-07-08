@@ -4,9 +4,8 @@ namespace App\Notifications\Ticket\Status;
 
 use App\Models\Ticket;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class ClosedTicketNotification extends Notification
 {
@@ -36,11 +35,11 @@ class ClosedTicketNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-        ->from(config('mail.from.address'), config('mail.from.name'))
-        ->subject('The ticket has been closed')
-        ->greeting('Hello '.$notifiable->name)
-        ->line('The ticket '.$this->ticket->subject.' has been closed by the assignee.')
-        ->action('Detail', route('tickets.show', $this->ticket));
+            ->from(config('mail.from.address'), config('mail.from.name'))
+            ->subject('The ticket has been closed')
+            ->greeting('Hello '.$notifiable->name)
+            ->line('The ticket '.$this->ticket->subject.' has been closed by the assignee.')
+            ->action('Detail', route('tickets.show', $this->ticket));
     }
 
     /**

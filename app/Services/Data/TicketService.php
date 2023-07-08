@@ -13,7 +13,6 @@ use App\Notifications\Ticket\Status\ReopenedTicketNotification;
 use App\Notifications\Ticket\TicketConvertedToTaskNotification;
 use App\Services\FileService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class TicketService
 {

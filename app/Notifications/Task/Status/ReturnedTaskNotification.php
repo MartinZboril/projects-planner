@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Notifications\Project\Status;
+namespace App\Notifications\Task\Status;
 
-use App\Models\Project;
+use App\Models\Task;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ReactivedProjectNotification extends Notification
+class ReturnedTaskNotification extends Notification
 {
     use Queueable;
 
@@ -15,7 +15,7 @@ class ReactivedProjectNotification extends Notification
      * Create a new notification instance.
      */
     public function __construct(
-        private Project $project
+        private Task $task
     ) {
     }
 
@@ -36,10 +36,10 @@ class ReactivedProjectNotification extends Notification
     {
         return (new MailMessage)
             ->from(config('mail.from.address'), config('mail.from.name'))
-            ->subject('The project has been reactivated')
+            ->subject('The task has been returned')
             ->greeting('Hello '.$notifiable->name)
-            ->line('The project '.$this->project->name.' has been reactivated by the founder.')
-            ->action('Detail', route('projects.show', $this->project));
+            ->line('The task '.$this->task->name.' has been returned by the author.')
+            ->action('Detail', route('tasks.show', $this->task));
     }
 
     /**
@@ -50,8 +50,8 @@ class ReactivedProjectNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'content' => 'The project '.$this->project->name.' has been reactivated by the founder.',
-            'link' => route('projects.show', $this->project),
+            'content' => 'The task '.$this->task->name.' has been returned by the author.',
+            'link' => route('tasks.show', $this->task),
         ];
     }
 }
