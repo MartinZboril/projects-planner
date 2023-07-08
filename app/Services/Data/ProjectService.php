@@ -2,12 +2,16 @@
 
 namespace App\Services\Data;
 
-use App\Enums\ProjectStatusEnum;
 use App\Models\Project;
 use App\Models\ProjectUser;
+use App\Services\FileService;
+use App\Enums\ProjectStatusEnum;
+use App\Models\User;
+use App\Notifications\Project\Status\ArchivedProjectNotification;
+use App\Notifications\Project\Status\FinishedProjectNotification;
 use App\Notifications\Project\UserAssignedNotification;
 use App\Notifications\Project\UserUnassignedNotification;
-use App\Services\FileService;
+use App\Notifications\Project\Status\ReactivedProjectNotification;
 
 class ProjectService
 {
@@ -65,6 +69,28 @@ class ProjectService
     public function handleChange(Project $project, int $status): Project
     {
         $project->update(['status' => $status]);
+
+        $notification = null;
+
+        switch ($project->status) {
+            case ProjectStatusEnum::active:
+                $notification = new ReactivedProjectNotification($project);
+                break;
+
+            case ProjectStatusEnum::finish:
+                $notification = new FinishedProjectNotification($project);
+                break;
+
+            case ProjectStatusEnum::archive:
+                $notification = new ArchivedProjectNotification($project);
+                break;
+        }
+
+        if ($notification) {
+            $project->team->each(function (User $user) use ($notification) {
+                $user->notify($notification);
+            });
+        }
 
         return $project->fresh();
     }
