@@ -36,7 +36,7 @@ class AssigneeUnassignedNotification extends Notification
     {
         return (new MailMessage)
             ->from(config('mail.from.address'), config('mail.from.name'))
-            ->subject('unassigned from the ticket')
+            ->subject('Unassigned from the ticket')
             ->greeting('Hello '.$notifiable->name)
             ->line('You have been unassigned from the ticket '.$this->ticket->subject)
             ->action('Detail', route('tickets.show', $this->ticket));

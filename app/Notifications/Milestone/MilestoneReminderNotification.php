@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Notifications\Task;
+namespace App\Notifications\Milestone;
 
-use App\Models\Task;
+use App\Models\Milestone;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class TaskReminderNotification extends Notification
+class MilestoneReminderNotification extends Notification
 {
     use Queueable;
 
@@ -15,7 +15,7 @@ class TaskReminderNotification extends Notification
      * Create a new notification instance.
      */
     public function __construct(
-        private Task $task
+        private Milestone $milestone
     ) {
     }
 
@@ -36,9 +36,10 @@ class TaskReminderNotification extends Notification
     {
         return (new MailMessage)
             ->from(config('mail.from.address'), config('mail.from.name'))
-            ->subject('Task has been deleted')
+            ->subject('Milestone due date reminder')
             ->greeting('Hello '.$notifiable->name)
-            ->line('The '.$this->task->name.' task has been deleted and work on it is finished.');
+            ->line('Reminder of due date for milestone '.$this->milestone->name)
+            ->action('Detail', route('projects.milestones.show', ['project' => $this->milestone->project, 'milestone' => $this->milestone]));
     }
 
     /**
@@ -49,7 +50,8 @@ class TaskReminderNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'content' => 'The '.$this->task->name.' task has been deleted and work on it is finished.',
+            'content' => 'Reminder of due date for milestone '.$this->milestone->name,
+            'link' => route('projects.milestones.show', ['project' => $this->milestone->project, 'milestone' => $this->milestone]),
         ];
     }
 }

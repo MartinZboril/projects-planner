@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Notifications\Task;
+namespace App\Notifications\Ticket;
 
-use App\Models\Task;
+use App\Models\Ticket;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class TaskReminderNotification extends Notification
+class TicketReminderNotification extends Notification
 {
     use Queueable;
 
@@ -15,7 +15,7 @@ class TaskReminderNotification extends Notification
      * Create a new notification instance.
      */
     public function __construct(
-        private Task $task
+        private Ticket $ticket
     ) {
     }
 
@@ -36,9 +36,10 @@ class TaskReminderNotification extends Notification
     {
         return (new MailMessage)
             ->from(config('mail.from.address'), config('mail.from.name'))
-            ->subject('Task has been deleted')
+            ->subject('Ticket due date reminder')
             ->greeting('Hello '.$notifiable->name)
-            ->line('The '.$this->task->name.' task has been deleted and work on it is finished.');
+            ->line('Reminder of due date for task '.$this->ticket->subject)
+            ->action('Detail', route('tickets.show', $this->ticket));
     }
 
     /**
@@ -49,7 +50,8 @@ class TaskReminderNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'content' => 'The '.$this->task->name.' task has been deleted and work on it is finished.',
+            'content' => 'Reminder of due date for task '.$this->ticket->subject,
+            'link' => route('tickets.show', $this->ticket),
         ];
     }
 }
