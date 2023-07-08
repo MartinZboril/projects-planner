@@ -27,11 +27,21 @@ class OwnerAssignedNotification extends Notification
      */
     public function via(object $notifiable): array
     {
+        $viaOptions = [];
+
         if ($notifiable->trashed() || $notifiable->id === Auth::id()) {
-            return [];
+            return $viaOptions;
         }
 
-        return ['database', 'mail'];
+        if ($notifiable->settings['notifications']['milestone']['assigned']['mail'] ?? false) {
+            array_push($viaOptions, 'mail');
+        }
+
+        if ($notifiable->settings['notifications']['milestone']['assigned']['database'] ?? false) {
+            array_push($viaOptions, 'database');
+        }
+
+        return $viaOptions;
     }
 
     /**

@@ -27,11 +27,21 @@ class FinishedProjectNotification extends Notification
      */
     public function via(object $notifiable): array
     {
+        $viaOptions = [];
+
         if ($notifiable->trashed() || $notifiable->id === Auth::id()) {
-            return [];
+            return $viaOptions;
         }
 
-        return ['database', 'mail'];
+        if ($notifiable->settings['notifications']['project']['finished']['mail'] ?? false) {
+            array_push($viaOptions, 'mail');
+        }
+
+        if ($notifiable->settings['notifications']['project']['finished']['database'] ?? false) {
+            array_push($viaOptions, 'database');
+        }
+
+        return $viaOptions;
     }
 
     /**

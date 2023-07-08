@@ -27,11 +27,21 @@ class ClosedTicketNotification extends Notification
      */
     public function via(object $notifiable): array
     {
+        $viaOptions = [];
+
         if ($notifiable->trashed() || $notifiable->id === Auth::id()) {
-            return [];
+            return $viaOptions;
         }
 
-        return ['database', 'mail'];
+        if ($notifiable->settings['notifications']['ticket']['closed']['mail'] ?? false) {
+            array_push($viaOptions, 'mail');
+        }
+
+        if ($notifiable->settings['notifications']['ticket']['closed']['database'] ?? false) {
+            array_push($viaOptions, 'database');
+        }
+
+        return $viaOptions;
     }
 
     /**

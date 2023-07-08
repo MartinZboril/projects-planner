@@ -16,7 +16,7 @@ class TicketReminderNotification extends Notification
      * Create a new notification instance.
      */
     public function __construct(
-        private Ticket $ticket
+        private Ticket $ticket,
     ) {
     }
 
@@ -27,11 +27,21 @@ class TicketReminderNotification extends Notification
      */
     public function via(object $notifiable): array
     {
+        $viaOptions = [];
+
         if ($notifiable->trashed() || $notifiable->id === Auth::id()) {
-            return [];
+            return $viaOptions;
         }
 
-        return ['database', 'mail'];
+        if ($notifiable->settings['notifications']['ticket']['reminder']['mail'] ?? false) {
+            array_push($viaOptions, 'mail');
+        }
+
+        if ($notifiable->settings['notifications']['ticket']['reminder']['database'] ?? false) {
+            array_push($viaOptions, 'database');
+        }
+
+        return $viaOptions;
     }
 
     /**

@@ -27,6 +27,7 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'settings' => 'array',
     ];
 
     protected $appends = [
@@ -46,6 +47,7 @@ class User extends Authenticatable
         'job_title' => ['string', 'nullable', 'max:255'],
         'mobile' => ['string', 'nullable', 'max:255'],
         'phone' => ['string', 'nullable', 'max:255'],
+        'settings' => ['nullable', 'array'],
     ];
 
     public function address(): BelongsTo
