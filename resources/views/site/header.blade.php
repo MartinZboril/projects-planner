@@ -35,6 +35,25 @@
             </a>
         </li>
         <li class="nav-item dropdown">
+            <a class="nav-link" data-toggle="dropdown" href="#">
+            <i class="far fa-bell"></i>
+            <span class="badge badge-warning navbar-badge unread-notifications-count">{{ auth()->user()->unreadNotifications()->count() }}</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+            <span class="dropdown-item dropdown-header"><span class="unread-notifications-count">{{ auth()->user()->unreadNotifications()->count() }}</span> Notifications</span>
+            <div class="dropdown-divider"></div>
+            @foreach (auth()->user()->unreadNotifications()->get() as $notification)
+                <a href="#" class="dropdown-item notification-{{ $notification->id }}-item" @if ($notification->data['link'] ?? false) onclick="viewNotificationLink('{{ route('notifications.seen', $notification) }}', '{{ $notification->data['link'] }}')" @else onclick="seenNotification('{{ route('notifications.seen', $notification) }}', '{{ $notification->id }}')" @endif class="dropdown-item">
+                    <span class="text-wrap">{!! Str::limit($notification->data['content'], 100, ' ...') !!}</span>
+                    <span class="float-right text-muted text-sm">{{ $notification->created_at->diffForHumans() }}</span>
+                </a>
+            @endforeach
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-divider"></div>
+                <a href="{{ route('notifications.index') }}" class="dropdown-item dropdown-footer">See All Notifications</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                 <img src="{{ (Auth::user()->avatar ?? false) ? asset('storage/' . Auth::user()->avatar->path) : asset('dist/img/user.png') }}" class="img-circle mr-2" alt="User Image" style="width: 25px;height: 25px;">
                 {{ Auth::User()->name }}

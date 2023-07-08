@@ -17,6 +17,8 @@ return [
         'analysis' => 'Analysis',
         'note' => 'Note',
         'role' => 'Role',
+        'realeases' => 'Releases',
+        'notifications' => 'Notifications',
     ],
     'content' => [
         'projects' => [

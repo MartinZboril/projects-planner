@@ -96,6 +96,10 @@ return [
         'update' => 'Role was updated!',
         'delete' => 'Role was deleted!',
     ],
+    'notification' => [
+        'read' => 'Notification marked as read!',
+        'read_all' => 'All notifications were mark as read!',
+    ],
     'complete' => 'Action was completed!',
     'error' => 'An error has occurred!',
 ];
