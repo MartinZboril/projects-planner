@@ -4,8 +4,9 @@ namespace App\Notifications\Ticket\Status;
 
 use App\Models\Ticket;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class ClosedTicketNotification extends Notification
 {
@@ -26,6 +27,10 @@ class ClosedTicketNotification extends Notification
      */
     public function via(object $notifiable): array
     {
+        if ($notifiable->trashed() || $notifiable->id === Auth::id()) {
+            return [];
+        }
+
         return ['database', 'mail'];
     }
 

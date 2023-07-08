@@ -4,8 +4,9 @@ namespace App\Notifications\Milestone;
 
 use App\Models\Milestone;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class OwnerUnassignedNotification extends Notification
 {
@@ -26,6 +27,10 @@ class OwnerUnassignedNotification extends Notification
      */
     public function via(object $notifiable): array
     {
+        if ($notifiable->trashed() || $notifiable->id === Auth::id()) {
+            return [];
+        }
+
         return ['database', 'mail'];
     }
 

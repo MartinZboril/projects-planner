@@ -4,8 +4,9 @@ namespace App\Notifications\ToDo;
 
 use App\Models\ToDo;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class ToDoReminderNotification extends Notification
 {
@@ -26,6 +27,10 @@ class ToDoReminderNotification extends Notification
      */
     public function via(object $notifiable): array
     {
+        if ($notifiable->trashed() || $notifiable->id === Auth::id()) {
+            return [];
+        }
+
         return ['database', 'mail'];
     }
 
