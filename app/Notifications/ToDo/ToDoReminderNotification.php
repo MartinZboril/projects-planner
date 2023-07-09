@@ -3,11 +3,10 @@
 namespace App\Notifications\ToDo;
 
 use App\Models\ToDo;
-use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Auth;
 use App\Services\Data\NotificationService;
-use Illuminate\Notifications\Notification;
+use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class ToDoReminderNotification extends Notification
 {
@@ -18,7 +17,7 @@ class ToDoReminderNotification extends Notification
      */
     public function __construct(
         private ToDo $todo,
-        private NotificationService $notificationService=new NotificationService,
+        private NotificationService $notificationService = new NotificationService,
     ) {
     }
 

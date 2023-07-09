@@ -2,22 +2,6 @@
 
 namespace App\Providers;
 
-use App\Models\Client;
-use App\Models\Comment;
-use App\Models\Milestone;
-use App\Models\Project;
-use App\Models\Role;
-use App\Models\Task;
-use App\Models\Ticket;
-use App\Models\User;
-use App\Observers\ClientObserver;
-use App\Observers\CommentObserver;
-use App\Observers\MilestoneObserver;
-use App\Observers\ProjectObserver;
-use App\Observers\RoleObserver;
-use App\Observers\TaskObserver;
-use App\Observers\TicketObserver;
-use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -30,6 +14,28 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
+        \App\Events\CommentCreated::class => [
+            \App\Listeners\SendCommentCreatedNotification::class,
+        ],
+        \App\Events\Milestone\MilestoneOwnerChanged::class => [
+            \App\Listeners\Milestone\SendAssignmentNotifications::class,
+        ],
+        \App\Events\ProjectTeamChanged::class => [
+            \App\Listeners\Project\SendWelcomeToNewMembersNotification::class,
+            \App\Listeners\Project\SendFarewellToOldMembersNotification::class,
+        ],
+        \App\Events\Task\TaskUserChanged::class => [
+            \App\Listeners\Task\SendAssignmentNotifications::class,
+        ],
+        \App\Events\Ticket\TicketAssigneeChanged::class => [
+            \App\Listeners\Ticket\SendAssignmentNotifications::class,
+        ],
+        \App\Events\User\UserCreated::class => [
+            \App\Listeners\User\SendUserCreatedNotification::class,
+        ],
+        \App\Events\User\UserDeleted::class => [
+            \App\Listeners\User\SendUserDeletedNotification::class,
+        ],
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
@@ -42,13 +48,13 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Client::observe(ClientObserver::class);
-        Comment::observe(CommentObserver::class);
-        Milestone::observe(MilestoneObserver::class);
-        Project::observe(ProjectObserver::class);
-        Role::observe(RoleObserver::class);
-        Task::observe(TaskObserver::class);
-        Ticket::observe(TicketObserver::class);
-        User::observe(UserObserver::class);
+        \App\Models\Client::observe(\App\Observers\ClientObserver::class);
+        \App\Models\Comment::observe(\App\Observers\CommentObserver::class);
+        \App\Models\Milestone::observe(\App\Observers\MilestoneObserver::class);
+        \App\Models\Project::observe(\App\Observers\ProjectObserver::class);
+        \App\Models\Role::observe(\App\Observers\RoleObserver::class);
+        \App\Models\Task::observe(\App\Observers\TaskObserver::class);
+        \App\Models\Ticket::observe(\App\Observers\TicketObserver::class);
+        \App\Models\User::observe(\App\Observers\UserObserver::class);
     }
 }

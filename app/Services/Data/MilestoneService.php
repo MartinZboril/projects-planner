@@ -2,10 +2,9 @@
 
 namespace App\Services\Data;
 
+use App\Events\Milestone\MilestoneOwnerChanged;
 use App\Models\Milestone;
 use App\Models\User;
-use App\Notifications\Milestone\OwnerAssignedNotification;
-use App\Notifications\Milestone\OwnerUnassignedNotification;
 use App\Services\FileService;
 
 class MilestoneService
@@ -32,11 +31,7 @@ class MilestoneService
         }
         // Notify owner about assigning to the milestone
         if ((int) $oldOwnerId !== (int) $milestone->owner_id) {
-            $milestone->owner->notify(new OwnerAssignedNotification($milestone));
-
-            if ($oldOwnerId) {
-                User::find($oldOwnerId)->notify(new OwnerUnassignedNotification($milestone));
-            }
+            MilestoneOwnerChanged::dispatch($milestone, $milestone->owner, ($oldOwnerId) ? User::find($oldOwnerId) : null);
         }
 
         return $milestone;

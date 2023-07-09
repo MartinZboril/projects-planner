@@ -4,9 +4,9 @@ namespace App\Notifications\Task;
 
 use App\Models\Task;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Auth;
 
 class UserDeletedNotification extends Notification
 {

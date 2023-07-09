@@ -3,6 +3,7 @@
 namespace App\Services\Data;
 
 use App\Enums\TaskStatusEnum;
+use App\Events\Task\TaskUserChanged;
 use App\Models\Task;
 use App\Models\User;
 use App\Notifications\Task\Status\CompletedTaskNotification;
@@ -10,8 +11,6 @@ use App\Notifications\Task\Status\InProgressedTaskNotification;
 use App\Notifications\Task\Status\PausedTaskNotification;
 use App\Notifications\Task\Status\ResumedTaskNotification;
 use App\Notifications\Task\Status\ReturnedTaskNotification;
-use App\Notifications\Task\UserAssignedNotification;
-use App\Notifications\Task\UserUnassignedNotification;
 use App\Services\FileService;
 use Illuminate\Support\Facades\Auth;
 
@@ -40,11 +39,7 @@ class TaskService
         }
         // Notify users about assignment to the task
         if ((int) $oldUserId !== (int) $task->user_id) {
-            $task->user->notify(new UserAssignedNotification($task));
-
-            if ($oldUserId) {
-                User::find($oldUserId)->notify(new UserUnassignedNotification($task));
-            }
+            TaskUserChanged::dispatch($task, $task->user, ($oldUserId) ? User::find($oldUserId) : null);
         }
 
         return $task;

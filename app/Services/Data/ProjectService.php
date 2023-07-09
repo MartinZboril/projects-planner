@@ -3,14 +3,13 @@
 namespace App\Services\Data;
 
 use App\Enums\ProjectStatusEnum;
+use App\Events\Project\ProjectTeamChanged;
 use App\Models\Project;
 use App\Models\ProjectUser;
 use App\Models\User;
 use App\Notifications\Project\Status\ArchivedProjectNotification;
 use App\Notifications\Project\Status\FinishedProjectNotification;
 use App\Notifications\Project\Status\ReactivedProjectNotification;
-use App\Notifications\Project\UserAssignedNotification;
-use App\Notifications\Project\UserUnassignedNotification;
 use App\Services\FileService;
 
 class ProjectService
@@ -33,22 +32,12 @@ class ProjectService
         if ($uploadedFiles) {
             $this->handleUploadFiles($project, $uploadedFiles);
         }
-        $oldTeam = ProjectUser::where('project_id', $project->id)->pluck('user_id');
         // Store projects team
+        $oldTeam = ProjectUser::where('project_id', $project->id)->pluck('user_id');
         ($project->team()->count() === 0) ? $project->team()->attach($inputs['team']) : $project->team()->sync($inputs['team']);
-        // Notify newly added users
-        foreach ($project->team as $user) {
-            if (! in_array($user->id, $oldTeam->toArray())) {
-                $user->notify(new UserAssignedNotification($project));
-            }
-        }
-        // Notify removed users from the project
         $newTeam = ProjectUser::where('project_id', $project->id)->pluck('user_id');
-        foreach ($oldTeam as $userId) {
-            if (! in_array($userId, $newTeam->toArray())) {
-                $user->notify(new UserUnassignedNotification($project));
-            }
-        }
+        // Dispatch event with notify users about their assignmenents
+        ProjectTeamChanged::dispatch($project, $newTeam, $oldTeam);
 
         return $project;
     }

@@ -3,11 +3,10 @@
 namespace App\Notifications\Ticket;
 
 use App\Models\Ticket;
-use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Auth;
 use App\Services\Data\NotificationService;
-use Illuminate\Notifications\Notification;
+use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class AssigneeAssignedNotification extends Notification
 {
@@ -18,7 +17,7 @@ class AssigneeAssignedNotification extends Notification
      */
     public function __construct(
         private Ticket $ticket,
-        private NotificationService $notificationService=new NotificationService,
+        private NotificationService $notificationService = new NotificationService,
     ) {
     }
 

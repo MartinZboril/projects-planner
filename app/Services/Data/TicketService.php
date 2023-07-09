@@ -3,10 +3,9 @@
 namespace App\Services\Data;
 
 use App\Enums\TicketStatusEnum;
+use App\Events\Ticket\TicketAssigneeChanged;
 use App\Models\Ticket;
 use App\Models\User;
-use App\Notifications\Ticket\AssigneeAssignedNotification;
-use App\Notifications\Ticket\AssigneeUnassignedNotification;
 use App\Notifications\Ticket\Status\ArchivedTicketNotification;
 use App\Notifications\Ticket\Status\ClosedTicketNotification;
 use App\Notifications\Ticket\Status\ReopenedTicketNotification;
@@ -39,11 +38,7 @@ class TicketService
         }
         // Notify assignee about assigning to the ticket
         if (($ticket->assignee ?? false) && ((int) $oldAssigneeId !== (int) $ticket->assignee_id)) {
-            $ticket->assignee->notify(new AssigneeAssignedNotification($ticket));
-
-            if ($oldAssigneeId) {
-                User::find($oldAssigneeId)->notify(new AssigneeUnassignedNotification($ticket));
-            }
+            TicketAssigneeChanged::dispatch($ticket, $ticket->assignee, ($oldAssigneeId) ? User::find($oldAssigneeId) : null);
         }
 
         return $ticket;

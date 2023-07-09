@@ -3,11 +3,10 @@
 namespace App\Notifications\Milestone;
 
 use App\Models\Milestone;
-use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Auth;
 use App\Services\Data\NotificationService;
-use Illuminate\Notifications\Notification;
+use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class OwnerAssignedNotification extends Notification
 {
@@ -18,7 +17,7 @@ class OwnerAssignedNotification extends Notification
      */
     public function __construct(
         private Milestone $milestone,
-        private NotificationService $notificationService=new NotificationService,
+        private NotificationService $notificationService = new NotificationService,
     ) {
     }
 

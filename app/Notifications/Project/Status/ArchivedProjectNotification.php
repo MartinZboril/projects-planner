@@ -3,11 +3,10 @@
 namespace App\Notifications\Project\Status;
 
 use App\Models\Project;
-use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Auth;
 use App\Services\Data\NotificationService;
-use Illuminate\Notifications\Notification;
+use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class ArchivedProjectNotification extends Notification
 {
@@ -18,7 +17,7 @@ class ArchivedProjectNotification extends Notification
      */
     public function __construct(
         private Project $project,
-        private NotificationService $notificationService=new NotificationService,
+        private NotificationService $notificationService = new NotificationService,
     ) {
     }
 

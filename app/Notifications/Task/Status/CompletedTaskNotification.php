@@ -3,11 +3,10 @@
 namespace App\Notifications\Task\Status;
 
 use App\Models\Task;
-use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Auth;
 use App\Services\Data\NotificationService;
-use Illuminate\Notifications\Notification;
+use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class CompletedTaskNotification extends Notification
 {
@@ -18,7 +17,7 @@ class CompletedTaskNotification extends Notification
      */
     public function __construct(
         private Task $task,
-        private NotificationService $notificationService=new NotificationService,
+        private NotificationService $notificationService = new NotificationService,
     ) {
     }
 
@@ -28,7 +27,9 @@ class CompletedTaskNotification extends Notification
      * @return array<int, string>
      */
     public function via(object $notifiable): array
-    {info(count($this->notificationService->handleGetDeliveryChannels($notifiable, 'task', 'completed')));
+    {
+        info(count($this->notificationService->handleGetDeliveryChannels($notifiable, 'task', 'completed')));
+
         return $this->notificationService->handleGetDeliveryChannels($notifiable, 'task', 'completed');
     }
 

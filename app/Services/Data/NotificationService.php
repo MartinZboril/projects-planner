@@ -2,8 +2,8 @@
 
 namespace App\Services\Data;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationService
 {

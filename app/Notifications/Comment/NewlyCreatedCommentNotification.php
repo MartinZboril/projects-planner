@@ -3,11 +3,10 @@
 namespace App\Notifications\Comment;
 
 use App\Models\Comment;
-use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Auth;
 use App\Services\Data\NotificationService;
-use Illuminate\Notifications\Notification;
+use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
 
 class NewlyCreatedCommentNotification extends Notification
 {
@@ -18,9 +17,8 @@ class NewlyCreatedCommentNotification extends Notification
      */
     public function __construct(
         private Comment $comment,
-        private string $detail,
-        private array $object,
-        private NotificationService $notificationService=new NotificationService,
+        private object $object,
+        private NotificationService $notificationService = new NotificationService,
     ) {
     }
 
@@ -31,7 +29,7 @@ class NewlyCreatedCommentNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return $this->notificationService->handleGetDeliveryChannels($notifiable, $this->object['type'], 'commented');
+        return $this->notificationService->handleGetDeliveryChannels($notifiable, $this->object->data->type, 'commented');
     }
 
     /**
@@ -43,8 +41,8 @@ class NewlyCreatedCommentNotification extends Notification
             ->from(config('mail.from.address'), config('mail.from.name'))
             ->subject('Newly created comment in ...')
             ->greeting('Hello '.$notifiable->name)
-            ->line('In the '.$this->object['type'].' '.$this->object['name'].' was newly created comment.')
-            ->action('Detail', $this->detail);
+            ->line('In the '.$this->object->data->type.' '.$this->object->data->name.' was newly created comment.')
+            ->action('Detail', $this->object->detail);
     }
 
     /**
@@ -55,8 +53,8 @@ class NewlyCreatedCommentNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'content' => 'In the '.$this->object['type'].' '.$this->object['name'].' was newly created comment.',
-            'link' => $this->detail,
+            'content' => 'In the '.$this->object->data->type.' '.$this->object->data->name.' was newly created comment.',
+            'link' => $this->object->detail,
         ];
     }
 }

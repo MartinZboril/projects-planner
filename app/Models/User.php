@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\User\UserDeleted;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -34,6 +35,10 @@ class User extends Authenticatable
         'full_name',
         'job_title_label',
         'mobile_label',
+    ];
+
+    protected $dispatchesEvents = [
+        'deleted' => UserDeleted::class,
     ];
 
     public const VALIDATION_RULES = [

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Notifications;
 
+use App\Http\Controllers\Controller;
+use App\Services\Data\NotificationService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
-use App\Services\Data\NotificationService;
 
 class NotificationSeenAllController extends Controller
 {

@@ -2,10 +2,9 @@
 
 namespace App\Services\Data;
 
+use App\Events\User\UserCreated;
 use App\Models\Address;
 use App\Models\User;
-use App\Notifications\User\UserCreatedNotification;
-use App\Notifications\User\UserDeletedNotification;
 use App\Services\FileService;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
@@ -51,7 +50,7 @@ class UserService
         }
 
         if ($registerMode) {
-            $user->notify(new UserCreatedNotification($user, $password));
+            UserCreated::dispatch($user, $password);
         }
 
         return $user;
@@ -71,7 +70,6 @@ class UserService
     public function handleDelete(User $user): void
     {
         $user->delete();
-        $user->notify(new UserDeletedNotification($user));
     }
 
     /**
