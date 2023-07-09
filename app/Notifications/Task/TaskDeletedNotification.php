@@ -8,7 +8,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class TaskReminderNotification extends Notification
+class TaskDeletedNotification extends Notification
 {
     use Queueable;
 

@@ -18,17 +18,32 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\SendCommentCreatedNotification::class,
         ],
         \App\Events\Milestone\MilestoneOwnerChanged::class => [
-            \App\Listeners\Milestone\SendAssignmentNotifications::class,
+            \App\Listeners\Milestone\SendMilestoneAssignmentNotifications::class,
         ],
         \App\Events\ProjectTeamChanged::class => [
             \App\Listeners\Project\SendWelcomeToNewMembersNotification::class,
             \App\Listeners\Project\SendFarewellToOldMembersNotification::class,
         ],
         \App\Events\Task\TaskUserChanged::class => [
-            \App\Listeners\Task\SendAssignmentNotifications::class,
+            \App\Listeners\Task\SendTaskAssignmentNotifications::class,
+        ],
+        \App\Events\Task\Status\TaskCompleted::class => [
+            \App\Listeners\Task\Status\SendTaskCompletedNotification::class,
+        ],
+        \App\Events\Task\Status\TaskInProgressed::class => [
+            \App\Listeners\Task\Status\SendTaskInProgressedNotification::class,
+        ],
+        \App\Events\Task\Status\TaskReturned::class => [
+            \App\Listeners\Task\Status\SendTaskReturnedNotification::class,
+        ],
+        \App\Events\Task\Status\TaskPaused::class => [
+            \App\Listeners\Task\Status\SendTaskPausedNotification::class,
+        ],
+        \App\Events\Task\Status\TaskResumed::class => [
+            \App\Listeners\Task\Status\SendTaskResumedNotification::class,
         ],
         \App\Events\Ticket\TicketAssigneeChanged::class => [
-            \App\Listeners\Ticket\SendAssignmentNotifications::class,
+            \App\Listeners\Ticket\SendTicketAssignmentNotifications::class,
         ],
         \App\Events\User\UserCreated::class => [
             \App\Listeners\User\SendUserCreatedNotification::class,

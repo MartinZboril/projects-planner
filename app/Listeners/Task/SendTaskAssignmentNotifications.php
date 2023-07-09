@@ -6,7 +6,7 @@ use App\Events\Task\TaskUserChanged;
 use App\Notifications\Task\UserAssignedNotification;
 use App\Notifications\Task\UserUnassignedNotification;
 
-class SendAssignmentNotifications
+class SendTaskAssignmentNotifications
 {
     /**
      * Create the event listener.

@@ -6,7 +6,7 @@ use App\Events\Ticket\TicketAssigneeChanged;
 use App\Notifications\Ticket\AssigneeAssignedNotification;
 use App\Notifications\Ticket\AssigneeUnassignedNotification;
 
-class SendAssignmentNotifications
+class SendTicketAssignmentNotifications
 {
     /**
      * Create the event listener.

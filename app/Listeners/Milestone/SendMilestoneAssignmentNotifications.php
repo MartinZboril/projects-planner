@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Notifications\Milestone\OwnerAssignedNotification;
 use App\Notifications\Milestone\OwnerUnassignedNotification;
 
-class SendAssignmentNotifications
+class SendMilestoneAssignmentNotifications
 {
     /**
      * Create the event listener.
