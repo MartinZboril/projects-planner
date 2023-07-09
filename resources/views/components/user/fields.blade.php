@@ -184,12 +184,14 @@
                     <x-notification.settings-option title="Project finished" parent="project" action="finished" :$user :$type />
                     <x-notification.settings-option title="Project reactivated" parent="project" action="reactivated" :$user :$type />
                     <x-notification.settings-option title="Project archived" parent="project" action="archived" :$user :$type />
+                    <x-notification.settings-option title="Project commented" parent="project" action="commented" :$user :$type />
                 </div>
                 <h6>Milestone</h6>
                 <div class="row mt-3 mb-2">
                     <x-notification.settings-option title="Milestone reminder" parent="milestone" action="reminder" :$user :$type />
                     <x-notification.settings-option title="Milestone assigned" parent="milestone" action="assigned" :$user :$type />
                     <x-notification.settings-option title="Milestone unassigned" parent="milestone" action="unassigned" :$user :$type />
+                    <x-notification.settings-option title="Milestone commented" parent="milestone" action="commented" :$user :$type />
                 </div>
                 <h6>Task</h6>
                 <div class="row mt-3 mb-2">
@@ -202,6 +204,7 @@
                     <x-notification.settings-option title="Task returned" parent="task" action="returned" :$user :$type />
                     <x-notification.settings-option title="Task paused" parent="task" action="paused" :$user :$type />
                     <x-notification.settings-option title="Task resumed" parent="task" action="resumed" :$user :$type />
+                    <x-notification.settings-option title="Task commented" parent="task" action="commented" :$user :$type />
                 </div>
                 <h6>Todo</h6>
                 <div class="row mt-3 mb-2">
@@ -217,6 +220,7 @@
                     <x-notification.settings-option title="Ticket reopened" parent="ticket" action="reopened" :$user :$type />
                     <x-notification.settings-option title="Ticket archived" parent="ticket" action="archived" :$user :$type />
                     <x-notification.settings-option title="Ticket converted" parent="ticket" action="converted" :$user :$type />
+                    <x-notification.settings-option title="Ticket commented" parent="ticket" action="commented" :$user :$type />
                 </div>
             </div>
         </div>

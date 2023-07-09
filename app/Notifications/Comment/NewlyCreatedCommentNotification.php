@@ -5,6 +5,7 @@ namespace App\Notifications\Comment;
 use App\Models\Comment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Data\NotificationService;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 
@@ -19,6 +20,7 @@ class NewlyCreatedCommentNotification extends Notification
         private Comment $comment,
         private string $detail,
         private array $object,
+        private NotificationService $notificationService=new NotificationService,
     ) {
     }
 
@@ -29,11 +31,7 @@ class NewlyCreatedCommentNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        if ($notifiable->trashed() || $notifiable->id === Auth::id()) {
-            return [];
-        }
-
-        return ['database', 'mail'];
+        return $this->notificationService->handleGetDeliveryChannels($notifiable, $this->object['type'], 'commented');
     }
 
     /**

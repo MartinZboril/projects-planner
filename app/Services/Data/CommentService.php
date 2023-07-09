@@ -48,7 +48,7 @@ class CommentService
         switch ($model::class) {
             case 'App\Models\Project':
                 $notifiers = $model->team;
-                $detail = route('projects.show', $model);
+                $detail = route('projects.comments.index', $model);
                 $object = [
                     'name' => $model->name,
                     'type' => 'project',
