@@ -3,13 +3,13 @@
 namespace App\Services\Data;
 
 use App\Enums\TicketStatusEnum;
+use App\Events\Ticket\Status\TicketArchived;
+use App\Events\Ticket\Status\TicketClosed;
+use App\Events\Ticket\Status\TicketConverted;
+use App\Events\Ticket\Status\TicketReopened;
 use App\Events\Ticket\TicketAssigneeChanged;
 use App\Models\Ticket;
 use App\Models\User;
-use App\Notifications\Ticket\Status\ArchivedTicketNotification;
-use App\Notifications\Ticket\Status\ClosedTicketNotification;
-use App\Notifications\Ticket\Status\ReopenedTicketNotification;
-use App\Notifications\Ticket\TicketConvertedToTaskNotification;
 use App\Services\FileService;
 use Illuminate\Support\Facades\Auth;
 
@@ -63,15 +63,15 @@ class TicketService
 
         switch ($ticket->status) {
             case TicketStatusEnum::open:
-                $ticket->assignee->notify(new ReopenedTicketNotification($ticket));
+                TicketReopened::dispatch($ticket);
                 break;
 
             case TicketStatusEnum::close:
-                $ticket->reporter->notify(new ClosedTicketNotification($ticket));
+                TicketClosed::dispatch($ticket);
                 break;
 
             case TicketStatusEnum::archive:
-                $ticket->assignee->notify(new ArchivedTicketNotification($ticket));
+                TicketArchived::dispatch($ticket);
                 break;
         }
 
@@ -84,7 +84,7 @@ class TicketService
     public function handleConvert(Ticket $ticket): void
     {
         $ticket->update(['status' => TicketStatusEnum::convert]);
-        $ticket->task->user->notify(new TicketConvertedToTaskNotification($ticket));
+        TicketConverted::dispatch($ticket);
     }
 
     /**

@@ -23,9 +23,6 @@ class SendMilestoneAssignmentNotifications
     public function handle(MilestoneOwnerChanged $event): void
     {
         $event->milestone->owner->notify(new OwnerAssignedNotification($event->milestone));
-
-        if ($event->old_owner) {
-            User::find($event->old_owner)->notify(new OwnerUnassignedNotification($event->milestone));
-        }
+        $event->old_owner?->notify(new OwnerUnassignedNotification($event->milestone));
     }
 }

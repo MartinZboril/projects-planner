@@ -45,6 +45,18 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\Ticket\TicketAssigneeChanged::class => [
             \App\Listeners\Ticket\SendTicketAssignmentNotifications::class,
         ],
+        \App\Events\Ticket\Status\TicketArchived::class => [
+            \App\Listeners\Ticket\Status\SendTicketArchivedNotification::class,
+        ],
+        \App\Events\Ticket\Status\TicketClosed::class => [
+            \App\Listeners\Ticket\Status\SendTicketClosedNotification::class,
+        ],
+        \App\Events\Ticket\Status\TicketConverted::class => [
+            \App\Listeners\Ticket\Status\SendTicketConvertedNotification::class,
+        ],
+        \App\Events\Ticket\Status\TicketReopened::class => [
+            \App\Listeners\Ticket\Status\SendTicketReopenedNotification::class,
+        ],
         \App\Events\User\UserCreated::class => [
             \App\Listeners\User\SendUserCreatedNotification::class,
         ],

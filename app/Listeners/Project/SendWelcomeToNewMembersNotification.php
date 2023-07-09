@@ -2,9 +2,9 @@
 
 namespace App\Listeners\Project;
 
-use App\Events\ProjectTeamChanged;
-use App\Notifications\Project\UserAssignedNotification;
+use App\Events\Project\ProjectTeamChanged;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Notifications\Project\UserAssignedNotification;
 
 class SendWelcomeToNewMembersNotification implements ShouldQueue
 {

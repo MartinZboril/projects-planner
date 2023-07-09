@@ -28,7 +28,7 @@ class ArchivedTicketNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return $this->notificationService->handleGetDeliveryChannels($notifiable, 'ticket', 'archived');
+        return $this->notificationService->handleGetDeliveryChannels($notifiable, 'ticket', 'closed');
     }
 
     /**

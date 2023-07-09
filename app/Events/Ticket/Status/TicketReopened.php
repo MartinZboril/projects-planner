@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Events\Project;
+namespace App\Events\Ticket\Status;
 
-use App\Models\Project;
+use App\Models\Ticket;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Collection;
 
-class ProjectTeamChanged
+class TicketReopened
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -17,9 +16,7 @@ class ProjectTeamChanged
      * Create a new event instance.
      */
     public function __construct(
-        public Project $project,
-        public Collection $new_team,
-        public Collection $old_team,
+        public Ticket $ticket,
     ) {
     }
 

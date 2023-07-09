@@ -22,9 +22,6 @@ class SendTaskAssignmentNotifications
     public function handle(TaskUserChanged $event): void
     {
         $event->user->notify(new UserAssignedNotification($event->task));
-
-        if ($event->old_user) {
-            $event->old_user->notify(new UserUnassignedNotification($event->task));
-        }
+        $event->old_user?->notify(new UserUnassignedNotification($event->task));
     }
 }

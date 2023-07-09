@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications\Ticket;
+namespace App\Notifications\Ticket\Status;
 
 use App\Models\Ticket;
 use App\Services\Data\NotificationService;

@@ -2,10 +2,10 @@
 
 namespace App\Listeners\Project;
 
-use App\Events\ProjectTeamChanged;
 use App\Models\User;
-use App\Notifications\Project\UserUnassignedNotification;
+use App\Events\Project\ProjectTeamChanged;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Notifications\Project\UserUnassignedNotification;
 
 class SendFarewellToOldMembersNotification implements ShouldQueue
 {

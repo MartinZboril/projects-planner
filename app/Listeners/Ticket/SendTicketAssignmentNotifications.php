@@ -22,9 +22,6 @@ class SendTicketAssignmentNotifications
     public function handle(TicketAssigneeChanged $event): void
     {
         $event->assignee->notify(new AssigneeAssignedNotification($event->ticket));
-
-        if ($event->old_assignee) {
-            $event->old_assignee->notify(new AssigneeUnassignedNotification($event->ticket));
-        }
+        $event->old_assignee?->notify(new AssigneeUnassignedNotification($event->ticket));
     }
 }
