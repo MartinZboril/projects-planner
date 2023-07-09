@@ -18,12 +18,5 @@ class UserObserver
         $user->avatar()->delete();
         $user->address()->delete();
         $user->notes()->where('is_private', true)->delete();
-        // Notifications
-        $user->tasks->each(function (Task $task) {
-            $task->author->notify(new UserDeletedNotification($task));
-        });
-        $user->tickets->each(function (Ticket $ticket) {
-            $ticket->reporter->notify(new AssigneeDeletedNotification($ticket));
-        });
     }
 }

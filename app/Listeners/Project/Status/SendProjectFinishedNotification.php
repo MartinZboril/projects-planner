@@ -5,8 +5,9 @@ namespace App\Listeners\Project\Status;
 use App\Events\Project\Status\ProjectFinished;
 use App\Models\User;
 use App\Notifications\Project\Status\FinishedProjectNotification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendProjectFinishedNotification
+class SendProjectFinishedNotification implements ShouldQueue
 {
     /**
      * Create the event listener.

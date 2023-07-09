@@ -24,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\Project\SendWelcomeToNewMembersNotification::class,
             \App\Listeners\Project\SendFarewellToOldMembersNotification::class,
         ],
+        \App\Events\Project\ProjectDeleted::class => [
+            \App\Listeners\Project\SendProjectDeletedNotification::class,
+        ],
         \App\Events\Project\Status\ProjectArchived::class => [
             \App\Listeners\Project\Status\SendProjectArchivedNotification::class,
         ],
@@ -35,6 +38,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         \App\Events\Task\TaskUserChanged::class => [
             \App\Listeners\Task\SendTaskAssignmentNotifications::class,
+        ],
+        \App\Events\Task\TaskDeleted::class => [
+            \App\Listeners\Task\SendTaskDeletedNotification::class,
         ],
         \App\Events\Task\Status\TaskCompleted::class => [
             \App\Listeners\Task\Status\SendTaskCompletedNotification::class,
@@ -54,6 +60,9 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\Ticket\TicketAssigneeChanged::class => [
             \App\Listeners\Ticket\SendTicketAssignmentNotifications::class,
         ],
+        \App\Events\Ticket\TicketDeleted::class => [
+            \App\Listeners\Ticket\SendTicketDeletedNotification::class,
+        ],
         \App\Events\Ticket\Status\TicketArchived::class => [
             \App\Listeners\Ticket\Status\SendTicketArchivedNotification::class,
         ],
@@ -71,6 +80,8 @@ class EventServiceProvider extends ServiceProvider
         ],
         \App\Events\User\UserDeleted::class => [
             \App\Listeners\User\SendUserDeletedNotification::class,
+            \App\Listeners\Task\SendTasksWithoutUserNotification::class,
+            \App\Listeners\Ticket\SendTicketsWithoutAssigneeNotification::class,
         ],
         Registered::class => [
             SendEmailVerificationNotification::class,
