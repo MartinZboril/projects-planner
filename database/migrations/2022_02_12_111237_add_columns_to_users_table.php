@@ -19,6 +19,7 @@ class AddColumnsToUsersTable extends Migration
             $table->string('job_title')->nullable();
             $table->string('mobile')->nullable();
             $table->string('phone')->nullable();
+            $table->text('settings')->nullable();
             $table->softDeletes()->after('updated_at');
         });
     }

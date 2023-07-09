@@ -3,7 +3,13 @@
 namespace App\Services\Data;
 
 use App\Enums\TicketStatusEnum;
+use App\Events\Ticket\Status\TicketArchived;
+use App\Events\Ticket\Status\TicketClosed;
+use App\Events\Ticket\Status\TicketConverted;
+use App\Events\Ticket\Status\TicketReopened;
+use App\Events\Ticket\TicketAssigneeChanged;
 use App\Models\Ticket;
+use App\Models\User;
 use App\Services\FileService;
 use Illuminate\Support\Facades\Auth;
 
@@ -19,6 +25,7 @@ class TicketService
      */
     public function handleSave(Ticket $ticket, array $inputs, ?array $uploadedFiles = []): Ticket
     {
+        $oldAssigneeId = $ticket->assignee_id;
         // Prepare fields
         $inputs['status'] = $ticket->status ?? TicketStatusEnum::open;
         $inputs['reporter_id'] = $ticket->reporter_id ?? Auth::id();
@@ -28,6 +35,10 @@ class TicketService
         // Upload files
         if ($uploadedFiles) {
             $this->handleUploadFiles($ticket, $uploadedFiles);
+        }
+        // Notify assignee about assigning to the ticket
+        if (($ticket->assignee ?? false) && ((int) $oldAssigneeId !== (int) $ticket->assignee_id)) {
+            TicketAssigneeChanged::dispatch($ticket, $ticket->assignee, ($oldAssigneeId) ? User::find($oldAssigneeId) : null);
         }
 
         return $ticket;
@@ -50,6 +61,20 @@ class TicketService
     {
         $ticket->update(['status' => $status]);
 
+        switch ($ticket->status) {
+            case TicketStatusEnum::open:
+                TicketReopened::dispatch($ticket);
+                break;
+
+            case TicketStatusEnum::close:
+                TicketClosed::dispatch($ticket);
+                break;
+
+            case TicketStatusEnum::archive:
+                TicketArchived::dispatch($ticket);
+                break;
+        }
+
         return $ticket->fresh();
     }
 
@@ -59,6 +84,7 @@ class TicketService
     public function handleConvert(Ticket $ticket): void
     {
         $ticket->update(['status' => TicketStatusEnum::convert]);
+        TicketConverted::dispatch($ticket);
     }
 
     /**

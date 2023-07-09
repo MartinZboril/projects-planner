@@ -185,4 +185,11 @@ Route::middleware(['auth'])->group(function () {
             ->except(['show']);
     });
     Route::resource('projects', App\Http\Controllers\Project\ProjectController::class);
+    // Notifications
+    Route::group(['prefix' => 'notifications', 'as' => 'notifications.'], function () {
+        Route::patch('/{notification}/seen', App\Http\Controllers\Notifications\NotificationSeenController::class)->name('seen');
+        Route::patch('/seen-all', App\Http\Controllers\Notifications\NotificationSeenAllController::class)->name('seen_all');
+    });
+    Route::resource('notifications', App\Http\Controllers\Notifications\NotificationController::class)
+        ->only(['index']);
 });

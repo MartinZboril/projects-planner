@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', __('pages.title.report'))
+@section('title', __('pages.title.realeases'))
 
 @section('content')
     <div class="content-wrapper">

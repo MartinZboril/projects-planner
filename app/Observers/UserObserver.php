@@ -2,7 +2,11 @@
 
 namespace App\Observers;
 
+use App\Models\Task;
+use App\Models\Ticket;
 use App\Models\User;
+use App\Notifications\Task\UserDeletedNotification;
+use App\Notifications\Ticket\AssigneeDeletedNotification;
 
 class UserObserver
 {

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ProjectStatusEnum;
 use App\Enums\TaskStatusEnum;
+use App\Events\Project\ProjectDeleted;
 use App\Traits\Scopes\MarkedRecords;
 use App\Traits\Scopes\OverdueRecords;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -26,6 +27,10 @@ class Project extends Model
     ];
 
     protected $cascadeDeletes = ['tasks', 'milestones', 'tickets', 'timers'];
+
+    protected $dispatchesEvents = [
+        'deleted' => ProjectDeleted::class,
+    ];
 
     public const VALIDATION_RULES = [
         'client_id' => ['required', 'integer', 'exists:clients,id'],

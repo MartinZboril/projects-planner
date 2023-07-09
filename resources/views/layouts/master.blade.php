@@ -46,7 +46,7 @@
       @include('site.header')
       <!-- Sidebar -->
       @include('site.sidebar')
-      <!-- Content -->    
+      <!-- Content -->
       @yield('content')
       <!-- Footer -->
       @include('site.footer')
@@ -75,11 +75,11 @@
       <!-- ChartJS -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
       @if(!empty($doughnut))
-        <script src="{{ asset('js/charts/doughnut.js') }}"></script>      
-      @endif   
+        <script src="{{ asset('js/charts/doughnut.js') }}"></script>
+      @endif
       @if(!empty($overview))
-        <script src="{{ asset('js/charts/overview.js') }}"></script>      
-      @endif            
+        <script src="{{ asset('js/charts/overview.js') }}"></script>
+      @endif
     @endif
     @if(!empty($momment))
       <!-- momment -->
@@ -98,57 +98,58 @@
       <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
     @endif
     @if(!empty($progressbar))
-      <script src="{{ asset('plugins/progress-bar/progressbar.js' ) }}"></script>    
-      <script src="{{ asset('js/charts/progress_bar.js') }}"></script>      
+      <script src="{{ asset('plugins/progress-bar/progressbar.js' ) }}"></script>
+      <script src="{{ asset('js/charts/progress_bar.js') }}"></script>
     @endif
     @if(!empty($datatables))
       <!-- DataTables -->
       <script src="https://cdn.datatables.net/v/bs4/dt-1.13.3/b-2.3.5/r-2.4.0/datatables.min.js"></script>
-    @endif    
+    @endif
     <!-- Custom scripts -->
     <script src="{{ asset('js/error.js') }}"></script>
     @if(!empty($toaster))
-      <script src="{{ asset('js/toastr.js') }}"></script>      
+      <script src="{{ asset('js/toastr.js') }}"></script>
     @endif
     @if(!empty($client))
-      <script src="{{ asset('js/actions/client.js') }}"></script>  
+      <script src="{{ asset('js/actions/client.js') }}"></script>
     @endif
     @if(!empty($milestone))
-      <script src="{{ asset('js/actions/milestone.js') }}"></script>  
+      <script src="{{ asset('js/actions/milestone.js') }}"></script>
     @endif
     @if(!empty($project))
-      <script src="{{ asset('js/actions/project.js') }}"></script>  
+      <script src="{{ asset('js/actions/project.js') }}"></script>
     @endif
     @if(!empty($task))
-      <script src="{{ asset('js/actions/task.js') }}"></script>  
+      <script src="{{ asset('js/actions/task.js') }}"></script>
     @endif
     @if(!empty($ticket))
-      <script src="{{ asset('js/actions/ticket.js') }}"></script>  
+      <script src="{{ asset('js/actions/ticket.js') }}"></script>
     @endif
     @if(!empty($todo))
-      <script src="{{ asset('js/actions/todo.js') }}"></script>  
-    @endif   
+      <script src="{{ asset('js/actions/todo.js') }}"></script>
+    @endif
     @if(!empty($comment))
-      <script src="{{ asset('js/actions/comment.js') }}"></script>  
-    @endif 
+      <script src="{{ asset('js/actions/comment.js') }}"></script>
+    @endif
     @if(!empty($note))
-      <script src="{{ asset('js/actions/note.js') }}"></script>  
-    @endif       
+      <script src="{{ asset('js/actions/note.js') }}"></script>
+    @endif
     @if(!empty($kanban))
-      <script src="{{ asset('js/actions/kanban.js') }}"></script>  
-    @endif    
+      <script src="{{ asset('js/actions/kanban.js') }}"></script>
+    @endif
     @if(!empty($file))
-      <script src="{{ asset('js/actions/file.js') }}"></script>  
-    @endif    
+      <script src="{{ asset('js/actions/file.js') }}"></script>
+    @endif
     @if(!empty($rate))
-      <script src="{{ asset('js/actions/rate.js') }}"></script>  
-    @endif         
+      <script src="{{ asset('js/actions/rate.js') }}"></script>
+    @endif
     @if(!empty($role))
-      <script src="{{ asset('js/actions/role.js') }}"></script>  
+      <script src="{{ asset('js/actions/role.js') }}"></script>
     @endif
     @if(!empty($user))
-      <script src="{{ asset('js/actions/user.js') }}"></script>  
-    @endif                                   
+      <script src="{{ asset('js/actions/user.js') }}"></script>
+    @endif
+    <script src="{{ asset('js/actions/notification.js') }}"></script>
     <script src="{{ asset('js/timer.js') }}" defer></script>
     <script src="{{ mix('js/app.js') }}"></script>
     @stack('scripts')

@@ -3,8 +3,12 @@
 namespace App\Services\Data;
 
 use App\Enums\ProjectStatusEnum;
-use App\Models\Note;
+use App\Events\Project\ProjectTeamChanged;
+use App\Events\Project\Status\ProjectArchived;
+use App\Events\Project\Status\ProjectFinished;
+use App\Events\Project\Status\ProjectReactived;
 use App\Models\Project;
+use App\Models\ProjectUser;
 use App\Services\FileService;
 
 class ProjectService
@@ -28,7 +32,11 @@ class ProjectService
             $this->handleUploadFiles($project, $uploadedFiles);
         }
         // Store projects team
+        $oldTeam = ProjectUser::where('project_id', $project->id)->pluck('user_id');
         ($project->team()->count() === 0) ? $project->team()->attach($inputs['team']) : $project->team()->sync($inputs['team']);
+        $newTeam = ProjectUser::where('project_id', $project->id)->pluck('user_id');
+        // Dispatch event with notify users about their assignmenents
+        ProjectTeamChanged::dispatch($project, $newTeam, $oldTeam);
 
         return $project;
     }
@@ -49,6 +57,20 @@ class ProjectService
     public function handleChange(Project $project, int $status): Project
     {
         $project->update(['status' => $status]);
+
+        switch ($project->status) {
+            case ProjectStatusEnum::active:
+                ProjectReactived::dispatch($project);
+                break;
+
+            case ProjectStatusEnum::finish:
+                ProjectFinished::dispatch($project);
+                break;
+
+            case ProjectStatusEnum::archive:
+                ProjectArchived::dispatch($project);
+                break;
+        }
 
         return $project->fresh();
     }

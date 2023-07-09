@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Dyrynda\Database\Support\CascadeSoftDeletes;
+use App\Events\User\UserDeleted;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -28,12 +28,17 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'settings' => 'array',
     ];
 
     protected $appends = [
         'full_name',
         'job_title_label',
         'mobile_label',
+    ];
+
+    protected $dispatchesEvents = [
+        'deleted' => UserDeleted::class,
     ];
 
     public const VALIDATION_RULES = [
@@ -47,6 +52,7 @@ class User extends Authenticatable
         'job_title' => ['string', 'nullable', 'max:255'],
         'mobile' => ['string', 'nullable', 'max:255'],
         'phone' => ['string', 'nullable', 'max:255'],
+        'settings' => ['nullable', 'array'],
     ];
 
     public function address(): BelongsTo
@@ -87,6 +93,16 @@ class User extends Authenticatable
     public function activeTimers(): HasMany
     {
         return $this->hasMany(Timer::class, 'user_id')->active(true);
+    }
+
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class, 'assignee_id');
     }
 
     protected function password(): Attribute

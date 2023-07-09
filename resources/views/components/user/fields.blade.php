@@ -1,7 +1,7 @@
 <div class="row">
-    <div class="col-md-7">
+    <div class="col-md-6">
         <div class="card card-primary card-outline">
-            <div class="card-header">{{ $type === 'edit' ? 'Edit' : 'Create'}} User</div>
+            <div class="card-header">{{ $type === 'edit' ? 'Edit' : 'Create' }} User</div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
@@ -54,7 +54,7 @@
                     @error('role_id')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                </div>                 
+                </div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -62,7 +62,7 @@
                             <input type="file" name="avatar" class="form-control border text-sm rounded-lg @error('avatar') is-invalid @enderror">
                             @error('avatar')
                                 <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror   
+                            @enderror
                         </div>
                     </div>
                     <div class="col-md-6 text-center">
@@ -72,7 +72,7 @@
                                 <a href="#" class="text-danger" onclick="removeUserAvatar('{{ route('users.avatar.remove', $user) }}', '{{ asset('dist/img/user.png') }}')">
                                     <i class="fas fa-unlink"></i> Remove
                                 </a>
-                            </div>                            
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -90,7 +90,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" name="password" id="password" class="form-control bg-white @error('password') is-invalid @enderror" placeholder="password" autocomplete="off" readonly 
+                            <input type="password" name="password" id="password" class="form-control bg-white @error('password') is-invalid @enderror" placeholder="password" autocomplete="off" readonly
                             onfocus="this.removeAttribute('readonly');">
                             @error('password')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -171,10 +171,57 @@
             </div>
         </div>
     </div>
-    <div class="col-md-5">
+    <div class="col-md-6">
         <div class="card card-primary card-outline">
-            <div class="card-header">Settings</div>
+            <div class="card-header">Notifications settings</div>
             <div class="card-body">
+                <h6>Project</h6>
+                <div class="row mt-3 mb-2">
+                    <x-notification.settings-option title="Project reminder" parent="project" action="reminder" :$user :$type />
+                    <x-notification.settings-option title="Project deleted" parent="project" action="deleted" :$user :$type />
+                    <x-notification.settings-option title="Project assigned" parent="project" action="assigned" :$user :$type />
+                    <x-notification.settings-option title="Project unassigned" parent="project" action="unassigned" :$user :$type />
+                    <x-notification.settings-option title="Project finished" parent="project" action="finished" :$user :$type />
+                    <x-notification.settings-option title="Project reactivated" parent="project" action="reactivated" :$user :$type />
+                    <x-notification.settings-option title="Project archived" parent="project" action="archived" :$user :$type />
+                    <x-notification.settings-option title="Project commented" parent="project" action="commented" :$user :$type />
+                </div>
+                <h6>Milestone</h6>
+                <div class="row mt-3 mb-2">
+                    <x-notification.settings-option title="Milestone reminder" parent="milestone" action="reminder" :$user :$type />
+                    <x-notification.settings-option title="Milestone assigned" parent="milestone" action="assigned" :$user :$type />
+                    <x-notification.settings-option title="Milestone unassigned" parent="milestone" action="unassigned" :$user :$type />
+                    <x-notification.settings-option title="Milestone commented" parent="milestone" action="commented" :$user :$type />
+                </div>
+                <h6>Task</h6>
+                <div class="row mt-3 mb-2">
+                    <x-notification.settings-option title="Task reminder" parent="task" action="reminder" :$user :$type />
+                    <x-notification.settings-option title="Task deleted" parent="task" action="deleted" :$user :$type />
+                    <x-notification.settings-option title="Task assigned" parent="task" action="assigned" :$user :$type />
+                    <x-notification.settings-option title="Task unassigned" parent="task" action="unassigned" :$user :$type />
+                    <x-notification.settings-option title="Task in progressed" parent="task" action="in_progressed" :$user :$type />
+                    <x-notification.settings-option title="Task completed" parent="task" action="completed" :$user :$type />
+                    <x-notification.settings-option title="Task returned" parent="task" action="returned" :$user :$type />
+                    <x-notification.settings-option title="Task paused" parent="task" action="paused" :$user :$type />
+                    <x-notification.settings-option title="Task resumed" parent="task" action="resumed" :$user :$type />
+                    <x-notification.settings-option title="Task commented" parent="task" action="commented" :$user :$type />
+                </div>
+                <h6>Todo</h6>
+                <div class="row mt-3 mb-2">
+                    <x-notification.settings-option title="Todo reminder" parent="todo" action="reminder" :$user :$type />
+                </div>
+                <h6>Ticket</h6>
+                <div class="row mt-3 mb-2">
+                    <x-notification.settings-option title="Ticket reminder" parent="ticket" action="reminder" :$user :$type />
+                    <x-notification.settings-option title="Ticket deleted" parent="ticket" action="deleted" :$user :$type />
+                    <x-notification.settings-option title="Ticket assigned" parent="ticket" action="assigned" :$user :$type />
+                    <x-notification.settings-option title="Ticket unassigned" parent="ticket" action="unassigned" :$user :$type />
+                    <x-notification.settings-option title="Ticket closed" parent="ticket" action="closed" :$user :$type />
+                    <x-notification.settings-option title="Ticket reopened" parent="ticket" action="reopened" :$user :$type />
+                    <x-notification.settings-option title="Ticket archived" parent="ticket" action="archived" :$user :$type />
+                    <x-notification.settings-option title="Ticket converted" parent="ticket" action="converted" :$user :$type />
+                    <x-notification.settings-option title="Ticket commented" parent="ticket" action="commented" :$user :$type />
+                </div>
             </div>
         </div>
         <div class="card">
