@@ -14,15 +14,24 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
-        \App\Events\CommentCreated::class => [
-            \App\Listeners\SendCommentCreatedNotification::class,
+        \App\Events\Comment\CommentCreated::class => [
+            \App\Listeners\Comment\SendCommentCreatedNotification::class,
         ],
         \App\Events\Milestone\MilestoneOwnerChanged::class => [
             \App\Listeners\Milestone\SendMilestoneAssignmentNotifications::class,
         ],
-        \App\Events\ProjectTeamChanged::class => [
+        \App\Events\Project\ProjectTeamChanged::class => [
             \App\Listeners\Project\SendWelcomeToNewMembersNotification::class,
             \App\Listeners\Project\SendFarewellToOldMembersNotification::class,
+        ],
+        \App\Events\Project\Status\ProjectArchived::class => [
+            \App\Listeners\Project\Status\SendProjectArchivedNotification::class,
+        ],
+        \App\Events\Project\Status\ProjectFinished::class => [
+            \App\Listeners\Project\Status\SendProjectFinishedNotification::class,
+        ],
+        \App\Events\Project\Status\ProjectReactived::class => [
+            \App\Listeners\Project\Status\SendProjectReactivedNotification::class,
         ],
         \App\Events\Task\TaskUserChanged::class => [
             \App\Listeners\Task\SendTaskAssignmentNotifications::class,

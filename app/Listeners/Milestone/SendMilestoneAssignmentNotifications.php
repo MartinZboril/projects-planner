@@ -3,7 +3,6 @@
 namespace App\Listeners\Milestone;
 
 use App\Events\Milestone\MilestoneOwnerChanged;
-use App\Models\User;
 use App\Notifications\Milestone\OwnerAssignedNotification;
 use App\Notifications\Milestone\OwnerUnassignedNotification;
 

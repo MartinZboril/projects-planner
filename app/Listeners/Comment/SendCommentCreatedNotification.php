@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Listeners;
+namespace App\Listeners\Comment;
 
-use App\Events\CommentCreated;
+use App\Events\Comment\CommentCreated;
 use App\Models\Milestone;
 use App\Models\Project;
 use App\Models\Task;
