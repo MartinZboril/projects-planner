@@ -60,12 +60,12 @@ class Ticket extends Model
 
     public function files(): MorphMany
     {
-        return $this->morphMany(File::class, 'fileable');
+        return $this->morphMany(File::class, 'fileable')->orderByDesc('created_at');
     }
 
     public function comments(): MorphMany
     {
-        return $this->morphMany(Comment::class, 'commentable');
+        return $this->morphMany(Comment::class, 'commentable')->orderByDesc('created_at');
     }
 
     public function task(): HasOne
