@@ -2,11 +2,10 @@
 
 namespace App\Listeners\Ticket;
 
-use App\Models\Ticket;
 use App\Events\User\UserDeleted;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Models\Ticket;
 use App\Notifications\Ticket\AssigneeDeletedNotification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SendTicketsWithoutAssigneeNotification implements ShouldQueue
 {
