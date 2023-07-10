@@ -16,14 +16,14 @@
                 <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
                 <div class="row">
                     <div class="col-md-5">
-                        @include('tickets.partials.informations')            
-                        <x-activity-feed.card />
+                        @include('tickets.partials.informations')
+                        <x-activity-feed.card :activities="[]" />
                     </div>
                     <div class="col-md-7">
                         <x-file.card :upload-form-route="route('tickets.files.upload', $ticket)" :parent="[$ticket]" destroy-form-route-name="tickets.files.destroy" :files="$ticket->files" />
-                        <x-comment.card :comments="$ticket->comments" :parent="[$ticket]" :store-form-route="route('tickets.comments.store', $ticket)" update-form-route-name="tickets.comments.update" destroy-form-route-name="tickets.comments.destroy" /> 
+                        <x-comment.card :comments="$ticket->comments" :parent="[$ticket]" :store-form-route="route('tickets.comments.store', $ticket)" update-form-route-name="tickets.comments.update" destroy-form-route-name="tickets.comments.destroy" />
                     </div>
-                </div> 
+                </div>
             </div>
         </section>
     </div>

@@ -24,15 +24,15 @@
                                 <div class="card-title">Rates</div>
                                 <div class="card-tools">
                                     <a href="{{ route('users.rates.assignment', $user) }}" class="btn btn-sm btn-primary text-white"><i class="fas fa-user-plus mr-1"></i>Assign</a>
-                                </div>                               
+                                </div>
                             </div>
                             <div class="card-body">
                                 {{ $dataTable->table() }}
                             </div>
                         </div>
-                        <x-activity-feed.card />
+                        <x-activity-feed.card :activities="[]" />
                     </div>
-                </div>         
+                </div>
             </div>
         </section>
         <!-- /.content -->

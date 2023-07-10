@@ -6,7 +6,7 @@
     <div class="content-wrapper">
         <!-- Content Header -->
         <div class="p-3 mb-3" style="background-color:white;">
-            @include('clients.partials.actions') 
+            @include('clients.partials.actions')
         </div>
         <!-- Main content -->
         <section class="content">
@@ -15,14 +15,7 @@
                     @include('clients.partials.header', ['active' => 'client'])
                 </div>
                 <x-site.flash-messages :message="Session::get('message')" :type="Session::get('type')" />
-                <div class="row">
-                    <div class="col-md-5">
-                        @include('clients.partials.informations')
-                    </div>
-                    <div class="col-md-7">
-                        <x-activity-feed.card />
-                    </div>
-                </div>  
+                    @include('clients.partials.informations')
             </div>
         </section>
     </div>

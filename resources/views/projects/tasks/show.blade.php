@@ -17,15 +17,15 @@
                 <div class="row">
                     <div class="col-md-5">
                         @include('tasks.partials.informations', ['project' => true])
-                        <x-activity-feed.card />
+                        <x-activity-feed.card :activities="[]" />
                     </div>
                     <div class="col-md-7">
                         <div id="ajax"></div>
                         <x-todo.card :todos="$task->todos" type="projects" :create-form-route="route('projects.tasks.todos.create', ['project' => $task->project, 'task' => $task])" />
                         <x-file.card :upload-form-route="route('projects.tasks.files.upload', ['project' => $task->project, 'task' => $task])" :parent="['project' => $task->project, 'task' => $task]" destroy-form-route-name="tasks.files.destroy" :files="$task->files" />
-                        <x-comment.card :comments="$task->comments" :parent="['project' => $task->project, 'task' => $task]" :store-form-route="route('projects.tasks.comments.store', ['project' => $task->project, 'task' => $task])" update-form-route-name="projects.tasks.comments.update" destroy-form-route-name="projects.tasks.comments.destroy" />     
+                        <x-comment.card :comments="$task->comments" :parent="['project' => $task->project, 'task' => $task]" :store-form-route="route('projects.tasks.comments.store', ['project' => $task->project, 'task' => $task])" update-form-route-name="projects.tasks.comments.update" destroy-form-route-name="projects.tasks.comments.destroy" />
                     </div>
-                </div> 
+                </div>
             </div>
         </section>
     </div>

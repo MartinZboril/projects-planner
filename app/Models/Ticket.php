@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\TicketPriorityEnum;
 use App\Enums\TicketStatusEnum;
 use App\Enums\TicketTypeEnum;
+use App\Events\Ticket\TicketCreated;
+use App\Events\Ticket\TicketDeleted;
 use App\Traits\Scopes\MarkedRecords;
 use App\Traits\Scopes\OverdueRecords;
 use Illuminate\Database\Eloquent\Builder;
@@ -22,6 +24,11 @@ class Ticket extends Model
 
     protected $guarded = [
         'id', 'created_at', 'updated_at',
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => TicketCreated::class,
+        'deleted' => TicketDeleted::class,
     ];
 
     protected $casts = [

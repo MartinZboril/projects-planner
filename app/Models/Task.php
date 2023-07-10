@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\TaskStatusEnum;
+use App\Events\Task\TaskCreated;
+use App\Events\Task\TaskDeleted;
 use App\Traits\Scopes\MarkedRecords;
 use App\Traits\Scopes\OverdueRecords;
 use Dyrynda\Database\Support\CascadeSoftDeletes;
@@ -24,6 +26,11 @@ class Task extends Model
     ];
 
     protected $cascadeDeletes = ['todos'];
+
+    protected $dispatchesEvents = [
+        'created' => TaskCreated::class,
+        'deleted' => TaskDeleted::class,
+    ];
 
     protected $casts = [
         'status' => TaskStatusEnum::class,

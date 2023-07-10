@@ -16,73 +16,117 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         \App\Events\Comment\CommentCreated::class => [
             \App\Listeners\Comment\SendCommentCreatedNotification::class,
+            \App\Listeners\Comment\Activity\LogCommentCreatedForProjectActivity::class,
         ],
+
+        \App\Events\Milestone\MilestoneCreated::class => [
+            \App\Listeners\Milestone\Activity\LogMilestoneCreatedForProjectActivity::class,
+        ],
+
+        \App\Events\Milestone\MilestoneDeleted::class => [
+            \App\Listeners\Milestone\Activity\LogMilestoneDeletedForProjectActivity::class,
+        ],
+
         \App\Events\Milestone\MilestoneOwnerChanged::class => [
             \App\Listeners\Milestone\SendMilestoneAssignmentNotifications::class,
         ],
+
         \App\Events\Project\ProjectTeamChanged::class => [
             \App\Listeners\Project\SendWelcomeToNewMembersNotification::class,
             \App\Listeners\Project\SendFarewellToOldMembersNotification::class,
         ],
+
         \App\Events\Project\ProjectDeleted::class => [
             \App\Listeners\Project\SendProjectDeletedNotification::class,
         ],
+
         \App\Events\Project\Status\ProjectArchived::class => [
             \App\Listeners\Project\Status\SendProjectArchivedNotification::class,
+            \App\Listeners\Project\Activity\LogProjectArchivedActivity::class,
         ],
+
         \App\Events\Project\Status\ProjectFinished::class => [
             \App\Listeners\Project\Status\SendProjectFinishedNotification::class,
+            \App\Listeners\Project\Activity\LogProjectFinishedActivity::class,
         ],
+
         \App\Events\Project\Status\ProjectReactived::class => [
             \App\Listeners\Project\Status\SendProjectReactivedNotification::class,
+            \App\Listeners\Project\Activity\LogProjectReactivedActivity::class,
         ],
+
         \App\Events\Task\TaskUserChanged::class => [
             \App\Listeners\Task\SendTaskAssignmentNotifications::class,
         ],
+
+        \App\Events\Task\TaskCreated::class => [
+            \App\Listeners\Task\Activity\LogTaskCreatedForProjectActivity::class,
+        ],
+
         \App\Events\Task\TaskDeleted::class => [
             \App\Listeners\Task\SendTaskDeletedNotification::class,
+            \App\Listeners\Task\Activity\LogTaskDeletedForProjectActivity::class,
         ],
+
         \App\Events\Task\Status\TaskCompleted::class => [
             \App\Listeners\Task\Status\SendTaskCompletedNotification::class,
         ],
+
         \App\Events\Task\Status\TaskInProgressed::class => [
             \App\Listeners\Task\Status\SendTaskInProgressedNotification::class,
         ],
+
         \App\Events\Task\Status\TaskReturned::class => [
             \App\Listeners\Task\Status\SendTaskReturnedNotification::class,
         ],
+
         \App\Events\Task\Status\TaskPaused::class => [
             \App\Listeners\Task\Status\SendTaskPausedNotification::class,
         ],
+
         \App\Events\Task\Status\TaskResumed::class => [
             \App\Listeners\Task\Status\SendTaskResumedNotification::class,
         ],
+
         \App\Events\Ticket\TicketAssigneeChanged::class => [
             \App\Listeners\Ticket\SendTicketAssignmentNotifications::class,
         ],
+
         \App\Events\Ticket\TicketDeleted::class => [
             \App\Listeners\Ticket\SendTicketDeletedNotification::class,
+            \App\Listeners\Ticket\Activity\LogTicketDeletedForProjectActivity::class,
         ],
+
+        \App\Events\Ticket\TicketCreated::class => [
+            \App\Listeners\Ticket\Activity\LogTicketCreatedForProjectActivity::class,
+        ],
+
         \App\Events\Ticket\Status\TicketArchived::class => [
             \App\Listeners\Ticket\Status\SendTicketArchivedNotification::class,
         ],
+
         \App\Events\Ticket\Status\TicketClosed::class => [
             \App\Listeners\Ticket\Status\SendTicketClosedNotification::class,
         ],
+
         \App\Events\Ticket\Status\TicketConverted::class => [
             \App\Listeners\Ticket\Status\SendTicketConvertedNotification::class,
         ],
+
         \App\Events\Ticket\Status\TicketReopened::class => [
             \App\Listeners\Ticket\Status\SendTicketReopenedNotification::class,
         ],
+
         \App\Events\User\UserCreated::class => [
             \App\Listeners\User\SendUserCreatedNotification::class,
         ],
+
         \App\Events\User\UserDeleted::class => [
             \App\Listeners\User\SendUserDeletedNotification::class,
             \App\Listeners\Task\SendTasksWithoutUserNotification::class,
             \App\Listeners\Ticket\SendTicketsWithoutAssigneeNotification::class,
         ],
+
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],

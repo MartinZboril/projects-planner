@@ -16,7 +16,7 @@
                     <div class="col-md-5">
                         @include('projects.milestones.partials.informations')
                         <x-file.card :upload-form-route="route('projects.milestones.files.upload', ['project' => $milestone->project, 'milestone' => $milestone])" :parent="['project' => $milestone->project, 'milestone' => $milestone]" destroy-form-route-name="projects.milestones.files.destroy" :files="$milestone->files" />
-                        <x-activity-feed.card />
+                        <x-activity-feed.card :activities="[]" />
                     </div>
                     <div class="col-md-7">
                         <div class="card card-primary card-outline">
@@ -25,9 +25,9 @@
                                 {{ $dataTable->table() }}
                             </div>
                         </div>
-                        <x-comment.card :comments="$milestone->comments" :parent="['project' => $milestone->project, 'milestone' => $milestone]" :store-form-route="route('projects.milestones.comments.store', ['project' => $milestone->project, 'milestone' => $milestone])" update-form-route-name="projects.milestones.comments.update" destroy-form-route-name="projects.milestones.comments.destroy" /> 
+                        <x-comment.card :comments="$milestone->comments" :parent="['project' => $milestone->project, 'milestone' => $milestone]" :store-form-route="route('projects.milestones.comments.store', ['project' => $milestone->project, 'milestone' => $milestone])" update-form-route-name="projects.milestones.comments.update" destroy-form-route-name="projects.milestones.comments.destroy" />
                     </div>
-                </div>         
+                </div>
             </div>
         </section>
     </div>
@@ -39,5 +39,5 @@
         $('#tasks-table').on('draw.dt', function() {
             $('[data-toggle="tooltip"]').tooltip();
         });
-    </script>       
+    </script>
 @endpush

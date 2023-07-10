@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\TaskStatusEnum;
+use App\Events\Milestone\MilestoneCreated;
+use App\Events\Milestone\MilestoneDeleted;
 use App\Traits\Scopes\MarkedRecords;
 use App\Traits\Scopes\OverdueRecords;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -19,6 +21,11 @@ class Milestone extends Model
 
     protected $fillable = [
         'project_id', 'owner_id', 'name', 'started_at', 'dued_at', 'colour', 'description', 'is_marked',
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => MilestoneCreated::class,
+        'deleted' => MilestoneDeleted::class,
     ];
 
     protected $casts = [
