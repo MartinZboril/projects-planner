@@ -5,21 +5,24 @@ namespace App\Models;
 use App\Enums\TaskStatusEnum;
 use App\Events\Task\TaskCreated;
 use App\Events\Task\TaskDeleted;
+use Spatie\Activitylog\LogOptions;
 use App\Traits\Scopes\MarkedRecords;
 use App\Traits\Scopes\OverdueRecords;
-use Dyrynda\Database\Support\CascadeSoftDeletes;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Spatie\Activitylog\Models\Activity;
+use Illuminate\Database\Eloquent\Builder;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Task extends Model
 {
-    use HasFactory, MarkedRecords, OverdueRecords, SoftDeletes, CascadeSoftDeletes;
+    use HasFactory, MarkedRecords, OverdueRecords, SoftDeletes, CascadeSoftDeletes, LogsActivity;
 
     protected $guarded = [
         'id', 'created_at', 'updated_at',
@@ -55,6 +58,14 @@ class Task extends Model
         'paused',
     ];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'project', 'author', 'user', 'milestone', 'ticket', 'status', 'started_at', 'dued_at', 'description'])
+            ->dontLogIfAttributesChangedOnly(['user_id', 'status', 'is_stopped', 'is_returned', 'updated_at'])
+            ->setDescriptionForEvent(fn (string $eventName) => ($this->ticket && $eventName === 'created') ? 'Task was created from the ticket.' : "Task was {$eventName}.");
+    }
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');
@@ -88,6 +99,11 @@ class Task extends Model
     public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable')->orderByDesc('created_at');
+    }
+
+    public function activities(): MorphMany
+    {
+        return $this->morphMany(Activity::class, 'subject')->orderByDesc('created_at');
     }
 
     public function todos(): HasMany

@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-md-5">
                         @include('tasks.partials.informations', ['project' => true])
-                        <x-activity-feed.card :activities="[]" />
+                        <x-activity-feed.card :activities="$task->activities" />
                     </div>
                     <div class="col-md-7">
                         <div id="ajax"></div>

@@ -4,6 +4,7 @@ namespace App\Listeners\Comment\Activity;
 
 use App\Events\Comment\CommentCreated;
 use App\Models\Project;
+use App\Models\Task;
 use App\Models\Ticket;
 
 class LogCommentCreatedForRecordActivity
@@ -36,6 +37,11 @@ class LogCommentCreatedForRecordActivity
             case 'App\Models\Ticket':
                 $model = Ticket::find($commentableId);
                 $type = 'ticket';
+                break;
+
+            case 'App\Models\Task':
+                $model = Task::find($commentableId);
+                $type = 'task';
                 break;
         }
 

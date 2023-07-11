@@ -70,22 +70,27 @@ class EventServiceProvider extends ServiceProvider
 
         \App\Events\Task\Status\TaskCompleted::class => [
             \App\Listeners\Task\Status\SendTaskCompletedNotification::class,
+            \App\Listeners\Task\Activity\LogTaskCompletedActivity::class,
         ],
 
         \App\Events\Task\Status\TaskInProgressed::class => [
             \App\Listeners\Task\Status\SendTaskInProgressedNotification::class,
+            \App\Listeners\Task\Activity\LogTaskInProgressedActivity::class,
         ],
 
         \App\Events\Task\Status\TaskReturned::class => [
             \App\Listeners\Task\Status\SendTaskReturnedNotification::class,
+            \App\Listeners\Task\Activity\LogTaskReturnedActivity::class,
         ],
 
         \App\Events\Task\Status\TaskPaused::class => [
             \App\Listeners\Task\Status\SendTaskPausedNotification::class,
+            \App\Listeners\Task\Activity\LogTaskPausedActivity::class,
         ],
 
         \App\Events\Task\Status\TaskResumed::class => [
             \App\Listeners\Task\Status\SendTaskResumedNotification::class,
+            \App\Listeners\Task\Activity\LogTaskResumedActivity::class,
         ],
 
         \App\Events\Ticket\TicketAssigneeChanged::class => [

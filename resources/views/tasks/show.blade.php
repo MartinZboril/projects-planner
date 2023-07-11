@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-md-5">
                         @include('tasks.partials.informations')
-                        <x-activity-feed.card :activities="[]" />
+                        <x-activity-feed.card :activities="$task->activities" />
                     </div>
                     <div class="col-md-7">
                         <x-todo.card :todos="$task->todos" :create-form-route="route('tasks.todos.create', $task)" />
