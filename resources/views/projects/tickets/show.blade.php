@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-md-5">
                         @include('tickets.partials.informations')
-                        <x-activity-feed.card :activities="[]" />
+                        <x-activity-feed.card :activities="$ticket->activities" />
                     </div>
                     <div class="col-md-7">
                         <x-file.card :upload-form-route="route('projects.tickets.files.upload', ['project' => $ticket->project, 'ticket' => $ticket])" :parent="['project' => $ticket->project, 'ticket' => $ticket]" destroy-form-route-name="tickets.files.destroy" :files="$ticket->files" />

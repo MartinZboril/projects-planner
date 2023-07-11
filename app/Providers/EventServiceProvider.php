@@ -16,7 +16,7 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         \App\Events\Comment\CommentCreated::class => [
             \App\Listeners\Comment\SendCommentCreatedNotification::class,
-            \App\Listeners\Comment\Activity\LogCommentCreatedForProjectActivity::class,
+            \App\Listeners\Comment\Activity\LogCommentCreatedForRecordActivity::class,
         ],
 
         \App\Events\Milestone\MilestoneCreated::class => [
@@ -103,18 +103,22 @@ class EventServiceProvider extends ServiceProvider
 
         \App\Events\Ticket\Status\TicketArchived::class => [
             \App\Listeners\Ticket\Status\SendTicketArchivedNotification::class,
+            \App\Listeners\Ticket\Activity\LogTicketArchivedActivity::class,
         ],
 
         \App\Events\Ticket\Status\TicketClosed::class => [
             \App\Listeners\Ticket\Status\SendTicketClosedNotification::class,
+            \App\Listeners\Ticket\Activity\LogTicketClosedActivity::class,
         ],
 
         \App\Events\Ticket\Status\TicketConverted::class => [
             \App\Listeners\Ticket\Status\SendTicketConvertedNotification::class,
+            \App\Listeners\Ticket\Activity\LogTicketConvertedActivity::class,
         ],
 
         \App\Events\Ticket\Status\TicketReopened::class => [
             \App\Listeners\Ticket\Status\SendTicketReopenedNotification::class,
+            \App\Listeners\Ticket\Activity\LogTicketReopenedActivity::class,
         ],
 
         \App\Events\User\UserCreated::class => [

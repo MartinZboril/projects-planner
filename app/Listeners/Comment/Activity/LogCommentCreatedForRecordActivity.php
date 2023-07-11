@@ -4,8 +4,9 @@ namespace App\Listeners\Comment\Activity;
 
 use App\Events\Comment\CommentCreated;
 use App\Models\Project;
+use App\Models\Ticket;
 
-class LogCommentCreatedForProjectActivity
+class LogCommentCreatedForRecordActivity
 {
     /**
      * Create the event listener.
@@ -30,6 +31,11 @@ class LogCommentCreatedForProjectActivity
             case 'App\Models\Project':
                 $model = Project::find($commentableId);
                 $type = 'project';
+                break;
+
+            case 'App\Models\Ticket':
+                $model = Ticket::find($commentableId);
+                $type = 'ticket';
                 break;
         }
 

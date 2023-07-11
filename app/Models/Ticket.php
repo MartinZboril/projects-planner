@@ -2,25 +2,28 @@
 
 namespace App\Models;
 
-use App\Enums\TicketPriorityEnum;
-use App\Enums\TicketStatusEnum;
 use App\Enums\TicketTypeEnum;
+use App\Enums\TicketStatusEnum;
+use App\Enums\TicketPriorityEnum;
+use Spatie\Activitylog\LogOptions;
 use App\Events\Ticket\TicketCreated;
 use App\Events\Ticket\TicketDeleted;
 use App\Traits\Scopes\MarkedRecords;
 use App\Traits\Scopes\OverdueRecords;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Spatie\Activitylog\Models\Activity;
+use Illuminate\Database\Eloquent\Builder;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Ticket extends Model
 {
-    use HasFactory, MarkedRecords, OverdueRecords, SoftDeletes;
+    use HasFactory, MarkedRecords, OverdueRecords, SoftDeletes, LogsActivity;
 
     protected $guarded = [
         'id', 'created_at', 'updated_at',
@@ -50,6 +53,14 @@ class Ticket extends Model
         'message' => ['required', 'max:65553'],
     ];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['subject', 'reporter_id', 'assignee', 'type', 'priority', 'dued_at', 'message'])
+            ->dontLogIfAttributesChangedOnly(['assignee_id', 'status', 'is_converted', 'updated_at'])
+            ->setDescriptionForEvent(fn (string $eventName) => "Ticket was {$eventName}.");
+    }
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');
@@ -73,6 +84,11 @@ class Ticket extends Model
     public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable')->orderByDesc('created_at');
+    }
+
+    public function activities(): MorphMany
+    {
+        return $this->morphMany(Activity::class, 'subject')->orderByDesc('created_at');
     }
 
     public function task(): HasOne
