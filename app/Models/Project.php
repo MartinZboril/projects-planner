@@ -17,10 +17,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Project extends Model
 {
-    use HasFactory, MarkedRecords, OverdueRecords, SoftDeletes, CascadeSoftDeletes;
+    use HasFactory, MarkedRecords, OverdueRecords, SoftDeletes, CascadeSoftDeletes, LogsActivity;
 
     protected $fillable = [
         'status', 'client_id', 'name', 'started_at', 'dued_at', 'estimated_hours', 'budget', 'description', 'is_marked',
@@ -50,6 +53,14 @@ class Project extends Model
         'started_at' => 'date',
         'dued_at' => 'date',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'team', 'started_at', 'dued_at', 'description'])
+            ->dontLogIfAttributesChangedOnly(['team', 'status', 'is_marked', 'updated_at'])
+            ->setDescriptionForEvent(fn (string $eventName) => "Project was {$eventName}.");
+    }
 
     public function client(): BelongsTo
     {
@@ -98,17 +109,22 @@ class Project extends Model
 
     public function files(): MorphMany
     {
-        return $this->morphMany(File::class, 'fileable');
+        return $this->morphMany(File::class, 'fileable')->orderByDesc('created_at');
     }
 
     public function comments(): MorphMany
     {
-        return $this->morphMany(Comment::class, 'commentable');
+        return $this->morphMany(Comment::class, 'commentable')->orderByDesc('created_at');
     }
 
     public function notes(): MorphMany
     {
-        return $this->morphMany(Note::class, 'noteable');
+        return $this->morphMany(Note::class, 'noteable')->orderByDesc('created_at');
+    }
+
+    public function activities(): MorphMany
+    {
+        return $this->morphMany(Activity::class, 'subject')->orderByDesc('created_at');
     }
 
     public function scopeStatus(Builder $query, ProjectStatusEnum $type): Builder

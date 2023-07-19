@@ -8,7 +8,9 @@ use App\Events\Task\Status\TaskInProgressed;
 use App\Events\Task\Status\TaskPaused;
 use App\Events\Task\Status\TaskResumed;
 use App\Events\Task\Status\TaskReturned;
+use App\Events\Task\TaskMilestoneChanged;
 use App\Events\Task\TaskUserChanged;
+use App\Models\Milestone;
 use App\Models\Task;
 use App\Models\User;
 use App\Services\FileService;
@@ -27,6 +29,7 @@ class TaskService
     public function handleSave(Task $task, array $inputs, ?array $uploadedFiles = []): Task
     {
         $oldUserId = $task->user_id;
+        $oldMilestoneId = $task->milestone_id;
         // Prepare fields
         $inputs['status'] = $task->status ?? TaskStatusEnum::new;
         $inputs['author_id'] = $inputs['author_id'] ?? ($task->author_id ?? Auth::id());
@@ -40,6 +43,10 @@ class TaskService
         // Notify users about assignment to the task
         if ((int) $oldUserId !== (int) $task->user_id) {
             TaskUserChanged::dispatch($task, $task->user, ($oldUserId) ? User::find($oldUserId) : null);
+        }
+        // Log activity about milestone assignment to the task
+        if ((int) $oldMilestoneId !== (int) $task->milestone_id) {
+            TaskMilestoneChanged::dispatch($task, $task->milestone, ($oldMilestoneId) ? Milestone::find($oldMilestoneId) : null);
         }
 
         return $task;

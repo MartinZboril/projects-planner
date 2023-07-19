@@ -2,3 +2,8 @@
     content:" *";
     color:red;
 }
+
+.scroll {
+    max-height: 300px;
+    overflow-y: auto;
+}

@@ -20,6 +20,7 @@ class ProjectTeamChanged
         public Project $project,
         public Collection $new_team,
         public Collection $old_team,
+        public bool $created_mode,
     ) {
     }
 

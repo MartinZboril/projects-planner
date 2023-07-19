@@ -2,6 +2,8 @@
 
 namespace App\Services\Data;
 
+use App\Events\Timer\TimerChanged;
+use App\Events\Timer\TimerStopped;
 use App\Models\Timer;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,11 +14,13 @@ class TimerService
      */
     public function handleSave(Timer $timer, array $inputs): Timer
     {
+        $oldTotalTime = $timer->total_time;
         // Prepare fields
         $inputs['project_id'] = $timer->project_id ?? $inputs['project_id'];
         $inputs['user_id'] = $timer->user_id ?? Auth::id();
         // Save timer
         $timer->fill($inputs)->save();
+        TimerChanged::dispatch($timer, $oldTotalTime);
 
         return $timer;
     }
@@ -41,6 +45,7 @@ class TimerService
     public function handleStop(Timer $timer): void
     {
         $timer->update(['until_at' => now()]);
+        TimerStopped::dispatch($timer);
     }
 
     /**

@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\TicketPriorityEnum;
 use App\Enums\TicketStatusEnum;
 use App\Enums\TicketTypeEnum;
+use App\Events\Ticket\TicketCreated;
+use App\Events\Ticket\TicketDeleted;
 use App\Traits\Scopes\MarkedRecords;
 use App\Traits\Scopes\OverdueRecords;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,13 +17,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Ticket extends Model
 {
-    use HasFactory, MarkedRecords, OverdueRecords, SoftDeletes;
+    use HasFactory, MarkedRecords, OverdueRecords, SoftDeletes, LogsActivity;
 
     protected $guarded = [
         'id', 'created_at', 'updated_at',
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => TicketCreated::class,
+        'deleted' => TicketDeleted::class,
     ];
 
     protected $casts = [
@@ -43,6 +53,14 @@ class Ticket extends Model
         'message' => ['required', 'max:65553'],
     ];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['subject', 'reporter_id', 'assignee', 'type', 'priority', 'dued_at', 'message'])
+            ->dontLogIfAttributesChangedOnly(['assignee_id', 'status', 'is_converted', 'is_marked', 'updated_at'])
+            ->setDescriptionForEvent(fn (string $eventName) => "Ticket was {$eventName}.");
+    }
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');
@@ -60,12 +78,17 @@ class Ticket extends Model
 
     public function files(): MorphMany
     {
-        return $this->morphMany(File::class, 'fileable');
+        return $this->morphMany(File::class, 'fileable')->orderByDesc('created_at');
     }
 
     public function comments(): MorphMany
     {
-        return $this->morphMany(Comment::class, 'commentable');
+        return $this->morphMany(Comment::class, 'commentable')->orderByDesc('created_at');
+    }
+
+    public function activities(): MorphMany
+    {
+        return $this->morphMany(Activity::class, 'subject')->orderByDesc('created_at');
     }
 
     public function task(): HasOne

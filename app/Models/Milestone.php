@@ -3,22 +3,32 @@
 namespace App\Models;
 
 use App\Enums\TaskStatusEnum;
+use Spatie\Activitylog\LogOptions;
 use App\Traits\Scopes\MarkedRecords;
 use App\Traits\Scopes\OverdueRecords;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Spatie\Activitylog\Models\Activity;
+use App\Events\Milestone\MilestoneCreated;
+use App\Events\Milestone\MilestoneDeleted;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Milestone extends Model
 {
-    use HasFactory, MarkedRecords, OverdueRecords, SoftDeletes;
+    use HasFactory, MarkedRecords, OverdueRecords, SoftDeletes, LogsActivity;
 
     protected $fillable = [
         'project_id', 'owner_id', 'name', 'started_at', 'dued_at', 'colour', 'description', 'is_marked',
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => MilestoneCreated::class,
+        'deleted' => MilestoneDeleted::class,
     ];
 
     protected $casts = [
@@ -36,6 +46,14 @@ class Milestone extends Model
         'description' => ['nullable', 'string', 'max:65553'],
     ];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'project', 'owner', 'started_at', 'dued_at', 'colour', 'description'])
+            ->dontLogIfAttributesChangedOnly(['owner_id', 'is_marked', 'updated_at'])
+            ->setDescriptionForEvent(fn (string $eventName) => "Milestone was {$eventName}.");
+    }
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');
@@ -48,12 +66,17 @@ class Milestone extends Model
 
     public function files(): MorphMany
     {
-        return $this->morphMany(File::class, 'fileable');
+        return $this->morphMany(File::class, 'fileable')->orderByDesc('created_at');
     }
 
     public function comments(): MorphMany
     {
-        return $this->morphMany(Comment::class, 'commentable');
+        return $this->morphMany(Comment::class, 'commentable')->orderByDesc('created_at');
+    }
+
+    public function activities(): MorphMany
+    {
+        return $this->morphMany(Activity::class, 'subject')->orderByDesc('created_at');
     }
 
     public function tasks(): HasMany

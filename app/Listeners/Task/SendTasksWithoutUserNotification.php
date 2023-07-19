@@ -2,11 +2,10 @@
 
 namespace App\Listeners\Task;
 
-use App\Models\Task;
 use App\Events\User\UserDeleted;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Models\Task;
 use App\Notifications\Task\UserDeletedNotification;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SendTasksWithoutUserNotification implements ShouldQueue
 {

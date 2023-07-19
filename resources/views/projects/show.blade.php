@@ -31,9 +31,9 @@
                                 <x-chart.progress-bar headline="Tasks" :title="$project->pending_tasks_count . ' pcs'" :subtitle="$project->done_tasks_count . ' Done'" chart-id="tasks-progress-bar" :value="$project->tasks_plan >= 100 ? '1.0' : ($project->tasks_plan / 100)" :text="$project->tasks_plan . '%'" :colour="'#' . ($project->tasks_plan > 100 ? 'dc3545' : '28a745')" />
                             </div>
                         </div>
-                        <x-activity-feed.card />
+                        <x-activity-feed.card :activities="$project->activities" />
                     </div>
-                </div>  
+                </div>
             </div>
         </section>
     </div>

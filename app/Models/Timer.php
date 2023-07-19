@@ -35,6 +35,8 @@ class Timer extends Model
     protected $appends = [
         'total_time',
         'amount',
+        'stop_route',
+        'project_route',
     ];
 
     public function project(): BelongsTo
