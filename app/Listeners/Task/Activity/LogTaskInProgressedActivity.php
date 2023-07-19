@@ -19,6 +19,6 @@ class LogTaskInProgressedActivity
     {
         activity()
             ->performedOn($event->task)
-            ->log('Task was in progressed.');
+            ->log('Task was in progressed');
     }
 }

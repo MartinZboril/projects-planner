@@ -19,6 +19,6 @@ class LogTaskResumedActivity
     {
         activity()
             ->performedOn($event->task)
-            ->log('Task was resumed.');
+            ->log('Task was resumed');
     }
 }

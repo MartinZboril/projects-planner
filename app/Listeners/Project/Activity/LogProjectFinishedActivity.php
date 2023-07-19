@@ -21,6 +21,6 @@ class LogProjectFinishedActivity
     {
         activity()
             ->performedOn($event->project)
-            ->log('Project was finished.');
+            ->log('Project was finished');
     }
 }

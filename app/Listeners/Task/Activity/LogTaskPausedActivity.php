@@ -19,6 +19,6 @@ class LogTaskPausedActivity
     {
         activity()
             ->performedOn($event->task)
-            ->log('Task was paused.');
+            ->log('Task was paused');
     }
 }

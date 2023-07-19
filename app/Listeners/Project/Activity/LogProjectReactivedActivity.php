@@ -21,6 +21,6 @@ class LogProjectReactivedActivity
     {
         activity()
             ->performedOn($event->project)
-            ->log('The project was reactived.');
+            ->log('The project was reactived');
     }
 }

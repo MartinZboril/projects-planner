@@ -18,7 +18,7 @@ function startWorkTimer(url, projectId, rateId, type) {
             const activeTimers = data.active_timers;
             // Change project view
             if (type === 'table') {
-                $('#projects-table').DataTable().ajax.reload(); 
+                $('#projects-table').DataTable().ajax.reload();
             } else {
                 $('#project-' + project.id + '-stop-work').attr('onclick', 'stopWorkTimer(\'' + timer.stop_route +'\', \'project\', \'timers-preview-modal\')');
                 $('#project-' + project.id + '-stop-work').show();
@@ -29,15 +29,15 @@ function startWorkTimer(url, projectId, rateId, type) {
                 if ($('#timers-table').DataTable()) {
                     $('#timers-table').DataTable().ajax.reload();
                 }
-            }            
+            }
             // Update active timers count
             if (activeTimers.length > 0) {
                 $('#timer-nav').show();
             } else {
                 $('#timer-nav').hide();
-            }     
+            }
             $('#active-timers-table tr:last').after('<tr id="timer-' + timer.id + '-modal-row"><td><a href="' + timer.project_route + '">' + project.name + '</a></td><td>' + timer.rate.name + '</td><td><span id="timer-' + timer.id + '-display" class="timer-record" data-since_at="' + timer.since_at + '"></span></td><td><a href="#" class="btn btn-sm btn-danger" onclick="stopWorkTimer(\'' + timer.stop_route +'\', \'modal\', \'timers-preview-modal\')"><i class="fas fa-stop"></i></a></td></tr>');
-            $('#timer-counter').html('<i class="fas fa-clock mr-1"></i>' + activeTimers.length);            
+            $('#timer-counter').html('<i class="fas fa-clock mr-1"></i>' + activeTimers.length);
             // Send message about start timer
             toastr.info(data.message);
         }
@@ -58,13 +58,13 @@ function stopWorkTimer(url, type, modalId) {
         success: function (data) {
             const timer = data.timer;
             const project = data.project;
-            const activeTimersCount = data.active_timers_count;  
-            // Change content of modal     
+            const activeTimersCount = data.active_timers_count;
+            // Change content of modal
             $('#timer-' + timer.id + '-modal-row').html('');
             if (type === 'modal') {
                 $('#' + modalId).removeClass("in");
                 $(".modal-backdrop").remove();
-                $('#' + modalId).hide(); 
+                $('#' + modalId).hide();
             }
             // Project buttons
             if ($('#project-' + project.id + '-stop-work')) {
@@ -87,7 +87,7 @@ function stopWorkTimer(url, type, modalId) {
                 $('#timer-nav').show();
             } else {
                 $('#timer-nav').hide();
-            }     
+            }
             $('#timer-counter').html('<i class="fas fa-clock mr-1"></i>' + activeTimersCount);
             // Send message about stop timer
             toastr.info(data.message);
@@ -110,7 +110,7 @@ function deleteTimer(url, type, tableIdentifier = '#timers-table', redirect) {
         },
         success: function (data) {
             if (type === 'table') {
-                $(tableIdentifier).DataTable().ajax.reload(); 
+                $(tableIdentifier).DataTable().ajax.reload();
             } else {
                 window.location.href = redirect ? redirect : window.location.href;
             }
@@ -119,7 +119,7 @@ function deleteTimer(url, type, tableIdentifier = '#timers-table', redirect) {
     });
 }
 // Display timers
-function displayTimers () { 
+function displayTimers () {
     $('.timer-record').each(function(i, obj) {
         const since_at = new Date(Date.parse($(obj).data('since_at')));
         const now = new Date($.now());

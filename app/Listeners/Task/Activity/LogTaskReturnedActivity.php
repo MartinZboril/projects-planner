@@ -19,6 +19,6 @@ class LogTaskReturnedActivity
     {
         activity()
             ->performedOn($event->task)
-            ->log('Task was returned.');
+            ->log('Task was returned');
     }
 }

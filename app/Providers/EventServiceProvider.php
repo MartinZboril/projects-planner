@@ -141,6 +141,14 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\Ticket\SendTicketsWithoutAssigneeNotification::class,
         ],
 
+        \App\Events\Timer\TimerStopped::class => [
+            \App\Listeners\Timer\Activity\LogTimerStoppedForProjectActivity::class,
+        ],
+
+        \App\Events\Timer\TimerChanged::class => [
+            \App\Listeners\Timer\Activity\LogTimerChangedForProjectActivity::class,
+        ],
+
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],

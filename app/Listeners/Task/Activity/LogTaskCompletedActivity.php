@@ -19,6 +19,6 @@ class LogTaskCompletedActivity
     {
         activity()
             ->performedOn($event->task)
-            ->log('Task was completed.');
+            ->log('Task was completed');
     }
 }

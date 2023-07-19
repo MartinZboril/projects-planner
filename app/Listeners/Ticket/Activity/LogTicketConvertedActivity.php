@@ -19,6 +19,6 @@ class LogTicketConvertedActivity
     {
         activity()
             ->performedOn($event->ticket)
-            ->log('Ticket was converted into task.');
+            ->log('Ticket was converted into task');
     }
 }

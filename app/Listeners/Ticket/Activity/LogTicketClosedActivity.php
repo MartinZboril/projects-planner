@@ -19,6 +19,6 @@ class LogTicketClosedActivity
     {
         activity()
             ->performedOn($event->ticket)
-            ->log('Ticket was closed.');
+            ->log('Ticket was closed');
     }
 }

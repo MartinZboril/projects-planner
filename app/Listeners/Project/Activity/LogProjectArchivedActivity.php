@@ -21,6 +21,6 @@ class LogProjectArchivedActivity
     {
         activity()
             ->performedOn($event->project)
-            ->log('The project was archived.');
+            ->log('The project was archived');
     }
 }

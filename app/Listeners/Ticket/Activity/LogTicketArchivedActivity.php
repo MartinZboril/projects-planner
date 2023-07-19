@@ -19,6 +19,6 @@ class LogTicketArchivedActivity
     {
         activity()
             ->performedOn($event->ticket)
-            ->log('Ticket was archived.');
+            ->log('Ticket was archived');
     }
 }
