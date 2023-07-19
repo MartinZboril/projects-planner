@@ -16,7 +16,7 @@
                     <div class="col-md-5">
                         @include('projects.milestones.partials.informations')
                         <x-file.card :upload-form-route="route('projects.milestones.files.upload', ['project' => $milestone->project, 'milestone' => $milestone])" :parent="['project' => $milestone->project, 'milestone' => $milestone]" destroy-form-route-name="projects.milestones.files.destroy" :files="$milestone->files" />
-                        <x-activity-feed.card :activities="[]" />
+                        <x-activity-feed.card :activities="$milestone->activities" />
                     </div>
                     <div class="col-md-7">
                         <div class="card card-primary card-outline">

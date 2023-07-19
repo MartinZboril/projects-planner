@@ -2,7 +2,7 @@
 
 namespace App\Listeners\Task\Activity;
 
-class LogTaskResumedActivity
+class LogTaskAssignForMilestoneActivity
 {
     /**
      * Create the event listener.
@@ -18,7 +18,7 @@ class LogTaskResumedActivity
     public function handle(object $event): void
     {
         activity()
-            ->performedOn($event->task)
-            ->log('Task was resumed.');
+            ->performedOn($event->milestone)
+            ->log("Task {$event->task->name} has been assigned for the milestone");
     }
 }

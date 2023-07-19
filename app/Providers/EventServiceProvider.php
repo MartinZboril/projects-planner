@@ -59,6 +59,11 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\Task\SendTaskAssignmentNotifications::class,
         ],
 
+        \App\Events\Task\TaskMilestoneChanged::class => [
+            \App\Listeners\Task\Activity\LogTaskAssignForMilestoneActivity::class,
+            \App\Listeners\Task\Activity\LogTaskUnassignForMilestoneActivity::class,
+        ],
+
         \App\Events\Task\TaskCreated::class => [
             \App\Listeners\Task\Activity\LogTaskCreatedForProjectActivity::class,
         ],

@@ -58,7 +58,7 @@ class Project extends Model
     {
         return LogOptions::defaults()
             ->logOnly(['name', 'team', 'started_at', 'dued_at', 'description'])
-            ->dontLogIfAttributesChangedOnly(['team', 'status', 'updated_at'])
+            ->dontLogIfAttributesChangedOnly(['team', 'status', 'is_marked', 'updated_at'])
             ->setDescriptionForEvent(fn (string $eventName) => "Project was {$eventName}.");
     }
 

@@ -2,9 +2,6 @@
 
 namespace App\Listeners\Ticket\Activity;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-
 class LogTicketArchivedActivity
 {
     /**

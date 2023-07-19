@@ -2,9 +2,6 @@
 
 namespace App\Listeners\Task\Activity;
 
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-
 class LogTaskInProgressedActivity
 {
     /**

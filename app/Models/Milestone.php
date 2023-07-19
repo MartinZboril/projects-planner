@@ -14,10 +14,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Models\Activity;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Milestone extends Model
 {
-    use HasFactory, MarkedRecords, OverdueRecords, SoftDeletes;
+    use HasFactory, MarkedRecords, OverdueRecords, SoftDeletes, LogsActivity;
 
     protected $fillable = [
         'project_id', 'owner_id', 'name', 'started_at', 'dued_at', 'colour', 'description', 'is_marked',
@@ -43,6 +46,14 @@ class Milestone extends Model
         'description' => ['nullable', 'string', 'max:65553'],
     ];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'project', 'owner', 'started_at', 'dued_at', 'colour', 'description'])
+            ->dontLogIfAttributesChangedOnly(['owner', 'is_marked', 'updated_at'])
+            ->setDescriptionForEvent(fn (string $eventName) => "Milestone was {$eventName}.");
+    }
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class, 'project_id');
@@ -61,6 +72,11 @@ class Milestone extends Model
     public function comments(): MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable')->orderByDesc('created_at');
+    }
+
+    public function activities(): MorphMany
+    {
+        return $this->morphMany(Activity::class, 'subject')->orderByDesc('created_at');
     }
 
     public function tasks(): HasMany
