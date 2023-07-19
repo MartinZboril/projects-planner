@@ -2,6 +2,8 @@
 
 namespace App\Listeners\Task\Activity;
 
+use App\Events\Task\Status\TaskResumed;
+
 class LogTaskResumedActivity
 {
     /**
@@ -15,7 +17,7 @@ class LogTaskResumedActivity
     /**
      * Handle the event.
      */
-    public function handle(object $event): void
+    public function handle(TaskResumed $event): void
     {
         activity()
             ->performedOn($event->task)

@@ -2,6 +2,8 @@
 
 namespace App\Listeners\Task\Activity;
 
+use App\Events\Task\Status\TaskCompleted;
+
 class LogTaskCompletedActivity
 {
     /**
@@ -15,7 +17,7 @@ class LogTaskCompletedActivity
     /**
      * Handle the event.
      */
-    public function handle(object $event): void
+    public function handle(TaskCompleted $event): void
     {
         activity()
             ->performedOn($event->task)

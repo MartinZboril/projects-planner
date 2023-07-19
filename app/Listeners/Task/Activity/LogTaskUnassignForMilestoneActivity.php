@@ -2,6 +2,8 @@
 
 namespace App\Listeners\Task\Activity;
 
+use App\Events\Task\TaskMilestoneChanged;
+
 class LogTaskUnassignForMilestoneActivity
 {
     /**
@@ -15,7 +17,7 @@ class LogTaskUnassignForMilestoneActivity
     /**
      * Handle the event.
      */
-    public function handle(object $event): void
+    public function handle(TaskMilestoneChanged $event): void
     {
         if (! $event->old_milestone) {
             return;

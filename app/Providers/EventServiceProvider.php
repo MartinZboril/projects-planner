@@ -29,11 +29,14 @@ class EventServiceProvider extends ServiceProvider
 
         \App\Events\Milestone\MilestoneOwnerChanged::class => [
             \App\Listeners\Milestone\SendMilestoneAssignmentNotifications::class,
+            \App\Listeners\Milestone\Activity\LogMilestoneOwnerChangedActivity::class,
         ],
 
         \App\Events\Project\ProjectTeamChanged::class => [
             \App\Listeners\Project\SendWelcomeToNewMembersNotification::class,
+            \App\Listeners\Project\Activity\LogProjectTeamNewMembersActivity::class,
             \App\Listeners\Project\SendFarewellToOldMembersNotification::class,
+            \App\Listeners\Project\Activity\LogProjectTeamOldMembersActivity::class,
         ],
 
         \App\Events\Project\ProjectDeleted::class => [
@@ -57,6 +60,7 @@ class EventServiceProvider extends ServiceProvider
 
         \App\Events\Task\TaskUserChanged::class => [
             \App\Listeners\Task\SendTaskAssignmentNotifications::class,
+            \App\Listeners\Task\Activity\LogTaskUserChangedActivity::class,
         ],
 
         \App\Events\Task\TaskMilestoneChanged::class => [
@@ -100,6 +104,7 @@ class EventServiceProvider extends ServiceProvider
 
         \App\Events\Ticket\TicketAssigneeChanged::class => [
             \App\Listeners\Ticket\SendTicketAssignmentNotifications::class,
+            \App\Listeners\Ticket\Activity\LogTicketAssigneeChangedActivity::class,
         ],
 
         \App\Events\Ticket\TicketDeleted::class => [

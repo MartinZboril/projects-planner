@@ -2,6 +2,8 @@
 
 namespace App\Listeners\Task\Activity;
 
+use App\Events\Task\Status\TaskPaused;
+
 class LogTaskPausedActivity
 {
     /**
@@ -15,7 +17,7 @@ class LogTaskPausedActivity
     /**
      * Handle the event.
      */
-    public function handle(object $event): void
+    public function handle(TaskPaused $event): void
     {
         activity()
             ->performedOn($event->task)

@@ -2,6 +2,8 @@
 
 namespace App\Listeners\Timer\Activity;
 
+use App\Events\Timer\TimerStopped;
+
 class LogTimerStoppedForProjectActivity
 {
     /**
@@ -15,7 +17,7 @@ class LogTimerStoppedForProjectActivity
     /**
      * Handle the event.
      */
-    public function handle(object $event): void
+    public function handle(TimerStopped $event): void
     {
         activity()
             ->performedOn($event->timer->project)

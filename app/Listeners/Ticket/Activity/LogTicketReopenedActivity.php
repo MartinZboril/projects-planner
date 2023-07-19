@@ -2,6 +2,8 @@
 
 namespace App\Listeners\Ticket\Activity;
 
+use App\Events\Ticket\Status\TicketReopened;
+
 class LogTicketReopenedActivity
 {
     /**
@@ -15,7 +17,7 @@ class LogTicketReopenedActivity
     /**
      * Handle the event.
      */
-    public function handle(object $event): void
+    public function handle(TicketReopened $event): void
     {
         activity()
             ->performedOn($event->ticket)

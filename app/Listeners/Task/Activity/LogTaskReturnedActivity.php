@@ -2,6 +2,8 @@
 
 namespace App\Listeners\Task\Activity;
 
+use App\Events\Task\Status\TaskReturned;
+
 class LogTaskReturnedActivity
 {
     /**
@@ -15,7 +17,7 @@ class LogTaskReturnedActivity
     /**
      * Handle the event.
      */
-    public function handle(object $event): void
+    public function handle(TaskReturned $event): void
     {
         activity()
             ->performedOn($event->task)

@@ -2,6 +2,8 @@
 
 namespace App\Listeners\Task\Activity;
 
+use App\Events\Task\TaskMilestoneChanged;
+
 class LogTaskAssignForMilestoneActivity
 {
     /**
@@ -15,7 +17,7 @@ class LogTaskAssignForMilestoneActivity
     /**
      * Handle the event.
      */
-    public function handle(object $event): void
+    public function handle(TaskMilestoneChanged $event): void
     {
         activity()
             ->performedOn($event->milestone)

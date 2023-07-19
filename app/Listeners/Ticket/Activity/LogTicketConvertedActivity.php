@@ -2,6 +2,8 @@
 
 namespace App\Listeners\Ticket\Activity;
 
+use App\Events\Ticket\Status\TicketConverted;
+
 class LogTicketConvertedActivity
 {
     /**
@@ -15,7 +17,7 @@ class LogTicketConvertedActivity
     /**
      * Handle the event.
      */
-    public function handle(object $event): void
+    public function handle(TicketConverted $event): void
     {
         activity()
             ->performedOn($event->ticket)

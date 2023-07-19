@@ -3,20 +3,20 @@
 namespace App\Models;
 
 use App\Enums\TaskStatusEnum;
-use App\Events\Milestone\MilestoneCreated;
-use App\Events\Milestone\MilestoneDeleted;
+use Spatie\Activitylog\LogOptions;
 use App\Traits\Scopes\MarkedRecords;
 use App\Traits\Scopes\OverdueRecords;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Models\Activity;
+use App\Events\Milestone\MilestoneCreated;
+use App\Events\Milestone\MilestoneDeleted;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Milestone extends Model
 {
@@ -50,7 +50,7 @@ class Milestone extends Model
     {
         return LogOptions::defaults()
             ->logOnly(['name', 'project', 'owner', 'started_at', 'dued_at', 'colour', 'description'])
-            ->dontLogIfAttributesChangedOnly(['owner', 'is_marked', 'updated_at'])
+            ->dontLogIfAttributesChangedOnly(['owner_id', 'is_marked', 'updated_at'])
             ->setDescriptionForEvent(fn (string $eventName) => "Milestone was {$eventName}.");
     }
 

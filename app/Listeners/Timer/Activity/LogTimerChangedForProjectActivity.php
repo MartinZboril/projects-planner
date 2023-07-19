@@ -2,6 +2,8 @@
 
 namespace App\Listeners\Timer\Activity;
 
+use App\Events\Timer\TimerChanged;
+
 class LogTimerChangedForProjectActivity
 {
     /**
@@ -15,7 +17,7 @@ class LogTimerChangedForProjectActivity
     /**
      * Handle the event.
      */
-    public function handle(object $event): void
+    public function handle(TimerChanged $event): void
     {
         activity()
             ->performedOn($event->timer->project)
