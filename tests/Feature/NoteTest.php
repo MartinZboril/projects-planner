@@ -2,12 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Enums\RoleEnum;
-use App\Models\Address;
+use Tests\TestCase;
 use App\Models\Note;
 use App\Models\User;
+use App\Models\Client;
+use App\Enums\RoleEnum;
+use App\Models\Address;
+use App\Models\SocialNetwork;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class NoteTest extends TestCase
 {
@@ -109,6 +111,40 @@ class NoteTest extends TestCase
         $this->assertEquals($note['content'], $lastNote->content);
     }
 
+    public function test_user_can_store_note_for_different_models(): void
+    {
+        $note = [
+            'user_id' => $this->user->id,
+            'name' => 'Note',
+            'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        ];
+
+        // Client
+        $client = Client::factory()->create([
+            'address_id' => Address::factory()->create()->first()->id,
+            'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+        ]);
+
+        $clientNote = $note + [
+            'noteable_id' => $client->id,
+            'noteable_type' => $client::class,
+        ];
+
+        $response = $this->actingAs($this->user)->post('clients/'.$client->id.'/notes', $clientNote);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('clients/'.$client->id.'/notes');
+
+        $this->assertDatabaseHas('notes', $clientNote);
+
+        $lastClientNote = Note::where('noteable_id', $client->id)->where('noteable_type', $client::class)->latest()->first();
+        $this->assertEquals($clientNote['noteable_id'], $lastClientNote->noteable_id);
+        $this->assertEquals($clientNote['noteable_type'], $lastClientNote->noteable_type);
+        $this->assertEquals($clientNote['content'], $lastClientNote->content);
+
+        //TODO: Project
+    }
+
     public function test_user_can_get_to_edit_note_page(): void
     {
         $note = Note::factory()->create(['user_id' => $this->user->id]);
@@ -141,6 +177,36 @@ class NoteTest extends TestCase
         $this->assertEquals($editedNote['content'], $updatedNote->content);
     }
 
+    public function test_user_can_update_note_for_different_models(): void
+    {
+        // Client
+        $client = Client::factory()->create([
+            'address_id' => Address::factory()->create()->first()->id,
+            'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+        ]);
+
+        $clientNote =  Note::factory()->create([
+            'user_id' => $this->user->id,
+            'noteable_id' => $client->id,
+            'noteable_type' => $client::class,
+        ]);
+
+        $editedClientNote = [
+            'name' => 'Updated Client Note',
+            'content' => 'Updated Client Note Content',
+        ];
+
+        $response = $this->actingAs($this->user)->put('clients/'.$client->id.'/notes/'.$clientNote->id, $editedClientNote);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('clients/'.$client->id.'/notes');
+
+        $lastClientNote = Note::where('noteable_id', $client->id)->where('noteable_type', $client::class)->latest()->first();
+        $this->assertEquals($editedClientNote['content'], $lastClientNote->content);
+
+        // TODO:: Project
+    }
+
     public function test_user_can_delete_note(): void
     {
         $note = Note::factory()->create(['user_id' => $this->user->id]);
@@ -151,6 +217,30 @@ class NoteTest extends TestCase
         $response->assertJsonPath('message', __('messages.note.delete'));
 
         $this->assertSoftDeleted($note);
+    }
+
+    public function test_user_can_delete_note_for_different_models(): void
+    {
+        // Client
+        $client = Client::factory()->create([
+            'address_id' => Address::factory()->create()->first()->id,
+            'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+        ]);
+
+        $clientNote =  Note::factory()->create([
+            'user_id' => $this->user->id,
+            'noteable_id' => $client->id,
+            'noteable_type' => $client::class,
+        ]);
+
+        $response = $this->actingAs($this->user)->delete('clients/'.$client->id.'/notes/'.$clientNote->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.note.delete'));
+
+        $this->assertSoftDeleted($clientNote);
+
+        // TODO:: Project
     }
 
     private function createUser(): User
