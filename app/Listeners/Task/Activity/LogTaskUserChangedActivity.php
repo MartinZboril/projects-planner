@@ -3,8 +3,6 @@
 namespace App\Listeners\Task\Activity;
 
 use App\Events\Task\TaskUserChanged;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class LogTaskUserChangedActivity
 {

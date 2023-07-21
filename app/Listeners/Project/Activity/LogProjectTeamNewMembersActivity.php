@@ -2,11 +2,8 @@
 
 namespace App\Listeners\Project\Activity;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
-use Illuminate\Queue\InteractsWithQueue;
 use App\Events\Project\ProjectTeamChanged;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Str;
 
 class LogProjectTeamNewMembersActivity
 {

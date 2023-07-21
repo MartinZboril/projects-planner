@@ -3,8 +3,6 @@
 namespace App\Listeners\Ticket\Activity;
 
 use App\Events\Ticket\TicketAssigneeChanged;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class LogTicketAssigneeChangedActivity
 {
