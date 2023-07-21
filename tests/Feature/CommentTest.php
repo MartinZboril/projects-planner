@@ -51,7 +51,7 @@ class CommentTest extends TestCase
 
         $this->assertDatabaseHas('comments', $clientComment);
 
-        $lastComment = Comment::latest()->first();
+        $lastComment = Comment::where('commentable_id', $client->id)->where('commentable_type', $client::class)->latest()->first();
         $this->assertEquals($clientComment['commentable_id'], $lastComment->commentable_id);
         $this->assertEquals($clientComment['commentable_type'], $lastComment->commentable_type);
         $this->assertEquals($clientComment['content'], $lastComment->content);
