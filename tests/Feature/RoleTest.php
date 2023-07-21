@@ -157,6 +157,18 @@ class RoleTest extends TestCase
         });
     }
 
+    public function test_user_can_delete_role(): void
+    {
+        $role = Role::factory()->create();
+
+        $response = $this->actingAs($this->user)->delete('/users/roles/'.$role->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.role.delete'));
+
+        $this->assertSoftDeleted($role);
+    }
+
     private function createUser(): User
     {
         return User::factory()->create([
