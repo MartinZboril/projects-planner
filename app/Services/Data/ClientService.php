@@ -89,7 +89,7 @@ class ClientService
     /**
      * Remove selected clients logo.
      */
-    public function handleRemoveAvatar(Client $client): void
+    public function handleRemoveLogo(Client $client): void
     {
         if ($oldLogoId = ($client->logo_id ?? null)) {
             $client->logo_id = null;

@@ -2,13 +2,16 @@
 
 namespace Tests\Feature;
 
+use Tests\TestCase;
+use App\Models\File;
+use App\Models\User;
+use App\Models\Client;
 use App\Enums\RoleEnum;
 use App\Models\Address;
-use App\Models\Client;
 use App\Models\SocialNetwork;
-use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class ClientTest extends TestCase
 {
@@ -152,6 +155,33 @@ class ClientTest extends TestCase
         $this->assertEquals($editedClient['note'], $updatedClient->note);
         $this->assertEquals($editedClient['twitter'], $updatedClient->socialNetwork->twitter);
         $this->assertEquals($editedClient['street'], $updatedClient->address->street);
+    }
+
+    public function test_user_can_work_with_client_logo(): void
+    {
+        $client = $this->createClient();
+        $editedClient = $this->getClientArray();
+
+        $clientFileName = 'client.jpg';
+        $editedClient['logo'] = UploadedFile::fake()->image($clientFileName);
+
+        // Upload
+        $response = $this->actingAs($this->user)->put('clients/'.$client->id, $editedClient);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('clients/'.$client->id);
+
+        $lastLogoFile = File::latest()->first();
+        $this->assertEquals($clientFileName, $lastLogoFile->file_name);
+        $this->assertEquals('clients/logos', $lastLogoFile->collection);
+
+        // Remove
+        $response = $this->actingAs($this->user)->delete('clients/'.$client->id.'/logo/remove');
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.client.logo.delete'));
+
+        $this->assertEquals($client->logo_id, null);
     }
 
     public function test_user_can_delete_client(): void
