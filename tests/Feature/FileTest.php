@@ -60,7 +60,6 @@ class FileTest extends TestCase
         //TODO: Milestone
         //TODO: Task
         //TODO: Ticket
-        //TODO: Comment
     }
 
     public function test_user_can_delete_file_for_different_models(): void
@@ -87,7 +86,6 @@ class FileTest extends TestCase
         //TODO: Milestone
         //TODO: Task
         //TODO: Ticket
-        //TODO: Comment
     }
 
     private function createUser(): User

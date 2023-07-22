@@ -2,14 +2,16 @@
 
 namespace Tests\Feature;
 
+use Tests\TestCase;
+use App\Models\File;
+use App\Models\User;
+use App\Models\Client;
 use App\Enums\RoleEnum;
 use App\Models\Address;
-use App\Models\Client;
 use App\Models\Comment;
 use App\Models\SocialNetwork;
-use App\Models\User;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
 class CommentTest extends TestCase
 {
@@ -114,6 +116,49 @@ class CommentTest extends TestCase
         $response->assertJsonPath('message', __('messages.comment.delete'));
 
         $this->assertSoftDeleted($clientComment);
+
+        // TODO:: Project
+        // TODO:: Milestone
+        // TODO:: Task
+        // TODO:: Ticket
+    }
+
+    public function test_user_can_upload_files_to_comments(): void
+    {
+        // Client
+        $client = Client::factory()->create([
+            'address_id' => Address::factory()->create()->first()->id,
+            'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+        ]);
+
+        $clientComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $client->id,
+            'commentable_type' => $client::class,
+        ]);
+
+        [$clientCommentFile1, $clientCommentFile2] = ['client_comment_1.jpg', 'client_comment_2.jpg'];
+
+        $editedClientComment = [
+            'content' => 'Updated comments with files',
+            'files' => [
+                UploadedFile::fake()->image($clientCommentFile1),
+                UploadedFile::fake()->image($clientCommentFile2),
+            ],
+        ];
+
+        $response = $this->actingAs($this->user)->put('clients/'.$client->id.'/comments/'.$clientComment->id, $editedClientComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('clients/'.$client->id.'/comments');
+
+        $lastClientComment = Comment::where('commentable_id', $client->id)->where('commentable_type', $client::class)->latest()->first();
+        $lastClientCommentFiles = File::where('fileable_id', $lastClientComment->id)->where('fileable_type', $lastClientComment::class)->latest()->get();
+        $this->assertEquals(2, $lastClientCommentFiles->count());
+        $this->assertEquals($clientCommentFile1, $lastClientCommentFiles[0]->file_name);
+        $this->assertEquals('comments', $lastClientCommentFiles[0]->collection);
+        $this->assertEquals($clientCommentFile2, $lastClientCommentFiles[1]->file_name);
+        $this->assertEquals('comments', $lastClientCommentFiles[1]->collection);
 
         // TODO:: Project
         // TODO:: Milestone
