@@ -2,16 +2,16 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\File;
-use App\Models\User;
-use App\Models\Client;
 use App\Enums\RoleEnum;
 use App\Models\Address;
+use App\Models\Client;
 use App\Models\Comment;
+use App\Models\File;
 use App\Models\SocialNetwork;
-use Illuminate\Http\UploadedFile;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Tests\TestCase;
 
 class CommentTest extends TestCase
 {
