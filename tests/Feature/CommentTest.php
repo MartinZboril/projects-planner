@@ -70,7 +70,7 @@ class CommentTest extends TestCase
             'social_network_id' => SocialNetwork::factory()->create()->first()->id,
         ]);
 
-        $clientComment =  Comment::factory()->create([
+        $clientComment = Comment::factory()->create([
             'user_id' => $this->user->id,
             'commentable_id' => $client->id,
             'commentable_type' => $client::class,
@@ -102,7 +102,7 @@ class CommentTest extends TestCase
             'social_network_id' => SocialNetwork::factory()->create()->first()->id,
         ]);
 
-        $clientComment =  Comment::factory()->create([
+        $clientComment = Comment::factory()->create([
             'user_id' => $this->user->id,
             'commentable_id' => $client->id,
             'commentable_type' => $client::class,

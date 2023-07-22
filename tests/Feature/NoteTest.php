@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\Note;
-use App\Models\User;
-use App\Models\Client;
 use App\Enums\RoleEnum;
 use App\Models\Address;
+use App\Models\Client;
+use App\Models\Note;
 use App\Models\SocialNetwork;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class NoteTest extends TestCase
 {
@@ -185,7 +185,7 @@ class NoteTest extends TestCase
             'social_network_id' => SocialNetwork::factory()->create()->first()->id,
         ]);
 
-        $clientNote =  Note::factory()->create([
+        $clientNote = Note::factory()->create([
             'user_id' => $this->user->id,
             'noteable_id' => $client->id,
             'noteable_type' => $client::class,
@@ -227,7 +227,7 @@ class NoteTest extends TestCase
             'social_network_id' => SocialNetwork::factory()->create()->first()->id,
         ]);
 
-        $clientNote =  Note::factory()->create([
+        $clientNote = Note::factory()->create([
             'user_id' => $this->user->id,
             'noteable_id' => $client->id,
             'noteable_type' => $client::class,
