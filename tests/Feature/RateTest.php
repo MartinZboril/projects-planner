@@ -191,6 +191,18 @@ class RateTest extends TestCase
         $this->assertDatabaseCount('rate_user', 0);
     }
 
+    public function test_user_can_delete_rate(): void
+    {
+        $rate = Rate::factory()->create();
+
+        $response = $this->actingAs($this->user)->delete('/users/rates/'.$rate->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.rate.delete'));
+
+        $this->assertSoftDeleted($rate);
+    }
+
     private function createUser(): User
     {
         return User::factory()->create([

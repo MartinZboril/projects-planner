@@ -41,7 +41,6 @@ class Project extends Model
         'team' => ['required', 'array'],
         'started_at' => ['required', 'date'],
         'dued_at' => ['required', 'date'],
-        'estimated_hours' => ['required', 'date'],
         'estimated_hours' => ['required', 'integer', 'min:0'],
         'budget' => ['required', 'integer', 'min:0'],
         'description' => ['required', 'string', 'max:65553'],

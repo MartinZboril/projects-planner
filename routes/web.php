@@ -127,7 +127,7 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/', [App\Http\Controllers\Project\File\ProjectFileController::class, 'index'])->name('index');
         });
         // Milestones
-        Route::group(['prefix' => '/milestone/{milestone}', 'as' => 'milestones.'], function () {
+        Route::group(['prefix' => '/milestones/{milestone}', 'as' => 'milestones.'], function () {
             // Actions
             Route::patch('/mark', App\Http\Controllers\Project\Milestone\ProjectMilestoneMarkController::class)->name('mark');
             // Comments

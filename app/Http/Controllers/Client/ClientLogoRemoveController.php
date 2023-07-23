@@ -22,7 +22,7 @@ class ClientLogoRemoveController extends Controller
     public function __invoke(Client $client): JsonResponse
     {
         try {
-            $this->clientService->handleRemoveAvatar($client);
+            $this->clientService->handleRemoveLogo($client);
         } catch (Exception $exception) {
             Log::error($exception);
         }
