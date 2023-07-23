@@ -7,11 +7,13 @@ use App\Models\File;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Client;
+use App\Models\Ticket;
 use App\Enums\RoleEnum;
 use App\Models\Address;
 use App\Models\Project;
 use App\Enums\TaskStatusEnum;
 use App\Models\SocialNetwork;
+use App\Enums\TicketStatusEnum;
 use App\Enums\ProjectStatusEnum;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -137,8 +139,50 @@ class FileTest extends TestCase
         $this->assertEquals($taskFileName, $lastTaskFile->file_name);
         $this->assertEquals('tasks/files', $lastTaskFile->collection);
 
+        // Ticket
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+
+        [$reporterId, $assigneeId] = User::factory(2)->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id');
+        $project->team()->attach([$reporterId, $assigneeId]);
+
+        $ticket = Ticket::factory()->create([
+            'project_id' => $project->id,
+            'reporter_id' => $reporterId,
+            'assignee_id' => $assigneeId,
+            'status' => TicketStatusEnum::open->value,
+        ]);
+
+        $ticketFileName = 'ticket.jpg';
+
+        $ticketFiles = [
+            'fileable_id' => $ticket->id,
+            'fileable_type' => $ticket::class,
+            'files' => [
+                UploadedFile::fake()->image($ticketFileName),
+            ],
+        ];
+
+        $response = $this->actingAs($this->user)->post('tickets/'.$ticket->id.'/files/upload', $ticketFiles);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('tickets/'.$ticket->id);
+
+        $lastTicketFile = File::where('fileable_id', $ticket->id)->where('fileable_type', $ticket::class)->latest()->first();
+        $this->assertEquals($ticketFiles['fileable_id'], $lastTicketFile->fileable_id);
+        $this->assertEquals($ticketFiles['fileable_type'], $lastTicketFile->fileable_type);
+        $this->assertEquals($ticketFileName, $lastTicketFile->file_name);
+        $this->assertEquals('tickets/files', $lastTicketFile->collection);
+
         //TODO: Milestone
-        //TODO: Ticket
     }
 
     public function test_user_can_delete_file_for_different_models(): void
@@ -220,8 +264,41 @@ class FileTest extends TestCase
 
         $this->assertSoftDeleted($taskFile);
 
+        // Ticket
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+
+        [$reporterId, $assigneeId] = User::factory(2)->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id');
+        $project->team()->attach([$reporterId, $assigneeId]);
+
+        $ticket = Ticket::factory()->create([
+            'project_id' => $project->id,
+            'reporter_id' => $reporterId,
+            'assignee_id' => $assigneeId,
+            'status' => TicketStatusEnum::open->value,
+        ]);
+
+        $ticketFile = File::factory()->create([
+            'fileable_id' => $ticket->id,
+            'fileable_type' => $ticket::class,
+        ]);
+
+        $response = $this->actingAs($this->user)->delete('tickets/'.$ticket->id.'/files/'.$ticketFile->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.file.delete'));
+
+        $this->assertSoftDeleted($ticketFile);
+
         //TODO: Milestone
-        //TODO: Ticket
     }
 
     private function createUser(): User

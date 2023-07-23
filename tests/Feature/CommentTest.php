@@ -7,12 +7,14 @@ use App\Models\File;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Client;
+use App\Models\Ticket;
 use App\Enums\RoleEnum;
 use App\Models\Address;
 use App\Models\Comment;
 use App\Models\Project;
 use App\Enums\TaskStatusEnum;
 use App\Models\SocialNetwork;
+use App\Enums\TicketStatusEnum;
 use App\Enums\ProjectStatusEnum;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -136,8 +138,46 @@ class CommentTest extends TestCase
         $this->assertEquals($taskComment['commentable_type'], $lastTask->commentable_type);
         $this->assertEquals($taskComment['content'], $lastTask->content);
 
+        // Ticket
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+
+        [$reporterId, $assigneeId] = User::factory(2)->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id');
+        $project->team()->attach([$reporterId, $assigneeId]);
+
+        $ticket = Ticket::factory()->create([
+            'project_id' => $project->id,
+            'reporter_id' => $reporterId,
+            'assignee_id' => $assigneeId,
+            'status' => TicketStatusEnum::open->value,
+        ]);
+
+        $ticketComment = $comment + [
+            'commentable_id' => $ticket->id,
+            'commentable_type' => $ticket::class,
+        ];
+
+        $response = $this->actingAs($this->user)->post('tickets/'.$ticket->id.'/comments', $ticketComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('tickets/'.$ticket->id);
+
+        $this->assertDatabaseHas('comments', $ticketComment);
+
+        $lastTicket = Comment::where('commentable_id', $ticket->id)->where('commentable_type', $ticket::class)->latest()->first();
+        $this->assertEquals($ticketComment['commentable_id'], $lastTicket->commentable_id);
+        $this->assertEquals($ticketComment['commentable_type'], $lastTicket->commentable_type);
+        $this->assertEquals($ticketComment['content'], $lastTicket->content);
+
         // TODO:: Milestone
-        // TODO:: Ticket
     }
 
     public function test_user_can_update_comment_for_different_models(): void
@@ -237,9 +277,47 @@ class CommentTest extends TestCase
         $lastTaskComment = Comment::where('commentable_id', $task->id)->where('commentable_type', $task::class)->latest()->first();
         $this->assertEquals($editedTaskComment['content'], $lastTaskComment->content);
 
+        // Ticket
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+
+        [$reporterId, $assigneeId] = User::factory(2)->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id');
+        $project->team()->attach([$reporterId, $assigneeId]);
+
+        $ticket = Ticket::factory()->create([
+            'project_id' => $project->id,
+            'reporter_id' => $reporterId,
+            'assignee_id' => $assigneeId,
+            'status' => TicketStatusEnum::open->value,
+        ]);
+
+        $ticketComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $ticket->id,
+            'commentable_type' => $ticket::class,
+        ]);
+
+        $editedTicketComment = [
+            'content' => 'Ticket Comment',
+        ];
+
+        $response = $this->actingAs($this->user)->put('tickets/'.$ticket->id.'/comments/'.$ticketComment->id, $editedTicketComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('tickets/'.$ticket->id);
+
+        $lastTicketComment = Comment::where('commentable_id', $ticket->id)->where('commentable_type', $ticket::class)->latest()->first();
+        $this->assertEquals($editedTicketComment['content'], $lastTicketComment->content);
 
         // TODO:: Milestone
-        // TODO:: Ticket
     }
 
     public function test_user_can_delete_comment_for_different_models(): void
@@ -324,8 +402,42 @@ class CommentTest extends TestCase
 
         $this->assertSoftDeleted($taskComment);
 
+        // Ticket
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+
+        [$reporterId, $assigneeId] = User::factory(2)->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id');
+        $project->team()->attach([$reporterId, $assigneeId]);
+
+        $ticket = Ticket::factory()->create([
+            'project_id' => $project->id,
+            'reporter_id' => $reporterId,
+            'assignee_id' => $assigneeId,
+            'status' => TicketStatusEnum::open->value,
+        ]);
+
+        $ticketComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $ticket->id,
+            'commentable_type' => $ticket::class,
+        ]);
+
+        $response = $this->actingAs($this->user)->delete('tickets/'.$ticket->id.'/comments/'.$ticketComment->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.comment.delete'));
+
+        $this->assertSoftDeleted($ticketComment);
+
         // TODO:: Milestone
-        // TODO:: Ticket
     }
 
     public function test_user_can_upload_files_to_comments(): void
@@ -458,8 +570,58 @@ class CommentTest extends TestCase
         $this->assertEquals($taskCommentFile2, $lastTaskCommentFiles[1]->file_name);
         $this->assertEquals('comments', $lastTaskCommentFiles[1]->collection);
 
+        // Ticket
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+
+        [$reporterId, $assigneeId] = User::factory(2)->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id');
+        $project->team()->attach([$reporterId, $assigneeId]);
+
+        $ticket = Ticket::factory()->create([
+            'project_id' => $project->id,
+            'reporter_id' => $reporterId,
+            'assignee_id' => $assigneeId,
+            'status' => TicketStatusEnum::open->value,
+        ]);
+
+        $ticketComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $ticket->id,
+            'commentable_type' => $ticket::class,
+        ]);
+
+        [$ticketCommentFile1, $ticketCommentFile2] = ['ticket_comment_1.jpg', 'ticket_comment_2.jpg'];
+
+        $editedTicketComment = [
+            'content' => 'Updated comments with files',
+            'files' => [
+                UploadedFile::fake()->image($ticketCommentFile1),
+                UploadedFile::fake()->image($ticketCommentFile2),
+            ],
+        ];
+
+        $response = $this->actingAs($this->user)->put('tickets/'.$ticket->id.'/comments/'.$ticketComment->id, $editedTicketComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('tickets/'.$ticket->id);
+
+        $lastTicketComment = Comment::where('commentable_id', $ticket->id)->where('commentable_type', $ticket::class)->latest()->first();
+        $lastTicketCommentFiles = File::where('fileable_id', $lastTicketComment->id)->where('fileable_type', $lastTicketComment::class)->latest()->get();
+        $this->assertEquals(2, $lastTicketCommentFiles->count());
+        $this->assertEquals($ticketCommentFile1, $lastTicketCommentFiles[0]->file_name);
+        $this->assertEquals('comments', $lastTicketCommentFiles[0]->collection);
+        $this->assertEquals($ticketCommentFile2, $lastTicketCommentFiles[1]->file_name);
+        $this->assertEquals('comments', $lastTicketCommentFiles[1]->collection);
+
         // TODO:: Milestone
-        // TODO:: Ticket
     }
 
     private function createUser(): User
