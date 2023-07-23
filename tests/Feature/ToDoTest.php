@@ -2,24 +2,25 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\Task;
-use App\Models\User;
-use App\Models\Client;
+use App\Enums\ProjectStatusEnum;
 use App\Enums\RoleEnum;
+use App\Enums\TaskStatusEnum;
 use App\Models\Address;
+use App\Models\Client;
 use App\Models\Project;
 use App\Models\SocialNetwork;
-use App\Enums\ProjectStatusEnum;
+use App\Models\Task;
 use App\Models\ToDo;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ToDoTest extends TestCase
 {
     use RefreshDatabase;
 
     private User $user;
+
     private Task $task;
 
     public function setUp(): void
@@ -123,7 +124,6 @@ class ToDoTest extends TestCase
         $this->assertEquals($editedTodo['description'], $updatedToDo->description);
     }
 
-
     public function test_user_can_check_todo(): void
     {
         $todo = ToDo::factory()->create([
@@ -199,6 +199,7 @@ class ToDoTest extends TestCase
             'project_id' => $project->id,
             'author_id' => $authorId,
             'user_id' => $userId,
+            'status' => TaskStatusEnum::new->value,
         ]);
     }
 }

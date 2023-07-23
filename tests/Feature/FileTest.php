@@ -4,11 +4,13 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Models\File;
+use App\Models\Task;
 use App\Models\User;
 use App\Models\Client;
 use App\Enums\RoleEnum;
 use App\Models\Address;
 use App\Models\Project;
+use App\Enums\TaskStatusEnum;
 use App\Models\SocialNetwork;
 use App\Enums\ProjectStatusEnum;
 use Illuminate\Http\UploadedFile;
@@ -92,8 +94,50 @@ class FileTest extends TestCase
         $this->assertEquals($projectFileName, $lastProjectFile->file_name);
         $this->assertEquals('projects/files', $lastProjectFile->collection);
 
+        // Task
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+
+        [$authorId, $userId] = User::factory(2)->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id');
+        $project->team()->attach([$authorId, $userId]);
+
+        $task = Task::factory()->create([
+            'project_id' => $project->id,
+            'author_id' => $authorId,
+            'user_id' => $userId,
+            'status' => TaskStatusEnum::new->value,
+        ]);
+
+        $taskFileName = 'task.jpg';
+
+        $taskFiles = [
+            'fileable_id' => $task->id,
+            'fileable_type' => $task::class,
+            'files' => [
+                UploadedFile::fake()->image($taskFileName),
+            ],
+        ];
+
+        $response = $this->actingAs($this->user)->post('tasks/'.$task->id.'/files/upload', $taskFiles);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('tasks/'.$task->id);
+
+        $lastTaskFile = File::where('fileable_id', $task->id)->where('fileable_type', $task::class)->latest()->first();
+        $this->assertEquals($taskFiles['fileable_id'], $lastTaskFile->fileable_id);
+        $this->assertEquals($taskFiles['fileable_type'], $lastTaskFile->fileable_type);
+        $this->assertEquals($taskFileName, $lastTaskFile->file_name);
+        $this->assertEquals('tasks/files', $lastTaskFile->collection);
+
         //TODO: Milestone
-        //TODO: Task
         //TODO: Ticket
     }
 
@@ -142,8 +186,41 @@ class FileTest extends TestCase
 
         $this->assertSoftDeleted($projectFile);
 
+        // Task
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+
+        [$authorId, $userId] = User::factory(2)->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id');
+        $project->team()->attach([$authorId, $userId]);
+
+        $task = Task::factory()->create([
+            'project_id' => $project->id,
+            'author_id' => $authorId,
+            'user_id' => $userId,
+            'status' => TaskStatusEnum::new->value,
+        ]);
+
+        $taskFile = File::factory()->create([
+            'fileable_id' => $task->id,
+            'fileable_type' => $task::class,
+        ]);
+
+        $response = $this->actingAs($this->user)->delete('tasks/'.$task->id.'/files/'.$taskFile->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.file.delete'));
+
+        $this->assertSoftDeleted($taskFile);
+
         //TODO: Milestone
-        //TODO: Task
         //TODO: Ticket
     }
 
