@@ -9,12 +9,15 @@ use App\Enums\TicketStatusEnum;
 use App\Enums\TicketTypeEnum;
 use App\Models\Address;
 use App\Models\Client;
+use App\Models\Comment;
+use App\Models\File;
 use App\Models\Project;
 use App\Models\SocialNetwork;
 use App\Models\Task;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class TicketTest extends TestCase
@@ -236,6 +239,149 @@ class TicketTest extends TestCase
             'assignee_id' => $assigneeId,
             'status' => TicketStatusEnum::open->value,
         ]);
+    }
+
+    public function test_user_can_upload_file_for_ticket(): void
+    {
+        $ticket = $this->createTicket();
+
+        $ticketFileName = 'ticket.jpg';
+
+        $ticketFiles = [
+            'fileable_id' => $ticket->id,
+            'fileable_type' => $ticket::class,
+            'files' => [
+                UploadedFile::fake()->image($ticketFileName),
+            ],
+        ];
+
+        $response = $this->actingAs($this->user)->post('tickets/'.$ticket->id.'/files/upload', $ticketFiles);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('tickets/'.$ticket->id);
+
+        $lastTicketFile = File::where('fileable_id', $ticket->id)->where('fileable_type', $ticket::class)->latest()->first();
+        $this->assertEquals($ticketFiles['fileable_id'], $lastTicketFile->fileable_id);
+        $this->assertEquals($ticketFiles['fileable_type'], $lastTicketFile->fileable_type);
+        $this->assertEquals($ticketFileName, $lastTicketFile->file_name);
+        $this->assertEquals('tickets/files', $lastTicketFile->collection);
+    }
+
+    public function test_user_can_delete_file_for_ticket(): void
+    {
+        $ticket = $this->createTicket();
+
+        $ticketFile = File::factory()->create([
+            'fileable_id' => $ticket->id,
+            'fileable_type' => $ticket::class,
+        ]);
+
+        $response = $this->actingAs($this->user)->delete('tickets/'.$ticket->id.'/files/'.$ticketFile->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.file.delete'));
+
+        $this->assertSoftDeleted($ticketFile);
+
+    }
+
+    public function test_user_can_store_tickets_comment(): void
+    {
+        $ticket = $this->createTicket();
+
+        $ticketComment = [
+            'commentable_id' => $ticket->id,
+            'commentable_type' => $ticket::class,
+            'user_id' => $this->user->id,
+            'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        ];
+
+        $response = $this->actingAs($this->user)->post('tickets/'.$ticket->id.'/comments', $ticketComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('tickets/'.$ticket->id);
+
+        $this->assertDatabaseHas('comments', $ticketComment);
+
+        $lastTicket = Comment::where('commentable_id', $ticket->id)->where('commentable_type', $ticket::class)->latest()->first();
+        $this->assertEquals($ticketComment['commentable_id'], $lastTicket->commentable_id);
+        $this->assertEquals($ticketComment['commentable_type'], $lastTicket->commentable_type);
+        $this->assertEquals($ticketComment['content'], $lastTicket->content);
+    }
+
+    public function test_user_can_update_tickets_comment(): void
+    {
+        $ticket = $this->createTicket();
+
+        $ticketComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $ticket->id,
+            'commentable_type' => $ticket::class,
+        ]);
+
+        $editedTicketComment = [
+            'content' => 'Ticket Comment',
+        ];
+
+        $response = $this->actingAs($this->user)->put('tickets/'.$ticket->id.'/comments/'.$ticketComment->id, $editedTicketComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('tickets/'.$ticket->id);
+
+        $lastTicketComment = Comment::where('commentable_id', $ticket->id)->where('commentable_type', $ticket::class)->latest()->first();
+        $this->assertEquals($editedTicketComment['content'], $lastTicketComment->content);
+    }
+
+    public function test_user_can_delete_tickets_comment(): void
+    {
+        $ticket = $this->createTicket();
+
+        $ticketComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $ticket->id,
+            'commentable_type' => $ticket::class,
+        ]);
+
+        $response = $this->actingAs($this->user)->delete('tickets/'.$ticket->id.'/comments/'.$ticketComment->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.comment.delete'));
+
+        $this->assertSoftDeleted($ticketComment);
+    }
+
+    public function test_user_can_upload_files_to_tickets_comment(): void
+    {
+        $ticket = $this->createTicket();
+
+        $ticketComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $ticket->id,
+            'commentable_type' => $ticket::class,
+        ]);
+
+        [$ticketCommentFile1, $ticketCommentFile2] = ['ticket_comment_1.jpg', 'ticket_comment_2.jpg'];
+
+        $editedTicketComment = [
+            'content' => 'Updated comments with files',
+            'files' => [
+                UploadedFile::fake()->image($ticketCommentFile1),
+                UploadedFile::fake()->image($ticketCommentFile2),
+            ],
+        ];
+
+        $response = $this->actingAs($this->user)->put('tickets/'.$ticket->id.'/comments/'.$ticketComment->id, $editedTicketComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('tickets/'.$ticket->id);
+
+        $lastTicketComment = Comment::where('commentable_id', $ticket->id)->where('commentable_type', $ticket::class)->latest()->first();
+        $lastTicketCommentFiles = File::where('fileable_id', $lastTicketComment->id)->where('fileable_type', $lastTicketComment::class)->latest()->get();
+        $this->assertEquals(2, $lastTicketCommentFiles->count());
+        $this->assertEquals($ticketCommentFile1, $lastTicketCommentFiles[0]->file_name);
+        $this->assertEquals('comments', $lastTicketCommentFiles[0]->collection);
+        $this->assertEquals($ticketCommentFile2, $lastTicketCommentFiles[1]->file_name);
+        $this->assertEquals('comments', $lastTicketCommentFiles[1]->collection);
     }
 
     private function createUser(): User

@@ -7,11 +7,14 @@ use App\Enums\RoleEnum;
 use App\Enums\TaskStatusEnum;
 use App\Models\Address;
 use App\Models\Client;
+use App\Models\Comment;
+use App\Models\File;
 use App\Models\Project;
 use App\Models\SocialNetwork;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class TaskTest extends TestCase
@@ -212,6 +215,148 @@ class TaskTest extends TestCase
         $response->assertJsonPath('message', __('messages.task.delete'));
 
         $this->assertSoftDeleted($task);
+    }
+
+    public function test_user_can_upload_file_for_task(): void
+    {
+        $task = $this->createTask();
+
+        $taskFileName = 'task.jpg';
+
+        $taskFiles = [
+            'fileable_id' => $task->id,
+            'fileable_type' => $task::class,
+            'files' => [
+                UploadedFile::fake()->image($taskFileName),
+            ],
+        ];
+
+        $response = $this->actingAs($this->user)->post('tasks/'.$task->id.'/files/upload', $taskFiles);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('tasks/'.$task->id);
+
+        $lastTaskFile = File::where('fileable_id', $task->id)->where('fileable_type', $task::class)->latest()->first();
+        $this->assertEquals($taskFiles['fileable_id'], $lastTaskFile->fileable_id);
+        $this->assertEquals($taskFiles['fileable_type'], $lastTaskFile->fileable_type);
+        $this->assertEquals($taskFileName, $lastTaskFile->file_name);
+        $this->assertEquals('tasks/files', $lastTaskFile->collection);
+    }
+
+    public function test_user_can_delete_file_for_task(): void
+    {
+        $task = $this->createTask();
+
+        $taskFile = File::factory()->create([
+            'fileable_id' => $task->id,
+            'fileable_type' => $task::class,
+        ]);
+
+        $response = $this->actingAs($this->user)->delete('tasks/'.$task->id.'/files/'.$taskFile->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.file.delete'));
+
+        $this->assertSoftDeleted($taskFile);
+    }
+
+    public function test_user_can_store_tasks_comment(): void
+    {
+        $task = $this->createTask();
+
+        $taskComment = [
+            'commentable_id' => $task->id,
+            'commentable_type' => $task::class,
+            'user_id' => $this->user->id,
+            'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        ];
+
+        $response = $this->actingAs($this->user)->post('tasks/'.$task->id.'/comments', $taskComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('tasks/'.$task->id);
+
+        $this->assertDatabaseHas('comments', $taskComment);
+
+        $lastTask = Comment::where('commentable_id', $task->id)->where('commentable_type', $task::class)->latest()->first();
+        $this->assertEquals($taskComment['commentable_id'], $lastTask->commentable_id);
+        $this->assertEquals($taskComment['commentable_type'], $lastTask->commentable_type);
+        $this->assertEquals($taskComment['content'], $lastTask->content);
+    }
+
+    public function test_user_can_update_tasks_comment(): void
+    {
+        $task = $this->createTask();
+
+        $taskComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $task->id,
+            'commentable_type' => $task::class,
+        ]);
+
+        $editedTaskComment = [
+            'content' => 'Task Comment',
+        ];
+
+        $response = $this->actingAs($this->user)->put('tasks/'.$task->id.'/comments/'.$taskComment->id, $editedTaskComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('tasks/'.$task->id);
+
+        $lastTaskComment = Comment::where('commentable_id', $task->id)->where('commentable_type', $task::class)->latest()->first();
+        $this->assertEquals($editedTaskComment['content'], $lastTaskComment->content);
+    }
+
+    public function test_user_can_delete_tasks_comment(): void
+    {
+        $task = $this->createTask();
+
+        $taskComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $task->id,
+            'commentable_type' => $task::class,
+        ]);
+
+        $response = $this->actingAs($this->user)->delete('tasks/'.$task->id.'/comments/'.$taskComment->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.comment.delete'));
+
+        $this->assertSoftDeleted($taskComment);
+    }
+
+    public function test_user_can_upload_files_to_tasks_comment(): void
+    {
+        $task = $this->createTask();
+
+        $taskComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $task->id,
+            'commentable_type' => $task::class,
+        ]);
+
+        [$taskCommentFile1, $taskCommentFile2] = ['task_comment_1.jpg', 'task_comment_2.jpg'];
+
+        $editedTaskComment = [
+            'content' => 'Updated comments with files',
+            'files' => [
+                UploadedFile::fake()->image($taskCommentFile1),
+                UploadedFile::fake()->image($taskCommentFile2),
+            ],
+        ];
+
+        $response = $this->actingAs($this->user)->put('tasks/'.$task->id.'/comments/'.$taskComment->id, $editedTaskComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('tasks/'.$task->id);
+
+        $lastTaskComment = Comment::where('commentable_id', $task->id)->where('commentable_type', $task::class)->latest()->first();
+        $lastTaskCommentFiles = File::where('fileable_id', $lastTaskComment->id)->where('fileable_type', $lastTaskComment::class)->latest()->get();
+        $this->assertEquals(2, $lastTaskCommentFiles->count());
+        $this->assertEquals($taskCommentFile1, $lastTaskCommentFiles[0]->file_name);
+        $this->assertEquals('comments', $lastTaskCommentFiles[0]->collection);
+        $this->assertEquals($taskCommentFile2, $lastTaskCommentFiles[1]->file_name);
+        $this->assertEquals('comments', $lastTaskCommentFiles[1]->collection);
     }
 
     private function createUser(): User

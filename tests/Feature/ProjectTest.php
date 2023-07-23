@@ -6,10 +6,14 @@ use App\Enums\ProjectStatusEnum;
 use App\Enums\RoleEnum;
 use App\Models\Address;
 use App\Models\Client;
+use App\Models\Comment;
+use App\Models\File;
+use App\Models\Note;
 use App\Models\Project;
 use App\Models\SocialNetwork;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class ProjectTest extends TestCase
@@ -235,6 +239,197 @@ class ProjectTest extends TestCase
         $response->assertJsonPath('message', __('messages.project.delete'));
 
         $this->assertSoftDeleted($project);
+    }
+
+    public function test_user_can_upload_file_for_project(): void
+    {
+        $project = $this->createProject(2);
+
+        $projectFileName = 'project.jpg';
+
+        $projectFiles = [
+            'fileable_id' => $project->id,
+            'fileable_type' => $project::class,
+            'files' => [
+                UploadedFile::fake()->image($projectFileName),
+            ],
+        ];
+
+        $response = $this->actingAs($this->user)->post('projects/'.$project->id.'/files/upload', $projectFiles);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('projects/'.$project->id.'/files');
+
+        $lastProjectFile = File::where('fileable_id', $project->id)->where('fileable_type', $project::class)->latest()->first();
+        $this->assertEquals($projectFiles['fileable_id'], $lastProjectFile->fileable_id);
+        $this->assertEquals($projectFiles['fileable_type'], $lastProjectFile->fileable_type);
+        $this->assertEquals($projectFileName, $lastProjectFile->file_name);
+        $this->assertEquals('projects/files', $lastProjectFile->collection);
+    }
+
+    public function test_user_can_delete_file_for_project(): void
+    {
+        $project = $this->createProject(2);
+
+        $projectFile = File::factory()->create([
+            'fileable_id' => $project->id,
+            'fileable_type' => $project::class,
+        ]);
+
+        $response = $this->actingAs($this->user)->delete('projects/'.$project->id.'/files/'.$projectFile->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.file.delete'));
+
+        $this->assertSoftDeleted($projectFile);
+    }
+
+    public function test_user_can_store_note_for_project(): void
+    {
+        $project = $this->createProject(1);
+
+        $projectNote = [
+            'user_id' => $this->user->id,
+            'name' => 'Note',
+            'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            'noteable_id' => $project->id,
+            'noteable_type' => $project::class,
+        ];
+
+        $response = $this->actingAs($this->user)->post('projects/'.$project->id.'/notes', $projectNote);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('projects/'.$project->id.'/notes');
+
+        $this->assertDatabaseHas('notes', $projectNote);
+
+        $lastProjectNote = Note::where('noteable_id', $project->id)->where('noteable_type', $project::class)->latest()->first();
+        $this->assertEquals($projectNote['noteable_id'], $lastProjectNote->noteable_id);
+        $this->assertEquals($projectNote['noteable_type'], $lastProjectNote->noteable_type);
+        $this->assertEquals($projectNote['content'], $lastProjectNote->content);
+    }
+
+    public function test_user_can_update_note_for_project(): void
+    {
+        $project = $this->createProject();
+
+        $projectNote = Note::factory()->create([
+            'user_id' => $this->user->id,
+            'noteable_id' => $project->id,
+            'noteable_type' => $project::class,
+        ]);
+
+        $editedProjectNote = [
+            'name' => 'Updated Project Note',
+            'content' => 'Updated Project Note Content',
+        ];
+
+        $response = $this->actingAs($this->user)->put('projects/'.$project->id.'/notes/'.$projectNote->id, $editedProjectNote);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('projects/'.$project->id.'/notes');
+
+        $lastProjectNote = Note::where('noteable_id', $project->id)->where('noteable_type', $project::class)->latest()->first();
+        $this->assertEquals($editedProjectNote['content'], $lastProjectNote->content);
+    }
+
+    public function test_user_can_store_projects_comment(): void
+    {
+        $project = $this->createProject(1);
+
+        $projectComment = [
+            'commentable_id' => $project->id,
+            'commentable_type' => $project::class,
+            'user_id' => $this->user->id,
+            'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        ];
+
+        $response = $this->actingAs($this->user)->post('projects/'.$project->id.'/comments', $projectComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('projects/'.$project->id.'/comments');
+
+        $this->assertDatabaseHas('comments', $projectComment);
+
+        $lastProject = Comment::where('commentable_id', $project->id)->where('commentable_type', $project::class)->latest()->first();
+        $this->assertEquals($projectComment['commentable_id'], $lastProject->commentable_id);
+        $this->assertEquals($projectComment['commentable_type'], $lastProject->commentable_type);
+        $this->assertEquals($projectComment['content'], $lastProject->content);
+    }
+
+    public function test_user_can_update_projects_comment(): void
+    {
+        $project = $this->createProject(1);
+
+        $projectComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $project->id,
+            'commentable_type' => $project::class,
+        ]);
+
+        $editedProjectComment = [
+            'content' => 'Project Comment',
+        ];
+
+        $response = $this->actingAs($this->user)->put('projects/'.$project->id.'/comments/'.$projectComment->id, $editedProjectComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('projects/'.$project->id.'/comments');
+
+        $lastProjectComment = Comment::where('commentable_id', $project->id)->where('commentable_type', $project::class)->latest()->first();
+        $this->assertEquals($editedProjectComment['content'], $lastProjectComment->content);
+    }
+
+    public function test_user_can_delete_projects_comment(): void
+    {
+        $project = $this->createProject(1);
+
+        $projectComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $project->id,
+            'commentable_type' => $project::class,
+        ]);
+
+        $response = $this->actingAs($this->user)->delete('projects/'.$project->id.'/comments/'.$projectComment->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.comment.delete'));
+
+        $this->assertSoftDeleted($projectComment);
+    }
+
+    public function test_user_can_upload_files_to_projects_comments(): void
+    {
+        $project = $this->createProject(1);
+
+        $projectComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $project->id,
+            'commentable_type' => $project::class,
+        ]);
+
+        [$projectCommentFile1, $projectCommentFile2] = ['project_comment_1.jpg', 'project_comment_2.jpg'];
+
+        $editedProjectComment = [
+            'content' => 'Updated comments with files',
+            'files' => [
+                UploadedFile::fake()->image($projectCommentFile1),
+                UploadedFile::fake()->image($projectCommentFile2),
+            ],
+        ];
+
+        $response = $this->actingAs($this->user)->put('projects/'.$project->id.'/comments/'.$projectComment->id, $editedProjectComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('projects/'.$project->id.'/comments');
+
+        $lastProjectComment = Comment::where('commentable_id', $project->id)->where('commentable_type', $project::class)->latest()->first();
+        $lastProjectCommentFiles = File::where('fileable_id', $lastProjectComment->id)->where('fileable_type', $lastProjectComment::class)->latest()->get();
+        $this->assertEquals(2, $lastProjectCommentFiles->count());
+        $this->assertEquals($projectCommentFile1, $lastProjectCommentFiles[0]->file_name);
+        $this->assertEquals('comments', $lastProjectCommentFiles[0]->collection);
+        $this->assertEquals($projectCommentFile2, $lastProjectCommentFiles[1]->file_name);
+        $this->assertEquals('comments', $lastProjectCommentFiles[1]->collection);
     }
 
     private function createUser(): User

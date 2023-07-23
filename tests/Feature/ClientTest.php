@@ -5,7 +5,9 @@ namespace Tests\Feature;
 use App\Enums\RoleEnum;
 use App\Models\Address;
 use App\Models\Client;
+use App\Models\Comment;
 use App\Models\File;
+use App\Models\Note;
 use App\Models\SocialNetwork;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -193,6 +195,197 @@ class ClientTest extends TestCase
         $response->assertJsonPath('message', __('messages.client.delete'));
 
         $this->assertSoftDeleted($client);
+    }
+
+    public function test_user_can_upload_file_for_client(): void
+    {
+        $client = $this->createClient();
+
+        $clientFileName = 'client.jpg';
+
+        $clientFiles = [
+            'fileable_id' => $client->id,
+            'fileable_type' => $client::class,
+            'files' => [
+                UploadedFile::fake()->image($clientFileName),
+            ],
+        ];
+
+        $response = $this->actingAs($this->user)->post('clients/'.$client->id.'/files/upload', $clientFiles);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('clients/'.$client->id.'/files');
+
+        $lastClientFile = File::where('fileable_id', $client->id)->where('fileable_type', $client::class)->latest()->first();
+        $this->assertEquals($clientFiles['fileable_id'], $lastClientFile->fileable_id);
+        $this->assertEquals($clientFiles['fileable_type'], $lastClientFile->fileable_type);
+        $this->assertEquals($clientFileName, $lastClientFile->file_name);
+        $this->assertEquals('clients/files', $lastClientFile->collection);
+    }
+
+    public function test_user_can_delete_file_for_client(): void
+    {
+        $client = $this->createClient();
+
+        $clientFile = File::factory()->create([
+            'fileable_id' => $client->id,
+            'fileable_type' => $client::class,
+        ]);
+
+        $response = $this->actingAs($this->user)->delete('clients/'.$client->id.'/files/'.$clientFile->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.file.delete'));
+
+        $this->assertSoftDeleted($clientFile);
+    }
+
+    public function test_user_can_store_note_for_client(): void
+    {
+        $client = $this->createClient();
+
+        $clientNote = [
+            'user_id' => $this->user->id,
+            'name' => 'Note',
+            'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            'noteable_id' => $client->id,
+            'noteable_type' => $client::class,
+        ];
+
+        $response = $this->actingAs($this->user)->post('clients/'.$client->id.'/notes', $clientNote);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('clients/'.$client->id.'/notes');
+
+        $this->assertDatabaseHas('notes', $clientNote);
+
+        $lastClientNote = Note::where('noteable_id', $client->id)->where('noteable_type', $client::class)->latest()->first();
+        $this->assertEquals($clientNote['noteable_id'], $lastClientNote->noteable_id);
+        $this->assertEquals($clientNote['noteable_type'], $lastClientNote->noteable_type);
+        $this->assertEquals($clientNote['content'], $lastClientNote->content);
+    }
+
+    public function test_user_can_update_note_for_client(): void
+    {
+        $client = $this->createClient();
+
+        $clientNote = Note::factory()->create([
+            'user_id' => $this->user->id,
+            'noteable_id' => $client->id,
+            'noteable_type' => $client::class,
+        ]);
+
+        $editedClientNote = [
+            'name' => 'Updated Client Note',
+            'content' => 'Updated Client Note Content',
+        ];
+
+        $response = $this->actingAs($this->user)->put('clients/'.$client->id.'/notes/'.$clientNote->id, $editedClientNote);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('clients/'.$client->id.'/notes');
+
+        $lastClientNote = Note::where('noteable_id', $client->id)->where('noteable_type', $client::class)->latest()->first();
+        $this->assertEquals($editedClientNote['content'], $lastClientNote->content);
+    }
+
+    public function test_user_can_store_clients_comment(): void
+    {
+        $client = $this->createClient();
+
+        $clientComment = [
+            'commentable_id' => $client->id,
+            'commentable_type' => $client::class,
+            'user_id' => $this->user->id,
+            'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        ];
+
+        $response = $this->actingAs($this->user)->post('clients/'.$client->id.'/comments', $clientComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('clients/'.$client->id.'/comments');
+
+        $this->assertDatabaseHas('comments', $clientComment);
+
+        $lastComment = Comment::where('commentable_id', $client->id)->where('commentable_type', $client::class)->latest()->first();
+        $this->assertEquals($clientComment['commentable_id'], $lastComment->commentable_id);
+        $this->assertEquals($clientComment['commentable_type'], $lastComment->commentable_type);
+        $this->assertEquals($clientComment['content'], $lastComment->content);
+    }
+
+    public function test_user_can_update_clients_comment(): void
+    {
+        $client = $this->createClient();
+
+        $clientComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $client->id,
+            'commentable_type' => $client::class,
+        ]);
+
+        $editedClientComment = [
+            'content' => 'Client Comment',
+        ];
+
+        $response = $this->actingAs($this->user)->put('clients/'.$client->id.'/comments/'.$clientComment->id, $editedClientComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('clients/'.$client->id.'/comments');
+
+        $lastClientComment = Comment::where('commentable_id', $client->id)->where('commentable_type', $client::class)->latest()->first();
+        $this->assertEquals($editedClientComment['content'], $lastClientComment->content);
+    }
+
+    public function test_user_can_delete_clients_comment(): void
+    {
+        $client = $this->createClient();
+
+        $clientComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $client->id,
+            'commentable_type' => $client::class,
+        ]);
+
+        $response = $this->actingAs($this->user)->delete('clients/'.$client->id.'/comments/'.$clientComment->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.comment.delete'));
+
+        $this->assertSoftDeleted($clientComment);
+    }
+
+    public function test_user_can_upload_files_to_clients_comment(): void
+    {
+        $client = $this->createClient();
+
+        $clientComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $client->id,
+            'commentable_type' => $client::class,
+        ]);
+
+        [$clientCommentFile1, $clientCommentFile2] = ['client_comment_1.jpg', 'client_comment_2.jpg'];
+
+        $editedClientComment = [
+            'content' => 'Updated comments with files',
+            'files' => [
+                UploadedFile::fake()->image($clientCommentFile1),
+                UploadedFile::fake()->image($clientCommentFile2),
+            ],
+        ];
+
+        $response = $this->actingAs($this->user)->put('clients/'.$client->id.'/comments/'.$clientComment->id, $editedClientComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('clients/'.$client->id.'/comments');
+
+        $lastClientComment = Comment::where('commentable_id', $client->id)->where('commentable_type', $client::class)->latest()->first();
+        $lastClientCommentFiles = File::where('fileable_id', $lastClientComment->id)->where('fileable_type', $lastClientComment::class)->latest()->get();
+        $this->assertEquals(2, $lastClientCommentFiles->count());
+        $this->assertEquals($clientCommentFile1, $lastClientCommentFiles[0]->file_name);
+        $this->assertEquals('comments', $lastClientCommentFiles[0]->collection);
+        $this->assertEquals($clientCommentFile2, $lastClientCommentFiles[1]->file_name);
+        $this->assertEquals('comments', $lastClientCommentFiles[1]->collection);
     }
 
     private function createUser(): User

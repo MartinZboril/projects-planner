@@ -2,16 +2,19 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Client;
+use App\Enums\ProjectStatusEnum;
 use App\Enums\RoleEnum;
 use App\Models\Address;
+use App\Models\Client;
+use App\Models\Comment;
+use App\Models\File;
+use App\Models\Milestone;
 use App\Models\Project;
 use App\Models\SocialNetwork;
-use App\Enums\ProjectStatusEnum;
-use App\Models\Milestone;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Tests\TestCase;
 
 class MilestoneTest extends TestCase
 {
@@ -154,6 +157,148 @@ class MilestoneTest extends TestCase
         $response->assertJsonPath('message', __('messages.milestone.delete'));
 
         $this->assertSoftDeleted($milestone);
+    }
+
+    public function test_user_can_upload_file_for_milestone(): void
+    {
+        $milestone = $this->createMilestone();
+
+        $milestoneFileName = 'milestone.jpg';
+
+        $milestoneFiles = [
+            'fileable_id' => $milestone->id,
+            'fileable_type' => $milestone::class,
+            'files' => [
+                UploadedFile::fake()->image($milestoneFileName),
+            ],
+        ];
+
+        $response = $this->actingAs($this->user)->post('projects/'.$milestone->project->id.'/milestones/'.$milestone->id.'/files/upload', $milestoneFiles);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('projects/'.$milestone->project->id.'/milestones/'.$milestone->id);
+
+        $lastMilestoneFile = File::where('fileable_id', $milestone->id)->where('fileable_type', $milestone::class)->latest()->first();
+        $this->assertEquals($milestoneFiles['fileable_id'], $lastMilestoneFile->fileable_id);
+        $this->assertEquals($milestoneFiles['fileable_type'], $lastMilestoneFile->fileable_type);
+        $this->assertEquals($milestoneFileName, $lastMilestoneFile->file_name);
+        $this->assertEquals('milestones/files', $lastMilestoneFile->collection);
+    }
+
+    public function test_user_can_delete_file_for_milestone(): void
+    {
+        $milestone = $this->createMilestone();
+
+        $milestoneFile = File::factory()->create([
+            'fileable_id' => $milestone->id,
+            'fileable_type' => $milestone::class,
+        ]);
+
+        $response = $this->actingAs($this->user)->delete('projects/'.$milestone->project->id.'/milestones/'.$milestone->id.'/files/'.$milestoneFile->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.file.delete'));
+
+        $this->assertSoftDeleted($milestoneFile);
+    }
+
+    public function test_user_can_store_milestones_comment(): void
+    {
+        $milestone = $this->createMilestone();
+
+        $milestoneComment = [
+            'commentable_id' => $milestone->id,
+            'commentable_type' => $milestone::class,
+            'user_id' => $this->user->id,
+            'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        ];
+
+        $response = $this->actingAs($this->user)->post('projects/'.$milestone->project->id.'/milestones/'.$milestone->id.'/comments', $milestoneComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('projects/'.$milestone->project->id.'/milestones/'.$milestone->id);
+
+        $this->assertDatabaseHas('comments', $milestoneComment);
+
+        $lastMilestone = Comment::where('commentable_id', $milestone->id)->where('commentable_type', $milestone::class)->latest()->first();
+        $this->assertEquals($milestoneComment['commentable_id'], $lastMilestone->commentable_id);
+        $this->assertEquals($milestoneComment['commentable_type'], $lastMilestone->commentable_type);
+        $this->assertEquals($milestoneComment['content'], $lastMilestone->content);
+    }
+
+    public function test_user_can_update_milestones_comment(): void
+    {
+        $milestone = $this->createMilestone();
+
+        $milestoneComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $milestone->id,
+            'commentable_type' => $milestone::class,
+        ]);
+
+        $editedMilestoneComment = [
+            'content' => 'Milestone Comment',
+        ];
+
+        $response = $this->actingAs($this->user)->put('projects/'.$milestone->project->id.'/milestones/'.$milestone->id.'/comments/'.$milestoneComment->id, $editedMilestoneComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('projects/'.$milestone->project->id.'/milestones/'.$milestone->id);
+
+        $lastMilestoneComment = Comment::where('commentable_id', $milestone->id)->where('commentable_type', $milestone::class)->latest()->first();
+        $this->assertEquals($editedMilestoneComment['content'], $lastMilestoneComment->content);
+    }
+
+    public function test_user_can_delete_milestones_comment(): void
+    {
+        $milestone = $this->createMilestone();
+
+        $milestoneComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $milestone->id,
+            'commentable_type' => $milestone::class,
+        ]);
+
+        $response = $this->actingAs($this->user)->delete('projects/'.$milestone->project->id.'/milestones/'.$milestone->id.'/comments/'.$milestoneComment->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.comment.delete'));
+
+        $this->assertSoftDeleted($milestoneComment);
+    }
+
+    public function test_user_can_upload_files_to_milestones_comment(): void
+    {
+        $milestone = $this->createMilestone();
+
+        $milestoneComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $milestone->id,
+            'commentable_type' => $milestone::class,
+        ]);
+
+        [$milestoneCommentFile1, $milestoneCommentFile2] = ['milestone_comment_1.jpg', 'milestone_comment_2.jpg'];
+
+        $editedMilestoneComment = [
+            'content' => 'Updated comments with files',
+            'files' => [
+                UploadedFile::fake()->image($milestoneCommentFile1),
+                UploadedFile::fake()->image($milestoneCommentFile2),
+            ],
+        ];
+
+        $response = $this->actingAs($this->user)->put('projects/'.$milestone->project->id.'/milestones/'.$milestone->id.'/comments/'.$milestoneComment->id, $editedMilestoneComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('projects/'.$milestone->project->id.'/milestones/'.$milestone->id);
+
+        $lastMilestoneComment = Comment::where('commentable_id', $milestone->id)->where('commentable_type', $milestone::class)->latest()->first();
+        $lastMilestoneCommentFiles = File::where('fileable_id', $lastMilestoneComment->id)->where('fileable_type', $lastMilestoneComment::class)->latest()->get();
+        $this->assertEquals(2, $lastMilestoneCommentFiles->count());
+        $this->assertEquals($milestoneCommentFile1, $lastMilestoneCommentFiles[0]->file_name);
+        $this->assertEquals('comments', $lastMilestoneCommentFiles[0]->collection);
+        $this->assertEquals($milestoneCommentFile2, $lastMilestoneCommentFiles[1]->file_name);
+        $this->assertEquals('comments', $lastMilestoneCommentFiles[1]->collection);
     }
 
     private function createUser(): User

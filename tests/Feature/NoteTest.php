@@ -113,69 +113,6 @@ class NoteTest extends TestCase
         $this->assertEquals($note['content'], $lastNote->content);
     }
 
-    public function test_user_can_store_note_for_different_models(): void
-    {
-        $note = [
-            'user_id' => $this->user->id,
-            'name' => 'Note',
-            'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        ];
-
-        // Client
-        $client = Client::factory()->create([
-            'address_id' => Address::factory()->create()->first()->id,
-            'social_network_id' => SocialNetwork::factory()->create()->first()->id,
-        ]);
-
-        $clientNote = $note + [
-            'noteable_id' => $client->id,
-            'noteable_type' => $client::class,
-        ];
-
-        $response = $this->actingAs($this->user)->post('clients/'.$client->id.'/notes', $clientNote);
-
-        $response->assertStatus(302);
-        $response->assertRedirect('clients/'.$client->id.'/notes');
-
-        $this->assertDatabaseHas('notes', $clientNote);
-
-        $lastClientNote = Note::where('noteable_id', $client->id)->where('noteable_type', $client::class)->latest()->first();
-        $this->assertEquals($clientNote['noteable_id'], $lastClientNote->noteable_id);
-        $this->assertEquals($clientNote['noteable_type'], $lastClientNote->noteable_type);
-        $this->assertEquals($clientNote['content'], $lastClientNote->content);
-
-        // Project
-        $project = Project::factory()->create([
-            'client_id' => Client::factory()->create([
-                'address_id' => Address::factory()->create()->first()->id,
-                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
-            ])->id,
-            'status' => ProjectStatusEnum::active->value,
-        ]);
-        $project->team()->attach(User::factory(2)->create([
-            'address_id' => Address::factory(1)->create()->first()->id,
-            'role_id' => RoleEnum::employee,
-        ])->pluck('id'));
-
-        $projectNote = $note + [
-            'noteable_id' => $project->id,
-            'noteable_type' => $project::class,
-        ];
-
-        $response = $this->actingAs($this->user)->post('projects/'.$project->id.'/notes', $projectNote);
-
-        $response->assertStatus(302);
-        $response->assertRedirect('projects/'.$project->id.'/notes');
-
-        $this->assertDatabaseHas('notes', $projectNote);
-
-        $lastProjectNote = Note::where('noteable_id', $project->id)->where('noteable_type', $project::class)->latest()->first();
-        $this->assertEquals($projectNote['noteable_id'], $lastProjectNote->noteable_id);
-        $this->assertEquals($projectNote['noteable_type'], $lastProjectNote->noteable_type);
-        $this->assertEquals($projectNote['content'], $lastProjectNote->content);
-
-    }
-
     public function test_user_can_get_to_edit_note_page(): void
     {
         $note = Note::factory()->create(['user_id' => $this->user->id]);
@@ -206,66 +143,6 @@ class NoteTest extends TestCase
 
         $this->assertEquals($editedNote['name'], $updatedNote->name);
         $this->assertEquals($editedNote['content'], $updatedNote->content);
-    }
-
-    public function test_user_can_update_note_for_different_models(): void
-    {
-        // Client
-        $client = Client::factory()->create([
-            'address_id' => Address::factory()->create()->first()->id,
-            'social_network_id' => SocialNetwork::factory()->create()->first()->id,
-        ]);
-
-        $clientNote = Note::factory()->create([
-            'user_id' => $this->user->id,
-            'noteable_id' => $client->id,
-            'noteable_type' => $client::class,
-        ]);
-
-        $editedClientNote = [
-            'name' => 'Updated Client Note',
-            'content' => 'Updated Client Note Content',
-        ];
-
-        $response = $this->actingAs($this->user)->put('clients/'.$client->id.'/notes/'.$clientNote->id, $editedClientNote);
-
-        $response->assertStatus(302);
-        $response->assertRedirect('clients/'.$client->id.'/notes');
-
-        $lastClientNote = Note::where('noteable_id', $client->id)->where('noteable_type', $client::class)->latest()->first();
-        $this->assertEquals($editedClientNote['content'], $lastClientNote->content);
-
-        // Project
-        $project = Project::factory()->create([
-            'client_id' => Client::factory()->create([
-                'address_id' => Address::factory()->create()->first()->id,
-                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
-            ])->id,
-            'status' => ProjectStatusEnum::active->value,
-        ]);
-        $project->team()->attach(User::factory(2)->create([
-            'address_id' => Address::factory(1)->create()->first()->id,
-            'role_id' => RoleEnum::employee,
-        ])->pluck('id'));
-
-        $projectNote = Note::factory()->create([
-            'user_id' => $this->user->id,
-            'noteable_id' => $project->id,
-            'noteable_type' => $project::class,
-        ]);
-
-        $editedProjectNote = [
-            'name' => 'Updated Project Note',
-            'content' => 'Updated Project Note Content',
-        ];
-
-        $response = $this->actingAs($this->user)->put('projects/'.$project->id.'/notes/'.$projectNote->id, $editedProjectNote);
-
-        $response->assertStatus(302);
-        $response->assertRedirect('projects/'.$project->id.'/notes');
-
-        $lastProjectNote = Note::where('noteable_id', $project->id)->where('noteable_type', $project::class)->latest()->first();
-        $this->assertEquals($editedProjectNote['content'], $lastProjectNote->content);
     }
 
     public function test_user_can_delete_note(): void
