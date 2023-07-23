@@ -2,16 +2,18 @@
 
 namespace Tests\Feature;
 
+use Tests\TestCase;
+use App\Models\File;
+use App\Models\User;
+use App\Models\Client;
 use App\Enums\RoleEnum;
 use App\Models\Address;
-use App\Models\Client;
 use App\Models\Comment;
-use App\Models\File;
+use App\Models\Project;
 use App\Models\SocialNetwork;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Enums\ProjectStatusEnum;
 use Illuminate\Http\UploadedFile;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CommentTest extends TestCase
 {
@@ -58,7 +60,41 @@ class CommentTest extends TestCase
         $this->assertEquals($clientComment['commentable_type'], $lastComment->commentable_type);
         $this->assertEquals($clientComment['content'], $lastComment->content);
 
-        // TODO:: Project
+        $comment = [
+            'user_id' => $this->user->id,
+            'content' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        ];
+
+        // Project
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+        $project->team()->attach(User::factory(2)->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id'));
+
+        $projectComment = $comment + [
+            'commentable_id' => $project->id,
+            'commentable_type' => $project::class,
+        ];
+
+        $response = $this->actingAs($this->user)->post('projects/'.$project->id.'/comments', $projectComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('projects/'.$project->id.'/comments');
+
+        $this->assertDatabaseHas('comments', $projectComment);
+
+        $lastProject = Comment::where('commentable_id', $project->id)->where('commentable_type', $project::class)->latest()->first();
+        $this->assertEquals($projectComment['commentable_id'], $lastProject->commentable_id);
+        $this->assertEquals($projectComment['commentable_type'], $lastProject->commentable_type);
+        $this->assertEquals($projectComment['content'], $lastProject->content);
+
         // TODO:: Milestone
         // TODO:: Task
         // TODO:: Ticket
@@ -90,7 +126,37 @@ class CommentTest extends TestCase
         $lastClientComment = Comment::where('commentable_id', $client->id)->where('commentable_type', $client::class)->latest()->first();
         $this->assertEquals($editedClientComment['content'], $lastClientComment->content);
 
-        // TODO:: Project
+        // Project
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+        $project->team()->attach(User::factory(2)->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id'));
+
+        $projectComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $project->id,
+            'commentable_type' => $project::class,
+        ]);
+
+        $editedProjectComment = [
+            'content' => 'Project Comment',
+        ];
+
+        $response = $this->actingAs($this->user)->put('projects/'.$project->id.'/comments/'.$projectComment->id, $editedProjectComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('projects/'.$project->id.'/comments');
+
+        $lastProjectComment = Comment::where('commentable_id', $project->id)->where('commentable_type', $project::class)->latest()->first();
+        $this->assertEquals($editedProjectComment['content'], $lastProjectComment->content);
+
         // TODO:: Milestone
         // TODO:: Task
         // TODO:: Ticket
@@ -117,7 +183,32 @@ class CommentTest extends TestCase
 
         $this->assertSoftDeleted($clientComment);
 
-        // TODO:: Project
+        // Project
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+        $project->team()->attach(User::factory(2)->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id'));
+
+        $projectComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $project->id,
+            'commentable_type' => $project::class,
+        ]);
+
+        $response = $this->actingAs($this->user)->delete('projects/'.$project->id.'/comments/'.$projectComment->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.comment.delete'));
+
+        $this->assertSoftDeleted($projectComment);
+
         // TODO:: Milestone
         // TODO:: Task
         // TODO:: Ticket
@@ -160,7 +251,48 @@ class CommentTest extends TestCase
         $this->assertEquals($clientCommentFile2, $lastClientCommentFiles[1]->file_name);
         $this->assertEquals('comments', $lastClientCommentFiles[1]->collection);
 
-        // TODO:: Project
+        // Project
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+        $project->team()->attach(User::factory(2)->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id'));
+
+        $projectComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $project->id,
+            'commentable_type' => $project::class,
+        ]);
+
+        [$projectCommentFile1, $projectCommentFile2] = ['project_comment_1.jpg', 'project_comment_2.jpg'];
+
+        $editedProjectComment = [
+            'content' => 'Updated comments with files',
+            'files' => [
+                UploadedFile::fake()->image($projectCommentFile1),
+                UploadedFile::fake()->image($projectCommentFile2),
+            ],
+        ];
+
+        $response = $this->actingAs($this->user)->put('projects/'.$project->id.'/comments/'.$projectComment->id, $editedProjectComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('projects/'.$project->id.'/comments');
+
+        $lastProjectComment = Comment::where('commentable_id', $project->id)->where('commentable_type', $project::class)->latest()->first();
+        $lastProjectCommentFiles = File::where('fileable_id', $lastProjectComment->id)->where('fileable_type', $lastProjectComment::class)->latest()->get();
+        $this->assertEquals(2, $lastProjectCommentFiles->count());
+        $this->assertEquals($projectCommentFile1, $lastProjectCommentFiles[0]->file_name);
+        $this->assertEquals('comments', $lastProjectCommentFiles[0]->collection);
+        $this->assertEquals($projectCommentFile2, $lastProjectCommentFiles[1]->file_name);
+        $this->assertEquals('comments', $lastProjectCommentFiles[1]->collection);
+
         // TODO:: Milestone
         // TODO:: Task
         // TODO:: Ticket

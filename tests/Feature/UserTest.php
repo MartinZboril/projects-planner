@@ -2,14 +2,13 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\File;
-use App\Models\User;
 use App\Enums\RoleEnum;
 use App\Models\Address;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\File;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Tests\TestCase;
 
 class UserTest extends TestCase
 {
@@ -43,7 +42,7 @@ class UserTest extends TestCase
         $response = $this->actingAs($this->user)->get('users/'.$user->id);
 
         $response->assertStatus(200);
-        $response->assertSeeText($this->user->name);
+        $response->assertSeeText($user->name);
     }
 
     public function test_user_can_get_to_create_another_user_page(): void
