@@ -2,21 +2,20 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Client;
-use App\Models\Ticket;
+use App\Enums\ProjectStatusEnum;
 use App\Enums\RoleEnum;
+use App\Enums\TicketPriorityEnum;
+use App\Enums\TicketStatusEnum;
+use App\Enums\TicketTypeEnum;
 use App\Models\Address;
+use App\Models\Client;
 use App\Models\Project;
 use App\Models\SocialNetwork;
-use App\Enums\TicketStatusEnum;
-use App\Enums\ProjectStatusEnum;
-use App\Enums\TicketPriorityEnum;
-use App\Enums\TicketTypeEnum;
 use App\Models\Task;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Models\Ticket;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class TicketTest extends TestCase
 {

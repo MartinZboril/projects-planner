@@ -12,6 +12,7 @@ use App\Enums\RoleEnum;
 use App\Models\Address;
 use App\Models\Comment;
 use App\Models\Project;
+use App\Models\Milestone;
 use App\Enums\TaskStatusEnum;
 use App\Models\SocialNetwork;
 use App\Enums\TicketStatusEnum;
@@ -177,7 +178,42 @@ class CommentTest extends TestCase
         $this->assertEquals($ticketComment['commentable_type'], $lastTicket->commentable_type);
         $this->assertEquals($ticketComment['content'], $lastTicket->content);
 
-        // TODO:: Milestone
+        // Milestone
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+
+        [$ownerId] = User::factory()->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id');
+        $project->team()->attach([$ownerId]);
+
+        $milestone = Milestone::factory()->create([
+            'project_id' => $project->id,
+            'owner_id' => $ownerId,
+        ]);
+
+        $milestoneComment = $comment + [
+            'commentable_id' => $milestone->id,
+            'commentable_type' => $milestone::class,
+        ];
+
+        $response = $this->actingAs($this->user)->post('projects/'.$milestone->project->id.'/milestones/'.$milestone->id.'/comments', $milestoneComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('projects/'.$milestone->project->id.'/milestones/'.$milestone->id);
+
+        $this->assertDatabaseHas('comments', $milestoneComment);
+
+        $lastMilestone = Comment::where('commentable_id', $milestone->id)->where('commentable_type', $milestone::class)->latest()->first();
+        $this->assertEquals($milestoneComment['commentable_id'], $lastMilestone->commentable_id);
+        $this->assertEquals($milestoneComment['commentable_type'], $lastMilestone->commentable_type);
+        $this->assertEquals($milestoneComment['content'], $lastMilestone->content);
     }
 
     public function test_user_can_update_comment_for_different_models(): void
@@ -317,7 +353,43 @@ class CommentTest extends TestCase
         $lastTicketComment = Comment::where('commentable_id', $ticket->id)->where('commentable_type', $ticket::class)->latest()->first();
         $this->assertEquals($editedTicketComment['content'], $lastTicketComment->content);
 
-        // TODO:: Milestone
+        // Milestone
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+
+        [$ownerId] = User::factory()->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id');
+        $project->team()->attach([$ownerId]);
+
+        $milestone = Milestone::factory()->create([
+            'project_id' => $project->id,
+            'owner_id' => $ownerId,
+        ]);
+
+        $milestoneComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $milestone->id,
+            'commentable_type' => $milestone::class,
+        ]);
+
+        $editedMilestoneComment = [
+            'content' => 'Milestone Comment',
+        ];
+
+        $response = $this->actingAs($this->user)->put('projects/'.$milestone->project->id.'/milestones/'.$milestone->id.'/comments/'.$milestoneComment->id, $editedMilestoneComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('projects/'.$milestone->project->id.'/milestones/'.$milestone->id);
+
+        $lastMilestoneComment = Comment::where('commentable_id', $milestone->id)->where('commentable_type', $milestone::class)->latest()->first();
+        $this->assertEquals($editedMilestoneComment['content'], $lastMilestoneComment->content);
     }
 
     public function test_user_can_delete_comment_for_different_models(): void
@@ -437,7 +509,38 @@ class CommentTest extends TestCase
 
         $this->assertSoftDeleted($ticketComment);
 
-        // TODO:: Milestone
+        // Milestone
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+
+        [$ownerId] = User::factory()->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id');
+        $project->team()->attach([$ownerId]);
+
+        $milestone = Milestone::factory()->create([
+            'project_id' => $project->id,
+            'owner_id' => $ownerId,
+        ]);
+
+        $milestoneComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $milestone->id,
+            'commentable_type' => $milestone::class,
+        ]);
+
+        $response = $this->actingAs($this->user)->delete('projects/'.$milestone->project->id.'/milestones/'.$milestone->id.'/comments/'.$milestoneComment->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.comment.delete'));
+
+        $this->assertSoftDeleted($milestoneComment);
     }
 
     public function test_user_can_upload_files_to_comments(): void
@@ -621,7 +724,54 @@ class CommentTest extends TestCase
         $this->assertEquals($ticketCommentFile2, $lastTicketCommentFiles[1]->file_name);
         $this->assertEquals('comments', $lastTicketCommentFiles[1]->collection);
 
-        // TODO:: Milestone
+        // Milestone
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+
+        [$ownerId] = User::factory()->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id');
+        $project->team()->attach([$ownerId]);
+
+        $milestone = Milestone::factory()->create([
+            'project_id' => $project->id,
+            'owner_id' => $ownerId,
+        ]);
+
+        $milestoneComment = Comment::factory()->create([
+            'user_id' => $this->user->id,
+            'commentable_id' => $milestone->id,
+            'commentable_type' => $milestone::class,
+        ]);
+
+        [$milestoneCommentFile1, $milestoneCommentFile2] = ['milestone_comment_1.jpg', 'milestone_comment_2.jpg'];
+
+        $editedMilestoneComment = [
+            'content' => 'Updated comments with files',
+            'files' => [
+                UploadedFile::fake()->image($milestoneCommentFile1),
+                UploadedFile::fake()->image($milestoneCommentFile2),
+            ],
+        ];
+
+        $response = $this->actingAs($this->user)->put('projects/'.$milestone->project->id.'/milestones/'.$milestone->id.'/comments/'.$milestoneComment->id, $editedMilestoneComment);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('projects/'.$milestone->project->id.'/milestones/'.$milestone->id);
+
+        $lastMilestoneComment = Comment::where('commentable_id', $milestone->id)->where('commentable_type', $milestone::class)->latest()->first();
+        $lastMilestoneCommentFiles = File::where('fileable_id', $lastMilestoneComment->id)->where('fileable_type', $lastTicketComment::class)->latest()->get();
+        $this->assertEquals(2, $lastMilestoneCommentFiles->count());
+        $this->assertEquals($milestoneCommentFile1, $lastMilestoneCommentFiles[0]->file_name);
+        $this->assertEquals('comments', $lastMilestoneCommentFiles[0]->collection);
+        $this->assertEquals($milestoneCommentFile2, $lastMilestoneCommentFiles[1]->file_name);
+        $this->assertEquals('comments', $lastMilestoneCommentFiles[1]->collection);
     }
 
     private function createUser(): User

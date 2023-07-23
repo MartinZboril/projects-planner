@@ -11,6 +11,7 @@ use App\Models\Ticket;
 use App\Enums\RoleEnum;
 use App\Models\Address;
 use App\Models\Project;
+use App\Models\Milestone;
 use App\Enums\TaskStatusEnum;
 use App\Models\SocialNetwork;
 use App\Enums\TicketStatusEnum;
@@ -182,7 +183,46 @@ class FileTest extends TestCase
         $this->assertEquals($ticketFileName, $lastTicketFile->file_name);
         $this->assertEquals('tickets/files', $lastTicketFile->collection);
 
-        //TODO: Milestone
+        // Milestone
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+
+        [$ownerId] = User::factory()->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id');
+        $project->team()->attach([$ownerId]);
+
+        $milestone = Milestone::factory()->create([
+            'project_id' => $project->id,
+            'owner_id' => $ownerId,
+        ]);
+
+        $milestoneFileName = 'milestone.jpg';
+
+        $milestoneFiles = [
+            'fileable_id' => $milestone->id,
+            'fileable_type' => $milestone::class,
+            'files' => [
+                UploadedFile::fake()->image($milestoneFileName),
+            ],
+        ];
+
+        $response = $this->actingAs($this->user)->post('projects/'.$milestone->project->id.'/milestones/'.$milestone->id.'/files/upload', $milestoneFiles);
+
+        $response->assertStatus(302);
+        $response->assertRedirect('projects/'.$milestone->project->id.'/milestones/'.$milestone->id);
+
+        $lastMilestoneFile = File::where('fileable_id', $milestone->id)->where('fileable_type', $milestone::class)->latest()->first();
+        $this->assertEquals($milestoneFiles['fileable_id'], $lastMilestoneFile->fileable_id);
+        $this->assertEquals($milestoneFiles['fileable_type'], $lastMilestoneFile->fileable_type);
+        $this->assertEquals($milestoneFileName, $lastMilestoneFile->file_name);
+        $this->assertEquals('milestones/files', $lastMilestoneFile->collection);
     }
 
     public function test_user_can_delete_file_for_different_models(): void
@@ -298,7 +338,37 @@ class FileTest extends TestCase
 
         $this->assertSoftDeleted($ticketFile);
 
-        //TODO: Milestone
+        // Milestone
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+
+        [$ownerId] = User::factory()->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id');
+        $project->team()->attach([$ownerId]);
+
+        $milestone = Milestone::factory()->create([
+            'project_id' => $project->id,
+            'owner_id' => $ownerId,
+        ]);
+
+        $milestoneFile = File::factory()->create([
+            'fileable_id' => $milestone->id,
+            'fileable_type' => $milestone::class,
+        ]);
+
+        $response = $this->actingAs($this->user)->delete('projects/'.$milestone->project->id.'/milestones/'.$milestone->id.'/files/'.$milestoneFile->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('message', __('messages.file.delete'));
+
+        $this->assertSoftDeleted($milestoneFile);
     }
 
     private function createUser(): User
