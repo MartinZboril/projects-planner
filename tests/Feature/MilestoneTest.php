@@ -85,7 +85,6 @@ class MilestoneTest extends TestCase
         $this->assertEquals($milestone['description'], $lastMilestone->description);
         $this->assertEquals($milestone['project_id'], $lastMilestone->project->id);
         $this->assertEquals($milestone['owner_id'], $lastMilestone->owner->id);
-
     }
 
     public function test_user_can_get_to_edit_projects_milestone_page(): void

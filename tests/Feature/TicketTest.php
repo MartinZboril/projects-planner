@@ -215,32 +215,6 @@ class TicketTest extends TestCase
         $this->assertSoftDeleted($ticket);
     }
 
-    private function createTicket(): Ticket
-    {
-        $this->actingAs($this->user);
-
-        $project = Project::factory()->create([
-            'client_id' => Client::factory()->create([
-                'address_id' => Address::factory()->create()->first()->id,
-                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
-            ])->id,
-            'status' => ProjectStatusEnum::active->value,
-        ]);
-
-        [$reporterId, $assigneeId] = User::factory(2)->create([
-            'address_id' => Address::factory(1)->create()->first()->id,
-            'role_id' => RoleEnum::employee,
-        ])->pluck('id');
-        $project->team()->attach([$reporterId, $assigneeId]);
-
-        return Ticket::factory()->create([
-            'project_id' => $project->id,
-            'reporter_id' => $reporterId,
-            'assignee_id' => $assigneeId,
-            'status' => TicketStatusEnum::open->value,
-        ]);
-    }
-
     public function test_user_can_upload_file_for_ticket(): void
     {
         $ticket = $this->createTicket();
@@ -389,6 +363,32 @@ class TicketTest extends TestCase
         return User::factory()->create([
             'address_id' => Address::factory(1)->create()->first()->id,
             'role_id' => RoleEnum::boss,
+        ]);
+    }
+
+    private function createTicket(): Ticket
+    {
+        $this->actingAs($this->user);
+
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+
+        [$reporterId, $assigneeId] = User::factory(2)->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id');
+        $project->team()->attach([$reporterId, $assigneeId]);
+
+        return Ticket::factory()->create([
+            'project_id' => $project->id,
+            'reporter_id' => $reporterId,
+            'assignee_id' => $assigneeId,
+            'status' => TicketStatusEnum::open->value,
         ]);
     }
 
