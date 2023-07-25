@@ -2,8 +2,8 @@
 
 namespace App\Jobs\Reminder;
 
-use App\Models\ToDo;
-use App\Notifications\ToDo\ToDoReminderNotification;
+use App\Models\Todo;
+use App\Notifications\Todo\TodoReminderNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -11,7 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 
-class ToDoReminder implements ShouldQueue
+class TodoReminder implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -28,8 +28,8 @@ class ToDoReminder implements ShouldQueue
      */
     public function handle(): void
     {
-        $this->todos->each(function (ToDo $todo) {
-            $todo->user->notify(new ToDoReminderNotification($todo));
+        $this->todos->each(function (Todo $todo) {
+            $todo->user->notify(new TodoReminderNotification($todo));
         });
     }
 }

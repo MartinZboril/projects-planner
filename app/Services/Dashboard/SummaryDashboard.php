@@ -9,7 +9,7 @@ use App\Models\Project;
 use App\Models\Task;
 use App\Models\Ticket;
 use App\Models\Timer;
-use App\Models\ToDo;
+use App\Models\Todo;
 use Illuminate\Support\Collection;
 
 class SummaryDashboard implements DashboardInterface
@@ -51,7 +51,7 @@ class SummaryDashboard implements DashboardInterface
         $summary = $this->pushItemsToSummary($summary, 'milestone', Milestone::with('tasks', 'tasksCompleted')->overdue()->get()->where('progress', '<', 1));
         $summary = $this->pushItemsToSummary($summary, 'task', Task::active()->overdue()->get());
         $summary = $this->pushItemsToSummary($summary, 'ticket', Ticket::active()->overdue()->get());
-        $summary = $this->pushItemsToSummary($summary, 'todo', ToDo::finished(false)->overdue()->get());
+        $summary = $this->pushItemsToSummary($summary, 'todo', Todo::finished(false)->overdue()->get());
 
         return $summary;
     }

@@ -3,14 +3,14 @@
 namespace App\Services\Data;
 
 use App\Models\Task;
-use App\Models\ToDo;
+use App\Models\Todo;
 
-class ToDoService
+class TodoService
 {
     /**
      * Save data for todo.
      */
-    public function handleSave(ToDo $todo, array $inputs, Task $task): void
+    public function handleSave(Todo $todo, array $inputs, Task $task): void
     {
         // Prepare fields
         $inputs['task_id'] = $task->id;
@@ -21,7 +21,7 @@ class ToDoService
     /**
      * Un/check the todo.
      */
-    public function handleCheck(ToDo $todo): ToDo
+    public function handleCheck(Todo $todo): Todo
     {
         $todo->update(['is_finished' => ! $todo->is_finished]);
 

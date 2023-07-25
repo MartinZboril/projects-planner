@@ -108,7 +108,7 @@ class Task extends Model
 
     public function todos(): HasMany
     {
-        return $this->hasMany(ToDo::class, 'task_id')->orderBy('is_finished')->orderByDesc('dued_at');
+        return $this->hasMany(Todo::class, 'task_id')->orderBy('is_finished')->orderByDesc('dued_at');
     }
 
     public function scopeStatus(Builder $query, TaskStatusEnum $type): Builder

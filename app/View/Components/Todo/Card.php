@@ -2,7 +2,7 @@
 
 namespace App\View\Components\Todo;
 
-use App\Models\ToDo;
+use App\Models\Todo;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\Component;
 
@@ -14,7 +14,7 @@ class Card extends Component
 
     public function __construct(Collection $todos, string $createFormRoute, ?string $type = 'tasks')
     {
-        $this->todos = $todos->each(function (ToDo $todo) use ($type) {
+        $this->todos = $todos->each(function (Todo $todo) use ($type) {
             $todo->edit_route = ($type === 'projects')
                                     ? route('projects.tasks.todos.edit', ['project' => $todo->task->project, 'task' => $todo->task, 'todo' => $todo])
                                     : route('tasks.todos.edit', ['task' => $todo->task, 'todo' => $todo]);

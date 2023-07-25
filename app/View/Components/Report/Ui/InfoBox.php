@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\Report\ui;
+namespace App\View\Components\Report\Ui;
 
 use Illuminate\View\Component;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\Task\UI;
+namespace App\View\Components\Task\Ui;
 
 use App\Enums\TaskStatusEnum;
 use App\Models\Task;

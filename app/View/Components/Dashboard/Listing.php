@@ -8,7 +8,7 @@ use App\Enums\TicketStatusEnum;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\Ticket;
-use App\Models\ToDo;
+use App\Models\Todo;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\Component;
 

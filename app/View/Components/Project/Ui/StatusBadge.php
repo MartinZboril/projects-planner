@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\Project\UI;
+namespace App\View\Components\Project\Ui;
 
 use App\Enums\ProjectStatusEnum;
 use Illuminate\View\Component;

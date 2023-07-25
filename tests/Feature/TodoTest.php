@@ -10,12 +10,12 @@ use App\Models\Client;
 use App\Models\Project;
 use App\Models\SocialNetwork;
 use App\Models\Task;
-use App\Models\ToDo;
+use App\Models\Todo;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class ToDoTest extends TestCase
+class TodoTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -35,7 +35,7 @@ class ToDoTest extends TestCase
 
     public function test_user_can_see_todos_list_in_task_show(): void
     {
-        $todos = ToDo::factory(3)->create([
+        $todos = Todo::factory(3)->create([
             'task_id' => $this->task->id,
             'is_finished' => false,
         ]);
@@ -44,7 +44,7 @@ class ToDoTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSeeText($this->task->name);
-        $response->assertSeeText('ToDo List');
+        $response->assertSeeText('Todo List');
 
         $this->assertDatabaseCount('todos', $todos->count());
     }
@@ -54,13 +54,13 @@ class ToDoTest extends TestCase
         $response = $this->actingAs($this->user)->get('tasks/'.$this->task->id.'/todos/create');
 
         $response->assertStatus(200);
-        $response->assertSee('Create ToDo');
+        $response->assertSee('Create Todo');
     }
 
     public function test_user_can_store_todo(): void
     {
         $todo = [
-            'name' => 'ToDo',
+            'name' => 'Todo',
             'dued_at' => '2023-07-01',
             'is_finished' => 0,
             'description' => 'Aenean sed pulvinar velit. Quisque suscipit, leo sit amet facilisis malesuada, neque eros lacinia sapien, eu gravida risus tellus ut enim.',
@@ -68,23 +68,23 @@ class ToDoTest extends TestCase
 
         $response = $this->actingAs($this->user)->post('tasks/'.$this->task->id.'/todos', $todo);
 
-        $lastToDo = ToDo::latest()->first();
+        $lastTodo = Todo::latest()->first();
 
         $response->assertStatus(302);
         $response->assertRedirect('tasks/'.$this->task->id);
 
         $this->assertDatabaseHas('todos', [
-            'id' => $lastToDo->id,
+            'id' => $lastTodo->id,
         ]);
 
-        $this->assertEquals($todo['name'], $lastToDo->name);
-        $this->assertEquals($todo['dued_at'], $lastToDo->dued_at->format('Y-m-d'));
-        $this->assertEquals($todo['description'], $lastToDo->description);
+        $this->assertEquals($todo['name'], $lastTodo->name);
+        $this->assertEquals($todo['dued_at'], $lastTodo->dued_at->format('Y-m-d'));
+        $this->assertEquals($todo['description'], $lastTodo->description);
     }
 
     public function test_user_can_get_to_edit_todo_page(): void
     {
-        $todo = ToDo::factory()->create([
+        $todo = Todo::factory()->create([
             'task_id' => $this->task->id,
             'is_finished' => false,
         ]);
@@ -92,7 +92,7 @@ class ToDoTest extends TestCase
         $response = $this->actingAs($this->user)->get('tasks/'.$this->task->id.'/todos/'.$todo->id.'/edit');
 
         $response->assertStatus(200);
-        $response->assertSee('Edit ToDo');
+        $response->assertSee('Edit Todo');
         $response->assertSee('value="'.$todo->name.'"', false);
         $response->assertSee('value="'.$todo->dued_at->format('Y-m-d').'"', false);
         $response->assertSee('>'.$todo->description.'</textarea>', false);
@@ -101,12 +101,12 @@ class ToDoTest extends TestCase
 
     public function test_user_can_update_todo(): void
     {
-        $todo = ToDo::factory()->create([
+        $todo = Todo::factory()->create([
             'task_id' => $this->task->id,
             'is_finished' => false,
         ]);
         $editedTodo = [
-            'name' => 'Updated ToDo',
+            'name' => 'Updated Todo',
             'dued_at' => '2023-07-01',
             'is_finished' => 0,
             'description' => 'Aenean sed pulvinar velit. Quisque suscipit, leo sit amet facilisis malesuada, neque eros lacinia sapien, eu gravida risus tellus ut enim.',
@@ -117,21 +117,21 @@ class ToDoTest extends TestCase
         $response->assertStatus(302);
         $response->assertRedirect('tasks/'.$this->task->id);
 
-        $updatedToDo = ToDo::find($todo->id);
+        $updatedTodo = Todo::find($todo->id);
 
-        $this->assertEquals($editedTodo['name'], $updatedToDo->name);
-        $this->assertEquals($editedTodo['dued_at'], $updatedToDo->dued_at->format('Y-m-d'));
-        $this->assertEquals($editedTodo['description'], $updatedToDo->description);
+        $this->assertEquals($editedTodo['name'], $updatedTodo->name);
+        $this->assertEquals($editedTodo['dued_at'], $updatedTodo->dued_at->format('Y-m-d'));
+        $this->assertEquals($editedTodo['description'], $updatedTodo->description);
     }
 
     public function test_user_can_check_todo(): void
     {
-        $todo = ToDo::factory()->create([
+        $todo = Todo::factory()->create([
             'task_id' => $this->task->id,
             'is_finished' => false,
         ]);
 
-        // Check ToDo
+        // Check Todo
         $response = $this->actingAs($this->user)->patch('tasks/'.$this->task->id.'/todos/'.$todo->id.'/check');
 
         $response->assertStatus(200);
@@ -139,10 +139,10 @@ class ToDoTest extends TestCase
         $response->assertJsonPath('message', __('messages.todo.finish'));
         $response->assertJsonPath('todo.id', $todo->id);
 
-        $markedToDo = ToDo::find($todo->id);
-        $this->assertEquals($markedToDo->is_finished, true);
+        $markedTodo = Todo::find($todo->id);
+        $this->assertEquals($markedTodo->is_finished, true);
 
-        // Unmark ToDo
+        // Unmark Todo
         $response = $this->actingAs($this->user)->patch('tasks/'.$this->task->id.'/todos/'.$todo->id.'/check');
 
         $response->assertStatus(200);
@@ -150,13 +150,13 @@ class ToDoTest extends TestCase
         $response->assertJsonPath('message', __('messages.todo.return'));
         $response->assertJsonPath('todo.id', $todo->id);
 
-        $markedToDo = ToDo::find($todo->id);
-        $this->assertEquals($markedToDo->is_marked, false);
+        $markedTodo = Todo::find($todo->id);
+        $this->assertEquals($markedTodo->is_marked, false);
     }
 
     public function test_user_can_delete_todo(): void
     {
-        $todo = ToDo::factory()->create([
+        $todo = Todo::factory()->create([
             'task_id' => $this->task->id,
             'is_finished' => false,
         ]);

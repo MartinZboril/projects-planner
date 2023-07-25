@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Task\ToDo;
+namespace App\Http\Controllers\Project\Task\Todo;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ToDo\DestroyToDoRequest;
-use App\Http\Requests\ToDo\StoreToDoRequest;
-use App\Http\Requests\ToDo\UpdateToDoRequest;
+use App\Http\Requests\Todo\DestroyTodoRequest;
+use App\Http\Requests\Todo\StoreTodoRequest;
+use App\Http\Requests\Todo\UpdateTodoRequest;
+use App\Models\Project;
 use App\Models\Task;
-use App\Models\ToDo;
-use App\Services\Data\ToDoService;
+use App\Models\Todo;
+use App\Services\Data\TodoService;
 use App\Traits\FlashTrait;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -16,30 +17,30 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
-class TaskToDoController extends Controller
+class ProjectTaskTodoController extends Controller
 {
     use FlashTrait;
 
     public function __construct(
-        private ToDoService $toDoService
+        private TodoService $toDoService
     ) {
     }
 
     /**
      * Show the form for creating a new todo.
      */
-    public function create(Task $task): View
+    public function create(Project $project, Task $task): View
     {
-        return view('tasks.todos.create', ['task' => $task]);
+        return view('projects.tasks.todos.create', ['project' => $project, 'task' => $task, 'todo' => new Todo]);
     }
 
     /**
      * Store a newly created todo in storage.
      */
-    public function store(StoreToDoRequest $request, Task $task): RedirectResponse
+    public function store(StoreTodoRequest $request, Project $project, Task $task): RedirectResponse
     {
         try {
-            $this->toDoService->handleSave(new ToDo, $request->validated(), $task);
+            $this->toDoService->handleSave(new Todo, $request->validated(), $task);
             $this->flash(__('messages.todo.create'), 'info');
         } catch (Exception $exception) {
             Log::error($exception);
@@ -47,21 +48,21 @@ class TaskToDoController extends Controller
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
 
-        return redirect()->route('tasks.show', $task);
+        return redirect()->route('projects.tasks.show', ['project' => $project, 'task' => $task]);
     }
 
     /**
      * Show the form for editing the todo.
 =    */
-    public function edit(Task $task, ToDo $todo): View
+    public function edit(Project $project, Task $task, Todo $todo): View
     {
-        return view('tasks.todos.edit', ['todo' => $todo]);
+        return view('projects.tasks.todos.edit', ['project' => $project, 'todo' => $todo]);
     }
 
     /**
      * Update the todo in storage.
      */
-    public function update(UpdateToDoRequest $request, Task $task, ToDo $todo): RedirectResponse
+    public function update(UpdateTodoRequest $request, Project $project, Task $task, Todo $todo): RedirectResponse
     {
         try {
             $this->toDoService->handleSave($todo, $request->validated(), $task);
@@ -72,13 +73,13 @@ class TaskToDoController extends Controller
             return redirect()->back()->with(['error' => __('messages.error')]);
         }
 
-        return redirect()->route('tasks.show', $task);
+        return redirect()->route('projects.tasks.show', ['project' => $project, 'task' => $task]);
     }
 
     /**
      * Remove the todo from storage.
      */
-    public function destroy(DestroyToDoRequest $request, Task $task, ToDo $todo): JsonResponse|RedirectResponse
+    public function destroy(DestroyTodoRequest $request, Project $project, Task $task, Todo $todo): JsonResponse|RedirectResponse
     {
         try {
             $todo->delete();
@@ -91,7 +92,7 @@ class TaskToDoController extends Controller
         if ($request->redirect ?? false) {
             $this->flash(__('messages.todo.delete'), 'danger');
 
-            return redirect()->route('tasks.show', $task);
+            return redirect()->route('projects.tasks.show', ['project' => $project, 'task' => $task]);
         }
 
         return response()->json([

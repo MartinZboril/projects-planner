@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Http\Controllers\Task\ToDo;
+namespace App\Http\Controllers\Task\Todo;
 
 use App\Http\Controllers\Controller;
 use App\Models\Task;
-use App\Models\ToDo;
-use App\Services\Data\ToDoService;
+use App\Models\Todo;
+use App\Services\Data\TodoService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
-class TaskToDoCheckController extends Controller
+class TaskTodoCheckController extends Controller
 {
     public function __construct(
-        private ToDoService $toDoService
+        private TodoService $toDoService
     ) {
     }
 
     /**
      * Check the todo in storage.
      */
-    public function __invoke(Task $task, ToDo $todo): JsonResponse
+    public function __invoke(Task $task, Todo $todo): JsonResponse
     {
         try {
             $todo = $this->toDoService->handleCheck($todo);
@@ -29,7 +29,7 @@ class TaskToDoCheckController extends Controller
         }
 
         return response()->json([
-            'message' => __('messages.todo.'.($todo->is_finished ? ToDo::FINISH : ToDo::RETURN)),
+            'message' => __('messages.todo.'.($todo->is_finished ? Todo::FINISH : Todo::RETURN)),
             'todo' => $todo,
         ]);
     }

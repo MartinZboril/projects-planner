@@ -22,8 +22,8 @@
                 <x-dashboard.widget text="Total" :value="$data->get('total_tasks_count')" icon="fas fa-tasks" colour="primary" :link="route('reports.tasks')" />
             </div>
             @if($data->get('overdue_todos')->count() > 0)
-                <x-dashboard.listing :items="$data->get('overdue_todos')" title="Overdue ToDos" type="todo" />
-            @endif            
+                <x-dashboard.listing :items="$data->get('overdue_todos')" title="Overdue Todos" type="todo" />
+            @endif
             @if($data->get('overdue_tasks')->count() > 0)
                 <x-dashboard.listing :items="$data->get('overdue_tasks')" title="Overdue Tasks" type="task" />
             @endif
@@ -34,9 +34,9 @@
                         <span class="badge badge-primary ml-2" style="font-size:14px;" id="newed-task-items-count-list">{{ $data->get('new_tasks')->count() }}</span>
                     </div>
                     <div class="card-body">
-                        {{ $dataTable->table() }}  
+                        {{ $dataTable->table() }}
                     </div>
-                </div>  
+                </div>
             @endif
             <div class="row">
                 <div class="col-md-4">
@@ -45,7 +45,7 @@
                 <div class="col-md-8">
                     <x-chart.overview :report-months="$data->get('report')->get('report_months')" :total-count="$data->get('report')->get('total_tasks_by_month')" :year="now()->format('Y')" chart-id="yearly-overview-chart" />
                 </div>
-            </div>               
+            </div>
         </section>
     </div>
 @endsection
@@ -56,5 +56,5 @@
         $('#tasks-table').on('draw.dt', function() {
             $('[data-toggle="tooltip"]').tooltip();
         });
-    </script>   
+    </script>
 @endpush

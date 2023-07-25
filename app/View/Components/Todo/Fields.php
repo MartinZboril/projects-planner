@@ -1,9 +1,9 @@
 <?php
 
-namespace App\View\Components\ToDo;
+namespace App\View\Components\Todo;
 
 use App\Models\Task;
-use App\Models\ToDo;
+use App\Models\Todo;
 use Illuminate\View\Component;
 
 class Fields extends Component
@@ -14,7 +14,7 @@ class Fields extends Component
 
     public $closeRoute;
 
-    public function __construct(?ToDo $todo, Task $task, string $type, ?bool $isProject = false)
+    public function __construct(?Todo $todo, Task $task, string $type, ?bool $isProject = false)
     {
         $this->todo = $todo;
         $this->type = $type;
