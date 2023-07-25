@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Enums\ProjectStatusEnum;
 use App\Enums\RoleEnum;
+use App\Events\Milestone\MilestoneOwnerChanged;
 use App\Models\Address;
 use App\Models\Client;
 use App\Models\Comment;
@@ -14,6 +15,7 @@ use App\Models\SocialNetwork;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class MilestoneTest extends TestCase
@@ -67,6 +69,8 @@ class MilestoneTest extends TestCase
 
     public function test_user_can_store_projects_milestone(): void
     {
+        Event::fake();
+
         $milestone = $this->getMilestoneArray();
 
         $response = $this->actingAs($this->user)->post('projects/'.$milestone['project_id'].'/milestones', $milestone);
@@ -85,6 +89,8 @@ class MilestoneTest extends TestCase
         $this->assertEquals($milestone['description'], $lastMilestone->description);
         $this->assertEquals($milestone['project_id'], $lastMilestone->project->id);
         $this->assertEquals($milestone['owner_id'], $lastMilestone->owner->id);
+
+        Event::assertDispatched(MilestoneOwnerChanged::class);
     }
 
     public function test_user_can_get_to_edit_projects_milestone_page(): void
@@ -103,6 +109,8 @@ class MilestoneTest extends TestCase
 
     public function test_user_can_update_projects_milestone(): void
     {
+        Event::fake();
+
         $milestone = $this->createMilestone();
         $editedMilestone = $this->getMilestoneArray();
 
@@ -117,6 +125,10 @@ class MilestoneTest extends TestCase
         $this->assertEquals($editedMilestone['description'], $updatedMilestone->description);
         $this->assertEquals($milestone->id, $updatedMilestone->project->id);
         $this->assertEquals($editedMilestone['owner_id'], $updatedMilestone->owner->id);
+
+        if ($updatedMilestone->owner->id !== $updatedMilestone->owner->id) {
+            Event::assertDispatched(MilestoneOwnerChanged::class);
+        }
     }
 
     public function test_user_can_mark_projects_milestone(): void

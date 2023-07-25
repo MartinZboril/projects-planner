@@ -5,6 +5,13 @@ namespace Tests\Feature;
 use App\Enums\ProjectStatusEnum;
 use App\Enums\RoleEnum;
 use App\Enums\TaskStatusEnum;
+use App\Events\Task\Status\TaskCompleted;
+use App\Events\Task\Status\TaskInProgressed;
+use App\Events\Task\Status\TaskPaused;
+use App\Events\Task\Status\TaskResumed;
+use App\Events\Task\Status\TaskReturned;
+use App\Events\Task\TaskMilestoneChanged;
+use App\Events\Task\TaskUserChanged;
 use App\Models\Address;
 use App\Models\Client;
 use App\Models\Comment;
@@ -15,6 +22,7 @@ use App\Models\Task;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class TaskTest extends TestCase
@@ -64,6 +72,8 @@ class TaskTest extends TestCase
 
     public function test_user_can_store_task(): void
     {
+        Event::fake();
+
         $task = $this->getTaskArray();
 
         $response = $this->actingAs($this->user)->post('tasks', $task);
@@ -83,6 +93,12 @@ class TaskTest extends TestCase
         $this->assertEquals($task['project_id'], $lastTask->project->id);
         $this->assertEquals($task['user_id'], $lastTask->user->id);
         $this->assertEquals(TaskStatusEnum::new, $lastTask->status);
+
+        Event::assertDispatched(TaskUserChanged::class);
+
+        if ($lastTask->milestone->id ?? false) {
+            Event::assertDispatched(TaskMilestoneChanged::class);
+        }
     }
 
     public function test_user_can_get_to_edit_task_page(): void
@@ -101,6 +117,8 @@ class TaskTest extends TestCase
 
     public function test_user_can_update_task(): void
     {
+        Event::fake();
+
         $task = $this->createTask();
         $editedTask = $this->getTaskArray();
 
@@ -115,6 +133,14 @@ class TaskTest extends TestCase
         $this->assertEquals($editedTask['description'], $updatedTask->description);
         $this->assertEquals($editedTask['project_id'], $updatedTask->project->id);
         $this->assertEquals($editedTask['user_id'], $updatedTask->user->id);
+
+        if ($task->user->id !== $updatedTask->user->id) {
+            Event::assertDispatched(TaskUserChanged::class);
+        }
+
+        if ($task->milestone->id ?? false && $task->milestone->id !== $updatedTask->milestone->id) {
+            Event::assertDispatched(TaskMilestoneChanged::class);
+        }
     }
 
     public function test_user_can_mark_task(): void
@@ -146,9 +172,13 @@ class TaskTest extends TestCase
 
     public function test_user_can_change_task_status(): void
     {
+        Event::fake();
+
         $task = $this->createTask();
 
         $this->assertEquals(TaskStatusEnum::new->value, $task->status->value);
+
+        Event::assertNotDispatched(TaskReturned::class);
 
         // In Progressed
         $response = $this->actingAs($this->user)->patch('tasks/'.$task->id.'/change-status', [
@@ -161,6 +191,8 @@ class TaskTest extends TestCase
         $response->assertJsonPath('task.id', $task->id);
         $response->assertJsonPath('task.status', TaskStatusEnum::in_progress->value);
 
+        Event::assertDispatched(TaskInProgressed::class);
+
         // Pause
         $response = $this->actingAs($this->user)->patch('tasks/'.$task->id.'/pause');
 
@@ -171,6 +203,8 @@ class TaskTest extends TestCase
         $response->assertJsonPath('task.is_stopped', 1);
         $response->assertJsonPath('task.status', TaskStatusEnum::in_progress->value);
 
+        Event::assertDispatched(TaskPaused::class);
+
         // Resumed
         $response = $this->actingAs($this->user)->patch('tasks/'.$task->id.'/pause');
 
@@ -180,6 +214,8 @@ class TaskTest extends TestCase
         $response->assertJsonPath('task.id', $task->id);
         $response->assertJsonPath('task.is_stopped', 0);
         $response->assertJsonPath('task.status', TaskStatusEnum::in_progress->value);
+
+        Event::assertDispatched(TaskResumed::class);
 
         // Complete
         $response = $this->actingAs($this->user)->patch('tasks/'.$task->id.'/change-status', [
@@ -192,6 +228,8 @@ class TaskTest extends TestCase
         $response->assertJsonPath('task.id', $task->id);
         $response->assertJsonPath('task.status', TaskStatusEnum::complete->value);
 
+        Event::assertDispatched(TaskCompleted::class);
+
         // Return
         $response = $this->actingAs($this->user)->patch('tasks/'.$task->id.'/change-status', [
             'status' => TaskStatusEnum::new->value,
@@ -203,6 +241,8 @@ class TaskTest extends TestCase
         $response->assertJsonPath('task.id', $task->id);
         $response->assertJsonPath('task.is_returned', 1);
         $response->assertJsonPath('task.status', TaskStatusEnum::new->value);
+
+        Event::assertDispatched(TaskReturned::class);
     }
 
     public function test_user_can_delete_task(): void

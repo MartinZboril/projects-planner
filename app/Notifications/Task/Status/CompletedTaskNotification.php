@@ -28,8 +28,6 @@ class CompletedTaskNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        info(count($this->notificationService->handleGetDeliveryChannels($notifiable, 'task', 'completed')));
-
         return $this->notificationService->handleGetDeliveryChannels($notifiable, 'task', 'completed');
     }
 

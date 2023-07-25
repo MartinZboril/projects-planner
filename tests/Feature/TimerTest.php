@@ -2,18 +2,20 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\Rate;
-use App\Models\User;
-use App\Models\Timer;
-use App\Models\Client;
-use App\Enums\RoleEnum;
-use App\Models\Address;
-use App\Models\Project;
-use App\Models\SocialNetwork;
 use App\Enums\ProjectStatusEnum;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Enums\RoleEnum;
+use App\Events\Timer\TimerChanged;
+use App\Events\Timer\TimerStopped;
+use App\Models\Address;
+use App\Models\Client;
+use App\Models\Project;
+use App\Models\Rate;
+use App\Models\SocialNetwork;
+use App\Models\Timer;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
+use Tests\TestCase;
 
 class TimerTest extends TestCase
 {
@@ -54,6 +56,8 @@ class TimerTest extends TestCase
 
     public function test_user_can_store_projects_timer(): void
     {
+        Event::fake();
+
         $timer = $this->getTimerArray();
 
         $response = $this->actingAs($this->user)->post('projects/'.$timer['project_id'].'/timers', $timer);
@@ -73,6 +77,8 @@ class TimerTest extends TestCase
         $this->assertEquals($lastTimer['project_id'], $lastTimer->project->id);
         $this->assertEquals($lastTimer['user_id'], $lastTimer->user->id);
         $this->assertEquals($lastTimer['rate_id'], $lastTimer->rate->id);
+
+        Event::assertDispatched(TimerChanged::class);
     }
 
     public function test_user_can_get_to_edit_projects_timer_page(): void
@@ -90,6 +96,8 @@ class TimerTest extends TestCase
 
     public function test_user_can_update_projects_timer(): void
     {
+        Event::fake();
+
         $timer = $this->createTimer();
         $editedTimer = $this->getTimerArray();
 
@@ -106,10 +114,14 @@ class TimerTest extends TestCase
         $this->assertEquals($timer->project_id, $updatedTimer->project->id);
         $this->assertEquals($timer->user_id, $updatedTimer->user->id);
         $this->assertEquals($editedTimer['rate_id'], $updatedTimer->rate->id);
+
+        Event::assertDispatched(TimerChanged::class);
     }
 
-    public function test_user_can_start_timer(): void
+    public function test_user_can_start_and_stop_timer(): void
     {
+        Event::fake();
+
         $project = $this->createProject(3);
 
         // Start timer
@@ -137,6 +149,8 @@ class TimerTest extends TestCase
 
         $stoppedTimer = Timer::find($startedTimer->id);
         $this->assertNotEquals($stoppedTimer->until_at, null);
+
+        Event::assertDispatched(TimerStopped::class);
     }
 
     public function test_user_can_delete_timer(): void
@@ -159,7 +173,7 @@ class TimerTest extends TestCase
         ]);
     }
 
-    private function createTimer($stopped=true): Timer
+    private function createTimer($stopped = true): Timer
     {
         $project = Project::factory()->create([
             'client_id' => Client::factory()->create([
