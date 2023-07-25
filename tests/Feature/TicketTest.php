@@ -7,6 +7,11 @@ use App\Enums\RoleEnum;
 use App\Enums\TicketPriorityEnum;
 use App\Enums\TicketStatusEnum;
 use App\Enums\TicketTypeEnum;
+use App\Events\Ticket\Status\TicketArchived;
+use App\Events\Ticket\Status\TicketClosed;
+use App\Events\Ticket\Status\TicketConverted;
+use App\Events\Ticket\Status\TicketReopened;
+use App\Events\Ticket\TicketAssigneeChanged;
 use App\Models\Address;
 use App\Models\Client;
 use App\Models\Comment;
@@ -18,6 +23,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class TicketTest extends TestCase
@@ -67,6 +73,8 @@ class TicketTest extends TestCase
 
     public function test_user_can_store_ticket(): void
     {
+        Event::fake();
+
         $ticket = $this->getTicketArray();
 
         $response = $this->actingAs($this->user)->post('tickets', $ticket);
@@ -86,6 +94,10 @@ class TicketTest extends TestCase
         $this->assertEquals($ticket['project_id'], $lastTicket->project->id);
         $this->assertEquals($ticket['assignee_id'], $lastTicket->assignee->id);
         $this->assertEquals(TicketStatusEnum::open, $lastTicket->status);
+
+        if ($lastTicket->assignee->id ?? false) {
+            Event::assertDispatched(TicketAssigneeChanged::class);
+        }
     }
 
     public function test_user_can_get_to_edit_ticket_page(): void
@@ -104,6 +116,8 @@ class TicketTest extends TestCase
 
     public function test_user_can_update_ticket(): void
     {
+        Event::fake();
+
         $ticket = $this->createTicket();
         $editedTicket = $this->getTicketArray();
 
@@ -118,6 +132,10 @@ class TicketTest extends TestCase
         $this->assertEquals($editedTicket['message'], $updatedTicket->message);
         $this->assertNotEquals($editedTicket['reporter_id'], $updatedTicket->reporter->id);
         $this->assertEquals($editedTicket['assignee_id'], $updatedTicket->assignee->id);
+
+        if (($updatedTicket->assignee->id ?? false) && $ticket->assignee->id !== $updatedTicket->assignee->id) {
+            Event::assertDispatched(TicketAssigneeChanged::class);
+        }
     }
 
     public function test_user_can_mark_ticket(): void
@@ -149,6 +167,8 @@ class TicketTest extends TestCase
 
     public function test_user_can_change_ticket_status(): void
     {
+        Event::fake();
+
         $ticket = $this->createTicket();
 
         $this->assertEquals(TicketStatusEnum::open->value, $ticket->status->value);
@@ -164,6 +184,8 @@ class TicketTest extends TestCase
         $response->assertJsonPath('ticket.id', $ticket->id);
         $response->assertJsonPath('ticket.status', TicketStatusEnum::close->value);
 
+        Event::assertDispatched(TicketClosed::class);
+
         // Reopen
         $response = $this->actingAs($this->user)->patch('tickets/'.$ticket->id.'/change-status', [
             'status' => TicketStatusEnum::open->value,
@@ -175,6 +197,8 @@ class TicketTest extends TestCase
         $response->assertJsonPath('ticket.id', $ticket->id);
         $response->assertJsonPath('ticket.status', TicketStatusEnum::open->value);
 
+        Event::assertDispatched(TicketReopened::class);
+
         // Archive
         $response = $this->actingAs($this->user)->patch('tickets/'.$ticket->id.'/change-status', [
             'status' => TicketStatusEnum::archive->value,
@@ -185,10 +209,14 @@ class TicketTest extends TestCase
         $response->assertJsonPath('message', __('messages.ticket.'.TicketStatusEnum::archive->name));
         $response->assertJsonPath('ticket.id', $ticket->id);
         $response->assertJsonPath('ticket.status', TicketStatusEnum::archive->value);
+
+        Event::assertDispatched(TicketArchived::class);
     }
 
     public function test_user_can_convert_ticket_into_task(): void
     {
+        Event::fake();
+
         $ticket = $this->createTicket();
 
         $response = $this->actingAs($this->user)->patch('tickets/'.$ticket->id.'/convert');
@@ -201,6 +229,8 @@ class TicketTest extends TestCase
         $createdTask = Task::where('ticket_id', $ticket->id)->first();
         $response->assertJsonPath('redirect', route('tasks.show', $createdTask->id));
         $this->assertEquals($convertedTicket->id, $createdTask->ticket->id);
+
+        Event::assertDispatched(TicketConverted::class);
     }
 
     public function test_user_can_delete_ticket(): void
@@ -213,32 +243,6 @@ class TicketTest extends TestCase
         $response->assertJsonPath('message', __('messages.ticket.delete'));
 
         $this->assertSoftDeleted($ticket);
-    }
-
-    private function createTicket(): Ticket
-    {
-        $this->actingAs($this->user);
-
-        $project = Project::factory()->create([
-            'client_id' => Client::factory()->create([
-                'address_id' => Address::factory()->create()->first()->id,
-                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
-            ])->id,
-            'status' => ProjectStatusEnum::active->value,
-        ]);
-
-        [$reporterId, $assigneeId] = User::factory(2)->create([
-            'address_id' => Address::factory(1)->create()->first()->id,
-            'role_id' => RoleEnum::employee,
-        ])->pluck('id');
-        $project->team()->attach([$reporterId, $assigneeId]);
-
-        return Ticket::factory()->create([
-            'project_id' => $project->id,
-            'reporter_id' => $reporterId,
-            'assignee_id' => $assigneeId,
-            'status' => TicketStatusEnum::open->value,
-        ]);
     }
 
     public function test_user_can_upload_file_for_ticket(): void
@@ -389,6 +393,32 @@ class TicketTest extends TestCase
         return User::factory()->create([
             'address_id' => Address::factory(1)->create()->first()->id,
             'role_id' => RoleEnum::boss,
+        ]);
+    }
+
+    private function createTicket(): Ticket
+    {
+        $this->actingAs($this->user);
+
+        $project = Project::factory()->create([
+            'client_id' => Client::factory()->create([
+                'address_id' => Address::factory()->create()->first()->id,
+                'social_network_id' => SocialNetwork::factory()->create()->first()->id,
+            ])->id,
+            'status' => ProjectStatusEnum::active->value,
+        ]);
+
+        [$reporterId, $assigneeId] = User::factory(2)->create([
+            'address_id' => Address::factory(1)->create()->first()->id,
+            'role_id' => RoleEnum::employee,
+        ])->pluck('id');
+        $project->team()->attach([$reporterId, $assigneeId]);
+
+        return Ticket::factory()->create([
+            'project_id' => $project->id,
+            'reporter_id' => $reporterId,
+            'assignee_id' => $assigneeId,
+            'status' => TicketStatusEnum::open->value,
         ]);
     }
 

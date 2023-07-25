@@ -3,11 +3,13 @@
 namespace Tests\Feature;
 
 use App\Enums\RoleEnum;
+use App\Events\User\UserCreated;
 use App\Models\Address;
 use App\Models\File;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -55,6 +57,8 @@ class UserTest extends TestCase
 
     public function test_user_can_store_another_user(): void
     {
+        Event::fake();
+
         $user = $this->getUserArray();
 
         $response = $this->actingAs($this->user)->post('users', $user);
@@ -73,6 +77,8 @@ class UserTest extends TestCase
         $this->assertEquals($user['email'], $createdUser->email);
         $this->assertEquals($user['job_title'], $createdUser->job_title);
         $this->assertEquals($user['country'], $createdUser->address->country);
+
+        Event::assertDispatched(UserCreated::class);
     }
 
     public function test_user_can_get_to_edit_another_user_page(): void

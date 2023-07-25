@@ -4,6 +4,10 @@ namespace Tests\Feature;
 
 use App\Enums\ProjectStatusEnum;
 use App\Enums\RoleEnum;
+use App\Events\Project\ProjectTeamChanged;
+use App\Events\Project\Status\ProjectArchived;
+use App\Events\Project\Status\ProjectFinished;
+use App\Events\Project\Status\ProjectReactived;
 use App\Models\Address;
 use App\Models\Client;
 use App\Models\Comment;
@@ -14,6 +18,7 @@ use App\Models\SocialNetwork;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class ProjectTest extends TestCase
@@ -121,6 +126,8 @@ class ProjectTest extends TestCase
         $this->assertEquals($project['description'], $lastProject->description);
         $this->assertEquals(count($project['team']), $lastProject->team->count());
         $this->assertEquals(ProjectStatusEnum::active, $lastProject->status);
+
+        Event::fake([ProjectTeamChanged::class]);
     }
 
     public function test_user_can_get_to_edit_project_page(): void
@@ -160,10 +167,14 @@ class ProjectTest extends TestCase
         $this->assertEquals($editedProject['name'], $updatedProject->name);
         $this->assertEquals($editedProject['description'], $updatedProject->description);
         $this->assertEquals(count($project['team']), $updatedProject->team->count());
+
+        Event::fake([ProjectTeamChanged::class]);
     }
 
     public function test_user_can_change_project_status(): void
     {
+        Event::fake();
+
         $project = $this->createProject(3);
 
         $this->assertEquals(ProjectStatusEnum::active->value, $project->status->value);
@@ -179,6 +190,8 @@ class ProjectTest extends TestCase
         $response->assertJsonPath('project.id', $project->id);
         $response->assertJsonPath('project.status', ProjectStatusEnum::finish->value);
 
+        Event::assertDispatched(ProjectFinished::class);
+
         // Activate
         $response = $this->actingAs($this->user)->patch('projects/'.$project->id.'/change-status', [
             'status' => ProjectStatusEnum::active->value,
@@ -190,6 +203,8 @@ class ProjectTest extends TestCase
         $response->assertJsonPath('project.id', $project->id);
         $response->assertJsonPath('project.status', ProjectStatusEnum::active->value);
 
+        Event::assertDispatched(ProjectReactived::class);
+
         // Archive
         $response = $this->actingAs($this->user)->patch('projects/'.$project->id.'/change-status', [
             'status' => ProjectStatusEnum::archive->value,
@@ -200,6 +215,8 @@ class ProjectTest extends TestCase
         $response->assertJsonPath('message', __('messages.project.'.ProjectStatusEnum::archive->name));
         $response->assertJsonPath('project.id', $project->id);
         $response->assertJsonPath('project.status', ProjectStatusEnum::archive->value);
+
+        Event::assertDispatched(ProjectArchived::class);
     }
 
     public function test_user_can_mark_project(): void
