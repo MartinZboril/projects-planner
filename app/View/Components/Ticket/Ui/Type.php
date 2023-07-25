@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\Ticket\UI;
+namespace App\View\Components\Ticket\Ui;
 
 use App\Enums\TicketTypeEnum;
 use Illuminate\View\Component;

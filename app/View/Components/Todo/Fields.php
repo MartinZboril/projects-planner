@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\ToDo;
+namespace App\View\Components\Todo;
 
 use App\Models\Task;
 use App\Models\ToDo;

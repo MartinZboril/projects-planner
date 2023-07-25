@@ -29,7 +29,7 @@
                 <span class="d-block ml-2">Remaining Hours: <b><span class="text-{{ $project->remaining_hours >= 0 ? 'sm' : 'danger' }}">{{ $project->remaining_hours }} Hours</span></b><span class="badge badge-{{ $project->time_plan > 100 ? 'danger' : 'success' }} ml-1">{{ $project->time_plan }} %</span></span>
                 <span class="d-block ml-2">Budget: <b>@money($project->budget)</b></span>
                 <span class="d-block ml-2">Remaining Budget: <b><span class="text-{{ $project->remaining_budget >= 0 ? 'sm' : 'danger' }}">@money($project->remaining_budget)</span></b><span class="badge badge-{{ $project->budget_plan > 100 ? 'danger' : 'success' }} ml-1">{{ $project->budget_plan }} %</span></span>
-            </p>                            
+            </p>
             <hr>
             <p class="text-sm">Team
                 <ul class="list-group list-group-flush ml-1">
@@ -39,7 +39,7 @@
                                 <x-site.ui.user-icon :$user />
                                 <span class="username"><a href="{{ route('users.show', $user) }}">{{ $user->full_name }}</a></span>
                                 <span class="description">Member</span>
-                            </div> 
+                            </div>
                         </li>
                     @endforeach
                 </ul>

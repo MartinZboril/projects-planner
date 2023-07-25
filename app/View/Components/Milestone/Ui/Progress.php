@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components\Milestone\UI;
+namespace App\View\Components\Milestone\Ui;
 
 use App\Models\Milestone;
 use Illuminate\View\Component;
