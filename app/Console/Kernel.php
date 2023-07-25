@@ -6,12 +6,12 @@ use App\Jobs\Reminder\MilestoneReminder;
 use App\Jobs\Reminder\ProjectReminder;
 use App\Jobs\Reminder\TaskReminder;
 use App\Jobs\Reminder\TicketReminder;
-use App\Jobs\Reminder\ToDoReminder;
+use App\Jobs\Reminder\TodoReminder;
 use App\Models\Milestone;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\Ticket;
-use App\Models\ToDo;
+use App\Models\Todo;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -25,8 +25,8 @@ class Kernel extends ConsoleKernel
         // ----- Reminders -----
 
         $schedule->call(function () {
-            $todos = ToDo::finished(false)->overdue()->get();
-            ToDoReminder::dispatch($todos);
+            $todos = Todo::finished(false)->overdue()->get();
+            TodoReminder::dispatch($todos);
         })->everyMinute();
 
         $schedule->call(function () {

@@ -61,11 +61,11 @@ return [
         'delete' => 'Timer was deleted!',
     ],
     'todo' => [
-        'create' => 'ToDo was created!',
-        'update' => 'ToDo was updated!',
-        'finish' => 'ToDo was finished!',
-        'return' => 'ToDo was returned!',
-        'delete' => 'ToDo was deleted!',
+        'create' => 'Todo was created!',
+        'update' => 'Todo was updated!',
+        'finish' => 'Todo was finished!',
+        'return' => 'Todo was returned!',
+        'delete' => 'Todo was deleted!',
     ],
     'user' => [
         'create' => 'User was created!',

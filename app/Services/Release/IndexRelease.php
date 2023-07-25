@@ -77,7 +77,7 @@ class IndexRelease
             '0.1.5' => [
                 'subject' => 'Extensions for tasks',
                 'realese_date' => Carbon::create(2022, 4, 27, 0),
-                'description' => 'Implement kanban with tasks in projects and added ToDos for tasks.',
+                'description' => 'Implement kanban with tasks in projects and added Todos for tasks.',
                 'background' => '',
             ],
             '0.1.6' => [

@@ -75,9 +75,9 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/upload', App\Http\Controllers\Task\TaskFileUploaderController::class)->name('upload');
             Route::delete('/{file}', App\Http\Controllers\Task\TaskFileDestroyController::class)->name('destroy');
         });
-        // ToDos
-        Route::patch('/todos/{todo}/check', App\Http\Controllers\Task\ToDo\TaskToDoCheckController::class)->name('todos.check');
-        Route::resource('todos', App\Http\Controllers\Task\ToDo\TaskToDoController::class)
+        // Todos
+        Route::patch('/todos/{todo}/check', App\Http\Controllers\Task\Todo\TaskTodoCheckController::class)->name('todos.check');
+        Route::resource('todos', App\Http\Controllers\Task\Todo\TaskTodoController::class)
             ->except(['index', 'show']);
     });
     Route::resource('tasks', App\Http\Controllers\Task\TaskController::class);
@@ -156,8 +156,8 @@ Route::middleware(['auth'])->group(function () {
                     Route::post('/upload', App\Http\Controllers\Project\Task\ProjectTaskFileUploaderController::class)->name('upload');
                     Route::delete('/{file}', App\Http\Controllers\Project\Task\ProjectTaskFileDestroyController::class)->name('destroy');
                 });
-                // ToDos
-                Route::resource('todos', App\Http\Controllers\Project\Task\ToDo\ProjectTaskToDoController::class)
+                // Todos
+                Route::resource('todos', App\Http\Controllers\Project\Task\Todo\ProjectTaskTodoController::class)
                     ->except(['index', 'show']);
             });
         });

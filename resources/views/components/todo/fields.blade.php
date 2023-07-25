@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-md-7">
         <div class="card card-primary card-outline">
-            <div class="card-header">{{ $type === 'edit' ? 'Edit' : 'Create' }} ToDo</div>
+            <div class="card-header">{{ $type === 'edit' ? 'Edit' : 'Create' }} Todo</div>
             <div class="card-body">
                 <div class="form-group required">
                     <label for="name" class="control-label">Name</label>
@@ -25,14 +25,14 @@
                     @error('is_finished')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                </div>                                   
+                </div>
                 <div class="form-group">
                     <label for="description">Description</label>
                     <textarea name="description" class="form-control summernote @error('description') is-invalid @enderror" id="description" cols="30" rows="10" placeholder="description">{{ old('description', $todo->description ?? null) }}</textarea>
                     @error('description')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
-                </div>     
+                </div>
             </div>
         </div>
     </div>

@@ -11,7 +11,7 @@ return [
         'task' => 'Task',
         'ticket' => 'Ticket',
         'timer' => 'Timer',
-        'todo' => 'ToDo',
+        'todo' => 'Todo',
         'user' => 'User',
         'report' => 'Report',
         'analysis' => 'Analysis',

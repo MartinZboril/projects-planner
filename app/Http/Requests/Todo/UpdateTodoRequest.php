@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\ToDo;
+namespace App\Http\Requests\Todo;
 
+use App\Models\Todo;
 use Illuminate\Foundation\Http\FormRequest;
 
-class DestroyToDoRequest extends FormRequest
+class UpdateTodoRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -16,8 +17,9 @@ class DestroyToDoRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'redirect' => 'nullable|boolean',
-        ];
+        $rules = Todo::VALIDATION_RULES;
+        unset($rules['task_id']);
+
+        return $rules;
     }
 }

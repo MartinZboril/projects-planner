@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Notifications\ToDo;
+namespace App\Notifications\Todo;
 
-use App\Models\ToDo;
+use App\Models\Todo;
 use App\Services\Data\NotificationService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ToDoReminderNotification extends Notification
+class TodoReminderNotification extends Notification
 {
     use Queueable;
 
@@ -16,7 +16,7 @@ class ToDoReminderNotification extends Notification
      * Create a new notification instance.
      */
     public function __construct(
-        private ToDo $todo,
+        private Todo $todo,
         private NotificationService $notificationService = new NotificationService,
     ) {
     }

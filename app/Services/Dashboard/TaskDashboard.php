@@ -5,7 +5,7 @@ namespace App\Services\Dashboard;
 use App\Enums\TaskStatusEnum;
 use App\Interfaces\DashboardInterface;
 use App\Models\Task;
-use App\Models\ToDo;
+use App\Models\Todo;
 use App\Services\Report\TaskReport;
 use Illuminate\Support\Collection;
 
@@ -35,7 +35,7 @@ class TaskDashboard implements DashboardInterface
             'in_progress_tasks_count' => Task::status(TaskStatusEnum::in_progress)->count(),
             'complete_tasks_count' => Task::status(TaskStatusEnum::complete)->count(),
             'report' => (new TaskReport)->getReportPerYear($year),
-            'overdue_todos' => ToDo::finished(false)->overdue()->get(),
+            'overdue_todos' => Todo::finished(false)->overdue()->get(),
         ]);
 
         return $data;
