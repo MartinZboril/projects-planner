@@ -165,7 +165,7 @@ class Project extends Model
     protected function deadline(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->status === ProjectStatusEnum::finish ? 0 : (($this->deadline_overdue ? -1 : 1) * abs($this->dued_at->diffInDays(now()->format('Y-m-d')))),
+            get: fn () => in_array($this->status, [ProjectStatusEnum::finish, ProjectStatusEnum::archive]) ? 0 : (($this->deadline_overdue ? -1 : 1) * abs($this->dued_at->diffInDays(now()->format('Y-m-d')))),
         );
     }
 
