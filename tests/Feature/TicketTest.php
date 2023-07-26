@@ -388,6 +388,30 @@ class TicketTest extends TestCase
         $this->assertEquals('comments', $lastTicketCommentFiles[1]->collection);
     }
 
+    public function test_user_can_see_tickets_reports(): void
+    {
+        $response = $this->actingAs($this->user)->get('report/tickets');
+
+        $response->assertStatus(200);
+        $response->assertSee('Report for Tickets');
+    }
+
+    public function test_user_can_see_tickets_analysis(): void
+    {
+        $response = $this->actingAs($this->user)->get('analysis/tickets');
+
+        $response->assertStatus(200);
+    }
+
+    public function test_user_can_see_tickets_dashboard(): void
+    {
+        $response = $this->actingAs($this->user)->get('dashboard/tickets');
+
+        $response->assertStatus(200);
+
+        $response->assertSee('btn-primary">Tickets<', false);
+    }
+
     private function createUser(): User
     {
         return User::factory()->create([

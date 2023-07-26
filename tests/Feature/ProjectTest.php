@@ -449,6 +449,30 @@ class ProjectTest extends TestCase
         $this->assertEquals('comments', $lastProjectCommentFiles[1]->collection);
     }
 
+    public function test_user_can_see_projects_reports(): void
+    {
+        $response = $this->actingAs($this->user)->get('report/projects');
+
+        $response->assertStatus(200);
+        $response->assertSee('Report for Projects');
+    }
+
+    public function test_user_can_see_projects_analysis(): void
+    {
+        $response = $this->actingAs($this->user)->get('analysis/projects');
+
+        $response->assertStatus(200);
+    }
+
+    public function test_user_can_see_projects_dashboard(): void
+    {
+        $response = $this->actingAs($this->user)->get('dashboard/projects');
+
+        $response->assertStatus(200);
+
+        $response->assertSee('btn-primary mr-1">Projects<', false);
+    }
+
     private function createUser(): User
     {
         return User::factory()->create([

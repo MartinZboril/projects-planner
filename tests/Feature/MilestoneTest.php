@@ -312,6 +312,21 @@ class MilestoneTest extends TestCase
         $this->assertEquals('comments', $lastMilestoneCommentFiles[1]->collection);
     }
 
+    public function test_user_can_see_milestones_reports(): void
+    {
+        $response = $this->actingAs($this->user)->get('report/milestones');
+
+        $response->assertStatus(200);
+        $response->assertSee('Report for Milestones');
+    }
+
+    public function test_user_can_see_milestones_analysis(): void
+    {
+        $response = $this->actingAs($this->user)->get('analysis/milestones');
+
+        $response->assertStatus(200);
+    }
+
     private function createUser(): User
     {
         return User::factory()->create([

@@ -399,6 +399,30 @@ class TaskTest extends TestCase
         $this->assertEquals('comments', $lastTaskCommentFiles[1]->collection);
     }
 
+    public function test_user_can_see_tasks_reports(): void
+    {
+        $response = $this->actingAs($this->user)->get('report/tasks');
+
+        $response->assertStatus(200);
+        $response->assertSee('Report for Tasks');
+    }
+
+    public function test_user_can_see_tasks_analysis(): void
+    {
+        $response = $this->actingAs($this->user)->get('analysis/tasks');
+
+        $response->assertStatus(200);
+    }
+
+    public function test_user_can_see_tasks_dashboard(): void
+    {
+        $response = $this->actingAs($this->user)->get('dashboard/tasks');
+
+        $response->assertStatus(200);
+
+        $response->assertSee('btn-primary mr-1">Tasks<', false);
+    }
+
     private function createUser(): User
     {
         return User::factory()->create([
