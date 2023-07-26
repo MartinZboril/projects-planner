@@ -13,7 +13,7 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="card card-primary card-outline">
-                    <div class="card-header">Report for projects</div>
+                    <div class="card-header">Report for Projects</div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-4">
@@ -29,10 +29,10 @@
                             </div>
                         </div>
                         <hr>
-                        <!-- Quarterly reports  -->                        
+                        <!-- Quarterly reports  -->
                         <x-report.ui.list :records="$data['quarterly_created_projects']" />
                     </div>
-                </div>            
+                </div>
             </div>
         </section>
     </div>
